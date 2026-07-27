@@ -1,0 +1,122 @@
+/* Talemistry brand design system — shared with the Next.js app */
+:root {
+  /* Core palette */
+  --tm-navy: #0b1b2b; /* Depth Navy — trust, depth */
+  --tm-navy-700: #12293f;
+  --tm-green: #1f9d78; /* Growth Green — potential */
+  --tm-green-600: #178a68;
+  --tm-teal: #2bb0b0; /* Chemistry Teal — connection */
+  --tm-amber: #f2a950; /* Signal Amber — energy */
+  --tm-ink: #0e1420;
+  --tm-slate: #5b6b7c;
+  --tm-mist: #f4f7f9; /* Cloud Mist background */
+  --tm-cloud: #ffffff;
+  --tm-line: #e2e9ee;
+
+  /* Semantic tokens */
+  --background: var(--tm-mist);
+  --surface: var(--tm-cloud);
+  --foreground: var(--tm-ink);
+  --muted: var(--tm-slate);
+  --primary: var(--tm-navy);
+  --primary-foreground: #ffffff;
+  --accent: var(--tm-green);
+  --accent-foreground: #ffffff;
+  --chemistry: var(--tm-teal);
+  --signal: var(--tm-amber);
+  --border: var(--tm-line);
+  --radius: 14px;
+
+  --shadow-sm: 0 1px 2px rgba(11, 27, 43, 0.06);
+  --shadow-md: 0 8px 24px rgba(11, 27, 43, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--background);
+  color: var(--foreground);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+/* Reusable primitives */
+.tm-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+.tm-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  background: rgba(31, 157, 120, 0.12);
+  color: var(--tm-green-600);
+}
+.tm-chip--muted {
+  background: #eef2f5;
+  color: var(--muted);
+}
+.tm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.tm-btn--primary {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+.tm-btn--primary:hover {
+  background: var(--tm-navy-700);
+}
+.tm-btn--ghost {
+  background: transparent;
+  border-color: var(--border);
+  color: var(--foreground);
+}
+.tm-btn--ghost:hover {
+  background: #eef2f5;
+}
+.tm-muted {
+  color: var(--muted);
+}
+.tm-scroll::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+.tm-scroll::-webkit-scrollbar-thumb {
+  background: #cfd9e0;
+  border-radius: 999px;
+}
