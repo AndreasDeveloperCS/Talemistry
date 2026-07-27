@@ -1,0 +1,131 @@
+.page-head {
+  margin-bottom: 1.25rem;
+}
+h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.sub {
+  color: var(--muted-foreground);
+  margin-top: 0.25rem;
+}
+.toolbar {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+.search {
+  flex: 1;
+  min-width: 240px;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  background: var(--card);
+  font-size: 0.9rem;
+}
+.sort {
+  display: flex;
+  gap: 0.4rem;
+}
+.sort button {
+  border: 1px solid var(--border);
+  background: var(--card);
+  border-radius: 0.6rem;
+  padding: 0.5rem 0.85rem;
+  font-size: 0.82rem;
+  cursor: pointer;
+  color: var(--muted-foreground);
+}
+.sort button.active {
+  background: var(--deep-navy);
+  color: #fff;
+  border-color: var(--deep-navy);
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+.cand {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: box-shadow 0.15s, transform 0.15s;
+}
+.cand:hover {
+  box-shadow: 0 8px 24px rgba(11, 31, 58, 0.1);
+  transform: translateY(-2px);
+}
+.c-head {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+.avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-weight: 600;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+.c-name {
+  font-weight: 600;
+}
+.c-title {
+  font-size: 0.8rem;
+  color: var(--muted-foreground);
+}
+.match {
+  margin-left: auto;
+  font-weight: 700;
+  color: var(--growth-green);
+}
+.c-loc {
+  font-size: 0.8rem;
+  color: var(--muted-foreground);
+  margin: 0.75rem 0;
+}
+.spectrum {
+  margin-bottom: 0.75rem;
+}
+.sp-label {
+  font-size: 0.72rem;
+  color: var(--muted-foreground);
+}
+.sp-track {
+  position: relative;
+  height: 8px;
+  background: var(--muted);
+  border-radius: 999px;
+  margin-top: 0.35rem;
+}
+.sp-range {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--insight-teal), var(--growth-green));
+}
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+.tag {
+  font-size: 0.7rem;
+  background: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.15rem 0.55rem;
+  color: var(--muted-foreground);
+}
+.empty {
+  color: var(--muted-foreground);
+  grid-column: 1 / -1;
+}

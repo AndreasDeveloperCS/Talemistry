@@ -4,6 +4,6 @@
  */
 export const environment = {
   production: false,
-  apiBaseUrl: 'http://localhost:4000/api/v1',
-  socketUrl: 'http://localhost:4000',
+  apiUrl: 'http://localhost:4000/api/v1',
+  wsUrl: 'http://localhost:4000',
 }
