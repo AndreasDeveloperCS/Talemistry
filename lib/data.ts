@@ -846,6 +846,95 @@ export const ACTIVITY = [
   { id: 5, actor: "Pipeline Copilot", action: "flagged a stalled pipeline in", target: "Data Scientist", time: "2026-07-26T11:00:00", tone: "amber" as const },
 ]
 
+/* Assessment library — skills tests, psychometric, culture-add */
+export type AssessmentKind = "skills" | "psychometric" | "culture" | "cognitive"
+export interface Assessment {
+  id: string
+  name: string
+  kind: AssessmentKind
+  duration: string
+  description: string
+  proctored: boolean
+  autoScored: boolean
+  assigned: number
+  completed: number
+  avgScore: number
+}
+export const ASSESSMENTS: Assessment[] = [
+  {
+    id: "as-1",
+    name: "Frontend Engineering — React & TypeScript",
+    kind: "skills",
+    duration: "60 min",
+    description: "Live coding: component architecture, state management, accessibility and performance profiling.",
+    proctored: true,
+    autoScored: true,
+    assigned: 24,
+    completed: 18,
+    avgScore: 78,
+  },
+  {
+    id: "as-2",
+    name: "System Design — Scalable Services",
+    kind: "skills",
+    duration: "45 min",
+    description: "Whiteboard-style design of a high-throughput service with trade-off discussion.",
+    proctored: false,
+    autoScored: false,
+    assigned: 11,
+    completed: 7,
+    avgScore: 82,
+  },
+  {
+    id: "as-3",
+    name: "Work Style & Team Chemistry",
+    kind: "psychometric",
+    duration: "20 min",
+    description: "Validated, human-supervised type indicator mapping cognition, energy and decision style.",
+    proctored: false,
+    autoScored: true,
+    assigned: 63,
+    completed: 51,
+    avgScore: 0,
+  },
+  {
+    id: "as-4",
+    name: "Culture-Add Signal",
+    kind: "culture",
+    duration: "15 min",
+    description: "Values alignment and collaboration preferences framed for culture-add, not culture-fit.",
+    proctored: false,
+    autoScored: true,
+    assigned: 63,
+    completed: 44,
+    avgScore: 0,
+  },
+  {
+    id: "as-5",
+    name: "Structured Problem Solving",
+    kind: "cognitive",
+    duration: "30 min",
+    description: "Numerical, logical and pattern reasoning with adaptive difficulty.",
+    proctored: true,
+    autoScored: true,
+    assigned: 30,
+    completed: 22,
+    avgScore: 71,
+  },
+  {
+    id: "as-6",
+    name: "Product Sense & Design Critique",
+    kind: "skills",
+    duration: "40 min",
+    description: "Portfolio-driven evaluation of product judgement, craft and communication.",
+    proctored: false,
+    autoScored: false,
+    assigned: 9,
+    completed: 6,
+    avgScore: 85,
+  },
+]
+
 /* Helpers */
 export const getCandidate = (id: string) => CANDIDATES.find((c) => c.id === id)
 export const getJob = (id: string) => JOBS.find((j) => j.id === id)

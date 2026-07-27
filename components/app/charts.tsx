@@ -42,6 +42,39 @@ function TooltipBox({ active, payload, label }: any) {
   )
 }
 
+export function MiniArea({
+  data,
+  height = 220,
+}: {
+  data: { label: string; value: number }[]
+  height?: number
+}) {
+  return (
+    <ResponsiveContainer width="100%" height={height}>
+      <AreaChart data={data} margin={{ top: 10, right: 8, left: -18, bottom: 0 }}>
+        <defs>
+          <linearGradient id="miniArea" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="var(--color-primary)" stopOpacity={0.35} />
+            <stop offset="100%" stopColor="var(--color-primary)" stopOpacity={0} />
+          </linearGradient>
+        </defs>
+        <CartesianGrid strokeDasharray="3 3" stroke={GRID} vertical={false} />
+        <XAxis dataKey="label" stroke={AXIS} tickLine={false} axisLine={false} fontSize={12} />
+        <YAxis stroke={AXIS} tickLine={false} axisLine={false} fontSize={12} />
+        <Tooltip content={<TooltipBox />} />
+        <Area
+          type="monotone"
+          dataKey="value"
+          name="Events"
+          stroke="var(--color-primary)"
+          strokeWidth={2}
+          fill="url(#miniArea)"
+        />
+      </AreaChart>
+    </ResponsiveContainer>
+  )
+}
+
 export function TrendArea({ data }: { data: { label: string; hires: number; applicants: number }[] }) {
   return (
     <ResponsiveContainer width="100%" height={240}>
