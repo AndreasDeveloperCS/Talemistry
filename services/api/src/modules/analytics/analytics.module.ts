@@ -6,6 +6,8 @@ import { MongooseModule } from '@nestjs/mongoose'
 import { Offer, OfferSchema } from '../offers/schemas/offer.schema'
 import { AnalyticsController } from './analytics.controller'
 import { AnalyticsService } from './analytics.service'
+import { LiveAnalyticsController } from './live-analytics.controller'
+import { LiveAnalyticsService } from './live-analytics.service'
 
 @Module({
   imports: [
@@ -14,7 +16,7 @@ import { AnalyticsService } from './analytics.service'
     OffersModule,
     MongooseModule.forFeature([{ name: Offer.name, schema: OfferSchema }]),
   ],
-  controllers: [AnalyticsController],
-  providers: [AnalyticsService],
+  controllers: [AnalyticsController, LiveAnalyticsController],
+  providers: [AnalyticsService, LiveAnalyticsService],
 })
 export class AnalyticsModule {}
