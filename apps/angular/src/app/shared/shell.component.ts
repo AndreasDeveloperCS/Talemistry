@@ -17,7 +17,7 @@ interface NavItem {
     <div class="layout">
       <aside class="sidebar" [class.open]="open()">
         <div class="brand">
-          <tal-logo [size]="30" />
+          <tal-logo [size]="30" [showEndorsement]="true" />
         </div>
 
         <nav>
