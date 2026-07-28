@@ -170,6 +170,34 @@
     background-color: #24af4f;
     color: #0b1b2a;
   }
+
+  /* Show a pointer cursor on all interactive/clickable elements.
+     Tailwind v4 resets buttons to the default cursor, so restore it here. */
+  button,
+  a[href],
+  label[for],
+  summary,
+  select,
+  [role="button"],
+  [role="tab"],
+  [role="menuitem"],
+  [role="switch"],
+  [role="option"],
+  [type="button"],
+  [type="submit"],
+  [type="reset"],
+  [type="checkbox"],
+  [type="radio"] {
+    cursor: pointer;
+  }
+
+  /* Disabled controls should never appear clickable. */
+  button:disabled,
+  [role="button"][aria-disabled="true"],
+  [disabled],
+  .cursor-not-allowed {
+    cursor: not-allowed;
+  }
 }
 
 /* ============================================================
