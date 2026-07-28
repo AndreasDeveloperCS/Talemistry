@@ -28,13 +28,13 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-grid opacity-60" aria-hidden="true" />
           <div className="relative mx-auto grid max-w-7xl gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:py-28 lg:px-8">
             <div className="flex flex-col justify-center">
-              <Badge tone="green" className="w-fit bg-white/10 text-[#4fd1a8]">
+              <Badge tone="green" className="w-fit">
                 <Sparkles className="h-3.5 w-3.5" /> Full-Cycle AI Recruitment Ecosystem
               </Badge>
-              <h1 className="mt-6 text-balance text-4xl font-bold leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-6xl">
+              <h1 className="mt-6 text-balance text-4xl font-bold leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
                 Reveal the chemistry of <span className="text-gradient-growth">human potential.</span>
               </h1>
-              <p className="mt-6 max-w-xl text-pretty text-lg leading-relaxed text-[#a9b7c8]">
+              <p className="mt-6 max-w-xl text-pretty text-lg leading-relaxed text-muted-foreground">
                 Talemistry connects job publication, candidate discovery, assessment, interviews,
                 decisions and offers in one human-supervised platform — so you understand candidates
                 beyond the resume.
@@ -46,26 +46,26 @@ export default function HomePage() {
                   </Button>
                 </Link>
                 <Link href="/dashboard">
-                  <Button size="lg" variant="outline" className="w-full border-white/20 bg-white/5 text-white hover:bg-white/10 sm:w-auto">
+                  <Button size="lg" variant="outline" className="w-full sm:w-auto">
                     Request a demonstration
                   </Button>
                 </Link>
               </div>
-              <dl className="mt-12 grid max-w-lg grid-cols-3 gap-6 border-t border-white/10 pt-8">
+              <dl className="mt-12 grid max-w-lg grid-cols-3 gap-6 border-t border-border pt-8">
                 {[
                   { v: "7 stages", l: "Unified journey" },
                   { v: "-38%", l: "Time to hire" },
                   { v: "Human", l: "Always in control" },
                 ].map((s) => (
                   <div key={s.l}>
-                    <dt className="text-2xl font-bold text-white">{s.v}</dt>
-                    <dd className="mt-1 text-xs text-[#8ea0b5]">{s.l}</dd>
+                    <dt className="text-2xl font-bold text-foreground">{s.v}</dt>
+                    <dd className="mt-1 text-xs text-muted-foreground">{s.l}</dd>
                   </div>
                 ))}
               </dl>
             </div>
             <div className="relative flex items-center">
-              <div className="relative w-full overflow-hidden rounded-2xl border border-white/10 shadow-2xl">
+              <div className="relative w-full overflow-hidden rounded-2xl border border-border shadow-2xl">
                 <Image
                   src="/hero-collaboration.png"
                   alt="A diverse team in focused collaboration around a laptop"
@@ -75,13 +75,13 @@ export default function HomePage() {
                   priority
                 />
               </div>
-              <Card className="animate-float-slow absolute -bottom-5 -left-4 w-56 border-white/10 bg-[#0b1b2a]/90 p-4 backdrop-blur">
-                <div className="flex items-center gap-2 text-[#4fd1a8]">
+              <Card className="animate-float-slow absolute -bottom-5 -left-4 w-56 bg-card/95 p-4 shadow-xl backdrop-blur">
+                <div className="flex items-center gap-2 text-primary">
                   <Atom className="h-4 w-4" />
                   <span className="text-xs font-semibold">Chemistry Match</span>
                 </div>
-                <p className="mt-1 text-2xl font-bold text-white">94%</p>
-                <p className="text-[11px] text-[#8ea0b5]">Role · Team · Organization alignment</p>
+                <p className="mt-1 text-2xl font-bold text-foreground">94%</p>
+                <p className="text-[11px] text-muted-foreground">Role · Team · Organization alignment</p>
               </Card>
             </div>
           </div>
@@ -153,15 +153,15 @@ export default function HomePage() {
         </section>
 
         {/* ---------------- Ecosystem / Journey ---------------- */}
-        <section id="ecosystem" className="relative overflow-hidden bg-[#0b1b2a]">
+        <section id="ecosystem" className="relative overflow-hidden border-y border-border bg-muted dark:bg-[#0b1b2a]">
           <div className="absolute inset-0 bg-grid opacity-40" aria-hidden="true" />
           <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-2xl text-center">
-              <p className="text-sm font-semibold uppercase tracking-wider text-[#4fd1a8]">The ecosystem</p>
-              <h2 className="mt-3 text-balance text-3xl font-bold tracking-tight text-white sm:text-4xl">
+              <p className="text-sm font-semibold uppercase tracking-wider text-primary dark:text-[#4fd1a8]">The ecosystem</p>
+              <h2 className="mt-3 text-balance text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
                 One ecosystem for the complete recruitment journey.
               </h2>
-              <p className="mt-5 text-pretty text-lg leading-relaxed text-[#a9b7c8]">
+              <p className="mt-5 text-pretty text-lg leading-relaxed text-muted-foreground">
                 Discover → Attract → Understand → Match → Evaluate → Decide → Offer.
               </p>
             </div>
@@ -170,7 +170,7 @@ export default function HomePage() {
             </div>
             <div className="mt-10 text-center">
               <Link href="/dashboard">
-                <Button size="lg" variant="dark" className="border border-white/15 bg-white/5 hover:bg-white/10">
+                <Button size="lg" variant="outline">
                   Explore the platform <ArrowRight className="h-4.5 w-4.5" />
                 </Button>
               </Link>
@@ -286,12 +286,12 @@ export default function HomePage() {
             </p>
             <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
               <Link href="/dashboard">
-                <Button size="lg" className="w-full sm:w-auto">
+                <Button size="lg" className="w-full bg-white text-[#176b25] shadow-sm hover:bg-white/90 sm:w-auto">
                   Experience Talemistry <ArrowRight className="h-4.5 w-4.5" />
                 </Button>
               </Link>
               <Link href="/dashboard">
-                <Button size="lg" variant="outline" className="w-full border-white/20 bg-white/5 text-white hover:bg-white/10 sm:w-auto">
+                <Button size="lg" variant="outline" className="w-full border-white/30 bg-white/10 text-white hover:bg-white/20 sm:w-auto">
                   Talk to our team
                 </Button>
               </Link>

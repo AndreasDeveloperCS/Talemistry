@@ -175,8 +175,13 @@
 /* ============================================================
    Brand gradients (from Brand Book Appendix A)
    ============================================================ */
+/* Bold brand accent band — green-forward, intentional (used for final CTA).
+   High-contrast with white text in both themes. */
 .gradient-discovery {
-  background: linear-gradient(135deg, #0b1b2a 0%, #383c5b 40%, #126f66 72%, #208e2d 100%);
+  background: linear-gradient(135deg, #176b25 0%, #208e2d 45%, #126f66 100%);
+}
+.dark .gradient-discovery {
+  background: linear-gradient(135deg, #0b1b2a 0%, #12594a 55%, #176b25 100%);
 }
 .gradient-human {
   background: linear-gradient(135deg, #545454 0%, #208e2d 55%, #4fd1a8 100%);
@@ -187,7 +192,15 @@
 .gradient-spark {
   background: linear-gradient(135deg, #ae0301 0%, #d1a18f 55%, #fafafa 100%);
 }
+/* Hero mesh — subtle, light brand tint by default; deep navy in dark mode. */
 .gradient-mesh {
+  background:
+    radial-gradient(60% 60% at 15% 20%, rgba(36, 175, 79, 0.12) 0%, transparent 60%),
+    radial-gradient(55% 55% at 85% 15%, rgba(18, 111, 102, 0.10) 0%, transparent 55%),
+    radial-gradient(70% 70% at 75% 85%, rgba(91, 85, 133, 0.08) 0%, transparent 60%),
+    #f4f7f5;
+}
+.dark .gradient-mesh {
   background:
     radial-gradient(60% 60% at 15% 20%, rgba(36, 175, 79, 0.22) 0%, transparent 60%),
     radial-gradient(55% 55% at 85% 15%, rgba(18, 111, 102, 0.28) 0%, transparent 55%),
@@ -202,12 +215,23 @@
   color: transparent;
 }
 
-/* Grid pattern for hero / dark surfaces */
+/* Grid pattern — subtle dark lines on light surfaces, white lines in dark mode */
 .bg-grid {
+  background-image:
+    linear-gradient(to right, rgba(11, 27, 42, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(11, 27, 42, 0.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+.dark .bg-grid {
   background-image:
     linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-  background-size: 44px 44px;
+}
+/* On the bold green CTA band, keep grid lines light in both themes */
+.gradient-discovery .bg-grid {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
 }
 
 @keyframes float-slow {
