@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* Drive the `dark:` variant from the `.dark` class (set by next-themes)
+   instead of the OS media query. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ============================================================
    TALEMISTRY DESIGN SYSTEM
    Normalized from the Talemistry Brand Book v1.0
@@ -110,6 +114,45 @@
   --sidebar-accent: rgba(255, 255, 255, 0.06);
   --sidebar-accent-foreground: #ffffff;
   --sidebar-ring: #24af4f;
+}
+
+.dark {
+  --background: #081521;
+  --foreground: #e7edf3;
+
+  --card: #0f2333;
+  --card-foreground: #e7edf3;
+
+  --popover: #12283a;
+  --popover-foreground: #e7edf3;
+
+  /* Brighter green for contrast on dark surfaces */
+  --primary: #34c759;
+  --primary-foreground: #06140b;
+
+  --secondary: #1a2f44;
+  --secondary-foreground: #c7d0dc;
+
+  --muted: #16293c;
+  --muted-foreground: #93a4b8;
+
+  --accent: #133025;
+  --accent-foreground: #6fe0a0;
+
+  --destructive: #ef4b49;
+  --destructive-foreground: #ffffff;
+
+  --border: #22384e;
+  --input: #26405a;
+  --ring: #34c759;
+
+  /* Sidebar stays deep-navy in both themes but darkens slightly for depth */
+  --sidebar: #061019;
+  --sidebar-foreground: #c7d0dc;
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-accent: rgba(255, 255, 255, 0.06);
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-ring: #34c759;
 }
 
 @layer base {

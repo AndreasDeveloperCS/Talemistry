@@ -2,6 +2,7 @@
 
 import { Search, Bell, Plus, HelpCircle } from "lucide-react"
 import { Avatar, Badge } from "@/components/ui/primitives"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export function Topbar({ title, subtitle }: { title: string; subtitle?: string }) {
   return (
@@ -21,6 +22,8 @@ export function Topbar({ title, subtitle }: { title: string; subtitle?: string }
             className="h-9 w-64 rounded-lg border border-border bg-card pl-9 pr-3 text-sm text-foreground outline-none transition focus:border-ring focus:ring-2 focus:ring-ring/30"
           />
         </div>
+
+        <ThemeToggle />
 
         <button
           type="button"

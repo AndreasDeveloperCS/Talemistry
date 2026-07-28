@@ -65,7 +65,7 @@ export function Sidebar() {
         <div className="flex flex-col leading-none">
           <span className="text-[13px] font-bold tracking-[0.18em] text-white">TALEMISTRY</span>
           <span className="mt-0.5 text-[8px] font-medium tracking-wide text-[#64708a]">
-            by Nomado Innovations
+            Nomado Innovations
           </span>
         </div>
       </div>

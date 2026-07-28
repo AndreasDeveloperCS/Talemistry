@@ -123,8 +123,8 @@ export function Avatar({
 export function Progress({
   value,
   className,
-  color = "#208e2d",
-  track = "#e9ecef",
+  color = "var(--primary)",
+  track = "var(--muted)",
 }: {
   value: number
   className?: string
@@ -155,7 +155,7 @@ export function StatDelta({ value }: { value: number }) {
     <span
       className={cn(
         "inline-flex items-center gap-0.5 text-xs font-semibold",
-        positive ? "text-[#176b25]" : "text-[#ae0301]",
+        positive ? "text-primary" : "text-destructive",
       )}
     >
       {positive ? "▲" : "▼"} {Math.abs(value)}%

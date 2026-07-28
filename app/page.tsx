@@ -20,7 +20,7 @@ import { Button, Card, Badge } from "@/components/ui/primitives"
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-[#fafafa]">
+    <div className="min-h-screen bg-background text-foreground">
       <SiteHeader />
       <main>
         {/* ---------------- Hero ---------------- */}
@@ -91,16 +91,16 @@ export default function HomePage() {
         <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-wider text-[#126f66]">The problem</p>
-              <h2 className="mt-3 text-balance text-3xl font-bold tracking-tight text-[#0b1b2a] sm:text-4xl">
+              <p className="text-sm font-semibold uppercase tracking-wider text-[#126f66] dark:text-[#5fd0c4]">The problem</p>
+              <h2 className="mt-3 text-balance text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
                 A resume shows experience. It does not show the whole person.
               </h2>
-              <p className="mt-5 text-pretty text-lg leading-relaxed text-[#545454]">
+              <p className="mt-5 text-pretty text-lg leading-relaxed text-muted-foreground">
                 Recruitment is fragmented across tools, evaluation stays surface-level, and
                 collaboration is inconsistent. Great people are eliminated for the wrong reasons —
                 and the evidence behind decisions disappears.
               </p>
-              <Link href="#philosophy" className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#176b25]">
+              <Link href="#philosophy" className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-primary">
                 See the difference <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
@@ -111,9 +111,9 @@ export default function HomePage() {
                 { icon: Users, t: "Inconsistent collaboration", d: "Feedback is scattered; decisions lack shared, structured context." },
               ].map((c) => (
                 <Card key={c.t} className="p-5">
-                  <c.icon className="h-6 w-6 text-[#383c5b]" />
-                  <h3 className="mt-4 text-sm font-semibold text-[#0b1b2a]">{c.t}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-[#64708a]">{c.d}</p>
+                  <c.icon className="h-6 w-6 text-[#383c5b] dark:text-[#8b93c9]" />
+                  <h3 className="mt-4 text-sm font-semibold text-foreground">{c.t}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{c.d}</p>
                 </Card>
               ))}
             </div>
@@ -121,14 +121,14 @@ export default function HomePage() {
         </section>
 
         {/* ---------------- Philosophy ---------------- */}
-        <section id="philosophy" className="border-y border-border bg-white">
+        <section id="philosophy" className="border-y border-border bg-card">
           <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-2xl text-center">
-              <p className="text-sm font-semibold uppercase tracking-wider text-[#5b5585]">Candidate intelligence</p>
-              <h2 className="mt-3 text-balance text-3xl font-bold tracking-tight text-[#0b1b2a] sm:text-4xl">
+              <p className="text-sm font-semibold uppercase tracking-wider text-[#5b5585] dark:text-[#b6a9e6]">Candidate intelligence</p>
+              <h2 className="mt-3 text-balance text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
                 Every candidate has a unique professional formula.
               </h2>
-              <p className="mt-5 text-pretty text-lg leading-relaxed text-[#545454]">
+              <p className="mt-5 text-pretty text-lg leading-relaxed text-muted-foreground">
                 Talemistry brings together skills, motivation, working style, evidence and potential
                 as connected elements — a complete, explainable Talemistry Profile.
               </p>
@@ -144,8 +144,8 @@ export default function HomePage() {
                   <Badge tone={c.tone} className="h-9 w-9 justify-center rounded-lg p-0">
                     <c.icon className="h-4.5 w-4.5" />
                   </Badge>
-                  <h3 className="mt-4 text-base font-semibold text-[#0b1b2a]">{c.t}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-[#64708a]">{c.d}</p>
+                  <h3 className="mt-4 text-base font-semibold text-foreground">{c.t}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{c.d}</p>
                 </Card>
               ))}
             </div>
@@ -182,11 +182,11 @@ export default function HomePage() {
         <section id="trust" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-wider text-[#126f66]">Responsible AI</p>
-              <h2 className="mt-3 text-balance text-3xl font-bold tracking-tight text-[#0b1b2a] sm:text-4xl">
+              <p className="text-sm font-semibold uppercase tracking-wider text-[#126f66] dark:text-[#5fd0c4]">Responsible AI</p>
+              <h2 className="mt-3 text-balance text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
                 AI-assisted insight. Human responsibility.
               </h2>
-              <p className="mt-5 text-pretty text-lg leading-relaxed text-[#545454]">
+              <p className="mt-5 text-pretty text-lg leading-relaxed text-muted-foreground">
                 AI coordinates work, analyzes information and identifies patterns. It does not reduce a
                 person to a score. Talemistry supports decisions; authorized people remain accountable
                 for them.
@@ -198,10 +198,10 @@ export default function HomePage() {
                   { t: "Preserve trust", d: "Handle candidate information carefully, transparently and securely." },
                 ].map((c) => (
                   <li key={c.t} className="flex gap-3">
-                    <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-[#176b25]" />
+                    <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
                     <div>
-                      <p className="text-sm font-semibold text-[#0b1b2a]">{c.t}</p>
-                      <p className="mt-0.5 text-sm text-[#64708a]">{c.d}</p>
+                      <p className="text-sm font-semibold text-foreground">{c.t}</p>
+                      <p className="mt-0.5 text-sm text-muted-foreground">{c.d}</p>
                     </div>
                   </li>
                 ))}
@@ -215,13 +215,13 @@ export default function HomePage() {
                 </div>
               </div>
               <div className="space-y-4 p-6">
-                <p className="text-sm leading-relaxed text-[#545454]">
-                  "The candidate shows <span className="font-semibold text-[#0b1b2a]">strong alignment</span> with
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  "The candidate shows <span className="font-semibold text-foreground">strong alignment</span> with
                   the role's analytical requirements. The interview should validate stakeholder communication."
                 </p>
-                <div className="rounded-lg border border-border bg-[#f2f3f4] p-4">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-[#8e8a99]">Evidence Trail</p>
-                  <ul className="mt-2 space-y-1.5 text-xs text-[#545454]">
+                <div className="rounded-lg border border-border bg-muted p-4">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Evidence Trail</p>
+                  <ul className="mt-2 space-y-1.5 text-xs text-muted-foreground">
                     <li>· Open-source contributions (verified)</li>
                     <li>· Skills assessment: 88/100 analytical reasoning</li>
                     <li>· Prescreen notes from M. Lindqvist</li>
@@ -237,7 +237,7 @@ export default function HomePage() {
         </section>
 
         {/* ---------------- Candidate experience ---------------- */}
-        <section id="candidate" className="border-t border-border bg-white">
+        <section id="candidate" className="border-t border-border bg-card">
           <div className="mx-auto grid max-w-7xl gap-12 px-4 py-20 sm:px-6 lg:grid-cols-2 lg:items-center lg:px-8">
             <div className="relative order-2 overflow-hidden rounded-2xl lg:order-1">
               <Image
@@ -249,11 +249,11 @@ export default function HomePage() {
               />
             </div>
             <div className="order-1 lg:order-2">
-              <p className="text-sm font-semibold uppercase tracking-wider text-[#a86a52]">Candidate experience</p>
-              <h2 className="mt-3 text-balance text-3xl font-bold tracking-tight text-[#0b1b2a] sm:text-4xl">
+              <p className="text-sm font-semibold uppercase tracking-wider text-[#a86a52] dark:text-[#d1a18f]">Candidate experience</p>
+              <h2 className="mt-3 text-balance text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
                 Recruitment that helps people feel recognized.
               </h2>
-              <p className="mt-5 text-pretty text-lg leading-relaxed text-[#545454]">
+              <p className="mt-5 text-pretty text-lg leading-relaxed text-muted-foreground">
                 Clear expectations, timely communication, transparent stages and respectful data
                 handling. Candidates are recognized as people, not processed as applications.
               </p>
@@ -263,9 +263,9 @@ export default function HomePage() {
                   { icon: Users, t: "Self-scheduling", d: "Candidates book interviews without back-and-forth." },
                 ].map((c) => (
                   <div key={c.t} className="rounded-xl border border-border p-4">
-                    <c.icon className="h-5 w-5 text-[#126f66]" />
-                    <p className="mt-3 text-sm font-semibold text-[#0b1b2a]">{c.t}</p>
-                    <p className="mt-1 text-sm text-[#64708a]">{c.d}</p>
+                    <c.icon className="h-5 w-5 text-[#126f66] dark:text-[#5fd0c4]" />
+                    <p className="mt-3 text-sm font-semibold text-foreground">{c.t}</p>
+                    <p className="mt-1 text-sm text-muted-foreground">{c.d}</p>
                   </div>
                 ))}
               </div>

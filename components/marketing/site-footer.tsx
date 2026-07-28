@@ -31,7 +31,7 @@ export function SiteFooter() {
               assessment, interviews, decisions and offers in one human-supervised platform.
             </p>
             <p className="mt-6 text-xs font-medium tracking-wide text-[#64708a]">
-              Talemistry by Nomado Innovations
+              Talemistry · Nomado Innovations
             </p>
           </div>
           {COLS.map((col) => (
