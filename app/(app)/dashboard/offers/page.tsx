@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { Topbar } from "@/components/app/topbar"
 import { Card, Badge, Button, Avatar, Progress } from "@/components/ui/primitives"
 import { OFFERS } from "@/lib/data"
+import { getOffers } from "@/lib/repos"
 import { formatCurrency } from "@/lib/utils"
 import { CheckCircle2, Clock, XCircle, TrendingUp } from "lucide-react"
 
@@ -9,6 +10,8 @@ export const metadata: Metadata = {
   title: "Offers",
   description: "Offer management, multi-stakeholder approvals and acceptance-likelihood intelligence.",
 }
+
+export const dynamic = "force-dynamic"
 
 const STATUS_TONE = {
   draft: "neutral",
@@ -32,9 +35,11 @@ const APPROVAL_ICON = {
   rejected: XCircle,
 } as const
 
-export default function OffersPage() {
-  const accepted = OFFERS.filter((o) => o.status === "accepted").length
-  const outstanding = OFFERS.filter((o) => ["sent", "pending-approval"].includes(o.status)).length
+export default async function OffersPage() {
+  const live = await getOffers().catch(() => [])
+  const OFFERS_DATA = live.length > 0 ? live : OFFERS
+  const accepted = OFFERS_DATA.filter((o) => o.status === "accepted").length
+  const outstanding = OFFERS_DATA.filter((o) => ["sent", "pending-approval"].includes(o.status)).length
 
   return (
     <>
@@ -43,7 +48,7 @@ export default function OffersPage() {
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <Card className="p-5">
             <p className="text-sm text-muted-foreground">Open offers</p>
-            <p className="mt-1 text-3xl font-semibold tracking-tight">{OFFERS.length}</p>
+            <p className="mt-1 text-3xl font-semibold tracking-tight">{OFFERS_DATA.length}</p>
           </Card>
           <Card className="p-5">
             <p className="text-sm text-muted-foreground">Awaiting response</p>
@@ -56,7 +61,7 @@ export default function OffersPage() {
         </div>
 
         <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-          {OFFERS.map((o) => {
+          {OFFERS_DATA.map((o) => {
             const total = o.base + o.bonus
             return (
               <Card key={o.id} className="p-5">

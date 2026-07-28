@@ -3,7 +3,10 @@ import { Video, Phone, MapPin, Clock, Users, Code2, ClipboardCheck, CheckCircle2
 import { Topbar } from "@/components/app/topbar"
 import { Card, Badge, Avatar, Button } from "@/components/ui/primitives"
 import { INTERVIEWS } from "@/lib/data"
+import { getInterviews } from "@/lib/repos"
 import { formatDate } from "@/lib/utils"
+
+export const dynamic = "force-dynamic"
 
 const typeTone: Record<string, string> = {
   Prescreen: "#545454",
@@ -71,11 +74,13 @@ function InterviewCard({ i }: { i: (typeof INTERVIEWS)[number] }) {
   )
 }
 
-export default function InterviewsPage() {
-  const upcoming = INTERVIEWS.filter((i) => i.status === "scheduled").sort(
+export default async function InterviewsPage() {
+  const live = await getInterviews().catch(() => [])
+  const data = live.length > 0 ? live : INTERVIEWS
+  const upcoming = data.filter((i) => i.status === "scheduled").sort(
     (a, b) => +new Date(a.start) - +new Date(b.start),
   )
-  const completed = INTERVIEWS.filter((i) => i.status === "completed")
+  const completed = data.filter((i) => i.status === "completed")
 
   return (
     <>

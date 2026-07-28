@@ -18,6 +18,7 @@ import { RealtimeModule } from './realtime/realtime.module'
       inject: [ConfigService],
       useFactory: (config: ConfigService<AppConfig, true>) => ({
         uri: config.get('mongoUri', { infer: true }),
+        dbName: config.get('dbName', { infer: true }),
       }),
     }),
     CandidatesModule,

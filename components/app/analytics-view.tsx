@@ -66,7 +66,7 @@ const DEFAULTS: Filters = { range: "12m", viewerId: "all", recruiterId: "all", s
 export function AnalyticsView() {
   const [filters, setFilters] = useState<Filters>(DEFAULTS)
 
-  const query = new URLSearchParams(filters).toString()
+  const query = new URLSearchParams({ ...filters }).toString()
   const { data, isLoading } = useSWR<LiveAnalytics & { ok: boolean; error?: string }>(
     `/api/analytics?${query}`,
     fetcher,

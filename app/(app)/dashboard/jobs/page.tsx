@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { Topbar } from "@/components/app/topbar"
 import { Card, Badge, Button, Progress } from "@/components/ui/primitives"
 import { JOBS } from "@/lib/data"
+import { getJobs } from "@/lib/repos"
 import { formatCurrency } from "@/lib/utils"
 import { JOURNEY_STAGES } from "@/lib/journey"
 import { MapPin, Users, Briefcase, Sparkles } from "lucide-react"
@@ -10,6 +11,8 @@ export const metadata: Metadata = {
   title: "Jobs & Roles",
   description: "Discover & Attract — craft roles, publish across channels and attract aligned talent.",
 }
+
+export const dynamic = "force-dynamic"
 
 const STATUS_TONE = {
   draft: "neutral",
@@ -20,9 +23,11 @@ const STATUS_TONE = {
 
 const PRIORITY_TONE = { high: "red", medium: "amber", low: "neutral" } as const
 
-export default function JobsPage() {
-  const published = JOBS.filter((j) => j.status === "published").length
-  const applicants = JOBS.reduce((s, j) => s + j.applicants, 0)
+export default async function JobsPage() {
+  const live = await getJobs().catch(() => [])
+  const JOBS_DATA = live.length > 0 ? live : JOBS
+  const published = JOBS_DATA.filter((j) => j.status === "published").length
+  const applicants = JOBS_DATA.reduce((s, j) => s + j.applicants, 0)
 
   return (
     <>
@@ -43,13 +48,13 @@ export default function JobsPage() {
           <Card className="p-5">
             <p className="text-sm text-muted-foreground">Avg JD quality</p>
             <p className="mt-1 text-3xl font-semibold tracking-tight">
-              {Math.round(JOBS.reduce((s, j) => s + j.jdQuality, 0) / JOBS.length)}
+              {Math.round(JOBS_DATA.reduce((s, j) => s + j.jdQuality, 0) / JOBS_DATA.length)}
             </p>
           </Card>
         </div>
 
         <div className="space-y-4">
-          {JOBS.map((j) => {
+          {JOBS_DATA.map((j) => {
             const stage = JOURNEY_STAGES.find((s) => s.id === j.stage)
             return (
               <Card key={j.id} className="p-5">

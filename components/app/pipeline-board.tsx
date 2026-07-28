@@ -24,9 +24,24 @@ export function PipelineBoard({ initial }: { initial: Candidate[] }) {
 
   function onDrop(stage: PipelineStatus) {
     if (!dragId) return
-    setCandidates((prev) => prev.map((c) => (c.id === dragId ? { ...c, status: stage } : c)))
+    const id = dragId
+    const previous = candidates
+    const moved = candidates.find((c) => c.id === id)
     setDragId(null)
     setOverStage(null)
+    if (!moved || moved.status === stage) return
+
+    // Optimistic update, then persist to MongoDB (rollback on failure).
+    setCandidates((prev) => prev.map((c) => (c.id === id ? { ...c, status: stage } : c)))
+    fetch(`/api/candidates/${id}/status`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status: stage }),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error(String(res.status))
+      })
+      .catch(() => setCandidates(previous))
   }
 
   return (

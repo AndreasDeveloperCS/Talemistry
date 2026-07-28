@@ -20,7 +20,7 @@ export async function GET(request: Request) {
   const nestUrl = process.env.NEST_API_URL
   if (nestUrl) {
     try {
-      const qs = new URLSearchParams(filters as Record<string, string>).toString()
+      const qs = new URLSearchParams({ ...filters }).toString()
       const res = await fetch(`${nestUrl.replace(/\/$/, "")}/api/v1/live/analytics?${qs}`, {
         cache: "no-store",
       })

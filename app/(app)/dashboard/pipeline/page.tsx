@@ -1,9 +1,15 @@
 import { Topbar } from "@/components/app/topbar"
 import { PipelineBoard } from "@/components/app/pipeline-board"
+import { getCandidates } from "@/lib/repos"
 import { CANDIDATES } from "@/lib/data"
 import { JOURNEY_STAGES } from "@/lib/journey"
 
-export default function PipelinePage() {
+export const dynamic = "force-dynamic"
+
+export default async function PipelinePage() {
+  const live = await getCandidates().catch(() => [])
+  const candidates = live.length > 0 ? live : CANDIDATES
+
   return (
     <>
       <Topbar title="Talent Pipeline" subtitle="Drag candidates across the seven-stage journey" />
@@ -29,7 +35,7 @@ export default function PipelinePage() {
           })}
         </div>
 
-        <PipelineBoard initial={CANDIDATES} />
+        <PipelineBoard initial={candidates} />
       </main>
     </>
   )

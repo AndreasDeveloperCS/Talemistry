@@ -33,6 +33,7 @@ exports.AppModule = AppModule = __decorate([
                 inject: [config_1.ConfigService],
                 useFactory: (config) => ({
                     uri: config.get('mongoUri', { infer: true }),
+                    dbName: config.get('dbName', { infer: true }),
                 }),
             }),
             candidates_module_1.CandidatesModule,
