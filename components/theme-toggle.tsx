@@ -1,37 +1,35 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import { useTheme } from "next-themes"
 import { Moon, Sun } from "lucide-react"
 import { Tooltip } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
 
 export function ThemeToggle({ className }: { className?: string }) {
-  const { resolvedTheme, setTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => setMounted(true), [])
+  const { setTheme } = useTheme()
 
-  const isDark = resolvedTheme === "dark"
-  const next = isDark ? "light" : "dark"
-  const label = mounted ? `Switch to ${next} mode` : "Toggle theme"
+  function toggle() {
+    // Read the live DOM state so the toggle is correct even before
+    // next-themes has hydrated (the inline script sets `.dark` pre-paint).
+    const isDark = document.documentElement.classList.contains("dark")
+    setTheme(isDark ? "light" : "dark")
+  }
 
   return (
-    <Tooltip label={label}>
+    <Tooltip label="Toggle theme">
       <button
         type="button"
-        aria-label={label}
-        onClick={() => setTheme(next)}
+        aria-label="Toggle theme"
+        onClick={toggle}
         className={cn(
           "inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition hover:text-foreground",
           className,
         )}
       >
-        {/* Render both; avoid hydration mismatch by only revealing after mount */}
-        {mounted ? (
-          isDark ? <Sun className="h-4 w-4" aria-hidden /> : <Moon className="h-4 w-4" aria-hidden />
-        ) : (
-          <Sun className="h-4 w-4 opacity-0" aria-hidden />
-        )}
+        {/* Icons are toggled purely via the `.dark` class, so the button always
+            shows a real icon on first paint — no mount gating, no empty state. */}
+        <Sun className="hidden h-4 w-4 dark:block" aria-hidden />
+        <Moon className="block h-4 w-4 dark:hidden" aria-hidden />
       </button>
     </Tooltip>
   )
