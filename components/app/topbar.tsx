@@ -1,8 +1,8 @@
 "use client"
 
 import { Search, Bell, Plus, HelpCircle } from "lucide-react"
-import { Avatar, Badge } from "@/components/ui/primitives"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { UserMenu } from "@/components/app/user-menu"
 
 export function Topbar({ title, subtitle }: { title: string; subtitle?: string }) {
   return (
@@ -50,13 +50,7 @@ export function Topbar({ title, subtitle }: { title: string; subtitle?: string }
           <span className="hidden sm:inline">New role</span>
         </button>
 
-        <div className="flex items-center gap-2 pl-1">
-          <Avatar name="Maya Chen" size={34} />
-          <div className="hidden leading-tight xl:block">
-            <p className="text-sm font-medium text-foreground">Maya Chen</p>
-            <p className="text-xs text-muted-foreground">Lead Recruiter</p>
-          </div>
-        </div>
+        <UserMenu />
       </div>
     </header>
   )
