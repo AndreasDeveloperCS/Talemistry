@@ -30,7 +30,8 @@ export default (): AppConfig => ({
   // Prefer the native write-enabled Talemistry DB; fall back to the legacy
   // source URI, then local.
   mongoUri: normalizeMongoUri(
-    process.env.TALEMISTRY_MONGODB_URI ??
+    process.env.MONGODB_CONNECTION_STRING ??
+      process.env.TALEMISTRY_MONGODB_URI ??
       process.env.MONGODB_URI ??
       'mongodb://127.0.0.1:27017/talemistry',
   ),

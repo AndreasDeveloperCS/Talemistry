@@ -30,7 +30,11 @@ export function normalizeMongoUri(raw: string | undefined): string {
   return uri
 }
 
-const PRIMARY_URI = normalizeMongoUri(process.env.TALEMISTRY_MONGODB_URI)
+// Native Talemistry DB (read/write). Prefer MONGODB_CONNECTION_STRING; fall
+// back to the earlier TALEMISTRY_MONGODB_URI for backwards compatibility.
+const PRIMARY_URI = normalizeMongoUri(
+  process.env.MONGODB_CONNECTION_STRING || process.env.TALEMISTRY_MONGODB_URI,
+)
 const SOURCE_URI = normalizeMongoUri(process.env.MONGODB_URI)
 const PRIMARY_DB_NAME = process.env.TALEMISTRY_DB_NAME || "talemistry"
 
@@ -50,7 +54,7 @@ global._talemistryConns = cache
 /** Primary Talemistry connection (read/write). */
 export async function getConnection(): Promise<mongoose.Connection> {
   if (!PRIMARY_URI) {
-    throw new Error("TALEMISTRY_MONGODB_URI is not set")
+    throw new Error("MONGODB_CONNECTION_STRING is not set")
   }
   if (cache.primary && cache.primary.readyState === 1) return cache.primary
 
