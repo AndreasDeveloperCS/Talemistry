@@ -1,0 +1,126 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+:host {
+  height: 100%;
+  max-width: $screen-size-tab !important;
+  box-shadow: 0 0px 10px $pallete-0-color-11;
+}
+
+.modal-window {
+  height: 100% !important;
+  margin: 0 auto;
+  overflow: scroll;
+  padding: $padding-l;
+  position: relative;
+  width: 100%;
+}
+
+.details {
+  &__option {
+    color: $active-text !important;
+  }
+
+  &-items {
+    display: flex;
+    flex-direction: column;
+    gap: $gap-small;
+    overflow-y: hidden;
+    height: 100%;
+
+    @media (max-width: $screen-size-mobile) {
+      gap: $gap-small;
+    }
+  }
+
+  &-wrapper-column {
+    display: grid;
+    max-width: 100%;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto;
+    gap: $gap-small;
+
+    @media (max-width: $screen-size-tab) {
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: (2fr, 1fr);
+
+      :nth-child(3) {
+        grid-column: 1 / -1;
+        grid-row: 2;
+      }
+    }
+
+    @media (max-width: $screen-size-mobile) {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+h2 {
+  margin: 0.5rem auto 0 auto;
+  text-align: center;
+}
+}
+
+
+.mat-error {
+  color: red;
+  font-size: 12px;
+}
+
+.company-block-style {
+  overflow-x: auto;
+  overflow-y: auto;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  //justify-content: space-between;
+  gap: 20px;
+}
+
+.control-bottom-block {
+  width: 100%;
+  z-index: 100;
+  transform: translateX(-50%);
+  left: 50%;
+  bottom: $margin-narrow;
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: row;
+  position: fixed;
+  justify-self: center;
+  gap: $gap-middle;
+  flex-direction: row;
+  justify-content: center !important;
+  margin: auto;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.form-header {
+  align-items: flex-start;
+  display: flex;
+  justify-content: flex-start;
+  font-weight: 600;
+  color: $pallete-0-color-6 !important;
+  height: fit-content;
+}
+
+.currencyField {
+  width: 100%;
+}
+
+button {
+  &.disabled {
+      opacity: 0.4;
+      pointer-events: none;
+      cursor: default;
+    }
+}
+
+.file-input-row {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 10px;
+  padding-left: $padding-narrow;
+}

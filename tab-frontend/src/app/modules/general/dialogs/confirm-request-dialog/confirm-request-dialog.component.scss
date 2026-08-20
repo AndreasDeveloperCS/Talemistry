@@ -1,0 +1,32 @@
+@use 'variables' as *; 
+@use 'global' as *;
+  
+.custom-dialog-content {
+  color: var(--text);
+  width: 100%;
+}
+
+button {
+  padding: 0.5rem;
+  border-radius: 20px;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.button-confirm {
+  background: $pallete-0-color-14;
+  color: var(--text);
+}
+
+.button-confirm:hover {
+  background: $pallete-0-color-15;
+}
+
+.button-reject {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.button-reject:hover {
+  background: #d1d5db;
+}

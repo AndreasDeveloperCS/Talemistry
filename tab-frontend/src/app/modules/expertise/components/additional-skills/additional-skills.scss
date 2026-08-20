@@ -1,0 +1,6 @@
+@use 'variables' as *; 
+@use 'global' as *;
+
+.skill-form {
+    background-color: $primary !important;
+}

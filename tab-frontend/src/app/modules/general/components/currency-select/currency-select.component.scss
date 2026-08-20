@@ -1,0 +1,15 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.header {
+    margin-bottom: -$margin-middle;
+    padding-left: $padding-s;
+    display: flex !important;
+    font-family: 'Urbanist';
+    justify-content: flex-start;
+}
+
+.currency {
+    min-height: $height-large;
+    min-width: 15rem !important;
+}

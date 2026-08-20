@@ -1,0 +1,33 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.gdpr-confirmation-elements {
+  display: flex;
+  flex-direction: column;
+  gap: $gap-semi-small;
+  // padding:$padding-middle;
+  text-align: left;
+  align-items: flex-start;
+  align-self: flex-start;
+  align-content: flex-start;
+  justify-self: flex-start;
+  justify-content: flex-start;
+  justify-items: flex-start;
+
+  .confirm-element {
+    display: flex;
+    align-items: center;
+
+    .checkbox {
+      display: inline-block;
+      vertical-align: bottom;
+    }
+
+    .text-confirmation {
+      font-size: 0.8rem;
+      color: var(--text);
+      padding-left: $padding-middle;
+      vertical-align: bottom;
+    }
+  }
+}

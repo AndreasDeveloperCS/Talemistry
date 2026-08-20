@@ -1,0 +1,43 @@
+<button mat-icon-button class="form-button exit-button" (click)="onClose()">
+    <mat-icon class="icon-close">
+      <svg class="icon-close" width="1.5rem" height="1.5rem" viewBox="0 0 108 107"
+        fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M27 26.75L54 53.5L81 26.75" stroke="white" stroke-width="10"
+          stroke-linecap="round" />
+        <path d="M27 80.25L54 53.5L81 80.25" stroke="white" stroke-width="10"
+          stroke-linecap="round" />
+      </svg>
+    </mat-icon>
+</button>
+<div class="cropper-modal">
+
+
+    <div class="cropper-container">
+        <image-cropper class="croper" [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true"
+            [aspectRatio]="targetAspectRatio" format="png" outputType="both" (imageCropped)="imageCropped($event)"
+            (imageLoaded)="imageLoaded($event)" (cropperReady)="cropperReady()" (loadImageFailed)="loadImageFailed()">
+        </image-cropper>
+
+        <picture>
+            <source [srcset]="croppedImage" type="image/png" alt="Cropped Image">
+            <!-- <img [src]="croppedImage"  /> -->
+        </picture>
+    </div>
+    <div class="button-group">
+        <button class="secondary-button" (click)="fileInput.click()" aria-label="Select another photo">
+            <mat-icon>add_a_photo</mat-icon>
+            <span>Reselect</span>
+        </button>
+        <input hidden id="file-input" #fileInput type="file" (change)="fileChangeEvent($event)" />
+        <button class="primary-button" (click)="upload()" [class.disabled]="isDisabled" aria-expanded="false"
+            aria-label="Profile Photo Crop Editor Confirmation">
+            <mat-icon>cloud_upload</mat-icon>
+            <span>Confirm</span>
+        </button>
+        <button class="secondary-button" (click)="onClose()" [class.disabled]="isDisabled" aria-expanded="false"
+            aria-label="Profile Photo Crop Editor Confirmation">
+            <mat-icon>close</mat-icon>
+            <span>Cancel</span>
+        </button>
+    </div>
+</div>

@@ -1,0 +1,122 @@
+@use 'variables' as *; 
+@use 'global' as *;
+
+.selected-filtered {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: $gap-small;
+  justify-content: right !important; 
+  align-items: center;
+  @media (max-width: $screen-size-tab) {
+    justify-content: left !important;
+  }
+  ::ng-deep .mat-mdc-select {
+    margin-top: 0 !important;
+  }
+  .mat-mdc-select {
+    width: fit-content;
+  }
+  ::ng-deep .mat-mdc-select-value {
+    display: flex;
+    justify-content: flex-start;
+    padding-left: 5px;
+    width: fit-content;
+    //width: 10rem;
+  }
+}
+
+.delete-skill-btn {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+.wrapper-item{
+  align-items: flex-start;
+  display: flex;
+  gap: $gap-small;
+  justify-content: flex-end;
+  padding: 0;
+  width: fit-content;
+}
+
+.text-center {
+  font-size: 1rem;
+  align-items: center;
+  justify-content: flex-start;
+  display: flex;
+  padding: 0.5rem 0.5rem 0.5rem 0;
+  height: 100% !important;
+  word-break: break-word;
+  width: fit-content;
+}
+
+.proficiency-options {
+  max-width: 120px;
+}
+
+.cooperation-type {
+  display: flex;
+  color: gray;
+  font-size: 10px;
+}
+
+.proficiency {
+  width: $dropdown-head !important;
+}
+
+.selected-filtered-item {
+  display: flex;
+  align-items: center;
+  width: 100%; 
+  align-items: flex-end;
+}
+
+.wrapper-item {
+  flex-grow: 1; /* Take all available space */
+  text-align: left; /* Align text to the left */
+  padding-right: 10px; /* Optional spacing */
+}
+
+.proficiency-options,
+.proficiency-block {
+  white-space: break-word;
+}
+
+.proficiency-options {
+  margin-right: 12px; 
+}
+
+
+.wrapper-item.stretch {
+  flex-grow: 1 !important;
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+
+}
+
+.proficiency-block {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  max-width: fit-content;
+  gap: $gap-micro;
+}
+
+.skill-info {
+  background-color: transparent;
+  padding: $padding-s;
+  border: none;
+  border-radius: $borderRadius;
+  box-shadow: var(--box-shadow-light);
+  font-weight: 600;
+  flex-direction: column;
+  margin: 0 $margin-narrow $margin-narrow;
+  width: 100%;
+}
+
+.selected-item {
+  background: $pallete-0-color-14 !important;
+}

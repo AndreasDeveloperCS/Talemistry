@@ -1,0 +1,594 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.cv-preview-theme {
+  --cv-primary-dark: #037F8C;
+  --cv-primary-mid: #008C94;
+  --cv-primary-light: #04D9D9;
+}
+$orange: #f97316;
+$orange-dark: #F66411;
+$slate-900: #0f172a;
+$slate-800: #1e293b;
+$slate-700: #334155;
+$slate-600: #475569;
+$slate-500: #64748b;
+$slate-200: #e2e8f0;
+$slate-100: #f1f5f9;
+$slate-50: #f8fafc;
+
+.sa-wrapper {
+  min-height: 297mm;
+  background: #fff;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  color: $slate-800;
+  position: relative;
+  display: flex;
+  width: 100%;
+  margin: 0.5rem auto;
+  max-width: 1100px;
+}
+
+// ───── ACCENT BAR ─────
+.sa-accent-bar {
+  width: 12px;
+  background: linear-gradient(180deg, var(--cv-primary-dark), var(--cv-primary-light), $orange);
+  flex-shrink: 0;
+}
+
+// ───── CONTENT AREA ─────
+.sa-content {
+  flex: 1;
+  display: flex;
+}
+
+// ───── SIDEBAR ─────
+.sa-sidebar {
+  width: 280px;
+  background: $slate-50;
+  flex-shrink: 0;
+
+  &__photo {
+    position: relative;
+    height: 320px;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__photo-gradient {
+    position: absolute;
+    inset: 0;
+    // background: linear-gradient(
+    //   to bottom,
+    //   rgba(248, 250, 252, 0),
+    //   rgba(248, 250, 252, 0) 60%,
+    //   $slate-50
+    // );
+  }
+
+  &__name-block {
+    padding-bottom: 1rem;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 1rem;
+    border-bottom: 4px solid var(--cv-primary-dark);
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: $slate-900;
+      line-height: 1.3;
+      margin: 0;
+    }
+  }
+
+  &__lastname, &__firstname {
+    color: var(--cv-primary-dark);
+  }
+
+  &__position {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: $slate-600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 4px 0 0;
+  }
+
+  &__contacts {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+// ───── CONTACT ITEM ─────
+.sa-contact {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.875rem;
+
+  &__icon {
+    width: 32px;
+    height: 32px;
+    background: var(--cv-primary-dark);
+    color: #fff;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    mat-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  &__text {
+    color: #131415;
+    word-break: break-all;
+    font-size: 0.8rem;
+  }
+}
+
+// ───── SIDEBAR SECTION ─────
+.sa-sidebar-section {
+  padding: 0 24px;
+  margin-top: 32px;
+
+  &__title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: $slate-900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__dash {
+    width: 24px;
+    height: 2px;
+    background: var(--cv-primary-dark);
+    display: block;
+  }
+}
+
+// ───── LANGUAGES ─────
+.sa-languages {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sa-language {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.875rem;
+    margin-bottom: 4px;
+  }
+
+  &__name {
+    font-weight: 500;
+    color: $slate-700;
+  }
+
+  &__level {
+    color: $slate-500;
+    font-size: 0.75rem;
+  }
+
+  &__bars {
+    display: flex;
+    gap: 4px;
+  }
+
+  &__bar {
+    height: 6px;
+    flex: 1;
+    border-radius: 9999px;
+    background: $slate-200;
+
+    &--active {
+      background: var(--cv-primary-dark);
+    }
+  }
+}
+
+// ───── SKILL TAGS ─────
+.sa-skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.sa-skill-tag {
+  background: var(--cv-primary-dark);
+  color: #fff;
+  padding: 4px 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 4px;
+}
+
+// ───── ATTRIBUTES ─────
+.sa-attributes {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sa-attribute {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  color: $slate-600;
+
+  &__bullet {
+    width: 6px;
+    height: 6px;
+    background: var(--cv-primary-dark);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+}
+
+// ───── MAIN PANEL ─────
+.sa-main {
+  flex: 1;
+  padding: 32px;
+}
+
+.sa-section {
+  margin-bottom: 32px;
+}
+
+// ───── SECTION LABEL (Objective / Summary) ─────
+.sa-section-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+
+  &__icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+
+    &--orange {
+      color: $orange;
+    }
+  }
+
+  &__icon-box {
+    width: 20px;
+    height: 20px;
+    background: var(--cv-primary-dark);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    mat-icon {
+      font-size: 12px;
+      width: 12px;
+      height: 12px;
+      color: #fff;
+    }
+  }
+
+  h2 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: $slate-900;
+    margin: 0;
+  }
+}
+
+.sa-objective-text {
+  color: $slate-700;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  font-style: italic;
+  border-left: 3px solid var(--cv-primary-dark);
+  padding-left: 16px;
+  background: rgba(var(--cv-primary-dark), 0.1);
+  padding-top: 12px;
+  padding-bottom: 12px;
+  border-radius: 0 4px 4px 0;
+  margin: 0;
+}
+
+.sa-summary-text {
+  color: $slate-600;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.sa-summary-line {
+  width: 80px;
+  height: 2px;
+  background: var(--cv-primary-light);
+  margin-top: 16px;
+}
+
+// ───── MAIN SECTION HEADER ─────
+.sa-main-section-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+
+  h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: $slate-900;
+    white-space: nowrap;
+    margin: 0;
+  }
+
+  &__line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, $slate-200, rgba(248, 250, 252, 0),);
+  }
+}
+
+// ───── EXPERIENCE ─────
+.sa-exp-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.sa-exp {
+  position: relative;
+
+  &__accent {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    border-radius: 9999px;
+    background: var(--cv-primary-light);
+
+    &--current {
+      background: $orange;
+    }
+  }
+
+  &__content {
+    padding-left: 20px;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  &__title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: $slate-900;
+    margin: 0;
+  }
+
+  &__company-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 2px;
+    color: var(--cv-primary-dark);
+    font-weight: 500;
+    font-size: 0.875rem;
+
+    mat-icon {
+      font-size: 14px;
+      width: 14px;
+      height: 14px;
+    }
+
+    span {
+      color: $slate-900;
+    }
+  }
+
+  &__date-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.875rem;
+    color: #fff;
+    background: var(--cv-primary-dark);
+    padding: 4px 8px;
+    border-radius: 4px;
+
+    mat-icon {
+      font-size: 14px;
+      width: 14px;
+      height: 14px;
+    }
+  }
+
+  &__present {
+    color: var(--cv-primary-dark);
+    font-weight: 500;
+  }
+
+  &__desc {
+    margin: 8px 0 0;
+    font-size: 0.875rem;
+    color: $slate-600;
+  }
+
+  &__achievements, &__responsibilities {
+    list-style: none;
+    padding: 0;
+    margin: 12px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 0.875rem;
+      color: $slate-600;
+    }
+  }
+
+  &__chevron {
+    color: var(--cv-primary-dark);
+    margin-top: 2px;
+    font-weight: 600;
+  }
+
+  &__skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 12px;
+  }
+
+  &__skill-tag {
+    background: $slate-100;
+    color: $slate-600;
+    padding: 2px 8px;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    border-radius: 4px;
+    border: 1px solid $slate-200;
+  }
+}
+
+.responsibilities-header, .achievements-header {
+	color: var(--cv-primary-dark);
+	font-size: 1rem;
+	font-weight: 600;
+	margin: 0.5rem 0;
+}
+
+// ───── EDUCATION ─────
+.sa-edu-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.sa-edu {
+  background: $slate-50;
+  border-radius: 8px;
+  padding: 16px;
+  border: 1px solid $slate-100;
+
+  h3 {
+    font-weight: 700;
+    color: $slate-900;
+    font-size: 0.875rem;
+    margin: 0;
+  }
+
+  &__spec {
+    color: var(--cv-primary-dark);
+    font-size: 0.875rem;
+    margin: 2px 0 0;
+  }
+
+  &__institution {
+    color: $slate-600;
+    font-size: 0.75rem;
+    margin: 8px 0 0;
+  }
+
+  &__date {
+    color: $slate-500;
+    font-size: 0.75rem;
+  }
+}
+
+// ───── CERTIFICATIONS ─────
+.sa-cert-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.sa-cert {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, rgba(var(--cv-primary-dark), 0.05), rgba(var(--cv-primary-light), 0.05));
+  border-radius: 8px;
+  padding: 12px 16px;
+  border: 1px solid rgba(var(--cv-primary-dark), 0.2);
+
+  &__icon {
+    width: 40px;
+    height: 40px;
+    background: var(--cv-primary-dark);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    flex-shrink: 0;
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  h4 {
+    font-weight: 600;
+    color: $slate-800;
+    font-size: 0.875rem;
+    margin: 0;
+  }
+
+  p {
+    font-size: 0.75rem;
+    color: $slate-500;
+    margin: 2px 0 0;
+  }
+}
+
+// ───── CORNER ACCENT ─────
+.sa-corner-accent {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 96px;
+  height: 96px;
+  overflow: hidden;
+  pointer-events: none;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 128px;
+    height: 128px;
+    background: rgba(var(--cv-primary-light), 0.1);
+    border-radius: 100% 0 0 0;
+  }
+}

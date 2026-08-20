@@ -1,0 +1,252 @@
+<div class="dashboard">
+  <div class="dashboard__inner">
+    <div class="upper-line">
+      <header class="page-header">
+        <h1 class="page-header__title">
+          <span class="material-icons">dashboard</span>
+          Candidate Dashboard
+        </h1>
+        <p class="page-header__subtitle">Track your job applications and discover matching opportunities</p>
+      </header>
+    </div>
+  <div class="stats-grid">
+    <div class="stat-card clickable" (click)="openPositionsListPreview($event)">
+      <div class="stat-card__top">
+        <span class="stat-card__label">Matching Positions</span>
+        <div class="stat-card__icon stat-card__icon--primary">
+          <span class="material-icons">my_location</span>
+        </div>
+      </div>
+      <div class="stat-card__bottom">
+        <span class="stat-card__value">
+          {{ animatedMatchingTotal }}
+        </span>
+        <span class="stat-card__trend">
+          <span class="material-icons">trending_up</span>
+          Based on skill set
+        </span>
+      </div>
+      <div class="match-pills">
+        <span class="badge badge--strong-hire">
+          {{ animatedHighMatch }} High
+        </span>
+        <span class="badge badge--accent-soft">
+          {{ animatedMediumMatch }} Medium
+        </span>
+        <span class="badge badge--default">
+          {{ animatedLowMatch }} Low
+        </span>
+      </div>
+    </div>
+    <div class="stat-card clickable" (click)="openAppliedPositionsPreview($event)">
+      <div class="stat-card__top">
+        <span class="stat-card__label">Total Applications</span>
+        <div class="stat-card__icon stat-card__icon--accent">
+          <span class="material-icons">work</span>
+        </div>
+      </div>
+      <span class="stat-card__value">
+        {{ animatedApplicationsTotal }}
+      </span>
+    </div>
+    <div class="stat-card clickable" (click)="openPositionsReachedInterviewStage($event)">
+      <div class="stat-card__top">
+        <span class="stat-card__label">In Interview Stage</span>
+        <div class="stat-card__icon stat-card__icon--accent">
+          <span class="material-icons">event</span>
+        </div>
+      </div>
+      <span class="stat-card__value">
+        {{ animatedInterview }}
+      </span>
+    </div>
+    <div class="stat-card clickable" (click)="openPositionsReachedOfferStage($event)">
+      <div class="stat-card__top">
+        <span class="stat-card__label">Offers Received</span>
+        <div class="stat-card__icon stat-card__icon--primary">
+          <span class="material-icons">check_circle</span>
+        </div>
+      </div>
+      <span class="stat-card__value">
+        {{ animatedOffer }}
+      </span>
+    </div>
+  </div>
+    <div class="main-grid">
+      <div class="main-grid__left">
+        <div class="card">
+          <h2 class="card__title">Application Funnel</h2>
+          <div class="funnel-chart-wrap">
+            <svg [attr.width]="svgWidth" [attr.height]="svgHeight"
+              [attr.viewBox]="'0 0 ' + svgWidth + ' ' + svgHeight"
+              role="img" aria-label="Application funnel chart">
+              <g *ngFor="let seg of getFunnelSegments()"
+                class="funnel-segment clickable"
+                (click)="openAppliedPositionsReachedStagePreview(seg.stageType, $event)">
+                <path [attr.d]="seg.path" [attr.fill]="seg.color" opacity="0.88"/>
+                <text [attr.x]="seg.cx" [attr.y]="seg.cy + 6" text-anchor="middle" class="funnel-label--value">
+                  {{ seg.value }}
+                </text>
+              </g>
+            </svg>
+            <div class="funnel-labels">
+              <div *ngFor="let seg of getFunnelSegments()" class="funnel-label-item clickable"
+                (click)="openAppliedPositionsReachedStagePreview(seg.stageType, $event)">
+                <span class="funnel-dot" [style.background]="seg.color"></span>
+                <span class="funnel-label-name">{{ seg.name }}</span>
+                <span class="funnel-label-val">{{ seg.value }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card__header">
+            <h2 class="card__title">My Applications</h2>
+            <span class="link-accent clickable" (click)="openAppliedPositionsPreview($event)">View all</span>
+          </div>
+          <div class="apps-list">
+            <div *ngFor="let pos of appliedPositions" class="app-item clickable" 
+              (click)="openAppliedPositionDetails(pos, $event)">
+              <div class="app-item__logo">
+                <span class="material-icons">business</span>
+              </div>
+              <div class="app-item__info">
+                <div class="app-item__row">
+                  <h3 class="app-item__title clickable" (click)="openPositionPreview(pos.positionId, $event)">{{ pos.positionName }}</h3>
+                  <span class="badge" [ngClass]="getStageClass(pos.currentStageType)">
+                    <span class="material-icons">{{ getStageIcon(pos.currentStageType) }}</span>
+                    {{ pos.currentStageType }}
+                  </span>
+                </div>
+                <p class="app-item__company">{{ pos.companyName }}</p>
+                <div class="app-item__dates">
+                  <span>Applied: {{ formatDate(pos.appliedDate) }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="main-grid__right">
+        <div class="card">
+          <div class="card__header">
+            <h2 class="card__title">
+              <span class="material-icons">star</span>
+              Top Matches
+            </h2>
+            <span class="link-accent clickable" (click)="openPositionsListPreview($event)">View all</span>
+          </div>
+          <div class="jobs-list">
+            <div *ngFor="let job of topMatchingJobs" class="job-card clickable" (click)="openPositionPreview(job.positionId, $event)">
+              <div class="job-card__head">
+                <div>
+                  <h3 class="job-card__title">{{ job.title }}</h3>
+                  <p class="job-card__company">{{ job.companyName }}</p>
+                </div>
+                <span class="match-badge" [ngClass]="getMatchBadgeClass(job.matchPercentage)">
+                  {{ job.matchPercentage }}%
+                </span>
+              </div>
+              <div class="job-card__meta">
+                <span>
+                  <span class="material-icons">verified</span>
+                  {{ job.matchedSkillsCount }}
+                  /
+                  {{ job.totalRequiredSkills }}
+                  skills matched
+                </span>
+              </div>
+              <div class="job-card__skills">
+                <span *ngFor="let skill of job.matchedSkills" class="skill-tag">{{ skill }}</span>
+              </div>
+              <div class="job-card__footer">
+                <span class="job-card__posted">Missing: {{ job.missingSkills.length }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card__header">
+            <h2 class="card__title">
+              <span class="material-icons">videocam</span>
+              Upcoming Meetings
+            </h2>
+            <span class="link-accent clickable" (click)="openMeetingsList($event)">
+              View all
+            </span>
+          </div>
+          @if(!upcomingMeetings?.length) {
+            <div class="meetings-empty">
+              <span class="material-icons">event_busy</span>
+              <div class="meetings-empty__title">
+                No upcoming meetings
+              </div>
+              <div class="meetings-empty__text">
+                Your scheduled interviews and calls will appear here.
+              </div>
+            </div>
+          }
+          @if(upcomingMeetings?.length) {
+            <div class="meetings-list">
+              <div *ngFor="let meeting of upcomingMeetings" class="meeting-item clickable"
+                (click)="openMeetingPreview(meeting, $event)">
+                <div class="meeting-item__left">
+                  <div class="meeting-platform" [ngClass]="getPlatformClass(meeting.platform)">
+                    <span class="material-icons">
+                      {{ getPlatformIcon(meeting.platform) }}
+                    </span>
+                  </div>
+                  <div class="meeting-item__info">
+                    <div class="meeting-item__top">
+                      <div class="meeting-item__topic">
+                        {{ meeting.topic || 'Interview Meeting' }}
+                      </div>
+                      <div class="meeting-status" [ngClass]="getStatusClass(meeting.status)">
+                        {{ getStatusLabel(meeting.status) }}
+                      </div>
+                    </div>
+                    <div class="meeting-item__participants">
+                      {{ getParticipantNames(meeting.participants) }}
+                    </div>
+                    <div class="meeting-item__meta">
+                      <div class="meeting-meta-block">
+                        <span class="material-icons">calendar_today</span>
+                        {{ meeting.date | date:'MMM d, y' }}
+                      </div>
+                      <div class="meeting-meta-block">
+                        <span class="material-icons">schedule</span>
+                        {{ meeting.startTime | date:'HH:mm' }}
+                      </div>
+                      <div class="meeting-meta-block">
+                        <span class="material-icons">timer</span>
+                        {{ formatDuration(meeting) }}
+                      </div>
+                    </div>
+                    <div class="meeting-actions" (click)="$event.stopPropagation()">
+                      <a *ngIf="meeting?.meetingLinkEvryka" [href]="meeting?.meetingLinkEvryka"
+                        target="_blank" class="meeting-action-btn">
+                        Evryka
+                      </a>
+                      <a *ngIf="meeting?.meetingLinkGoogleMeets?.hangoutLink" [href]="meeting?.meetingLinkGoogleMeets?.hangoutLink"
+                        target="_blank" class="meeting-action-btn">
+                        Google Meet
+                      </a>
+                      <a *ngIf="meeting?.meetingLinkZoom?.join_url" [href]="meeting?.meetingLinkZoom?.join_url"
+                        target="_blank" class="meeting-action-btn">
+                        Zoom
+                      </a>
+                      <a *ngIf="meeting?.meetingLinkTeams?.joinUrl" [href]="meeting?.meetingLinkTeams?.joinUrl"
+                        target="_blank" class="meeting-action-btn">
+                        Teams
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

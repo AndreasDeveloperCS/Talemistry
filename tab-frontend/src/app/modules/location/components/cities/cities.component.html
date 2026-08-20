@@ -1,0 +1,24 @@
+<mat-form-field class="form-field-input">
+  <mat-label class="new-label">{{ content.city }}</mat-label>
+  <mat-select class="container__full-width currency transparent-select-full-width" 
+    [(ngModel)]="selectedItem" [value]="selectedItem"
+    (selectionChange)="select($event.value)" (click)="populateCollection()">
+
+    <mat-select-trigger>
+      <div class="container__middle container__end">
+        <span>{{ selectedItem.name }}</span>
+      </div>
+    </mat-select-trigger>
+
+    <input class="dropdown-filter container__full-width" [placeholder]='content.txtFilter' [formControl]="filterControl"
+      (keyup)="applyLocalFilter()" (selectionChange)="applyLocalFilter()" />
+    <div (scroll)="onScroll($event)" class="drop-down-list-scroll">
+      @for (option of collection; track option) {
+      <mat-option [value]="option" class="container__middle">
+        {{ option.name }} - {{ option.country }}
+      </mat-option>
+      }
+    </div>
+
+  </mat-select>
+</mat-form-field>

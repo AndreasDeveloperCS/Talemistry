@@ -1,0 +1,154 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+button[auth-btn] {
+    display: flex;
+    flex-direction: row;
+
+    position: relative;
+
+    border-radius: 50%;
+    height: 4rem !important;
+    font-size: 4rem !important;
+
+    filter: drop-shadow(0px -6px -6px #3bd3d4BB);
+
+    font-weight: bold;
+
+    //background: linear-gradient(45deg, #41ff6c, #4bff2b);
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    min-height: 4rem !important;
+    transition: transform 0.2s ease, filter 0.3s ease;
+    background: linear-gradient(45deg, rgb(40, 175, 176) 0%, #79DAFFCC 53%, rgb(10, 33, 88) 100%);
+
+    &:hover {
+        filter: drop-shadow(0px 8px -8px #3bd3d4BB);
+        background: radial-gradient(circle, #ffffffBB 10%, transparent 70%);
+    }
+
+    &:active {
+        transform: scale(0.98);
+    }
+
+    span {
+
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        justify-self: center;
+        justify-items: center;
+        align-content: center;
+        align-self: center;
+        align-items: center;
+    }
+}
+
+
+.login-glow {
+    filter: drop-shadow(0px 0px 12px 12px #3bd3d4BB);
+    background: radial-gradient(circle, #ffffffBB 10%, transparent 70%);
+
+    transition: opacity 0.4s;
+    opacity: 0.8;
+
+    &:hover {
+        filter: drop-shadow(0px 0px 12px 12px #FFFFFFEE);
+        background: radial-gradient(circle, #FFFFFFEE 10%, transparent 70%);
+    }
+}
+
+.auth-btn:active .login-glow {
+    opacity: 1;
+    animation: glow-animation 0.4s forwards;
+}
+
+@keyframes glow-animation {
+    0% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: scale(1.05);
+        opacity: 1;
+    }
+}
+
+button[auth-logout] {
+    display: flex;
+    position: absolute;
+    justify-content: center;
+    justify-self: center;
+    z-index: 100;
+    flex-direction: row;
+    justify-content: center;
+    justify-self: center;
+    justify-items: center;
+    align-content: center;
+    align-self: center;
+    align-items: center;
+    margin-top: 0.5rem;
+    margin-left: -1.5rem;
+    padding: 1rem;
+    font-size: 1rem;
+    filter: drop-shadow(0px 8px -8px #3bd3d4BB);
+    background: linear-gradient(30deg, #ffffffBB 10%, transparent 70%);
+
+    //padding: 0.5rem;
+    font-size: 1.5rem;
+    // filter: drop-shadow(0px -6px -6px #3bd3d4BB);
+    cursor: pointer;
+    filter: drop-shadow(0px 8px 8px rgba(27, 157, 218, 0.3));
+
+    &:hover {
+        filter: drop-shadow(0px 8px -8px #ffffffBB);
+        background: linear-gradient(30deg, #3bd3d4BB 10%, transparent 70%);
+    }
+}
+
+mat-icon[auth-mat-icon] {
+    display: flex;
+    position: relative;
+    flex-direction: row;
+    justify-self: center;
+    justify-content: center;
+    justify-items: center;
+    align-self: center;
+    width: 4rem;
+    height: 4rem !important;
+    font-size: 4rem !important;
+    border-radius: 50%;
+    background-color: transparent;
+    z-index: 100;
+    background: linear-gradient(45deg, rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0.8) 53%, rgb(10, 33, 88) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    filter: drop-shadow(0px 4px 4px rgba(0, 20, 40, 0.5));
+
+
+    &:hover {
+        background: linear-gradient(45deg, rgb(40, 175, 176) 0%, #79DAFFCC 53%, rgb(10, 33, 88) 100%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-fill-color: transparent;
+        filter: drop-shadow(0px 4px 4px rgba(0, 20, 40, 0.5));
+        transform: scale(1.05);
+        cursor: pointer;
+    }
+
+    &:active {
+        transform: scale(0.98);
+        filter: drop-shadow(0px 2px 2px rgba(0, 20, 40, 0.5));
+    }
+}
+
+.profile-photo {
+    filter: drop-shadow(0px 20px 20px rgba(42, 134, 179, 0.5));
+    height: 64px;
+    width: 64px;
+}

@@ -1,0 +1,24 @@
+@use 'variables' as *; 
+@use 'global' as *;
+
+.users-wrapper{
+ 
+    ::ng-deep .mdc-list-item__primary-text {
+        display: flex;
+        justify-content: space-between !important; /* Distributes spans to left and right */
+        align-items: center; /* Centers content vertically */
+        width: 100%;
+    }
+
+    ::ng-deep .mdc-list-item__primary-text {
+        flex: 1; /* Allows each span to take available space */
+    }
+    
+    ::ng-deep .mdc-list-item__primary-text span:first-child {
+        text-align: left; /* Aligns the first span to the left */
+    }
+    
+    ::ng-deep .mdc-list-item__primary-text span:last-child {
+        text-align: right; /* Aligns the second span to the right */
+    }
+}

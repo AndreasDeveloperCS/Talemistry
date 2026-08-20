@@ -1,0 +1,38 @@
+  <div class="dialog-form editor universal-input">
+    <div class="container__middle">
+        <h4>{{ content.txtGeminiGenerator }}</h4>
+    </div>
+    <form [formGroup]="generatedForm">
+      <mat-form-field appearance="outline" class="small-input" density="-2">
+        <input autofocus
+        type="text"
+        matInput
+        [placeholder]="content.txtRequest"
+        formControlName="title"
+        required
+        class="input-correction" />
+        <mat-icon matSuffix (click)="generateDescription()">send</mat-icon>
+      </mat-form-field>
+    </form>
+
+    <ngx-editor appInsertion
+        [editor]="editor"
+        class="editor__scroll-hidden"
+        [(ngModel)]="html"
+        [disabled]="false"
+        (ngModelChange)="editorChange($event)"
+        [placeholder]="content.blogPostContent">
+    </ngx-editor>
+
+    <div class="edit-buttons">
+      <button class="menu-button" (click)="closeGeminiFullScreenDialog()">
+        <mat-icon>fullscreen_exit</mat-icon>
+      </button>
+      <button class="menu-button" (click)="openGeminiFullScreenDialog()">
+        <mat-icon>fullscreen</mat-icon>
+      </button>
+      <button class="menu-button" (click)="closeGeminiDialog()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </div>

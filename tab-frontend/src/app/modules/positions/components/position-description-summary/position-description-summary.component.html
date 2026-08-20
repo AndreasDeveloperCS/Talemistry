@@ -1,0 +1,39 @@
+  <div class="editor tab-settings container__column p-sm universal-input custom-toggle">
+
+    <div class="container__flex container__middle container__nowrap tab-settings__full">
+      <mat-form-field>
+        <input type="text" matInput 
+          class="transparent-input-full-width"
+          [(ngModel)]="headerName" 
+          (ngModelChange)="headerChange($event)">
+      </mat-form-field>
+      <mat-button-toggle-group 
+        [(ngModel)]="isIncluded" 
+        (ngModelChange)="isIncludedChange($event)"
+        class="toggle-group toggle-group-align" 
+        style="margin-top: 0.8rem;">
+        <mat-button-toggle [value]="false">{{content.txtNo}}</mat-button-toggle>
+        <mat-button-toggle [value]="true">{{content.txtYes}}</mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+    <div class="tab-settings__items editor__scroll-hidden"
+      [class.disabled]="!isIncluded">
+      <div class="container-editor-menu">
+        <ngx-editor-menu 
+          [editor]="editor" 
+          [toolbar]="toolbar">
+        </ngx-editor-menu>
+      </div>
+      <div class="container-of-editors">
+        <ngx-editor appInsertion
+        [editor]="editor"
+        [class.disabled]="!isIncluded"
+        [(ngModel)]="summarySectionContent"
+        [disabled]="false"
+        class="editor__scroll-hidden"
+        (ngModelChange)="editorChange($event)"
+        [placeholder]="content.positionDescription">
+      </ngx-editor>
+      </div>
+    </div>
+  </div>

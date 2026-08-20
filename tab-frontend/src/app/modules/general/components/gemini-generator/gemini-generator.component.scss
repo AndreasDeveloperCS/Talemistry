@@ -1,0 +1,51 @@
+@use 'variables' as *; 
+@use 'global' as *;
+
+.container__middle {
+    flex-shrink: 0; 
+    margin: 10px 0;
+  }
+
+  :host {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-width: 350px;
+    overflow-y: auto;
+    width: 100%;
+  }
+
+  .edit-buttons {
+    z-index: 1000;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    align-items: center;
+    border-radius: 50%;
+    opacity: 0.8;
+  }
+
+  .menu-button {
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .menu-button:hover,
+  .menu-button:active:focus,
+  .menu-button:active {
+    border: 1px solid $active-text;
+    opacity: 1;
+  }
+
+  mat-form-field {
+    --mat-form-field-container-height: 16px !important; 
+  }
+  
+  .input-correction {
+    margin-top: 8px !important;
+  }  

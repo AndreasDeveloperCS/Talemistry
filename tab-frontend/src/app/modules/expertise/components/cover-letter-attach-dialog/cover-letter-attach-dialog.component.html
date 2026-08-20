@@ -1,0 +1,66 @@
+   <button mat-icon-button class="form-button exit-button" (click)="closeDialog()">
+      <mat-icon class="icon-close">
+        <svg width="24px" height="24px" viewBox="0 0 108 107"
+          fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M27 26.75L54 53.5L81 26.75" stroke="white" stroke-width="10"
+            stroke-linecap="round" />
+          <path d="M27 80.25L54 53.5L81 80.25" stroke="white" stroke-width="10"
+            stroke-linecap="round" />
+        </svg>
+      </mat-icon>
+    </button>
+
+    <div class="dialog-form universal-input">
+    <h3 class="container__center">{{content.txtCoverLetterUploading}}</h3>
+    <mat-form-field>
+      <textarea
+      class="cover-letter__textarea"
+            matInput
+            [formControl]="coverLetterTextControl"
+            cdkTextareaAutosize
+            [placeholder]="content.txtCoverLetter"
+            name="coverLetterTextControl"
+            [(ngModel)]="data.info.coverLetterText"
+          ></textarea>
+      </mat-form-field>
+    <div>{{content.txtSelectedCover}}: </div>
+    <div>{{data.coverLetterFileData?.fileName}}</div>
+
+    <div mat-dialog-actions >
+
+        <div   class="pb-sm">
+            <a (click)="openPrivacyPolicy()"
+                class="font__link pb-sm"
+                routerLinkActive="active"
+                ariaCurrentWhenActive="page">
+                * {{content.txtPrivacyPolicy}}
+            </a>
+        </div>
+
+        <app-confirmation-plate
+            [confirmationText]="gdprContent.confirmationText"
+            [refusionText]="gdprContent.rejectText"
+            [amAgree]="gdprConfirmationStatus"
+            (gdprConfirmationChanged)="onGdprConfirmationChanged($event)">
+        </app-confirmation-plate>
+    
+    </div>
+
+    <div mat-dialog-actions class="">
+  
+      <div class="container__full-width">
+        <div class="mt-md mb-md container__flex container__center">
+            <button class="button__primary-color button--small" 
+                    type="submit"  mat-dialog-close
+                    (click)="confirmCVUploading()"
+                    [disabled]="!gdprConfirmationStatus || !isSelectedCv">
+                    {{ content.confirmText }}
+            </button>
+            <button (click)="closeDialog()"
+                    class="button__primary-color button--small">
+                    {{ content.cancelText }}
+            </button>
+        </div>
+      </div>
+    </div>
+  </div>

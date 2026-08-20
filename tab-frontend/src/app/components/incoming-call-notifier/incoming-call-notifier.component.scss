@@ -1,0 +1,108 @@
+.incoming-call-popup-container {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    z-index: 1400;
+    pointer-events: none;
+}
+
+.incoming-call-popup {
+    width: min(360px, calc(100vw - 2rem));
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.95rem 1rem;
+    border-radius: 1rem;
+    border: 1px solid rgba(123, 246, 223, 0.2);
+    background: linear-gradient(160deg, rgba(3, 20, 29, 0.96), rgba(8, 33, 45, 0.96));
+    box-shadow: 0 18px 32px rgba(0, 0, 0, 0.32);
+    color: #efffff;
+    pointer-events: auto;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.incoming-call-popup.fade-out {
+    opacity: 0;
+    transform: translateY(8px);
+}
+
+.incoming-call-avatar {
+    width: 2.8rem;
+    height: 2.8rem;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #ffb14d, #ff8c26);
+    color: #07202d;
+    font-weight: 800;
+}
+
+.incoming-call-copy {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+
+    strong,
+    span {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+.incoming-call-kicker {
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(123, 246, 223, 0.78);
+}
+
+.incoming-call-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.incoming-call-action {
+    border: none;
+    border-radius: 999px;
+    padding: 0.55rem 0.9rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.incoming-call-action.accept {
+    background: linear-gradient(135deg, #ffb14d, #ff8c26);
+    color: #04131b;
+}
+
+.incoming-call-action.decline {
+    background: rgba(239, 255, 255, 0.08);
+    color: #dff8f7;
+    border: 1px solid rgba(123, 246, 223, 0.18);
+}
+
+@media (max-width: 640px) {
+    .incoming-call-popup-container {
+        left: 0.75rem;
+        right: 0.75rem;
+        bottom: 0.75rem;
+    }
+
+    .incoming-call-popup {
+        width: 100%;
+        grid-template-columns: auto 1fr;
+    }
+
+    .incoming-call-actions {
+        grid-column: 1 / -1;
+        justify-content: flex-end;
+    }
+}

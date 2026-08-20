@@ -1,0 +1,73 @@
+<div class="calendar-container">
+  <div class="calendar-header">
+    <div class="header-left">
+      <div class="title-group">
+        <h1 class="calendar-title">{{ content.txtRecruitmentCalendar }}</h1>
+        <p class="calendar-subtitle">{{ content.txtRecruitmentCalendarSubtitle }}</p>
+      </div>
+    </div>
+
+    <button class="new-meeting-btn" (click)="handleCreateMeeting()">
+      <mat-icon>add</mat-icon> 
+      <span class="new-meeting-lbl">{{ content.txtNewMeeting }}</span>
+    </button>
+
+    <!-- <div class="header-right">
+      <app-view-switcher
+        [currentView]="currentView"
+        (onViewChange)="setCurrentView($event)">
+      </app-view-switcher>
+    </div> -->
+  </div>
+
+  <ng-container [ngSwitch]="currentView">
+    <app-month-view
+      *ngSwitchCase="'month'"
+      [currentDate]="currentDate"
+      (onDateChange)="setCurrentDate($event)"
+      (onCreateMeeting)="handleCreateMeeting()"
+      (onCreateMeetingForDate)="handleCreateMeetingForDate($event)"
+      (onMeetingClick)="handleMeetingClick($event)"
+    ></app-month-view>
+
+    <app-week-view
+      *ngSwitchCase="'week'"
+      [currentDate]="currentDate"
+      (onDateChange)="setCurrentDate($event)"
+      (onCreateMeeting)="handleCreateMeeting()"
+      (onCreateMeetingForDateTime)="handleCreateMeetingForDateTime($event)"
+      (onMeetingClick)="handleMeetingClick($event)"
+    ></app-week-view>
+
+    <app-day-view
+      *ngSwitchCase="'day'"
+      [currentDate]="currentDate"
+      (onDateChange)="setCurrentDate($event)"
+      (onCreateMeeting)="handleCreateMeetingForDate($event)"
+      (onCreateMeetingForDateTime)="handleCreateMeetingForDateTime($event)"
+      (onMeetingClick)="handleMeetingClick($event)"
+    ></app-day-view>
+  </ng-container>
+
+  @if(isCreateMeetingOpen) {
+    <div
+      class="modal-backdrop"
+      (click)="handleModalBackdropClick($event)">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h2 class="modal-title">{{ getDialogTitle() }}</h2>
+          <button class="modal-close-btn" (click)="handleMeetingCancel()">
+            <i class="fa-solid fa-times"></i>
+          </button>
+        </div>
+
+        <app-meeting-form
+          [selectedDate]="selectedDate"
+          [selectedTime]="selectedTime"
+          (onSubmit)="handleMeetingSubmit($event)"
+          (onCancel)="handleMeetingCancel()"
+        ></app-meeting-form>
+      </div>
+    </div>
+  }
+</div>

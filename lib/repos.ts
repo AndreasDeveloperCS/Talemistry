@@ -1,6 +1,8 @@
 import { collection } from "./mongodb"
 import type { Candidate, Job, Interview, Offer, Assessment } from "./data"
 import type { PipelineStatus } from "./journey"
+import { backendGetPositionById, backendGetPositions } from "./backend-client"
+import { mapPositionToJob } from "./translate/job"
 
 /** Remove Mongo's _id so documents match the frontend interfaces exactly. */
 function clean<T>(doc: Record<string, unknown> | null): T | null {
@@ -47,12 +49,18 @@ export async function createCandidate(input: Candidate): Promise<Candidate> {
 /* -------------------------------- Jobs -------------------------------- */
 
 export async function getJobs(filter: Record<string, unknown> = {}): Promise<Job[]> {
+  const positions = await backendGetPositions()
+  if (positions) return positions.map(mapPositionToJob)
+
   const col = await collection("jobs")
   const docs = await col.find(filter).toArray()
   return cleanMany<Job>(docs)
 }
 
 export async function getJobById(id: string): Promise<Job | null> {
+  const position = await backendGetPositionById(id)
+  if (position) return mapPositionToJob(position)
+
   const col = await collection("jobs")
   return clean<Job>(await col.findOne({ id }))
 }

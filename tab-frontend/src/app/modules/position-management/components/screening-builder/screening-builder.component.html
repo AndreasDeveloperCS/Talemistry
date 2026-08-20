@@ -1,0 +1,204 @@
+<div class="screening-builder">
+    @if(isLoading) {
+      <app-loading-spinner></app-loading-spinner>
+    }
+    @if(!isLoading) {
+      @if(!isOwner) {
+        <div class="error-message">
+          <mat-icon class="unauthorized-icon">lock</mat-icon>
+          You do not have permission to access this screening builder.
+        </div>
+      }
+      @if(isOwner) {
+        <div class="container">
+          <div class="header">
+            <div class="header-content">
+              <h1 class="title">Screening Question Builder</h1>
+              <p class="subtitle">
+                Build your screening questionnaire by dragging questions from templates or creating custom ones
+              </p>
+            </div>
+            <button class="save-button" (click)="saveScreening()">
+              <mat-icon>save</mat-icon>
+              <span>Save Screening</span>
+            </button>
+          </div>
+
+          <div class="main-grid">
+            <div class="template-sidebar">
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title-wrapper">
+                    <mat-icon class="accent-icon">auto_awesome</mat-icon>
+                    <h2 class="card-title">Question Templates</h2>
+                  </div>
+                  <p class="card-description">Click to add frequently-asked screening questions</p>
+                </div>
+                <div class="card-content">
+                  <div class="template-list">
+                    <button 
+                      *ngFor="let template of templateQuestions; let i = index"
+                      class="template-item"
+                      (click)="addTemplateQuestion(template)">
+                      <div class="template-item-content">
+                        <p class="template-text">{{ template.text }}</p>
+                        <mat-icon class="add-icon">add</mat-icon>
+                      </div>
+                      <div class="template-badges">
+                        <span class="badge badge-secondary">{{ template.type }}</span>
+                        <span class="badge badge-outline" *ngIf="template.required">Required</span>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          
+            <div class="question-builder">
+              <div class="card">
+                <div class="card-header">
+                  <h2 class="card-title">Your Screening Questions ({{ questions.length }})</h2>
+                  <p class="card-description">Drag to reorder • Click to edit • Delete unwanted questions</p>
+                </div>
+                <div class="card-content">
+
+                  <div class="empty-state" *ngIf="questions.length === 0">
+                    <mat-icon class="empty-icon">auto_awesome</mat-icon>
+                    <p class="empty-text">No questions yet. Add from templates or create custom ones.</p>
+                    <button class="button button-outline" (click)="addCustomQuestion()">
+                      <mat-icon>add</mat-icon>
+                      <span>Add Custom Question</span>
+                    </button>
+                  </div>
+
+                  <div class="question-list" *ngIf="questions.length > 0">
+                    <div 
+                      *ngFor="let question of questions; let i = index"
+                      class="question-item"
+                      [class.dragging]="draggedIndex === i"
+                      draggable="true"
+                      (dragstart)="onDragStart(i)"
+                      (dragover)="onDragOver($event, i)"
+                      (dragend)="onDragEnd()">
+                      
+                      <button class="drag-handle">
+                        <mat-icon>drag_indicator</mat-icon>
+                      </button>
+
+                      <div class="question-content">
+                        <div class="question-header">
+                          <span class="question-number">Q{{ i + 1 }}</span>
+                          <textarea 
+                            class="question-input"
+                            [(ngModel)]="question.text"
+                            placeholder="Enter your question..."
+                            rows="2"></textarea>
+                        </div>
+
+                        <div class="question-controls">
+                          <label class="control-label">Type:</label>
+                          <select
+                            class="select-input"
+                            [(ngModel)]="question.type">
+                            <option *ngFor="let option of questionTypeOptions"
+                                    [ngValue]="option.value">
+                              {{ option.label }}
+                            </option>
+                          </select>
+
+                          <div
+                            class="video-duration"
+                            *ngIf="question.type === QuestionType.VideoResponse">
+
+                            <label class="control-label">
+                              Max duration:  
+                            </label>
+
+                            <input
+                              type="number"
+                              class="select-input"
+                              style="max-width: 5rem;"
+                              [(ngModel)]="question.durationInSeconds"
+                              [min]="MIN_VIDEO_DURATION"
+                              step="1"
+                              (blur)="normalizeVideoDuration(question)"/>
+
+                            <small class="hint">
+                              seconds
+                            </small>
+                          </div>
+                          
+                          <label class="checkbox-label">
+                            <input 
+                              type="checkbox"
+                              [(ngModel)]="question.required">
+                            <span>Required</span>
+                          </label>
+                        </div>
+
+                        <div *ngIf="question.type === 'select' || question.type === 'multiselect'" class="question-options">
+                          <div class="container__flex" style="align-items: center; justify-content: space-between;">
+                            <label class="options-label">Options:</label>
+                            <button class="button button-small button-outline" (click)="addOption(question)">
+                              <mat-icon>add</mat-icon>
+                              <span>Add Option</span>
+                            </button>
+                          </div>
+
+                          <div *ngFor="let option of question.options || []; let j = index" class="option-item">
+                            <input
+                              type="text"
+                              [(ngModel)]="question.options![j].text"
+                              placeholder="Enter option text..."
+                              class="option-input"
+                            />
+                            <button class="delete-option" (click)="removeOption(question, j)">
+                              <mat-icon>delete</mat-icon>
+                            </button>
+                          </div>
+
+                        </div>
+                      </div>
+
+                      <button class="delete-button" (click)="removeQuestion(question._id)">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </div>
+
+                    <button class="button button-outline button-full" (click)="addCustomQuestion()">
+                      <mat-icon>add</mat-icon>
+                      <span>Add Custom Question</span>
+                    </button>
+                    <button class="save-button" (click)="saveScreening()" style="margin: 0 auto;">
+                      <mat-icon>save</mat-icon>
+                      <span>Save Screening</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="ready-card" *ngIf="questions.length > 0">
+                <div class="ready-content">
+                  <div class="ready-info">
+                    <mat-icon class="ready-icon">check_circle</mat-icon>
+                    <div>
+                      <p class="ready-title">Ready to save</p>
+                      <p class="ready-subtitle">{{ questions.length }} questions configured</p>
+                    </div>
+                  </div>
+                  @if(screeningFormId !== '') {
+                  <button class="button button-outline" (click)="previewTalentView()">
+                    <mat-icon>visibility</mat-icon>
+                    <span>Preview Talent View</span>
+                  </button>
+                  }
+                </div>
+              </div>
+            </div>
+          
+          </div>
+        </div>
+      }
+    }
+</div>

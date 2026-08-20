@@ -1,0 +1,68 @@
+<div class="skill-form">
+
+  <form [formGroup]="skillDataForm">
+
+    <mat-form-field>
+
+      <mat-select placeholder="Skill Type" [(value)]="skill.skillType">
+        @for (skillType of skillTypes; track skillType) {
+        <mat-option [value]="skillType">
+          {{ skillType }}
+        </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <input [class]="skillDataForm.controls.skillName?.invalid ? 'invalid' : 'valid'" matInput
+        [placeholder]="skill.skillType == 'Academic' ? content.txtEducationSecialication : skill.skillType == 'Language' ? content.txtLanguage : content.txtName"
+        name="skillName" formControlName="skillName" [(ngModel)]="skill.skillName" required />
+
+      @if (skillDataForm.controls.skillName?.invalid) {
+      <mat-error>
+        <div class="errors">
+          @if (skillDataForm.controls.skillName?.errors) {
+          <p>{{content.txtFieldRequired}}</p>
+          }
+        </div>
+      </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-select placeholder="Language Skill Type" [(value)]="languageSkillType">
+        @for (languageSkillType of languageSkillTypes; track languageSkillType) {
+        <mat-option [value]="languageSkillType">
+          {{ languageSkillType }}
+        </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-select placeholder="Academic Education Level" [(value)]="academicEducationLevel">
+        @for (academicEducationLevel of academicEducationLevels; track academicEducationLevel) {
+        <mat-option [value]="academicEducationLevel">
+          {{ academicEducationLevel }}
+        </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </form>
+
+  <div mat-dialog-actions [align]="'end'">
+
+    <div class="container__center">
+      <div class="container__flex">
+        <!-- <button type="submit" (click)="onAddSkill()"
+
+      mat-button
+
+      class="button-apply">
+      {{ data != null ?  content.btnUpdateSkill : content.btnAddSkill  }}
+    </button> -->
+
+      </div>
+    </div>
+  </div>
+
+</div>

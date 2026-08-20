@@ -1,0 +1,84 @@
+<mat-label class="new-label">{{ placeholderText }}</mat-label>
+<div class=" container-column custom-toggle">
+  <mat-form-field>
+    <div class="input-group__field" style="justify-content: flex-start;">
+      <input type="text" class="transparent-input-full-width" [placeholder]="placeholderText" matInput [(ngModel)]="rawInputlValue"
+        [formControl]="inputControl" (input)="filterCollectionItems()" (click)="applyLocalFilter()"
+        (focus)="onAutocompleteOpened()" [matAutocomplete]="matAutocomplete">
+
+      <mat-autocomplete autoActiveFirstOption #matAutocomplete="matAutocomplete" (opened)="onAutocompleteOpened()">
+        <input class="input-group__dropdown transparent-input-width" [placeholder]='content.txtFilter' [formControl]="filterControl"
+          (keyup)="applyLocalFilter()" />
+
+        @for (option of collection; track option) {
+        <mat-option [value]="getValue(option)">
+          <div class="container__middle">
+            {{ getValue(option) }}
+          </div>
+        </mat-option>
+        }
+      </mat-autocomplete>
+
+      <div class="round-add-button container__center" (click)="add(rawInputlValue)">
+        <mat-icon>add</mat-icon>
+      </div>
+    </div>
+  </mat-form-field>
+
+  <div>
+    @for (item of positionsList; track item) {
+    <div class="selected-filtered-item">
+      <div class="skill-info">
+        <div class="container__space-between ">
+          <div class="wrapper-item stretch" style="display: flex;">
+            <mat-label class="cooperation-type new-label" style="display: none;">Skill name</mat-label>
+            <div class="selected-item">
+              <mat-button inline="true">
+              </mat-button>
+              <span class="text-center">
+                {{getValue(item)}}
+              </span>
+            </div>
+          </div>
+          <div>
+            <mat-button (click)="removeSkill(item)" inline="true" class="delete-skill-btn">
+               <mat-icon>delete_sweep</mat-icon>
+            </mat-button>
+          </div>
+        </div>
+        <div class="wrapper-item proficiency-block container__space-between">
+          <div>
+            <mat-label class="cooperation-type new-label">{{content.txtSeniorityLevel}}</mat-label>
+            <div class="proficiency-options">
+              <mat-select [(ngModel)]="item.proficiencyLevel" class="proficiency transparent-select"
+                (selectionChange)="onSeniorityLevelChange(item, item.proficiencyLevel)">
+                <div class="selected-filtered-skill">
+                  @for (option of proficiencyLevels; track option) {
+                  <mat-option [value]="option">
+                    <div class="container__middle">
+                      {{option}}
+                    </div>
+                  </mat-option>
+                  }
+                </div>
+              </mat-select>
+            </div>
+          </div>
+          <div>
+            <mat-label class="cooperation-type new-label">{{content.txtImportance}}</mat-label>
+            <mat-button-toggle-group matInput aria-label="Skill Importance" 
+              class="toggle-group" [(ngModel)]="item.skillImportance">
+              @for (importance of SkillImportanceCollection; track importance) {
+              <mat-button-toggle [value]="importance" (change)="onSkillImportanceChange(item, importance)">
+                <span>{{importance}}</span>
+              </mat-button-toggle>
+              }
+            </mat-button-toggle-group>
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+
+</div>

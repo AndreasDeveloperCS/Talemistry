@@ -1,0 +1,24 @@
+@if(initialLoading) {
+<app-loading-spinner></app-loading-spinner>
+}
+@if(!initialLoading) {
+<div class="dashboard-container" #scrollContainer>
+  <div class="content">
+
+    @if(dataItems.length > 0) {
+      <div class="positions-wrapper">
+        @for(position of dataItems; track position) {
+          <app-saved-position-card
+            (positionsListUpdated)="onPositionsListUpdated($event)"
+            [position]="position"
+            [statuses]="statuses">
+          </app-saved-position-card>
+        }
+      </div>
+    }
+    @if(dataItems.length === 0) {
+      <p>There are no positions saved</p>
+    }
+  </div>
+</div>
+}

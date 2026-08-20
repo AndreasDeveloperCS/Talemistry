@@ -1,0 +1,127 @@
+@use 'variables' as *; 
+@use 'global' as *;
+
+.calendar-container {
+  max-width: $screen-size-netbook;
+  margin: 0 auto;
+  padding: $padding-extra-wide;
+  color: var(--text);
+
+  @media(max-width: $screen-size-mobile) {
+    padding: $padding-narrow;
+  }
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $margin-wide;
+
+  @media(max-width: $screen-size-mobile) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: $gap-narrow;
+
+    .title-group {
+      display: flex;
+      flex-direction: column;
+
+      .calendar-title {
+        font-size: $font-size-header-extra-wide;
+        font-weight: bold;
+        color: var(--accent-text);
+
+        @media(max-width: $screen-size-mobile) {
+          font-size: $font-size-header-middle;
+        }
+      }
+
+      .calendar-subtitle {
+        font-size: $font-size-header-small;
+        color: var(--text);
+      }
+    }
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: $gap-narrow;
+
+    .theme-toggle-btn {
+      padding: $padding-narrow;
+      border: $border solid $pallete-0-color-11;
+      border-radius: $borderRadiusSemiMiddle;
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+
+      &:hover {
+        border-color: var(--accent-text);
+      }
+    }
+  }
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal-content {
+  background-color: $pallete-0-color-3;
+  border-radius: $borderRadiusMiddle;
+  border-radius: $borderRadiusMiddle $borderRadius;
+  box-shadow: var(--box-shadow-light);
+  max-width: 640px;
+  width: 100%;
+  padding: $padding-extra-wide $padding-wide;
+  display: flex;
+  max-height: 90vh;
+  flex-direction: column;
+
+  &.dark {
+    background-color: $pallete-0-color-23;
+    color: var(--text);
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $margin-middle;
+
+    .modal-title {
+      font-size: $font-size-header-middle;
+      font-weight: bold;
+      color: var(--text);
+      color: var(--accent-text);
+    }
+
+    .modal-close-btn {
+      background: transparent;
+      border: none;
+      color: $pallete-0-color-16;
+      cursor: pointer;
+
+      &:hover {
+        color: var(--text);
+      }
+
+      i {
+        font-size: $font-size-header-narrow;
+      }
+    }
+  }
+}

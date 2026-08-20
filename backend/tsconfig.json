@@ -1,0 +1,44 @@
+{
+  "compilerOptions": {
+    "incremental": true,
+    "importHelpers": true,
+    "sourceMap": true,
+    "inlineSources": true,
+
+    // Emit JS unless there are *actual* errors
+    "noEmit": false,
+    "noEmitOnError": true,
+
+    "strict": false,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "pretty": true,
+
+    "target": "ESNext",
+
+    "outDir": "./dist",
+    "rootDir": "./src",
+
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+
+    "skipLibCheck": true,
+
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+
+    "types": [ "node" ],
+    "typeRoots": [ "./node_modules/@types", "types/express.d.ts", "./types" ],
+  },
+  "include": [
+    "src/**/*",
+    "types/express.d.ts",
+    "config.json",
+    "config.prod.json",
+    // , "../tab-frontend/src/app/modules/interviews/services/chat.service.ts" 
+  ],
+  "exclude": [
+    "node_modules", "dist", "**/*spec.ts"
+  ]
+}

@@ -1,0 +1,125 @@
+@use 'variables' as *;
+
+
+// ::ng-deep .mat-button-toggle-group {
+//   background-color: $primary-dark;
+//   width: fit-content !important;
+//   height: 100%;
+//   display: flex;
+//   justify-content: center;
+//   margin: auto;
+//   border: none;
+// }
+
+// ::ng-deep .mat-button-toggle {
+//   color: $primary-dark; // Customize the background color of the tab group $active-text;
+//   background-color: $active-text;
+// }
+
+// ::ng-deep .mat-button-toggle-checked {
+//   color: $primary-dark;
+//   width: 100%;
+
+//   .mat-button-toggle-label-content {
+//     color: $primary-dark;
+//   }
+// }
+
+// ::ng-deep .mdc-switch:enabled .mdc-switch__track::after {
+//   // --mdc-switch-selected-track-color:$active-text;
+//   background: var(--mdc-switch-unselected-track-color) !important;
+// }
+
+// ::ng-deep .mat-mdc-slide-toggle .mat-accent {
+//   .mdc-form-field {
+//     .mdc-switch .mdc-switch--selected {
+//       .mdc-switch__track {
+//         background-color: #108800 !important;
+//       }
+//     }
+
+//     .mdc-switch .mdc-switch--unselected {
+//       .mdc-switch__track {
+//         background-color: #CC0000 !important;
+//       }
+//     }
+//   }
+// }
+
+// ::ng-deep .mdc-switch__icon {
+//   border-radius: 50%;
+//   border-style: none;
+// }
+
+// ::ng-deep .mdc-switch__icon--on {
+//   background-color: #108800;
+// }
+
+// ::ng-deep .mdc-switch__icon--off {
+//   background-color: #CC0000;
+// }
+
+// // .mat-mdc-slide-toggle.mat-accent {
+// //     --mdc-switch-selected-focus-handle-color:white; /* Фокус на ручці */
+// //     --mdc-switch-selected-pressed-handle-color:white; /* Натискання на ручці */
+// //     --mdc-switch-selected-focus-track-color: white; /* Фокус на треку */
+// //     --mdc-switch-selected-pressed-track-color: white; /* Натискання на треку */
+// //     --mdc-switch-selected-track-color: white; /* Трек */
+// //     --mdc-switch-unselected-handle-color: white; /* Ручка у вимкненому стані */
+// //     --mdc-switch-unselected-track-color: white; /* Трек у вимкненому стані */
+// //     --mat-option-selected-state-label-text-color: white;
+
+// //     --mdc-switch-selected-focus-state-layer-color: white; /* Зміна на новий колір */
+// //     --mdc-switch-selected-handle-color: white;
+// //     --mdc-switch-selected-hover-state-layer-color: white;
+// //     --mdc-switch-selected-pressed-state-layer-color: white;
+
+// //     --mdc-switch-selected-hover-handle-color: white;
+// //     --mdc-switch-selected-hover-track-color: white;
+
+// //   }
+// .mdc-switch.mdc-switch--unselected:enabled .mdc-switch__icon {
+//   fill: var(--mdc-switch-unselected-icon-color);
+// }
+
+// // .mat-mdc-slide-toggle {
+// //   --mdc-switch-handle-elevation-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+// //   --mdc-switch-handle-shadow-color: black;
+// //   --mdc-switch-disabled-handle-elevation-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.2), 0px 0px 0px 0px rgba(0, 0, 0, 0.14), 0px 0px 0px 0px rgba(0, 0, 0, 0.12);
+// //   --mdc-switch-selected-icon-color: #fff;
+// //    --mdc-switch-unselected-focus-handle-color: white;
+// //    --mdc-switch-unselected-focus-state-layer-color: white;
+// //   --mdc-switch-unselected-focus-track-color: #e0e0e0;
+// //   --mdc-switch-unselected-handle-color: white;
+// //   --mdc-switch-unselected-hover-handle-color: white;
+// //   --mdc-switch-unselected-hover-state-layer-color: white;
+// //   --mdc-switch-unselected-hover-track-color: #e0e0e0;
+// //   --mdc-switch-unselected-icon-color: #fff;
+// //   --mdc-switch-unselected-pressed-handle-color: white;
+// //   --mdc-switch-unselected-pressed-state-layer-color: white;
+// //   --mdc-switch-unselected-pressed-track-color: #e0e0e0;
+// //   --mdc-switch-unselected-track-color: #e0e0e0;
+// //   --mdc-switch-state-layer-size: 40px !important;
+// // }
+
+// .toggle-group {
+//   border: 1px solid $active-text;
+//   border-radius: 4px;
+//   height: fit-content;
+//   padding: $padding-small;
+//   min-width: 12rem !important;
+// }
+
+// :ng-deep mat-button-toggle {
+//   background-color: transparent;
+//   width: 100%;
+// }
+
+// :ng-deep mat-button-toggle.mat-button-toggle-checked {
+//   background-color: $primaryThree;
+// }
+
+// ::ng-deep .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
+//   line-height: 2.3;
+// }
+

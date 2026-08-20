@@ -1,0 +1,10 @@
+<div class="container__padding-wide">
+    <mat-tab-group animationDuration="300ms" mat-stretch-tabs="false" mat-align-tabs="start" backgroundColor="primary"
+        (selectedTabChange)="onTabChanged($event)" [selectedIndex]="getSelectedTabIndex()">
+        @for (item of routes; track item; let i = $index) {
+            <mat-tab [label]="item.label" [routerLink]="item.route" [active]="currentRoute == item.route">
+            </mat-tab>
+        }
+    </mat-tab-group>
+    <router-outlet></router-outlet>
+</div>

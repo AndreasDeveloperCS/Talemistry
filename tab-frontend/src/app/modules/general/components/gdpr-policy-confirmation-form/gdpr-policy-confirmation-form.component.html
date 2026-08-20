@@ -1,0 +1,38 @@
+<div class="dialog-form dialog-padding">
+  <div class="p-xs container__center">
+    <div class="dialog-header">{{gdprContent.gdprTitle}}</div>
+  </div>
+  <div class="gdpr__agreement">
+    @for (item of gdprContent.statements; track item) {
+      <div>
+        <h5>{{ item.statementTitle }}</h5>
+        @for (statementItem of item.statementContent; track statementItem) {
+          <div>
+            <p [innerHtml]="statementItem"></p>
+          </div>
+        }
+        <br/>
+      </div>
+    }
+  </div>
+
+  <div mat-dialog-actions>
+    <div class="container__center container__column_gap">
+      <app-confirmation-plate
+        [confirmationText]="gdprContent.confirmationText"
+        [refusionText]="gdprContent.rejectText"
+        [amAgree]="gdprStatus"
+        (gdprConfirmationChanged)="onGdprStatusChanged($event)">
+      </app-confirmation-plate>
+      <div class="mt-lg">
+        <!-- [mat-dialog-close]="data" -->
+        <button class="button__primary-color button--medium"
+          (click)="onCancel()"
+          mat-button
+          mat-dialog-close>
+          {{ content.continueText }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

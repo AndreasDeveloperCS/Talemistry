@@ -1,0 +1,100 @@
+<div class="universal-input custom-toggle">
+  <button mat-icon-button class="close-button" (click)="onCancel()">
+    <mat-icon class>
+      <svg class="icon-close" width="1.5rem" height="1.5rem" viewBox="0 0 108 107" fill="none"
+        xmlns="http://www.w3.org/2000/svg">
+        <path d="M27 26.75L54 53.5L81 26.75" stroke="white" stroke-width="10" stroke-linecap="round" />
+        <path d="M27 80.25L54 53.5L81 80.25" stroke="white" stroke-width="10" stroke-linecap="round" />
+      </svg>
+    </mat-icon>
+  </button>
+
+  <div>
+    <form [formGroup]="skillDataForm">
+      <mat-button-toggle-group name="skillType" matInput formControlName="skillType" required aria-label="Skill Type"
+        [(ngModel)]="skill.skillType">
+        @for (type of skillTypes; track type) {
+        <mat-button-toggle [value]="type">
+          <span>{{type}}</span>
+        </mat-button-toggle>
+        }
+      </mat-button-toggle-group>
+      <mat-form-field>
+
+        <mat-select placeholder="Skill Type" name="skillType" formControlName="skillType" [(value)]="skill.skillType">
+          @for (skillType of skillTypes; track skillType) {
+          <mat-option [value]="skillType">
+            {{ skillType }}
+          </mat-option>
+          }
+        </mat-select>
+
+        <input autofocus autocomplete="on" name="skillType" formControlName="skillType"
+          [class]="skillDataForm.get('skillType')?.invalid ? 'invalid' : 'valid'" matInput
+          [placeholder]="content.txtSurname" [value]="skill.skillType" [(ngModel)]="skill.skillType" required />
+        @if (skillDataForm.get('skillType')?.invalid) {
+        <mat-error>
+          <div class="errors">
+            @if (skillDataForm.get('skillType')?.errors) {
+            <p>{{content.txtFieldRequired}}</p>
+            }
+          </div>
+        </mat-error>
+        }
+
+      </mat-form-field>
+
+      <mat-form-field>
+        <input
+          [class]="skillDataForm.get('skillName')?.invalid && skillDataForm.get('skillName')?.touched ? 'invalid' : 'valid'"
+          matInput [placeholder]="skill.skillType == 'Academic' ? content.txtEducationSecialication : skill.skillType == 'Language' 
+                                                             ? content.txtLanguage : content.txtName" name="skillName"
+          formControlName="skillName" [(ngModel)]="skill.skillName" required />
+        @if (skillDataForm.get('skillName')?.invalid) {
+        <mat-error>
+          <div class="errors">
+            @if (skillDataForm.get('skillName')?.errors) {
+            <p>{{content.txtFieldRequired}}</p>
+            }
+          </div>
+        </mat-error>
+        }
+      </mat-form-field>
+    </form>
+    <div>
+      @switch (skill.skillType) {
+      @case (SkillTypeEnum.hard) {
+      <div>
+        Hard Skill
+      </div>
+      }
+      @case (SkillTypeEnum.soft) {
+      <div>
+        Soft Skill
+      </div>
+      }
+      @case (SkillTypeEnum.domain) {
+      <div>
+        Domain Skill
+      </div>
+      }
+      @case (SkillTypeEnum.language) {
+      <div>
+        Language Skill
+      </div>
+      }
+      @default {
+      <div>
+        Default
+      </div>
+      }
+      }
+    </div>
+    <div mat-dialog-actions [align]="'end'" class="container__center">
+      <button (click)="onAddSkill()" class="button__primary-color button--medium container__center">
+          {{ controlButtonContent }}
+      </button>
+
+  </div>
+
+</div>

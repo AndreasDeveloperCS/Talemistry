@@ -1,0 +1,35 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.recruitment{
+  .notification {
+    color: $attentionColor;
+  }
+  
+  .mdc-dialog__title {
+    display: none;
+  }
+  
+  /* Скрытие стрелок в браузерах на основе WebKit (Chrome, Safari) */
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+  
+  ::ng-deep .mat-mdc-dialog-actions .mat-mdc-button-base+.mat-mdc-button-base {
+    margin-left: 0px !important;
+  }
+  
+  .flex-inline {
+    display: flex;
+  
+    @media (max-width: $screen-size-tab) {
+      flex-direction: column;
+    }
+  }
+}

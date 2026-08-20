@@ -1,0 +1,191 @@
+<h2 class="apply-header" #applyForm>{{ content.txtWouldYouLikeToApply }}</h2>
+
+<form [formGroup]="candidateForm" novalidate class="apply-form-container">
+
+  <div class="step-track-container">
+    <div class="step-track-line">
+      <div class="step-track-progress" [style.width.%]="getTrackLineWidth()"></div>
+    </div>
+
+    <div class="step-icons">
+      @for(s of steps; track s; let index = $index) {
+      <div class="step-icon" [class.active]="$index+1 <= step" [class.current-step]="$index+1 === step">
+        <mat-icon [alt]="s.label" [toolTip]="s.label" [class.active-icon]="$index+1 <= step">
+          {{ s.icon }}
+        </mat-icon>
+      </div>
+      }
+    </div>
+  </div>
+
+  @if(step === 1) {
+  <section class="form-step">
+    <h2>{{ content.uploadCVText }}</h2>
+    <div class="upload-box">
+      <button type="button" class="button__primary-color button--medium collapsed-button" (click)="fileCVInput.click()">
+        <mat-icon>attach_file</mat-icon>
+        <span>{{ content.addCvText }}</span>
+      </button>
+      <p>{{ content.txtClickUploadCV }}</p>
+      <p style="opacity: 0.9;">{{ content.cvFormats }}</p>
+
+      <input #fileCVInput type="file" hidden (change)="onCVSelected($event)" [accept]="extensions" />
+
+      <div class="file-selected-attachment">
+        <label mat-dialog-title class="file-selected-attachment">
+          {{ fileCVName }}
+        </label>
+        <mat-icon *ngIf="fileCVName" (click)="deleteCVFile()">delete_sweep</mat-icon>
+      </div>
+    </div>
+  </section>
+  }
+
+  @if(step === 2) {
+  <section class="form-step">
+    <h2>{{ content.txtCoverLetter }}</h2>
+    <label>{{ content.tellAboutYourMotivation }}</label>
+    <div class="cover-letter-container">
+      <div class="cover-letter-block">
+        <p><mat-icon>upload</mat-icon> Upload File</p>
+        <div class="upload-box">
+          <button type="button" class="button__primary-color button--medium collapsed-button"
+            (click)="fileCLInput.click()">
+            <mat-icon>attach_file</mat-icon>
+            <span>{{ content.addClText }}</span>
+          </button>
+          <p>{{ content.txtClickUploadCL }}</p>
+          <p style="opacity: 0.9;">{{ content.cvFormats }}</p>
+
+          <input #fileCLInput type="file" hidden (change)="onCLSelected($event)" [accept]="extensions" />
+
+          <div class="file-selected-attachment">
+            <label mat-dialog-title class="file-selected-attachment">
+              {{ fileCLName }}
+            </label>
+            <mat-icon *ngIf="fileCLName" (click)="deleteCLFile()">delete</mat-icon>
+          </div>
+        </div>
+      </div>
+      <div class="or-circle">OR</div>
+      <div class="cover-letter-block">
+        <p><mat-icon>edit</mat-icon>Write directly</p>
+        <textarea matInput [placeholder]="content.motivationalPlaceholder" formControlName="coverLetterText" rows="10"
+          cdkAutosizeMaxRows="10" name="coverLetterText" [(ngModel)]="candidateInfoData.coverLetterText"
+          class="transparent-input">
+        </textarea>
+      </div>
+    </div>
+  </section>
+  }
+
+  @if(step === 3) {
+  <section class="form-step">
+    <h2>{{ content.txtPersonalInformation }}</h2>
+
+    <div class="form-group row">
+      <div class="form-field">
+        <label>Name *</label>
+        <input type="text" matInput placeholder="Enter your name" name="firstname" formControlName="firstname"
+          [(ngModel)]="candidateInfoData.firstname" class="transparent-input"
+          [class.invalid]="candidateForm.controls.firstname?.invalid && candidateForm.controls.firstname?.touched" />
+        @if(candidateForm.controls.firstname?.invalid) {
+        <p class="form-error">
+          {{ content.txtFieldRequired }}
+        </p>
+        }
+      </div>
+
+      <div class="form-field">
+        <label>Surname *</label>
+        <input type="text" matInput placeholder="Enter your surname" name="lastname" formControlName="lastname"
+          [(ngModel)]="candidateInfoData.lastname" class="transparent-input"
+          [class.invalid]="candidateForm.controls.lastname?.invalid && candidateForm.controls.lastname?.touched" />
+        @if(candidateForm.controls.lastname?.invalid) {
+        <p class="form-error">
+          {{ content.txtFieldRequired }}
+        </p>
+        }
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="form-field">
+        <label>Phone Number *</label>
+        <input type="tel" matInput placeholder="Enter your phone number" name="phone" formControlName="phone"
+          [(ngModel)]="candidateInfoData.phone" class="transparent-input"
+          [class.invalid]="candidateForm.controls.phone?.invalid && candidateForm.controls.phone?.touched" />
+        @if(candidateForm.controls.phone?.invalid) {
+        <p class="form-error">
+          {{ content.txtFieldRequired }} {{ content.txtValidationPhoneNumber }}
+        </p>
+        }
+      </div>
+
+      <div class="form-field">
+        <label>Email *</label>
+        <input type="email" matInput placeholder="Enter your email" name="email" formControlName="email"
+          [(ngModel)]="candidateInfoData.email" class="transparent-input"
+          [class.invalid]="candidateForm.controls.email?.invalid && candidateForm.controls.email?.touched" />
+        @if(candidateForm.controls.email?.invalid) {
+        <p class="form-error">
+          {{ content.txtFieldRequired }} {{ content.txtValidationEmailError }}
+        </p>
+        }
+      </div>
+    </div>
+
+    <div class="privacy-policy-confirmation-block">
+      <a (click)="openPrivacyPolicy()" class="privacy-policy-apply-form" routerLinkActive="active"
+        ariaCurrentWhenActive="page">
+        * {{ content.txtPrivacyPolicy }}
+      </a>
+    </div>
+
+    <app-confirmation-plate class="confirmation-plate" [confirmationText]="gdprContent.confirmationText"
+      [refusionText]="gdprContent.rejectText" [amAgree]="gdprConfirmationStatus"
+      (gdprConfirmationChanged)="onGdprConfirmationChanged($event)">
+    </app-confirmation-plate>
+
+    <div class="recaptcha">
+      <re-captcha id="recaptcha" name="recaptcha" [(ngModel)]="candidateInfoData.recaptcha" [siteKey]="capchaKey"
+        formControlName="recaptcha" required [class.is-invalid]="candidateForm.controls.recaptcha?.invalid &&
+                              (candidateForm.controls.recaptcha?.dirty || candidateForm.controls.recaptcha?.touched)">
+      </re-captcha>
+    </div>
+    <p>
+      <label *ngIf="isJustSent || isApplied" style="color: 'green'">You have already applied for
+        this position
+      </label>
+    </p>
+  </section>
+  }
+
+  <div class="form-navigation">
+    <button type="button" class="btn prev" [disabled]="step === 1" [style.opacity]="step === 1 ? 0 : 1"
+      [style.cursor]="step === 1 ? 'default' : 'pointer'" (click)="previousStep()">
+      <mat-icon>arrow_back</mat-icon> {{ content.previousStep }}
+    </button>
+
+    @if(step < 3) { <button type="button" class="btn next" (click)="nextStep()">
+      {{ content.nextStep }} <mat-icon>arrow_forward</mat-icon>
+      </button>
+      }
+
+      @if(step === 3) {
+      <button class="btn next"
+        [class.disabled]="!candidateForm.valid || !gdprConfirmationStatus || !isSelectedCv || isApplied" 
+        (click)="onApply()" [disabled]="!candidateForm.valid || !gdprConfirmationStatus || !isSelectedCv || isApplied">
+        <span>{{ content.txtapply }}</span>
+        <mat-icon>input</mat-icon>
+      </button>
+      }
+  </div>
+
+  @if(isJustSent) {
+  <div class="notification">
+    {{ content.cvSent }}
+  </div>
+  }
+
+</form>

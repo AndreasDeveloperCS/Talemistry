@@ -1,0 +1,44 @@
+  <div class="visit-card-download-container">
+    <h3 class="section-title">
+      <mat-icon>print</mat-icon>
+      Print Your Visit Cards
+    </h3>
+
+    <div class="visit-card-download-content">
+      <div class="visit-card-left">
+        <!-- Color Selector -->
+        <div class="color-selector">
+          <label>Select Color Scheme:</label>
+          <div class="color-options">
+            <button
+              *ngFor="let color of colorOptions"
+              [ngClass]="['color-btn', color]"
+              [class.active]="selectedColor === color"
+              (click)="selectColor(color)">
+              {{ color | titlecase }}
+            </button>
+          </div>
+        </div>
+        
+        <!-- Download Button -->
+        <div class="download-section">
+          <button class="download-btn" (click)="downloadVisitCards()">
+            <mat-icon>download</mat-icon> Download Visit Cards (PDF)
+          </button>
+        </div>
+      </div>
+
+      <!-- Preview Card -->
+      <div class="preview-card" [ngClass]="selectedColor">
+        <div class="preview-info">
+          <h4>{{ profile.firstName }} {{ profile.lastName }}</h4>
+          <p class="position">{{ profile.targetPosition }}</p>
+          <p class="contact">{{ profile.email }}</p>
+          <p class="contact">{{ profile.phone }}</p>
+        </div>
+        <div class="preview-qr">
+          <app-qr-code [value]="qrCodeEndpointUrl" caption=""></app-qr-code>
+        </div>
+      </div>
+    </div>
+  </div>

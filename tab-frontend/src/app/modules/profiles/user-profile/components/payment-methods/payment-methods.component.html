@@ -1,0 +1,183 @@
+<section class="payment-methods-page">
+    <div class="pm-container">
+        <div class="pm-header">
+            <h2><mat-icon>payment</mat-icon> Payment Methods</h2>
+            <p>Manage your saved payment methods and default billing option.</p>
+        </div>
+
+        <!-- Status -->
+        <div class="pm-status" *ngIf="statusMessage" [class.success]="statusTone === 'success'"
+            [class.error]="statusTone === 'error'" [class.info]="statusTone === 'info'">
+            <mat-icon *ngIf="statusTone === 'success'">check_circle</mat-icon>
+            <mat-icon *ngIf="statusTone === 'error'">error</mat-icon>
+            <mat-icon *ngIf="statusTone === 'info'">info</mat-icon>
+            <span>{{ statusMessage }}</span>
+        </div>
+
+        <!-- Current Subscription Info -->
+        <div class="pm-subscription-info" *ngIf="currentSubscription">
+            <div class="pm-subscription-info__row">
+                <span class="pm-subscription-info__label">Plan</span>
+                <strong>{{ currentSubscription.planName || currentSubscription.planId || 'None' }}</strong>
+            </div>
+            <div class="pm-subscription-info__row">
+                <span class="pm-subscription-info__label">Status</span>
+                <span class="pm-subscription-badge" [class.active]="currentSubscription.status === 'active'">
+                    {{ currentSubscription.status || 'unknown' }}
+                </span>
+            </div>
+            <div class="pm-subscription-info__row">
+                <span class="pm-subscription-info__label">Provider</span>
+                <span>{{ currentSubscription.provider || 'Not set' }}</span>
+            </div>
+        </div>
+
+        <!-- Saved Payment Methods List -->
+        <div class="pm-list">
+            <div class="pm-list__empty" *ngIf="!paymentMethods.length && !showAddForm">
+                <mat-icon>credit_card_off</mat-icon>
+                <p>No payment methods saved yet.</p>
+                <p>Add a card or bank account to manage your subscription billing.</p>
+            </div>
+
+            <div class="pm-card" *ngFor="let method of paymentMethods" [class.pm-card--default]="method.isDefault">
+                <div class="pm-card__icon">
+                    <mat-icon>{{ getProviderIcon(method.provider) }}</mat-icon>
+                </div>
+                <div class="pm-card__info">
+                    <strong>{{ method.label }}</strong>
+                    <small *ngIf="method.expiryMonth && method.expiryYear">
+                        Expires {{ method.expiryMonth }}/{{ method.expiryYear }}
+                    </small>
+                    <small *ngIf="method.bankName">{{ method.bankName }}</small>
+                    <span class="pm-card__default-badge" *ngIf="method.isDefault">Default</span>
+                </div>
+                <div class="pm-card__actions">
+                    <button type="button" class="pm-btn pm-btn--secondary" *ngIf="!method.isDefault"
+                        (click)="setDefaultPaymentMethod(method)">
+                        Set as default
+                    </button>
+                    <button type="button" class="pm-btn pm-btn--danger" (click)="removePaymentMethod(method)">
+                        <mat-icon>delete_outline</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Payment Method Actions -->
+        <div class="pm-add-actions" *ngIf="!showAddForm">
+            <button type="button" class="pm-btn pm-btn--primary" *ngIf="canAddStripe()" (click)="openAddForm('stripe')">
+                <mat-icon>credit_card</mat-icon>
+                Add card (Stripe)
+            </button>
+            <button type="button" class="pm-btn pm-btn--primary" *ngIf="canAddGoCardless()"
+                (click)="openAddForm('gocardless')">
+                <mat-icon>account_balance</mat-icon>
+                Add bank account (GoCardless)
+            </button>
+        </div>
+
+        <!-- Add Stripe Card Form -->
+        <div class="pm-add-form" *ngIf="showAddForm && addProvider === 'stripe'">
+            <h3>Add a new card</h3>
+
+            <div class="pm-form-grid">
+                <label class="pm-field pm-field--wide">
+                    <span>Cardholder name</span>
+                    <input [(ngModel)]="addCardholderName" type="text" autocomplete="cc-name"
+                        placeholder="Full name on card" class="pm-input" />
+                </label>
+                <label class="pm-field pm-field--element pm-field--wide">
+                    <span>Card number</span>
+                    <div #newCardNumberHost class="stripe-element-host"></div>
+                </label>
+                <label class="pm-field pm-field--element">
+                    <span>Expiration</span>
+                    <div #newCardExpiryHost class="stripe-element-host"></div>
+                </label>
+                <label class="pm-field pm-field--element">
+                    <span>CVC</span>
+                    <div #newCardCvcHost class="stripe-element-host"></div>
+                </label>
+            </div>
+
+            <div class="pm-inline-error" *ngIf="stripeCardError">
+                <mat-icon>error</mat-icon>
+                <span>{{ stripeCardError }}</span>
+            </div>
+
+            <div class="pm-form-actions">
+                <button type="button" class="pm-btn pm-btn--primary" [disabled]="busy || !stripeCardReady"
+                    (click)="saveNewPaymentMethod()">
+                    {{ busy ? 'Saving...' : 'Save card' }}
+                </button>
+                <button type="button" class="pm-btn pm-btn--secondary" (click)="cancelAdd()">
+                    Cancel
+                </button>
+            </div>
+        </div>
+
+        <!-- Add GoCardless Card Form -->
+        <div class="pm-add-form" *ngIf="showAddForm && addProvider === 'gocardless'">
+            <h3>Add a card</h3>
+
+            <div class="pm-form-grid">
+                <label class="pm-field pm-field--wide">
+                    <span>Name on card</span>
+                    <input [(ngModel)]="addGcCardForm.cardholderName" type="text" autocomplete="cc-name"
+                        placeholder="Alex Taylor" class="pm-input" />
+                </label>
+                <label class="pm-field pm-field--wide">
+                    <span>Card number</span>
+                    <input [(ngModel)]="addGcCardForm.cardNumber" type="text" inputmode="numeric"
+                        autocomplete="cc-number" placeholder="1234 5678 9012 3456" maxlength="19" class="pm-input" />
+                </label>
+                <label class="pm-field">
+                    <span>Expiration</span>
+                    <input [(ngModel)]="addGcCardForm.expiration" type="text" inputmode="numeric" autocomplete="cc-exp"
+                        placeholder="MM / YY" maxlength="7" class="pm-input" />
+                </label>
+                <label class="pm-field">
+                    <span>CVC</span>
+                    <input [(ngModel)]="addGcCardForm.cvc" type="text" inputmode="numeric" autocomplete="cc-csc"
+                        placeholder="123" maxlength="4" class="pm-input" />
+                </label>
+            </div>
+
+            <p class="pm-note">
+                GoCardless will securely verify your card details and set up recurring billing.
+                Your card information is transmitted over an encrypted connection and not stored in this application.
+            </p>
+
+            <div class="pm-form-actions">
+                <button type="button" class="pm-btn pm-btn--primary"
+                    [disabled]="busy || !addGcCardForm.cardholderName.trim() || !addGcCardForm.cardNumber.trim() || !addGcCardForm.expiration.trim() || !addGcCardForm.cvc.trim()"
+                    (click)="saveNewPaymentMethod()">
+                    {{ busy ? 'Saving...' : 'Save card' }}
+                </button>
+                <button type="button" class="pm-btn pm-btn--secondary" (click)="cancelAdd()">
+                    Cancel
+                </button>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="pm-quick-actions">
+            <button type="button" class="pm-btn pm-btn--secondary"
+                *ngIf="currentSubscription?.provider === 'stripe' && currentSubscription?.customerId"
+                (click)="openBillingPortal()">
+                <mat-icon>settings</mat-icon>
+                Open Stripe Billing Portal
+            </button>
+            <button type="button" class="pm-btn pm-btn--secondary" (click)="goToSubscription()">
+                <mat-icon>subscriptions</mat-icon>
+                Manage Subscription
+            </button>
+        </div>
+
+        <div class="pm-footer">
+            <mat-icon>verified_user</mat-icon>
+            <span>Your payment information is secured with industry-standard encryption</span>
+        </div>
+    </div>
+</section>

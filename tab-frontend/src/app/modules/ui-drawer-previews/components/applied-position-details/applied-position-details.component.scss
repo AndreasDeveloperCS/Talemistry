@@ -1,0 +1,251 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.applied-position-details-preview {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.preview-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.preview-subtitle {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: #8f96b2;
+  margin-bottom: 6px;
+  font-weight: 700;
+}
+
+.preview-title {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 800;
+  color: white;
+}
+
+.preview-company {
+  margin-top: 8px;
+  color: #b3bbd5;
+  font-size: 15px;
+}
+
+.btns {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.position-btn, .company-btn {
+  height: 44px;
+  border-radius: 14px;
+  border: none;
+  background: rgba(255,255,255,.06);
+  color: white;
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  gap: 10px;
+  padding: 0 18px;
+  cursor: pointer;
+}
+
+.pipeline-flow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  overflow-x: auto;
+  padding: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.pipeline-stage {
+  min-width: 120px;
+  border-radius: 18px;
+  padding: 18px 14px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid transparent;
+  transition: .2s ease;
+  text-align: center;
+}
+
+.pipeline-stage.clickable {
+  cursor: pointer;
+}
+
+.pipeline-stage.clickable:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,.12);
+}
+
+.pipeline-stage.current {
+  border-color: #7c5cff;
+  background: rgba(124,92,255,.14);
+}
+
+.pipeline-stage.passed {
+  background: rgba(76,175,80,.12);
+}
+
+.pipeline-stage.future {
+  opacity: .6;
+}
+
+.pipeline-stage__icon {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.pipeline-stage__icon mat-icon {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+}
+
+.pipeline-stage__name {
+  font-size: 13px;
+  font-weight: 700;
+  color: white;
+}
+
+.details-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.details-card {
+  border-radius: 24px;
+  padding: 24px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.06);
+}
+
+.details-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 18px;
+  font-size: 18px;
+  color: white;
+}
+
+.questions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.question-item {
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(255,255,255,.03);
+}
+
+.question-toggle {
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.answer-text {
+  padding: 0 16px 16px;
+  color: #c2c8de;
+  line-height: 1.6;
+}
+
+.assessment-score {
+  font-size: 42px;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 18px;
+}
+
+.progress-bar {
+  height: 12px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(255,255,255,.06);
+}
+
+.progress-bar__fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    #7c5cff,
+    #4f8cff
+  );
+}
+
+.meeting-state {
+  border-radius: 16px;
+  padding: 18px;
+  font-weight: 600;
+}
+
+.meeting-state.success {
+  background: rgba(76,175,80,.12);
+  color: #62d56d;
+}
+
+.meeting-state.pending {
+  background: rgba(255,193,7,.12);
+  color: #ffd54f;
+}
+
+.meeting-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 10px;
+  padding: 8px 12px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn.primary {
+  background: $pallete-0-color-14;
+  color: white;
+}
+
+.btn.secondary {
+  background: transparent;
+  border: 1px solid $pallete-0-color-14;
+  color: $pallete-0-color-14;
+}
+
+.feedback-item {
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(255,255,255,.04);
+  color: #cdd3ea;
+  line-height: 1.6;
+}
+
+.notes-box {
+  color: #cdd3ea;
+  line-height: 1.7;
+}

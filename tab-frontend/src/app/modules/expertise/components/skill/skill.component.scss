@@ -1,0 +1,112 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+
+.skill-options {
+  display: flex;
+}
+
+
+// new
+.skill-full-width {
+  .company-name {
+    position: relative;
+  }
+
+  .dropdown-icon {
+    position: absolute;
+    right: 0.15rem;
+    bottom: 1rem;
+    transform: translateY(-50%) rotate(0deg) !important;
+    cursor: pointer;
+    pointer-events: auto;
+    color: var(--text);
+    transition: transform 0.2s ease;
+
+    @media (max-width: $screen-size-mobile) {
+      bottom: -0.5rem;
+    }
+  }
+
+  .dropdown-icon.open {
+    transform: translateY(-50%) rotate(180deg) !important;
+  }
+}
+
+.custom-slider {
+  position: relative;
+  width: 100%;
+  padding-right: $padding-extra-large;
+}
+
+.ngx-slider-tick {
+  font-size: 12px;
+  color: #000;
+}
+
+.ngx-slider-tick-container {
+  position: absolute;
+  top: -30px;
+  width: 100%;
+  text-align: center;
+  padding: 0 $padding-middle;
+
+}
+
+.ngx-slider-tick-container:last-child {
+  top: 30px;
+}
+
+.mdc-button__ripple {
+  background-color: $primaryOne !important;
+}
+
+.input-filter {
+  align-items: flex-end !important;
+}
+
+.skill-short-width {
+  max-width: 6rem;
+
+  @media (max-width: $screen-size-mobile) {
+    max-width: 100%;
+  }
+}
+
+.skill-standart-width {
+
+  // min-width: $standart-input-width;
+  @media (max-width: $screen-size-mobile) {
+    display: block;
+    max-width: 100%;
+  }
+
+}
+
+.general-vertical-align {
+  display: flex;
+  vertical-align: middle;
+
+  @media (max-width: $screen-size-mobile) {
+    margin-top: $margin-narrow;
+  }
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  /* Убирает стрелки в Firefox */
+}
+
+.skill-form {
+  .mat-typography .errors p {
+    font-size: 11px;
+    padding: $padding-narrow 0;
+    color: red !important;
+  }
+}

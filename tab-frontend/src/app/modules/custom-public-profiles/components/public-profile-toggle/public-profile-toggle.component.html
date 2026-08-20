@@ -1,0 +1,75 @@
+@if(isPublic !== undefined) {
+<div class="profile-toggle-container" [class.is-public]="isPublic">
+  <div class="decorative-circle decorative-circle-top"></div>
+  <div class="decorative-circle decorative-circle-bottom"></div>
+
+  <div class="content">
+    <div class="header">
+      <div class="text-content">
+        <div class="title-row">
+          <mat-icon class="material-icons icon">
+            {{ isPublic ? 'lock_open' : 'auto_awesome' }}
+          </mat-icon>
+          <h3 class="title">
+            {{ isPublic ? 'Your Profile is Live!' : 'Amplify Your Reach' }}
+          </h3>
+        </div>
+        <p class="description">
+          {{ isPublic 
+            ? 'Your expertise is now discoverable. Share your unique link with the world!' 
+            : 'Transform your profile into a powerful portfolio. Share your skills while keeping sensitive info private.' }}
+        </p>
+      </div>
+      
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-primary" (click)="togglePublic()">
+        <mat-icon class="material-icons btn-icon">
+          {{ isPublic ? 'lock' : 'lock_open' }}
+        </mat-icon>
+        {{ isPublic ? 'Make Private' : 'Go Public' }}
+      </button>
+
+      <button *ngIf="isPublic" class="btn btn-secondary" (click)="viewPublicPage()">
+        <mat-icon class="material-icons btn-icon">open_in_new</mat-icon>
+        View Public Page
+      </button>
+    </div>
+
+    <div class="privacy-notice">
+      <mat-icon class="material-icons privacy-icon">lock</mat-icon>
+      <span class="privacy-text">Protected: Email, phone, surname & company names stay private</span>
+    </div>
+  </div>
+
+  <div class="container__flex">
+    <app-qr-code *ngIf="isPublic" [value]="qrCodeEndpointUrl" caption=""></app-qr-code>
+
+    <mat-icon class="material-icons globe-icon">public</mat-icon>
+  </div>
+</div>
+}
+<div class="public-block-info">
+    <h3><mat-icon>record_voice_over</mat-icon>Shape Your Public Persona</h3>
+    <div class="public-block-info-fields">
+      <div class="public-block-info-field">
+        <label class="new-label"><mat-icon>badge</mat-icon> Pseudonym</label>
+        <input 
+          class="transparent-input-full-width" 
+          (blur)="syncToService()"
+          [(ngModel)]="pseudonym" 
+          placeholder="Pseudonym"/>
+      </div>
+
+      <div class="public-block-info-field">
+        <label class="new-label"><mat-icon>flag</mat-icon> Target Position</label>
+        <input 
+          class="transparent-input-full-width" 
+          style="font-size: 1rem;"
+          (blur)="syncToService()"
+          [(ngModel)]="targetPosition" 
+          placeholder="Target Position"/>
+      </div>
+    </div>
+</div>

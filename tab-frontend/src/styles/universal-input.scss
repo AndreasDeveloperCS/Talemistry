@@ -1,0 +1,85 @@
+@use 'variables' as *;
+
+.universal-full-width {
+  color: var(--text);
+  width: 100%;
+
+  .input-filter {
+    display: inline-flex;
+    min-width: 10rem;
+    max-width: 30rem;
+    width: 100%;
+
+    justify-content: flex-end;
+    justify-self: flex-end;
+    justify-items: flex-end;
+    align-content: center;
+    align-self: center;
+    align-items: center;
+
+    @media (max-width: $screen-size-mobile) {
+      min-width: 90vh;
+      max-width: 90vh;
+      width: 100%;
+    }
+
+  }
+}
+
+//  Hard skill
+
+.skill-form {
+  align-items: baseline;
+}
+
+::ng-deep .skill-form {
+  max-width: 100%;
+}
+
+::ng-deep .skill-form mat-form-field {
+  width: 100%;
+  height: 100%;
+}
+
+::ng-deep .skill-form .slider-filter {
+  width: 100%;
+}
+
+::ng-deep .skill-form mat-form-field .input-date {
+  height: 3rem !important;
+}
+
+.skill-label {
+  line-height: 3rem;
+}
+
+.slider-filter {
+  position: relative;
+  display: block !important;
+  height: max-content;
+
+  background-color: transparent;
+
+  padding: $padding-s;
+
+  .slider-title {
+    display: block !important;
+    align-self: start;
+    justify-self: start;
+    font-weight: 700;
+    color: var(--text);
+
+    margin: $margin-wide;
+  }
+
+  .label-mark {
+    position: relative;
+    display: inline-flex;
+  }
+
+  .range-slider-filter {
+    padding: $padding-s;
+    // width: 50rem;
+    display: block !important;
+  }
+}

@@ -1,0 +1,23 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+:host {
+  width: 100%;
+}
+
+.position-location{
+    margin-right: $margin-middle;
+    ::ng-deep .mat-mdc-select {
+        margin-top: 0.2rem;
+      }
+}
+
+.selected-item {
+  font-weight: 600;
+  word-wrap: break-word !important;
+  flex-wrap: wrap !important;
+}
+
+.input-group__items {
+  margin-bottom: $margin-middle;
+}

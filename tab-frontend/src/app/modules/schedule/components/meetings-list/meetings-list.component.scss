@@ -1,0 +1,52 @@
+@use 'variables' as *; 
+@use 'global' as *;
+
+.meetings-list {
+  display: flex;
+  flex-direction: column;
+  gap: $gap-narrow;
+  padding: $padding-narrow;
+
+  .meetings-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0;
+
+    .meetings-title {
+      font-weight: bold;
+      color: $pallete-0-color-14;
+    }
+
+    .add-meeting-button {
+      font-size: $font-size-button-narrow;
+      color: var(--text);
+      background-color: $pallete-0-color-13;
+      padding: $padding-middle !important;
+      border: none;
+      border-radius: $borderRadiusSemiMiddle;
+      cursor: pointer;
+      padding: 0;
+      text-decoration: none;
+      transform: transition 0.2s ease;
+
+      &:hover {
+        scale: 1.1;
+      }
+    }
+  }
+
+  .meetings-items {
+    display: flex;
+    flex-direction: column;
+    gap: $gap-narrow;
+  }
+
+  .empty-message {
+    font-size: $font-size-placeholder;
+    color: var(--text);
+    box-shadow: var(--box-shadow-light);
+    padding: $padding-middle $padding-narrow;
+    border-radius: $borderRadiusMiddle;
+  }
+}

@@ -1,0 +1,33 @@
+<div class="container ">
+  <h3 class="hidden">{{content.txtOpenedPositions}}</h3>
+
+  <div class="cv-gallery">
+    @for (pdf of pdfs; track pdf; let i = $index) {
+      <div>
+        <button class="element" (click)="onFullView(pdf)">
+          @if (pdf[i]) {
+            <div>
+              <pdf-viewer
+                [rotation]="0"
+                [original-size]="true"
+                [show-all]="true"
+                [fit-to-page]="true"
+                [zoom]="0"
+                [zoom-scale]="'page-width'"
+                [render-text]="false"
+                [external-link-target]="'blank'"
+                [autoresize]="true"
+                [show-borders]="true"
+                [src]="pdf"
+                (after-load-complete)="onPdfComplete($event)"
+                (error)="onPdfError($event)"
+                style="width: 95%; height: 36rem"
+                >
+              </pdf-viewer>
+            </div>
+          }
+        </button>
+      </div>
+    }
+  </div>
+</div>

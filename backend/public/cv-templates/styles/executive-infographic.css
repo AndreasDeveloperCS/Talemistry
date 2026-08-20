@@ -1,0 +1,530 @@
+@import "./print-page-breaks.css";
+
+:root {
+  --primary-color: #008C94;
+  --primary-dark: #037F8C;
+  --primary-bright: #04D9D9;
+  --slate-900: #0f172a;
+  --slate-700: #334155;
+  --slate-300: #cbd5e1;
+  --slate-100: #f1f5f9;
+  --white: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: var(--white);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.ei-wrapper {
+	 background-color: #f8fafc;
+	 font-family: 'Inter', 'Segoe UI', sans-serif;
+	 margin: 0 auto;
+	 width: auto;
+  	 min-height: auto;
+}
+ .ei-header {
+	 background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
+	 color: #fff;
+}
+ .ei-header__inner {
+	 /* max-width: 960px; */
+	 margin: 0 auto;
+	 padding: 40px 32px;
+}
+ .ei-header__profile {
+	 display: flex;
+	 align-items: center;
+	 gap: 32px;
+}
+ .ei-header__photo {
+	 width: 128px;
+	 height: 128px;
+	 border-radius: 50%;
+	 border: 4px solid rgba(255, 255, 255, 0.3);
+	 overflow: hidden;
+	 background: rgba(255, 255, 255, 0.2);
+	 flex-shrink: 0;
+	 display: flex;
+	 align-items: center;
+	 justify-content: center;
+}
+ .ei-header__photo img {
+	 width: 100%;
+	 height: 100%;
+	 object-fit: cover;
+}
+ .ei-header__initials {
+	 font-size: 2.5rem;
+	 font-weight: 700;
+}
+ .ei-header__info {
+	 flex: 1;
+}
+ .ei-header__name {
+	 font-size: 2.5rem;
+	 font-weight: 700;
+	 letter-spacing: -0.025em;
+	 margin: 0;
+}
+ .ei-header__title {
+	 font-size: 1.25rem;
+	 color: #00fafb;
+	 font-weight: 500;
+	 margin: 4px 0 0;
+}
+ .ei-header__contacts {
+	 display: flex;
+	 flex-wrap: wrap;
+	 gap: 16px;
+	 margin-top: 16px;
+	 font-size: 0.875rem;
+}
+ .ei-header__contact-item {
+	 display: flex;
+	 align-items: center;
+	 gap: 4px;
+}
+ .ei-header__contact-item mat-icon {
+	 font-size: 16px;
+	 width: 16px;
+	 height: 16px;
+}
+ .ei-metrics {
+	 /* max-width: 960px; */
+	 margin: -24px auto 0;
+	 padding: 0 32px;
+	 display: grid;
+	 grid-template-columns: repeat(4, 1fr);
+	 gap: 16px;
+}
+ .ei-metrics__card {
+	 background: #fff;
+	 border-radius: 8px;
+	 padding: 16px;
+	 box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+	 border: 1px solid #e2e8f0;
+	 display: flex;
+	 align-items: center;
+	 gap: 12px;
+}
+ .ei-metrics__icon {
+	 width: 48px;
+	 height: 48px;
+	 border-radius: 50%;
+	 background: rgba(3, 127, 140, 0.1);
+	 display: flex;
+	 align-items: center;
+	 justify-content: center;
+	 flex-shrink: 0;
+}
+ .ei-metrics__icon mat-icon {
+	 color: var(--primary-dark);
+}
+ .ei-metrics__value {
+	 font-size: 1.5rem;
+	 font-weight: 700;
+	 color: var(--primary-dark);
+}
+ .ei-metrics__label {
+	 font-size: 0.75rem;
+	 color: #475569;
+	 text-transform: uppercase;
+	 letter-spacing: 0.05em;
+}
+ .ei-main {
+	 /* max-width: 960px; */
+	 margin: 0 auto;
+	 padding: 32px;
+}
+ .ei-card {
+	 background: #fff;
+	 border-radius: 8px;
+	 padding: 24px;
+	 box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+	 border: 1px solid #e2e8f0;
+	 margin-bottom: 24px;
+}
+ .ei-section-label {
+	 display: flex;
+	 align-items: center;
+	 gap: 12px;
+	 margin-bottom: 12px;
+}
+ .ei-section-label__icon {
+	 width: 40px;
+	 height: 40px;
+	 border-radius: 50%;
+	 display: flex;
+	 align-items: center;
+	 justify-content: center;
+	 color: #fff;
+}
+ .ei-section-label__icon mat-icon {
+	 font-size: 20px;
+	 width: 20px;
+	 height: 20px;
+}
+ .ei-section-label__icon--orange {
+	 background: #f97316;
+}
+ .ei-section-label__icon--teal {
+	 background: var(--primary-dark);
+}
+ .ei-section-label__text {
+	 font-size: 1.125rem;
+	 font-weight: 700;
+	 color: #1e293b;
+	 text-transform: uppercase;
+	 letter-spacing: 0.05em;
+	 margin: 0;
+}
+ .ei-objective-text {
+	 color: #1e293b;
+	 line-height: 1.6;
+	 font-style: italic;
+	 font-size: 1.125rem;
+	 border-left: 4px solid var(--primary-dark);
+	 padding-left: 16px;
+	 margin: 0;
+}
+ .ei-summary-text {
+	 color: #475569;
+	 line-height: 1.6;
+	 margin: 0;
+}
+ .ei-columns {
+	 display: grid;
+	 grid-template-columns: 320px 1fr;
+	 gap: 24px;
+	 height: 100%;
+}
+.ei-columns__right > * {
+  width: 100%;           /* ensures vertical stacking */
+}
+ .ei-section-header {
+	 display: flex;
+	 align-items: center;
+	 gap: 8px;
+	 margin-bottom: 16px;
+	 padding-bottom: 8px;
+	 border-bottom: 2px solid var(--primary-dark);
+}
+ .ei-section-header mat-icon {
+	 color: var(--primary-dark);
+	 font-size: 20px;
+	 width: 20px;
+	 height: 20px;
+}
+ .ei-section-header h2 {
+	 font-size: 1.125rem;
+	 font-weight: 700;
+	 color: #1e293b;
+	 text-transform: uppercase;
+	 letter-spacing: 0.05em;
+	 margin: 0;
+}
+ .ei-skill-bar {
+	 margin-bottom: 12px;
+}
+ .ei-skill-bar__header {
+	 display: flex;
+	 justify-content: space-between;
+	 align-items: center;
+	 margin-bottom: 4px;
+}
+ .ei-skill-bar__name {
+	 font-size: 0.875rem;
+	 font-weight: 500;
+	 color: #1e293b;
+}
+ .ei-skill-bar__level {
+	 font-size: 0.75rem;
+	 color: var(--primary-dark);
+	 font-weight: 500;
+}
+ .ei-skill-bar__track {
+	 height: 8px;
+	 background: #e2e8f0;
+	 border-radius: 9999px;
+	 overflow: hidden;
+}
+ .ei-skill-bar__fill {
+	 height: 100%;
+	 border-radius: 9999px;
+	 background: linear-gradient(90deg, var(--primary-dark), var(--primary-bright));
+	 transition: width 0.5s ease;
+}
+ .ei-tags {
+	 display: flex;
+	 flex-wrap: wrap;
+	 gap: 8px;
+}
+ .ei-tag {
+	 padding: 6px 12px;
+	 border-radius: 9999px;
+	 font-size: 0.875rem;
+	 font-weight: 500;
+}
+ .ei-tag--teal {
+	 background: rgba(3, 127, 140, 0.1);
+	 color: var(--primary-dark);
+}
+ .ei-languages {
+	 display: flex;
+	 flex-wrap: wrap;
+	 justify-content: center;
+	 gap: 24px;
+}
+ .ei-language {
+	 display: flex;
+	 flex-direction: column;
+	 align-items: center;
+}
+ .ei-language__circle {
+	 position: relative;
+	 width: 80px;
+	 height: 80px;
+}
+ .ei-language__circle svg {
+	 width: 100%;
+	 height: 100%;
+	 transform: rotate(-90deg);
+}
+ .ei-language__track {
+	 stroke: #e2e8f0;
+	 stroke-width: 6;
+	 fill: none;
+}
+ .ei-language__progress {
+	 stroke: var(--primary-dark);
+	 stroke-width: 6;
+	 fill: none;
+	 stroke-linecap: round;
+	 transition: stroke-dashoffset 0.5s ease;
+}
+ .ei-language__label-inner {
+	 position: absolute;
+	 inset: 0;
+	 display: flex;
+	 align-items: center;
+	 justify-content: center;
+	 font-size: 0.75rem;
+	 font-weight: 700;
+	 color: var(--primary-dark);
+}
+ .ei-language__name {
+	 margin-top: 8px;
+	 font-size: 0.875rem;
+	 font-weight: 600;
+	 color: #1e293b;
+}
+ .ei-language__level {
+	 font-size: 0.75rem;
+	 color: #475569;
+}
+ .ei-experience-list {
+	 display: flex;
+	 flex-direction: column;
+	 gap: 24px;
+}
+ .ei-experience--bordered {
+	 padding-top: 24px;
+	 border-top: 1px solid #e2e8f0;
+}
+ .ei-experience__header {
+	 display: flex;
+	 justify-content: space-between;
+	 align-items: flex-start;
+	 gap: 8px;
+	 margin-bottom: 12px;
+}
+ .ei-experience__title {
+	 font-size: 1.125rem;
+	 font-weight: 700;
+	 color: #1e293b;
+	 margin: 0;
+}
+ .ei-experience__company {
+	 color: var(--primary-dark);
+	 font-weight: 500;
+	 margin: 2px 0 0;
+}
+ .ei-experience__date {
+	 font-size: 0.875rem;
+	 padding: 4px 12px;
+	 border-radius: 9999px;
+	 white-space: nowrap;
+	 background: var(--primary-dark);
+	 color: #fff;
+}
+ .ei-experience__date--current {
+	 background: var(--primary-dark);
+	 color: #fff;
+	 font-weight: 500;
+}
+ .ei-experience__desc {
+	 font-size: 0.875rem;
+	 color: #475569;
+	 margin: 0 0 5px;
+}
+ .ei-experience__subheader {
+	 color: var(--primary-dark);
+	 font-weight: 500;
+	 margin: 2px 0 0;
+}
+ .ei-experience__achievements {
+	 list-style: none;
+	 padding: 0;
+	 margin: 0;
+	 display: flex;
+	 flex-direction: column;
+	 gap: 8px;
+}
+ .ei-experience__achievements li {
+	 display: flex;
+	 align-items: flex-start;
+	 gap: 8px;
+	 font-size: 0.875rem;
+	 color: #475569;
+}
+ .ei-experience__achievements li span {
+	 color: #0f172a;
+}
+ .ei-achievement-icon {
+	 color: var(--primary-dark);
+	 font-size: 16px;
+	 width: 16px;
+	 height: 16px;
+	 margin-top: 2px;
+	 flex-shrink: 0;
+}
+ .ei-education-list {
+	 display: flex;
+	 flex-direction: column;
+	 gap: 16px;
+}
+ .ei-education {
+	 display: flex;
+	 align-items: flex-start;
+	 gap: 16px;
+}
+ .ei-education--bordered {
+	 padding-top: 16px;
+	 border-top: 1px solid #e2e8f0;
+}
+ .ei-education__icon {
+	 width: 48px;
+	 height: 48px;
+	 border-radius: 8px;
+	 background: rgba(3, 127, 140, 0.1);
+	 display: flex;
+	 align-items: center;
+	 justify-content: center;
+	 flex-shrink: 0;
+}
+ .ei-education__icon mat-icon {
+	 color: var(--primary-dark);
+}
+ .ei-education__content {
+	 flex: 1;
+}
+ .ei-education__content h4 {
+	 font-weight: 700;
+	 color: #1e293b;
+	 margin: 0;
+}
+ .ei-education__institution {
+	 color: var(--primary-dark);
+	 font-weight: 500;
+	 margin: 2px 0 0;
+}
+ .ei-education__dates {
+	 font-size: 0.875rem;
+	 color: #475569;
+	 margin: 2px 0 0;
+}
+ .ei-education__field {
+	 font-size: 0.875rem;
+	 color: #475569;
+	 margin: 4px 0 0;
+}
+ .ei-certifications {
+	 display: grid;
+	 grid-template-columns: repeat(2, 1fr);
+	 gap: 16px;
+}
+ .ei-certification {
+	 display: flex;
+	 align-items: flex-start;
+	 gap: 12px;
+	 padding: 12px;
+	 background: #f8fafc;
+	 border-radius: 8px;
+}
+ .ei-certification__icon {
+	 width: 40px;
+	 height: 40px;
+	 border-radius: 50%;
+	 background: rgba(3, 127, 140, 0.1);
+	 display: flex;
+	 align-items: center;
+	 justify-content: center;
+	 flex-shrink: 0;
+}
+ .ei-certification__icon mat-icon {
+	 color: var(--primary-dark);
+	 font-size: 20px;
+	 width: 20px;
+	 height: 20px;
+}
+ .ei-certification h4 {
+	 font-weight: 600;
+	 color: #1e293b;
+	 font-size: 0.875rem;
+	 margin: 0;
+}
+ .ei-certification p {
+	 font-size: 0.75rem;
+	 color: #475569;
+	 margin: 2px 0 0;
+}
+ .ei-certification__date {
+	 color: var(--primary-dark);
+	 font-weight: 500;
+}
+ .ei-domains {
+	 display: grid;
+	 grid-template-columns: repeat(2, 1fr);
+	 gap: 12px;
+}
+ .ei-domain {
+	 text-align: center;
+	 padding: 12px;
+	 background: linear-gradient(135deg, rgba(3, 127, 140, 0.05), rgba(4, 217, 217, 0.1));
+	 border-radius: 8px;
+	 border: 1px solid rgba(3, 127, 140, 0.2);
+}
+ .ei-domain__years {
+	 font-size: 1.125rem;
+	 font-weight: 700;
+	 color: var(--primary-dark);
+}
+ .ei-domain__name {
+	 font-size: 0.875rem;
+	 color: #475569;
+}
+
+.ei-edu,
+.ei-cert {
+  font-size: 12px;
+  margin-bottom: 8px;
+}

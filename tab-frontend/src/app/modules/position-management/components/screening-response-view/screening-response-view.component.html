@@ -1,0 +1,33 @@
+<button mat-icon-button class="form-button exit-button" (click)="onCancel()">
+    <mat-icon class="icon-close">
+      <svg class="icon-close" width="1.5rem" height="1.5rem" viewBox="0 0 108 107"
+        fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M27 26.75L54 53.5L81 26.75" stroke="white" stroke-width="10"
+          stroke-linecap="round" />
+        <path d="M27 80.25L54 53.5L81 80.25" stroke="white" stroke-width="10"
+          stroke-linecap="round" />
+      </svg>
+    </mat-icon>
+</button>
+
+<div class="response-container" *ngIf="response">
+  <h2 class="response-title">Submitted Screening</h2>
+  <p class="response-meta">Submitted on: {{ response.createdDate | date: 'medium' }}</p>
+
+  <div class="answers-list">
+    <div class="answer-item" *ngFor="let answer of response.answers">
+      <div class="question-text">{{ answer.questionText }}</div>
+
+      <div class="answer-value" *ngIf="answer.value as val">
+        <ng-container *ngIf="isArray(val); else singleValue">
+          <ul class="answer-list">
+            <li *ngFor="let item of val">{{ item.text || item }}</li>
+          </ul>
+        </ng-container>
+        <ng-template #singleValue>
+          {{ val.text || val }}
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

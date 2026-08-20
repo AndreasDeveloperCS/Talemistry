@@ -1,0 +1,67 @@
+<div class="login-wrapper">
+  <div class="login-card">
+    <h1 class="brand">AI Talent Acquisition</h1>
+    <p class="subtitle">Log in to your account</p>
+
+    <form [formGroup]="form">
+      <div class="form-item">
+        <label for="email">{{content.txtEmail}}</label>
+        <input id="email" type="email" formControlName="email" [(ngModel)]="signInData.email" (input)="onInputChange()"
+          [placeholder]="content.txtEmail" required autocomplete="on" />
+        @if (form.controls.email?.invalid
+        && (form.controls.email?.touched
+        || form.controls.email?.dirty)) {
+        <mat-error>
+          <div class="errors">
+            @if (form.controls.email?.errors) {
+            <p>{{content.txtFieldRequired}}</p>
+            }
+          </div>
+        </mat-error>
+        }
+      </div>
+      <div class="form-item">
+        <label for="password">{{content.txtPassword}}</label>
+        <input id="password" type="password" [placeholder]="content.txtPassword" formControlName="password"
+          [type]="isPasswordVisible ? 'password' : 'text' " (input)="onInputChange()" [(ngModel)]="signInData.password"
+          required autocomplete="on" />
+        <button type="button" class="toggle-visibility-btn" (click)="tooglePasswordVisible()">
+          <mat-icon>{{isPasswordVisible ? 'visibility_off' :
+            'visibility'}}</mat-icon>
+        </button>
+        @if (form.controls.password?.invalid
+        && (form.controls.password?.touched
+        || form.controls.password?.dirty)) {
+        <mat-error>
+          <div class="errors">
+            @if (form.controls.password?.errors) {
+            <p>{{content.txtFieldRequired}}</p>
+            }
+          </div>
+        </mat-error>
+        }
+      </div>
+
+      <div class="notificationHeight">
+        @for (notification of notificationMessages; track notification) {
+        <div class="notification">
+          {{notification}}
+        </div>
+        }
+      </div>
+
+      <div class="login-links">
+        <span class="password-recovery" (click)="onPasswordRecovery()">
+          {{ content.txtForgotPassword }}
+        </span>
+      </div>
+
+      <button type="submit" class="action-btn" (click)="signIn()">{{ content.signInText }}</button>
+    </form>
+
+    <p class="footer-msg">
+      {{ content.txtNotHaveAccount }}
+      <span (click)="onRegistration()">{{ content.txtSignUp }}</span>
+    </p>
+  </div>
+</div>

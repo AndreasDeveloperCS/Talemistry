@@ -1,0 +1,94 @@
+<div class="weekly-calendar">
+  <div class="calendar-header">
+    <div class="header-left">
+      <div class="week-nav">
+        <button class="nav-btn" (click)="navigateWeek('prev')">
+          <mat-icon>navigate_before</mat-icon>
+        </button>
+        <h2 class="week-title">{{ weekRange }}</h2>
+        <button class="nav-btn" (click)="navigateWeek('next')">
+          <mat-icon>navigate_next</mat-icon>
+        </button>
+      </div>
+    </div>
+    <button class="new-meeting-btn" (click)="onCreateMeeting.emit()">
+      <mat-icon>add</mat-icon> 
+      <span class="new-meeting-lbl">{{ content.txtNewMeeting }}</span>
+    </button>
+  </div>
+
+  <div class="calendar-layout">
+    <div class="calendar-grid">
+      <div class="day-headers">
+        <div class="header-cell">{{ content.txtTime }}</div>
+        @for(day of weekDays; track day) {
+        <div class="header-cell" [ngClass]="{ 'today': day.isToday }">
+          <div>{{ day.date | date:'EEE' }}</div>
+          <div class="header-date">{{ day.date | date:'d' }}</div>
+        </div>
+        }
+      </div>
+
+      <div class="time-slots">
+        @for(hour of workingHours; track hour) {
+        <div class="time-row">
+          <div class="time-cell">{{ formatHour(hour) }}</div>
+          @for(day of weekDays; track day) {
+          <ng-container>
+            <div class="time-slot group" [ngClass]="getTimeSlotClass(day, hour)"
+              (click)="handleTimeSlotClick(day, hour)">
+              @for(meeting of getMeetingsForHour(day, hour); track meeting) {
+              <ng-container>
+                <div class="meeting">
+                  <div class="meeting-label">{{ meeting.topic }}</div>
+                </div>
+              </ng-container>
+              }
+
+              @if(!isTimeSlotAvailable(day, hour) && getMeetingsForHour(day, hour).length === 0) {
+              <div class="slot-unavailable">
+                <mat-icon>lock</mat-icon>
+              </div>
+              }
+
+              @if(isTimeSlotAvailable(day, hour)) {
+              <button class="add-slot-btn" (click)="$event.stopPropagation(); handleTimeSlotClick(day, hour)">
+                <mat-icon>add</mat-icon>
+              </button>
+              }
+            </div>
+          </ng-container>
+          }
+        </div>
+        }
+      </div>
+
+      <div class="calendar-legend">
+        <div class="legend-item">
+          <div class="legend-icon scheduled">
+            <mat-icon>event_note</mat-icon>
+          </div>
+          <span>{{ content.txtScheduled }}</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-icon unavailable">
+            <mat-icon>lock</mat-icon>
+          </div>
+          <span>{{ content.txtUnavailable }}</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-icon available">
+            <mat-icon>event_available</mat-icon>
+          </div>
+          <span>{{ content.txtAvailable }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="meetings-sidebar">
+      <app-meetings-list [meetings]="allWeekMeetings" [title]="content.txtThisWeeksMeetings"
+        [emptyMessage]="content.txtNoMeetingsThisWeek" (onCreateMeeting)="onCreateMeeting.emit()"
+        (onMeetingClick)="onMeetingClick.emit($event)"></app-meetings-list>
+    </div>
+  </div>
+</div>

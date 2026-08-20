@@ -1,0 +1,45 @@
+@use 'variables' as *;
+
+.expansion-panel {
+   mat-accordion {
+    color: var(--text);
+    border-radius: 8px;
+    padding: 10px;
+  }
+
+   mat-expansion-panel {
+    color: var(--text);
+    border: 1px solid $hover-elements-highlight-background;
+    margin-bottom: 10px;
+    background-color: transparent;
+  }
+
+   mat-expansion-panel-header {
+    background-color: $elements-highlight-background;
+    font-weight: bold;
+    padding: 12px;
+  }
+
+   mat-panel-title {
+    background-color: transparent;
+    color: var(--text);
+    font-size: 1.2rem;
+  }
+  
+   mat-expansion-panel:hover {
+    //background-color: $elements-highlight-background;
+    background-color: transparent;
+    color: var(--text);
+  }
+
+   mat-expansion-panel.mat-expanded {
+    //background-color: $elements-highlight-background;
+    background-color: transparent;
+    color: var(--text);
+    border: none;
+  }
+
+   .mat-expansion-indicator::after {
+    color: var(--text);
+  }
+}

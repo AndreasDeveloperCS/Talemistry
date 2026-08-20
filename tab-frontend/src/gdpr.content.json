@@ -1,0 +1,107 @@
+{
+  "gdprTitle": "Privacy policy",
+  "gdprIcon": "privacy_tip",
+  "statements": [
+    {
+      "statementTitle": "Introduction",
+      "icon": "info",
+      "statementContent": [
+        "This privacy policy is provided by Evryka - Digital Innovative Solutions (Evryka - DIS), which operates a shared expert database for identifying and recruiting personnel for its own projects and those of external clients. This privacy policy explains how the company processes your personal data within this database and outlines your rights regarding your personal information stored therein.",
+        "Evryka - Digital Innovative Solutions (hereinafter referred to as Evryka - DIS) is an international IT outsourcing company based in Greece (European Union) and active in the field of development cooperation. Our clients include national and international institutions and organizations, such as national ministries, the European Commission, or the World Bank. We implement projects either independently or in cooperation with partner organizations and companies, using both internal staff and freelance experts.",
+        "To process your CV and related personal documents in our expert database, we require your explicit consent. After reading this privacy policy, you may provide consent by replying to the email to which this document was attached.",
+        "Without your consent, we will neither store your CV and related documents in our database nor retain existing data. As a result, we will be unable to consider you as a potential expert for our current or future projects."
+      ]
+    },
+    {
+      "statementTitle": "Data protection terminology used in this privacy policy",
+      "icon": "gavel",
+      "statementContent": [
+        "Our personal data processing activities are governed by the General Data Protection Regulation (Regulation (EU) 2016/679), which uses the following terminology:",
+        "'Personal data' refers to any information that can be used to identify you, including your name, email address, IP address, or any other data revealing your physical, physiological, genetic, mental, economic, cultural, or social identity.",
+        "Under the GDPR, we are the 'data controller' of all personal data collected and processed as described in this policy, since we determine how your data is handled. Any third-party service providers acting on our behalf are considered 'data processors'.",
+        "If we handle your personal data, you are a 'data subject', meaning you have specific rights under the GDPR concerning how your data is processed. These rights are outlined in this privacy policy."
+      ]
+    },
+    {
+      "statementTitle": "How we store and process your personal data",
+      "icon": "storage",
+      "statementContent": [
+        "As part of our expert recruitment process, we store your contact details (address, email, phone number, etc.), your CV, and any supporting documents submitted with your CV (e.g., diplomas, work certificates) in electronic format. In rare cases, paper-based copies may also be kept, where required by law.",
+        "We process your personal data solely for the purpose of identifying and selecting candidates for projects we are currently implementing or planning for the future.",
+        "Your CV and personal documents are stored in our central expert database. Additionally, we may store these files on our internal servers for purposes such as editing, translating, or formatting your CV for recruitment and deployment.",
+        "We may occasionally contact you using your provided contact details to request updates to your CV and documents. We do not use this data for advertising, newsletters, or marketing purposes."
+      ]
+    },
+    {
+      "statementTitle": "How long we keep your personal data",
+      "icon": "schedule",
+      "statementContent": [
+        "As a general rule, we retain your CV and related documents in our expert database for up to 3 years. We will only keep them beyond this period if (i) you renew your consent—e.g., in response to an email we send prior to expiration—or (ii) the data is necessary for fulfilling a contractual agreement with you.",
+        "If we are unable to obtain your renewed consent, or if you withdraw previously given consent, we will delete your data or block access to it if statutory obligations require retention (e.g., for audits involving public procurement).",
+        "The legal basis for processing your data is outlined below."
+      ]
+    },
+    {
+      "statementTitle": "Legal basis for data processing.",
+      "icon": "balance",
+      "statementContent": [
+        "The legal basis for data processing is Article 6(1)(a) of the GDPR, where consent has been given. If processing is necessary for fulfilling a contractual obligation, Article 6(1)(b) applies. If we are required to process data to comply with legal obligations, Article 6(1)(c) serves as the legal basis."
+      ]
+    },
+    {
+      "statementTitle": "Your rights in terms of data protection.",
+      "icon": "lock",
+      "statementContent": [
+        "As a data subject, you have the following rights concerning your personal data:<br/>",
+        "• <strong>Right to confirmation</strong> – You may ask us to confirm whether we are processing your personal data.",
+        "• <strong>Right to be informed</strong> – You are entitled to information about the data we process and the purposes of processing.",
+        "• <strong>Right of access</strong> – You can request copies of the personal data we hold about you.",
+        "• <strong>Right to rectification</strong> – If your data is incorrect or incomplete, you can ask us to correct or update it.",
+        "• <strong>Right to erasure</strong> – You can request deletion of your personal data from our records.",
+        "• <strong>Right to restrict processing</strong> – If you object to how we are processing your data, you may request restrictions on further processing.",
+        "• <strong>Right to data portability</strong> – You can request that your data be transferred to another organization, provided this does not infringe on the rights of others.",
+        "• <strong>Right to withdraw consent</strong> – You may withdraw your consent for data processing at any time by contacting us using the contact details provided.",
+        "",
+        "To exercise any of these rights, please contact a member of our team or use our general company contact information. These requests are free of charge unless deemed manifestly unfounded, repetitive, or excessive—in which case we may charge a fee or decline the request.",
+        "We aim to respond to all valid requests within one month. If your request is complex or you have made multiple requests, we may need more time. In such cases, we will inform you and provide updates.",
+        "You also have the right to lodge a complaint with your local data protection authority in the European Union. You may choose the authority that is most convenient for you."
+      ]
+    },
+    {
+      "statementTitle": "Transfer of personal data.",
+      "icon": "flight_takeoff",
+      "statementContent": [
+        "The expert database where we store your CV and documents (e.g., diplomas, certificates) is accessible only to authorized personnel at Evryka - DIS. This centralized access facilitates efficient identification of suitable experts and increases your chances of selection for relevant positions.",
+        "During the recruitment process, your data may be shared with third parties such as partner consulting firms or relevant national or international authorities (e.g., ministries, EU bodies). However, we will always contact you prior to officially proposing you as an expert for a project or tender.",
+        "If we apply for or implement a project outside the EU, or if we cooperate with non-EU partners, your data may be transferred outside the EU. ",
+        "These transfers are infrequent and occur only when necessary—for example, when nominating you for a specific position or in preparation for strategic cooperation prior to a tender."
+      ]
+    },
+    {
+      "statementTitle": "Automated decision making and profiling",
+      "icon": "psychology_alt",
+      "statementContent": [
+        "As a responsible organization, we do not engage in automated decision-making or profiling."
+      ]
+    },
+    {
+      "statementTitle": "Further information on personal data protection",
+      "icon": "link",
+      "statementContent": [
+        "For additional information regarding the processing of your personal data outside the scope of this recruitment-related privacy policy, please consult our general privacy policy available on our website."
+      ]
+    },
+    {
+      "statementTitle": "Deleting your personal data",
+      "icon": "delete",
+      "statementContent": [
+        "We regularly delete personal data in compliance with GDPR requirements. Specifically, we delete your CV and related documents:",
+        "1. After 3 years, unless you provide renewed consent following our request, or",
+        "2. If you withdraw your previously granted consent.",
+        "If statutory obligations require us to retain your data for a longer period, we will do so only as long as necessary. During this period, your data will be blocked from access until deletion is permitted."
+      ]
+    }
+  ],
+  "confirmationText": "Yes, I hereby consent to the storage, processing, transmission, and use of my personal data for the purposes of identification and selection of project personnel until the specified expiry date. I also consent to the transmission of my data to donor organizations or partners located in non-EU countries (third countries), if necessary for these purposes.",
+  "rejectText": "No, I do not consent to the processing of my personal data."
+}

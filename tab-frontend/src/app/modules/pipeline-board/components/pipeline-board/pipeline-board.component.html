@@ -1,0 +1,59 @@
+<div class="dashboard">
+
+  <!-- Pipeline Header -->
+  <div class="pipeline-wrapper">
+    <app-pipeline-header
+      [stageCounts]="stageCounts"
+      [selectedStage]="selectedStage"
+      [totalApplicants]="totalApplicants"
+      (stageSelected)="selectStage($event)"
+    ></app-pipeline-header>
+  </div>
+
+  <!-- Main Content Grid -->
+  <main class="dashboard-main">
+    <div class="panels-grid">
+      <!-- Positions Panel -->
+      <div class="panel-column positions-column">
+        <app-positions-panel
+          [selectedPosition]="selectedPosition"
+          (positionSelected)="selectPosition($event)"
+        ></app-positions-panel>
+      </div>
+
+      <!-- Applicants Panel -->
+      <div class="panel-column applicants-column">
+        <app-applicants-panel
+          [positionId]="selectedPosition?._id"
+          [positionTitle]="selectedPosition?.title ?? null"
+          [selectedApplicant]="selectedApplicant"
+          [selectedStage]="selectedStage"
+          (applicantsCountChanged)="onApplicantsCountChange($event)"
+          (stageCounts)="onStageCountsChanged($event)"
+          (applicantSelected)="selectApplicant($event)"
+          (applicantUpdated)="selectApplicant($event)"
+          (stageChanged)="onStageChange($event)"
+        ></app-applicants-panel>
+      </div>
+
+      <!-- Interviews Panel -->
+      <div class="panel-column interviews-column">
+        <app-interviews-panel
+          [selectedInterview]="selectedInterview"
+          [selectedApplicant]="selectedApplicant"
+          (interviewSelected)="selectInterview($event)"
+        ></app-interviews-panel>
+      </div>
+
+      <!-- Content Panel -->
+      <div class="panel-column content-column">
+        <app-content-panel
+          [feedback]="currentFeedback"
+          [selectedInterview]="selectedInterview"
+          (stageStatusChange)="onStageStatusChange($event)"
+        ></app-content-panel>
+      </div>
+    </div>
+  </main>
+</div>
+<!-- <app-meeting-template-management [positionId]="selectedPosition?._id"></app-meeting-template-management> -->

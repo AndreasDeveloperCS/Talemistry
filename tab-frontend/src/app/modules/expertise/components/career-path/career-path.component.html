@@ -1,0 +1,319 @@
+<div class="universal-input candidate container__limited-width">
+    <div class="profile-nav">
+        <div class="nav-card" *ngFor="let section of sections" (click)="scrollToSection(section.id)">
+            <div class="icon">
+                <mat-icon>{{ section.icon }}</mat-icon>
+            </div>
+            <h3>{{ section.title }}</h3>
+            <div class="nav-icon">
+                <mat-icon class="jump-icon">arrow_downward</mat-icon>
+            </div>
+        </div>
+    </div>
+    <app-visit-cards></app-visit-cards>
+
+    <app-public-profile-toggle [isPublic]="service.model.isPublic ?? false"
+        [targetPosition]="service.model.targetPosition ?? ''" [pseudonym]="service.model.pseudonym"
+        [profileId]="service.model._id ?? ''">
+    </app-public-profile-toggle>
+
+    @if(loading) {
+    <app-loading-spinner></app-loading-spinner>
+    }
+    @if(!loading) {
+
+    <div class="container__limited-width candidate__gap">
+        <div id="cvParser" appLazySection (visible)="cvParserVisible = true">
+            @if(cvParserVisible) {
+                <app-cv-parser-upload></app-cv-parser-upload>
+            }
+        </div>
+
+        <div id="cvs" appLazySection (visible)="cvsVisible = true">
+            @if(cvsVisible) {
+                <app-cvs-cls-history-view></app-cvs-cls-history-view>
+            }
+        </div>
+
+        <div class="section" id="social" appLazySection (visible)="socialVisible = true">
+            <div class="section-header">
+                <mat-icon>link</mat-icon>
+                {{content.titleSocialNetwork}}
+            </div>
+
+            @if (socialVisible) {
+            <app-social-media-platforms></app-social-media-platforms>
+            }
+        </div>
+
+        <div class="section" id="goals" appLazySection (visible)="goalsVisible = true">
+            <div class="section-header">
+                <mat-icon>my_location</mat-icon>
+                Goals & Objectives
+            </div>
+            @if(goalsVisible) {
+            <app-objective></app-objective>
+            <app-summary></app-summary>
+            }
+        </div>
+
+        <div class="section" id="motivation" appLazySection (visible)="motivationVisible = true">
+            <div class="section-header">
+                <mat-icon>emoji_events</mat-icon>
+                Motivation
+            </div>
+            @if(motivationVisible) {
+            <app-compensation-package></app-compensation-package>
+            <app-motivational-factors></app-motivational-factors>
+            }
+        </div>
+
+        <div class="section" id="skills" appLazySection (visible)="skillsVisible = true">
+            <div class="section-header">
+                <mat-icon>psychology</mat-icon>
+                Skills & Expertise
+            </div>
+            @if(skillsVisible) {
+            <div appLazySection (visible)="hardSkillsVisible = true">
+                @if(hardSkillsVisible) {
+                <app-user-skills [placeholderText]="'Hard skills'" [skillType]="service.hardSkillType"
+                    [skillIcon]="'engineering'">
+                </app-user-skills>
+                }
+            </div>
+            <div appLazySection (visible)="softSkillsVisible = true">
+                @if(softSkillsVisible) {
+                <app-user-skills [placeholderText]="'Soft skills'" [skillType]="service.softSkillType"
+                    [skillIcon]="'record_voice_over'">
+                </app-user-skills>
+                }
+            </div>
+
+            <div appLazySection (visible)="domainSkillsVisible = true">
+                @if(domainSkillsVisible) {
+                <app-user-skills [placeholderText]="'Domain skills'" [skillType]="service.domainSkillType"
+                    [skillIcon]="'business_center'">
+                </app-user-skills>
+                }
+            </div>
+
+            <div appLazySection (visible)="managerialSkillsVisible = true">
+                @if(managerialSkillsVisible) {
+                <app-user-skills [placeholderText]="'Managerial skills'" [skillType]="service.managirialSkillType"
+                    [skillIcon]="'groups'">
+                </app-user-skills>
+                }
+            </div>
+
+            <div appLazySection (visible)="languageSkillsVisible = true">
+                @if(languageSkillsVisible) {
+                <app-user-skills [placeholderText]="'Languages'" [skillType]="service.languageSkillType"
+                    [skillIcon]="'translate'">
+                </app-user-skills>
+                }
+            </div>
+            }
+        </div>
+
+    </div>
+
+    <div class="section" id="experience">
+        <div class="section-header">
+            <mat-icon>school</mat-icon>
+            Experience & Education
+        </div>
+        <mat-accordion class="expansion-panel">
+
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon>precision_manufacturing</mat-icon>{{content.txtOperationalExperience}}
+                    </mat-panel-title>
+
+                </mat-expansion-panel-header>
+                <div class="candidate__wrapper-items">
+                    <div class="one-line-container">
+                        <div class="square-add-button"
+                            (click)="service.addNewSkillToCollection(service.operationalExperienceSkillType)">
+                            <mat-icon>add</mat-icon>
+                        </div>
+                        <h3>{{content.txtAddNewOperationalExperience}}</h3>
+                    </div>
+
+                    <ng-template matExpansionPanelContent>
+                        <div class="candidate__container-reverse">
+                            @for (skill of service.model.operationalExperience; track skill) {
+                            <div class="candidate__container-reverse-item">
+                                <app-operational-expirience [skill]="skill"></app-operational-expirience>
+                            </div>
+                            }
+                        </div>
+                    </ng-template>
+                </div>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel hideToggle>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon>school</mat-icon>{{content.txtAcademicEducation}}
+                    </mat-panel-title>
+
+                </mat-expansion-panel-header>
+                <div class="candidate__wrapper-items">
+                    <div class="one-line-container">
+                        <div class="square-add-button"
+                            (click)="service.addNewSkillToCollection(service.academicEducationSkillType)">
+                            <mat-icon>add</mat-icon>
+                        </div>
+                        <h3>{{content.txtAddNewAcademicEducation}}</h3>
+                    </div>
+
+                    <ng-template matExpansionPanelContent>
+                        <div class="candidate__container-reverse">
+                            @for (skill of service.model.academicEducation; track skill) {
+                            <div class="candidate__container-reverse-item">
+                                <app-education-item [skill]="skill"></app-education-item>
+                            </div>
+                            }
+                        </div>
+                    </ng-template>
+                </div>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel hideToggle>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon>workspace_premium</mat-icon>{{content.certificationTxt}}
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="candidate__wrapper-items">
+                    <div class="one-line-container">
+                        <div class="square-add-button"
+                            (click)="service.addNewSkillToCollection(service.certificationSkillType)">
+                            <mat-icon>add</mat-icon>
+                        </div>
+                        <h3>{{content.txtAddNewCertification}}</h3>
+                    </div>
+
+                    <ng-template matExpansionPanelContent>
+                        <div class="candidate__container-reverse">
+                            @for (skill of service.model.certification; track skill) {
+                            <div class="candidate__container-reverse-item">
+                                <app-certificate [skill]="skill"></app-certificate>
+                            </div>
+                            }
+                        </div>
+                    </ng-template>
+                </div>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel hideToggle>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon>engineering</mat-icon>{{content.skillsNameHard}}
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <ng-template matExpansionPanelContent>
+                    <div class="candidate__container-reverse">
+                        @for (skill of service.model.hardSkills; track skill) {
+                        <div class="candidate__container-reverse-item">
+                            <app-skill [skill]="skill"></app-skill>
+                        </div>
+                        }
+                    </div>
+                </ng-template>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel hideToggle>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon>record_voice_over</mat-icon>{{content.skillsNameSoft}}
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <ng-template matExpansionPanelContent>
+                    <div class="candidate__container-reverse">
+                        @for (skill of service.model.softSkills; track skill) {
+                        <div class="candidate__container-reverse-item">
+                            <app-skill [skill]="skill"></app-skill>
+                        </div>
+                        }
+                    </div>
+                </ng-template>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel hideToggle>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon>business_center</mat-icon>{{content.skillsNameDomain}}
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <ng-template matExpansionPanelContent>
+                    <div class="candidate__container-reverse">
+                        @for (skill of service.model.domainSkills; track skill) {
+                        <div class="candidate__container-reverse-item">
+                            <app-skill [skill]="skill"></app-skill>
+                        </div>
+                        }
+                    </div>
+                </ng-template>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel hideToggle>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon>groups</mat-icon>{{content.skillsNameManagerial}}
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <ng-template matExpansionPanelContent>
+                    <div class="candidate__container-reverse">
+                        @for (skill of service.model.managerialSkills; track skill) {
+                        <div class="candidate__container-reverse-item">
+                            <app-skill [skill]="skill"></app-skill>
+                        </div>
+                        }
+                    </div>
+                </ng-template>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel hideToggle>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon>translate</mat-icon>{{content.skillsNameLanguage}}
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <ng-template matExpansionPanelContent>
+                    <div class="candidate__container-reverse">
+                        @for (skill of service.model.languagesSkills; track skill) {
+                        <div class="candidate__container-reverse-item">
+                            <app-skill [skill]="skill"></app-skill>
+                        </div>
+                        }
+                    </div>
+                </ng-template>
+            </mat-expansion-panel>
+
+        </mat-accordion>
+    </div>
+
+    <div class="section" id="additional" appLazySection (visible)="additionalVisible = true">
+        <div class="section-header">
+            <mat-icon>info</mat-icon>
+            Additional Info
+        </div>
+        @if(additionalVisible) {
+        <app-additional-information></app-additional-information>
+        }
+    </div>
+
+    <button (click)="save()" class="button--absolute button__primary-color button--small" type="submit" color="primary">
+        {{content.saveText}}
+    </button>
+    }
+</div>
+
+<button class="back-to-top" (click)="scrollToTop()">
+    <mat-icon>keyboard_arrow_up</mat-icon>
+</button>

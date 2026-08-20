@@ -1,0 +1,85 @@
+<div class="calendar-container">
+  <div class="calendar-sidebar">
+    <div class="calendar-header">
+      <button class="nav-button" (click)="previousMonth()">‹</button>
+      <span class="month-label">{{ selectedDate | date:'MMMM yyyy' }}</span>
+      <button class="nav-button" (click)="nextMonth()">›</button>
+    </div>
+
+    <div class="weekdays">
+      @for(day of weekDays; track day) {
+      <div class="weekday">{{ day }}</div>
+      }
+    </div>
+
+    <div class="days-grid">
+      @for(first of [].constructor(firstDayOfMonth); track first) {
+      <ng-container>
+        <div class="empty"></div>
+      </ng-container>
+      }
+
+      @for(i of daysInMonth; track i) {
+      <ng-container>
+        <button class="day-button" [class.selected-day]="i === selectedDate.getDate()"
+          [class.available-day]="hasCalendarAvailability(selectedDate.getFullYear(), selectedDate.getMonth(), i)"
+          (click)="onDateCustomSelect(selectedDate.getFullYear(), selectedDate.getMonth(), i)">
+          {{ i }}
+        </button>
+      </ng-container>
+      }
+    </div>
+  </div>
+
+  <div class="schedule-panel">
+    <div class="schedule-header">
+      <h2>{{ selectedDate | date: 'fullDate' }}</h2>
+      <button class="add-slot-button" (click)="openAddTimeSlotForm()">
+        <mat-icon>add</mat-icon>
+        <span class="schedule-header-lbl">{{ content.txtAddTimeFrame }}</span>
+      </button>
+    </div>
+
+    @if(filteredTimeFrames.length > 0) {
+    <ng-container>
+      <div class="slots-list">
+        @for(timeSlot of filteredTimeFrames; track timeSlot) {
+        <div class="time-slot">
+          <div class="time-slot-info" (click)="openEditTimeSlotForm(timeSlot)">
+            <div class="date-time-info">
+              <div class="container__flex">
+                <mat-icon>access_time</mat-icon>
+                <div>{{ timeSlot.startTime }} - {{ timeSlot.endTime }}</div>
+              </div>
+              <div class="container__flex">
+                <mat-icon>calendar_month</mat-icon>
+                <div>{{ timeSlot.startDate | date: 'fullDate' }}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="time-slot-extra-info">
+            <span class="repeat-badge">{{ getRepeatPatternLabel(timeSlot) }}</span>
+            <div class="time-slot-actions">
+              <button class="edit-button" (click)="openEditTimeSlotForm(timeSlot)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button class="delete-button" (click)="handleDeleteTimeSlot(timeSlot.id)">
+                <mat-icon>delete_outline</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+    </ng-container>
+    }
+    @else {
+      <div class="no-slots">
+        <mat-icon>access_time</mat-icon>
+        <h3>{{ content.txtNoTimeSlots }}</h3>
+        <p>{{ content.txtAddAvailableTimeSlots }}</p>
+      </div>
+    }
+  </div>
+</div>

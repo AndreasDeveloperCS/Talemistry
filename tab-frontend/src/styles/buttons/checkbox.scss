@@ -1,0 +1,36 @@
+@use 'variables' as *;
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;  
+}
+
+.checkbox-label {
+  max-width: 100%;
+  flex-wrap: nowrap;
+}
+
+.mdc-checkbox
+  .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate):not(
+    [data-indeterminate='true']
+  )
+  ~ .mdc-checkbox__background {
+  border-color: white !important;
+}
+
+.mdc-checkbox
+  .mdc-checkbox__native-control:enabled:checked
+  ~ .mdc-checkbox__background {
+  background-color: $color-secondary !important;
+  border-color: $color-secondary !important;
+}
+
+.mdc-checkbox__native-control:enabled:checked ~ .mdc-checkbox__background {
+  background-color: $color-secondary !important;
+  border-color: $color-secondary !important;
+}
+
+.mat-pseudo-checkbox-full {
+  border: 2px solid white;
+}

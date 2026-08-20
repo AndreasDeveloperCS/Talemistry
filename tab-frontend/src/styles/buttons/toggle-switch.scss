@@ -1,0 +1,308 @@
+@use 'variables' as *;
+
+.toggle-switch {
+  ::ng-deep .mat-button-toggle-group {
+    background-color: $primary-dark;
+    width: 10rem;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    border: none;
+    box-shadow: var(--box-shadow-light) !important;
+  }
+
+  ::ng-deep .mat-button-toggle {
+    color: $primary-dark; // Customize the background color of the tab group $active-text;
+    background-color: transparent;
+  }
+
+  ::ng-deep .mat-button-toggle-checked {
+    color: $primary-dark;
+
+    .mat-button-toggle-label-content {
+      color: $primary-dark;
+    }
+  }
+
+  ::ng-deep .mdc-switch:enabled .mdc-switch__track::after {
+    background: #FFFFFF !important;
+  }
+
+  ::ng-deep .mat-mdc-slide-toggle .mat-accent {
+    .mdc-form-field {
+      .mdc-switch .mdc-switch--selected {
+        .mdc-switch__track {
+          background-color: #4caf50 !important;
+        }
+      }
+
+      .mdc-switch .mdc-switch--unselected {
+        .mdc-switch__track {
+          background-color: #f44336 !important;
+        }
+      }
+    }
+  }
+
+  ::ng-deep .mdc-switch__icon {
+    border-radius: 50%;
+    border-style: none;
+  }
+
+  ::ng-deep .mdc-switch__icon--on {
+    background-color: #4caf50;
+    --mdc-switch-selected-icon-color: #FFFFFF;
+    --mdc-switch-selected-track-color: #f44336;
+
+  }
+
+  ::ng-deep .mdc-switch__icon--off {
+    // background-color: #f44336;
+    --mdc-switch-unselected-icon-color: #FFFFFF;
+    --mdc-switch-unselected-track-color: #4caf50;
+  }
+
+  .mat-mdc-slide-toggle.mat-accent {
+    color: $active-text !important;
+    --mdc-switch-track-height: 28px !important;
+    --mdc-switch-track-width: 52px !important;
+    --mdc-switch-handle-width: 28px !important;
+    --mdc-switch-handle-height: 28px !important;
+    --mdc-switch-handle-radius: 28px !important;
+    --mdc-switch-selected-handle-color: #4caf50;
+    --mdc-switch-selected-track-color: #4caf50;
+    --mat-switch-label-text-color: transparent !important;
+
+    --mdc-switch-selected-pressed-handle-color: #4caf50;
+    --mdc-switch-selected-pressed-track-color: #4caf50;
+
+    --mdc-switch-selected-focus-handle-color: #4caf50;
+    --mdc-switch-selected-focus-track-color: #4caf50;
+
+    // --mdc-switch-selected-hover-handle-color: #4caf50;
+    // --mdc-switch-selected-hover-track-color: #4caf50;
+
+    --mdc-switch-selected-focus-state-layer-color: #4caf50;
+    --mat-option-selected-state-label-text-color: white;
+
+    // --mdc-switch-selected-hover-state-layer-color: #4caf50;
+    --mdc-switch-selected-pressed-state-layer-color: #4caf50;
+
+    --mdc-switch-selected-icon-color: #FFFFFF;
+
+    --mdc-switch-unselected-handle-color: #f44336;
+    --mdc-switch-unselected-track-color: #ffffff;
+
+    --mdc-switch-unselected-pressed-handle-color: #f44336;
+
+    --mdc-switch-unselected-focus-handle-color: #f44336;
+
+    --mdc-switch-unselected-hover-handle-color: #f44336;
+
+    --mdc-switch-unselected-dragged-track-color: white; 
+    --mat-option-unselected-state-label-text-color: white;
+    --mdc-switch-unselected-hover-track-color: white !important;
+    --mdc-switch-unselected-icon-color: #FFFFFF;
+  }
+
+  .mdc-switch.mdc-switch--selected:enabled .mdc-switch__icon {
+    --mdc-switch-selected-icon-color: #FFFFFF;
+    fill: var(--mdc-switch-selected-icon-color);
+  }
+
+  .mdc-switch.mdc-switch--unselected:enabled .mdc-switch__icon {
+    --mdc-switch-unselected-icon-color: #FFFFFF;
+    fill: var(--mdc-switch-unselected-icon-color);
+  }
+  .mdc-switch__handle-track{
+    margin-left: 2px !important;
+  }
+  .mcd-track-handle {
+    // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Regular box shadow */
+    // filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3)); /* Filter-based shadow */
+    transition: all 0.3s ease !important;
+  }
+  .mat-mdc-slide-toggle {
+    color: $active-text !important;
+    --mdc-switch-handle-shape: 50% !important;
+    --mdc-switch-track-height: 28px !important;
+    --mdc-switch-track-width: 52px !important;
+    --mdc-switch-handle-width: 28px !important;
+    --mdc-switch-handle-height: 28px !important;
+    --mdc-switch-handle-radius: 28px !important;
+    --mdc-switch-track-shape: 20px !important;
+    --mat-switch-selected-with-icon-handle-horizontal-margin: auto !important;
+    --mat-switch-pressed-handle-size: 24px;
+    --mat-switch-with-icon-handle-size: 24px;
+    --mdc-switch-handle-elevation-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+    --mdc-switch-handle-shadow-color: black;
+    --mdc-switch-handle-elevation-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+    --mdc-switch-handle-shadow-color: black;
+    --mdc-switch-disabled-handle-elevation-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.2), 0px 0px 0px 0px rgba(0, 0, 0, 0.14), 0px 0px 0px 0px rgba(0, 0, 0, 0.12);
+
+    color: $active-text !important;
+    --mdc-switch-selected-handle-color: #4caf50;
+    --mdc-switch-selected-track-color: #4caf50;
+
+
+    --mdc-switch-selected-pressed-handle-color: #4caf50;
+    --mdc-switch-selected-pressed-track-color: #4caf50;
+
+    --mdc-switch-selected-focus-handle-color: #4caf50;
+    --mdc-switch-selected-focus-track-color: #4caf50;
+
+    --mdc-switch-selected-hover-handle-color: #4caf50;
+    --mdc-switch-selected-hover-track-color: #4caf50;
+
+    --mdc-switch-selected-focus-state-layer-color: #4caf50;
+
+    --mat-option-selected-state-label-text-color: white;
+
+    --mdc-switch-selected-hover-state-layer-color: #4caf50;
+    --mdc-switch-selected-pressed-state-layer-color: #4caf50;
+
+    --mdc-switch-selected-icon-color: #FFFFFF;
+
+    --mdc-switch-unselected-handle-color: white;
+
+    --mdc-switch-unselected-pressed-handle-color: white;
+    --mdc-switch-unselected-pressed-track-color: white;
+
+    --mdc-switch-unselected-focus-handle-color: white;
+    --mdc-switch-unselected-focus-track-color: white;
+
+    --mdc-switch-unselected-hover-handle-color: white;
+
+    --mat-option-unselected-state-label-text-color: white;
+
+    --mdc-switch-unselected-focus-state-layer-color: white;
+    --mdc-switch-unselected-hover-state-layer-color: white;
+    --mdc-switch-unselected-pressed-state-layer-color: rgb(88, 0, 228);
+
+    --mdc-switch-unselected-icon-color: #FFFFFF;
+    --mdc-switch-state-layer-size: 40px !important;
+  }
+
+  .toggle-group {
+    border: 1px solid $pallete-0-color-7 !important;
+    border-radius: $borderRadiusMiddle $borderRadius !important;
+    height: fit-content;
+    padding: $padding-xxxs;
+  }
+
+  :ng-deep mat-button-toggle {
+    background-color: transparent;
+  }
+
+  :ng-deep mat-button-toggle.mat-button-toggle-checked {
+    background-color: $primaryThree;
+  }
+
+  ::ng-deep .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
+    line-height: 2.3;
+  }
+
+
+  ::ng-deep .mdc-switch .mdc-switch__handle {
+    margin-left: 1px;
+  }
+
+  ::ng-deep .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
+    background-color: #4caf50;
+  }
+
+  ::ng-deep .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
+    background-color: #4caf50;
+  }
+}
+
+::ng-deep .custom-toggle-wrapper .mdc-switch__thumb {
+  transition: transform 250ms ease-in-out, background-color 250ms ease-in-out !important;
+}
+
+::ng-deep .custom-toggle-wrapper .mdc-switch__track {
+  transition: background-color 250ms ease-in-out !important;
+}
+
+@keyframes thumbSlide {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(20px); // залежить від розміру
+  }
+}
+
+::ng-deep .mdc-switch--selected .mdc-switch__thumb {
+  animation: thumbSlide 0.3s ease forwards !important;
+}
+
+.toggle-switch-custom {
+  position: relative;
+  display: inline-block;
+  width: 52px;
+  height: 28px;
+
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+
+    &:focus-visible+.slider {
+    }
+
+    &:checked+.slider {
+      background-color: #4caf50;
+
+      &:before {
+        transform: translateX(24px);
+      }
+    }
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.3s;
+    border-radius: 28px;
+
+    &:before {
+      position: absolute;
+      content: "";
+      height: 22px;
+      width: 22px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.3s;
+      border-radius: 50%;
+      // box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    }
+  }
+}
+
+// .toggle-group-new {
+//   border: 1px solid $pallete-0-color-7 !important;
+//   border-radius: $borderRadiusMiddle $borderRadius !important;
+//   height: fit-content;
+//   padding: $padding-xxxs;
+// }
+
+mat-button-toggle-group {
+  background-color: transparent;
+  min-width: 10rem;
+  width: fit-content;
+  height: 100%;
+  max-height: 2.4rem;
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  border: none;
+  box-shadow: var(--box-shadow-light) !important;
+}

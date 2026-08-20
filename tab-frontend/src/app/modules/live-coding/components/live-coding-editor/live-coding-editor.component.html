@@ -1,0 +1,205 @@
+<div class="live-coding-container" [class.two-columns]="isTalentRole">
+  <div class="editor-section">
+    <div class="toolbar">
+      <div class="language-section">
+        <label for="languageSelect">Language:</label>
+        <select id="languageSelect" [(ngModel)]="selectedLanguage" (ngModelChange)="onLanguageChange($event)">
+          <option *ngFor="let lang of languages" [value]="lang.value">
+            {{ lang.label }}
+          </option>
+        </select>
+      </div>
+      <div class="actions">
+        <button class="action-button run-btn" (click)="runCode()" [disabled]="isRunning">
+          <mat-icon>
+            {{ isRunning ? 'hourglass_top' : 'play_arrow' }}
+          </mat-icon>
+          {{ isRunning ? 'Running...' : 'Run' }}
+        </button>
+        <button class="action-button clear-btn" (click)="clearInput()">
+          <mat-icon>delete</mat-icon>
+          Clear
+        </button>
+      </div>
+    </div>
+    <div class="sql-context" *ngIf="selectedLanguage === 'sql'">
+      <button class="action-button add-table-btn" (click)="addTable()">
+          + Add Table
+      </button>
+      <div class="data-block scrollbar-hidden">
+        <app-sql-table
+          *ngFor="let table of sqlContext.tables"
+          [table]="table"
+          (tableChange)="onTableChange($event)"
+          (delete)="deleteTable($event)">
+        </app-sql-table>
+      </div>
+    </div>
+    <div #editorContainer class="editor-container"></div>
+  </div>
+  <div class="output-section">
+    <div class="toolbar">
+      <h4>Output</h4>
+      <div class="status" *ngIf="isRunning">
+        <span class="spinner"></span>
+        Running...
+      </div>
+      <div class="actions">
+        <button class="action-button clear-btn" (click)="clearOutput()">
+          <mat-icon>delete</mat-icon>
+          Clear
+        </button>
+      </div>
+    </div>
+    <div *ngIf="selectedLanguage === 'sql'">
+      <div class="sql-error" *ngIf="sqlError">
+        {{ sqlError }}
+      </div>
+      <app-sql-result-grid *ngIf="!sqlError && isSqlExecuted" [rows]="sqlResult"></app-sql-result-grid>
+      <div *ngIf="sqlPassed !== undefined" class="sql-status">
+        <span *ngIf="sqlPassed">
+          ✅ Passed
+        </span>
+        <span *ngIf="!sqlPassed">
+          ❌ Failed
+        </span>
+      </div>
+      <div *ngIf="sqlSuccess" class="result-toolbar">
+        <div class="status success">
+          ✔ Query executed successfully
+        </div>
+        <div class="stats">
+          <span>{{queryType}}</span>
+          <span>{{rowCount}} row(s)</span>
+          <span>{{executionTime}} ms</span>
+        </div>
+      </div>
+    </div>
+    <pre *ngIf="selectedLanguage !== 'sql'" #outputContainer>{{ output }}</pre>
+  </div>
+  @if(!isTalentRole) {
+    <div class="snippets-section">
+      <div class="tabs">
+        <button [class.active]="activeTab === 'default'" (click)="switchTab('default')">
+          Default
+        </button>
+        <button [class.active]="activeTab === 'personal'" (click)="switchTab('personal')">
+          My Snippets
+        </button>
+        <button [class.active]="activeTab === 'ai'" (click)="switchTab('ai')">
+          AI
+        </button>
+      </div>
+      <div *ngIf="activeTab === 'default'" class="tab-content scrollbar-hidden">
+        <div *ngFor="let snippet of defaultSnippets" class="snippet-card">
+          <h5>{{ snippet.title }}</h5>
+          <pre>{{ snippet.code }}</pre>
+          <div class="actions">
+            <button class="action-button insert-btn" (click)="insertSnippet(snippet)">Insert</button>
+            <button class="action-button insert-btn" (click)="insertSnippet(snippet, 'replace')">Replace</button>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="activeTab === 'personal'" class="tab-content">
+        <button class="action-button add-btn" (click)="addPersonalSnippet()">+ Add</button>
+        <div class="create-snippet">
+          <input
+            type="text"
+            placeholder="Snippet title..."
+            [(ngModel)]="newSnippet.title"/>
+          <select [(ngModel)]="newSnippet.language">
+            <option *ngFor="let lang of languages" [value]="lang.value">
+              {{ lang.label }}
+            </option>
+          </select>
+          <textarea placeholder="Paste or write code..." [(ngModel)]="newSnippet.code"></textarea>
+          <div class="form-actions">
+            <button class="action-button save-btn" 
+              [disabled]="!newSnippet.title || !newSnippet.code" 
+              (click)="saveSnippet()">
+              Save
+            </button>
+            <button class="action-button primary-btn" 
+              [disabled]="!newSnippet.title || !newSnippet.code" 
+              (click)="saveAndInsertSnippet()">
+              Save & Insert
+            </button>
+          </div>
+        </div>
+        @if(isPersonalSnippetsLoading) {
+          <app-sun-spinner></app-sun-spinner>
+        }
+        @else if (!personalSnippets.length) {
+          <p class="empty-state">
+            No snippets yet. Create your first one above 👆
+          </p>
+        }
+        @else {
+          <div *ngFor="let snippet of personalSnippets" class="snippet-card">
+            <h5>
+              {{ snippet.title }}
+              <mat-icon (click)="deleteSnippet(snippet._id)">delete_sweep</mat-icon>
+            </h5>
+            <pre>{{ snippet.code }}</pre>
+            <div class="actions">
+              <button class="action-button insert-btn" (click)="insertSnippet(snippet)">Insert</button>
+              <button class="action-button insert-btn" (click)="insertSnippet(snippet, 'replace')">Replace</button>
+            </div>
+          </div>
+        }
+      </div>
+      <div *ngIf="activeTab === 'ai'" class="tab-content ai-tab">
+        <div class="ai-input">
+          <div class="lang-chips">
+            <button *ngFor="let lang of languages"
+              [class.active]="aiSelectedLanguage === lang.value"
+              (click)="aiSelectedLanguage = lang.value">
+              {{ lang.label }}
+            </button>
+          </div>
+          <div>
+            Describe the code snippet you want to generate:
+            <span class="hint">
+              (e.g. "debounce function in JavaScript", "Python file reader with error handling")
+            </span>
+          </div>
+          <textarea [(ngModel)]="aiPrompt"
+            placeholder="Type your request...">
+          </textarea>
+          <div class="actions">
+            <button class="action-button primary-btn"
+              (click)="generateSnippet()"
+              [disabled]="!aiPrompt || isGenerating">
+              {{ isGenerating ? 'Generating...' : 'Generate' }}
+            </button>
+          </div>
+          <p class="error" *ngIf="aiError">{{ aiError }}</p>
+        </div>
+        @if(isGenerating) {
+          <app-sun-spinner></app-sun-spinner>
+        }
+        <div *ngIf="aiGeneratedSnippet && !isGenerating" class="snippet-card ai-result">
+          <h5>{{ aiGeneratedSnippet.title }}</h5>
+          <pre>{{ aiGeneratedSnippet.code }}</pre>
+          <div class="actions">
+            <button class="action-button insert-btn" (click)="insertSnippet(aiGeneratedSnippet)">
+              Insert
+            </button>
+            <button class="action-button insert-btn" (click)="insertSnippet(aiGeneratedSnippet, 'replace')">
+              Replace
+            </button>
+            <button class="action-button save-btn" (click)="saveGeneratedSnippet()">
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>
+<div class="clipboard-notifications">
+  <div class="clipboard-toast" *ngFor="let n of notifications"
+    [class.warning]="n.type === 'warning'" [class.danger]="n.type === 'danger'" [class.info]="n.type === 'info'">
+    {{ n.message }}
+  </div>
+</div>

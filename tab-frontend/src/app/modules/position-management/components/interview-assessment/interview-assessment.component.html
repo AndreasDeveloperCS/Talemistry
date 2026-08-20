@@ -1,0 +1,166 @@
+<button mat-icon-button class="form-button exit-button" (click)="onCancel()">
+    <mat-icon class="icon-close">
+      <svg class="icon-close" width="1.5rem" height="1.5rem" viewBox="0 0 108 107"
+        fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M27 26.75L54 53.5L81 26.75" stroke="white" stroke-width="10"
+          stroke-linecap="round" />
+        <path d="M27 80.25L54 53.5L81 80.25" stroke="white" stroke-width="10"
+          stroke-linecap="round" />
+      </svg>
+    </mat-icon>
+</button>
+
+<div class="assessment-container">
+  <h2>Interview Accessment - Sarah Johnson</h2>
+  <div class="tabs">
+    <button
+      *ngFor="let tab of tabs"
+      class="tab"
+      [class.active]="activeTab === tab.key"
+      (click)="setActiveTab(tab.key)">
+      <mat-icon>{{ tab.icon }}</mat-icon>
+      <span class="tab-label">{{ tab.label }}</span>
+    </button>
+  </div>
+
+  <!-- FEEDBACK TAB -->
+  <div *ngIf="activeTab === 'feedback'" class="tab-content feedback-tab">
+    <div class="feedback-top">
+      <div class="interview-details box">
+        <h3><mat-icon>description</mat-icon>Interview Details</h3>
+        <div><span class="label"><mat-icon>person</mat-icon>Interviewer:</span> John Smith</div>
+        <div><span class="label"><mat-icon>calendar_today</mat-icon>Date:</span> 2024-01-28</div>
+        <div><span class="label"><mat-icon>hourglass_top</mat-icon>Duration:</span> 90 minutes</div>
+        <div><span class="label"><mat-icon>grade</mat-icon>Overall Score:</span> <span class="score">85%</span></div>
+      </div>
+      <div class="score-breakdown box">
+        <h3><mat-icon>leaderboard</mat-icon>Score Breakdown</h3>
+        <div><span class="label"><mat-icon>memory</mat-icon>Technical Skills</span> <span class="score-value">90%</span></div>
+        <div class="bar"><div class="fill" style="width: 90%"></div></div>
+
+        <div><span class="label"><mat-icon>connect_without_contact</mat-icon>Communication</span> <span class="score-value">80%</span></div>
+        <div class="bar"><div class="fill" style="width: 80%"></div></div>
+
+        <div><span class="label"><mat-icon>diversity_3</mat-icon>Cultural Fit</span> <span class="score-value">85%</span></div>
+        <div class="bar"><div class="fill" style="width: 85%"></div></div>
+      </div>
+    </div>
+
+    <div class="box feedback-text">
+      <h3><mat-icon>assignment</mat-icon>Interview Feedback</h3>
+      <p>
+        Strong technical skills with React and TypeScript. Good problem-solving approach.
+        Needs improvement in system design concepts.
+      </p>
+    </div>
+
+    <div class="feedback-bottom">
+      <div class="box strengths">
+        <h3><mat-icon>thumb_up</mat-icon>Strengths</h3>
+        <ul>
+          <li *ngFor="let item of strengths"><mat-icon>check_circle</mat-icon>{{ item }}</li>
+        </ul>
+      </div>
+      <div class="box improvements">
+        <h3><mat-icon>warning</mat-icon>Improvement Areas</h3>
+        <ul>
+          <li *ngFor="let item of improvements"><mat-icon>error</mat-icon>{{ item }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ASSESSMENT TAB -->
+  <div *ngIf="activeTab === 'assessment'" class="tab-content assessment-tab">
+    <div class="skill-block box">
+      <h3><mat-icon>memory</mat-icon>Technical Skills Assessment</h3>
+
+      <div class="skill-group" *ngFor="let skill of technicalSkills">
+        <div class="skill-header">
+          <span class="skill-name"><mat-icon>developer_mode</mat-icon> {{ skill.name }}</span>
+          <span class="skill-label" [ngClass]="skill.tag">{{ skill.tag }}</span>
+        </div>
+        <div class="progress-bar-container">
+          <div class="progress-bar" [style.width.%]="(skill.score / 10) * 100"></div>
+        </div>
+        <div class="skill-score">{{ skill.score }}/10</div>
+      </div>
+    </div>
+
+    <div class="skill-block box">
+      <h3><mat-icon>connect_without_contact</mat-icon>Soft Skills Assessment</h3>
+      <div class="skill-group" *ngFor="let soft of softSkills">
+        <div class="skill-header">
+          <span class="skill-name"><mat-icon>record_voice_over</mat-icon>{{ soft.name }}</span>
+        </div>
+        <div class="progress-bar-container">
+          <div class="progress-bar" [style.width.%]="(soft.score / 10) * 100"></div>
+        </div>
+        <div class="skill-score">{{ soft.score }}/10</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COURSES TAB -->
+  <div *ngIf="activeTab === 'courses'" class="tab-content courses-tab">
+    <div class="box">
+      <h3>📚 Recommended Courses</h3>
+      <p>Courses to help improve skills based on interview assessment</p>
+
+      <div class="course" *ngFor="let course of recommendedCourses">
+        <div>
+          <div class="header">
+            <span class="name"><mat-icon>insights</mat-icon>{{ course.title }}</span>
+            <span class="platform"><mat-icon>cast_for_education</mat-icon> {{ course.by }}</span>
+          </div>
+          <span class="goal"><mat-icon>track_changes</mat-icon> {{ course.description }}</span>
+        </div>
+        <div
+          class="badge"
+          [ngClass]="{
+            high: course.priority === 'High',
+            medium: course.priority === 'Medium'
+          }">
+          {{ course.priority }} Priority
+        </div>
+      </div>
+    </div>
+    <div class="box recommendations">
+      <h3><mat-icon>insights</mat-icon>Improvement Recommendations</h3>
+      <ul>
+        <li *ngFor="let item of recommendations"><mat-icon>school</mat-icon>{{ item }}</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- DECISION TAB -->
+  <div *ngIf="activeTab === 'decision'" class="tab-content decision-tab box">
+    <h3><mat-icon>how_to_vote</mat-icon>Interview Decision</h3>
+    <p class="sub">Update the interview status and provide final feedback</p>
+
+    <div class="decision-row">
+      <div class="status-info">
+        <label for="status"><mat-icon>radio_button_checked</mat-icon>Interview Status:</label>
+        <select id="status" [(ngModel)]="interviewStatus">
+          <option *ngFor="let status of statusOptions" [value]="status.value">
+            {{ status.label }}
+          </option>
+        </select>
+      </div>
+      <div class="overall-score">
+        <mat-icon>grade</mat-icon>
+        <span class="overall-score-label">Overall Score:</span>
+        <span class="score-value">{{ overallScore }}%</span>
+      </div>
+    </div>
+
+    <div class="comments-section">
+      <h4><mat-icon>description</mat-icon>Final Comments</h4>
+      <textarea [(ngModel)]="finalComments" placeholder="Add final comments about the interview decision..."></textarea>
+    </div>
+    <div class="actions">
+      <button class="draft"><mat-icon>save</mat-icon>Save Draft</button>
+      <button class="update" (click)="updateStatus()"><mat-icon>refresh</mat-icon>Update Status</button>
+    </div>
+  </div>
+</div>

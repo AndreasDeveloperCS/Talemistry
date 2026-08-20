@@ -1,0 +1,98 @@
+<div class="panel">
+  <div class="panel-header">
+    <div class="panel-title">
+      <mat-icon class="material-icons icon-sm text-primary">assignment</mat-icon>
+      <span>Pipeline Stages</span>
+    </div>
+    <span class="panel-count">{{ selectedApplicant?.stages?.length || 0 }}</span>
+  </div>
+
+  <div class="panel-content scrollbar-hidden">
+    <ng-container *ngIf="selectedApplicant; else noApplicant">
+      <div class="applicant-context">
+        <span class="applicant-photo-block" (click)="openProfile(selectedApplicant.talentId, $event)">
+        <img
+          *ngIf="selectedApplicant.photoUrl"
+          [src]="selectedApplicant.photoUrl"
+          alt="{{ selectedApplicant.talentName }}"
+          class="applicant-photo"
+        />
+        <mat-icon class="material-icons icon-sm" *ngIf="!selectedApplicant.photoUrl">
+          person
+        </mat-icon>
+        </span>
+        <span class="applicant-name" 
+          (click)="openProfile(selectedApplicant.talentId, $event)">
+          {{ selectedApplicant.talentName }}
+        </span>
+      </div>
+
+      <div class="interviews-list">
+        <div
+          *ngFor="let stage of visibleStages"
+          [class.card-disabled]="!stage._id"
+          class="interview-card card"
+          [class.card-selected]="selectedInterview?.name === stage.name"
+          (click)="onSelectStage(stage, $event)"
+        >
+
+          <div class="interview-content">
+            <div class="interview-header">
+              <div class="interview-title-container">
+                <div class="interview-icon">
+                  <mat-icon class="material-icons icon-sm icon-orange">
+                    {{ stage.icon || 'flag' }}
+                  </mat-icon>
+                </div>
+                <h4 class="interview-title"
+                  [class.clickable]="stage.stageType === 'screening'"
+                  (click)="onStageClick(stage, $event)">
+                  {{ stage.name === 'Applied' ? 'CV Review' : stage.name }}
+                </h4>
+              </div>
+
+              <span class="stage-status-select"
+                [ngClass]="'stage-status-' + getFinalDecisionStatus(stage)">
+                {{ stageStatusLabels[getFinalDecisionStatus(stage)] }}
+              </span>
+            </div>
+
+            <div class="hr-comment">
+              <mat-icon class="material-icons icon-sm icon-light-teal">comment</mat-icon>
+
+              @if (editingStageId !== stage._id) {
+                <p [class.text-active]="stage.notes"
+                  [class.text-muted]="!stage.notes">
+                  {{ stage?.notes || 'Leave your comment here...' }}
+                </p>
+                <mat-icon 
+                  class="material-icons icon-sm icon-light-teal"
+                  (click)="startEditHrComment(stage, $event)">
+                  edit
+                </mat-icon>
+              } @else {
+                <textarea [(ngModel)]="hrComment" class="comment-input" placeholder="Leave your comment..." rows="3"></textarea>
+                <mat-icon class="material-icons icon-sm icon-success" (click)="saveHrComment(stage, $event)">check</mat-icon>
+                <mat-icon class="material-icons icon-sm icon-cancel" (click)="cancelEditHrComment($event)">close</mat-icon>
+              }
+            </div>
+
+            <div class="interview-meta">
+              <span class="meta-item" *ngIf="stage.createdDate">
+                <mat-icon class="material-icons icon-sm icon-light-teal">event</mat-icon>
+                {{ formatDate(stage.createdDate) }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-template #noApplicant>
+      <div class="empty-state">
+        <mat-icon class="material-icons icon-lg">assignment</mat-icon>
+        <p>Select an applicant to view pipeline stages</p>
+      </div>
+    </ng-template>
+  </div>
+</div>

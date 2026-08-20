@@ -1,0 +1,40 @@
+<div class="position-location">
+  <mat-label class="new-label">{{ content.txtLocation }}</mat-label>
+  <mat-select class="container__full-width transparent-select" [(ngModel)]="selectedCountry"
+    (selectionChange)="select($event.value)" (click)="populateCollection()">
+
+    <mat-select-trigger>
+      <div class="container__flex container__baseline ">
+        <div>
+          <mat-icon class="add-button" (click)="add(selectedItem.name)" inline="true">add_circle</mat-icon>
+        </div>
+        <span>{{ selectedItem.name }}</span>
+      </div>
+    </mat-select-trigger>
+
+    <input class="dropdown-filter container__full-width" placeholder="Filter..." [formControl]="filterControl"
+      (keyup)="applyLocalFilter()" (selectionChange)="applyLocalFilter()" />
+
+    <div (scroll)="onScroll($event)" class="drop-down-list-scroll">
+      @for (option of collection; track option) {
+      <mat-option [value]="option">
+        {{option.name}}
+      </mat-option>
+      }
+    </div>
+
+  </mat-select>
+
+  <div class="tag-items">
+    @for (item of locationsList; track item) {
+    <div class="tag-item">
+      <span>{{getValue(item)}}</span>
+      <button (click)="remove(item)" inline="true" class="remove-btn">
+        <!-- <app-delete-icon></app-delete-icon> -->
+         <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    }
+  </div>
+
+</div>

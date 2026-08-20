@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>CV - {{FIRSTNAME}} {{LASTNAME}}</title>
+  <link rel="stylesheet" href="../styles/creative-blocks.css" />
+</head>
+<body>
+<div class="cv-container">
+  <div class="cv-wrapper">
+    <section class="hero-section">
+      <div class="hero-content">
+        {{#if PHOTO}}
+        <img src="{{PHOTO}}" alt="{{FIRSTNAME}} {{LASTNAME}}" class="hero-photo">
+        {{/if}}
+        <div class="hero-text">
+          <h1 class="hero-name">{{FIRSTNAME}} {{LASTNAME}}</h1>
+          {{#if TITLE}}
+            <p class="hero-title">{{TITLE}}</p>
+          {{/if}}
+          <div class="hero-contact">
+            {{#if EMAIL}}
+              <span>{{EMAIL}}</span>
+            {{/if}}
+            {{#if PHONE}}
+              <span>{{PHONE}}</span>
+            {{/if}}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="content-grid">
+      <section class="content-double-grid">
+        {{#if OBJECTIVE}}
+          <div class="card card-accent-teal">
+            <h2 class="card-title">Objective</h2>
+            <p class="card-text">{{OBJECTIVE}}</p>
+          </div>
+        {{/if}}
+
+        {{#if SUMMARY}}
+          <div class="card card-accent-teal">
+            <h2 class="card-title">Summary</h2>
+            <p class="card-text">{{SUMMARY}}</p>
+          </div>
+        {{/if}}
+      </section>
+
+      {{#if HARD_SKILLS.length}}
+        <div class="card">
+          <h2 class="card-title">Hard Skills</h2>
+          <div class="skills-grid">
+            {{#each HARD_SKILLS}}
+              {{#if name}}
+                <span class="skill-badge skill-badge-cyan">{{name}}</span>
+              {{/if}}
+            {{/each}}
+          </div>
+        </div>
+      {{/if}}
+
+      <section class="content-triple-grid">
+        {{#if DOMAIN_SKILLS.length}}
+          <div class="card card-skills">
+            <h2 class="card-title">Domain Skills</h2>
+            <ul class="skills-list-simple">
+              {{#each DOMAIN_SKILLS}}
+              <li>{{#if name}}{{name}}{{/if}}</li>
+              {{/each}}
+            </ul>
+          </div>
+        {{/if}}
+
+        {{#if MANAGERIAL_SKILLS.length}}
+          <div class="card card-skills">
+            <h2 class="card-title">Managerial Skills</h2>
+            <ul class="skills-list-simple">
+              {{#each MANAGERIAL_SKILLS}}
+              <li>{{#if name}}{{name}}{{/if}}</li>
+              {{/each}}
+            </ul>
+          </div>
+        {{/if}}
+
+        {{#if SOFT_SKILLS.length}}
+          <div class="card card-skills">
+            <h2 class="card-title">Soft Skills</h2>
+            <ul class="skills-list-simple">
+              {{#each SOFT_SKILLS}}
+              <li>{{#if name}}{{name}}{{/if}}</span>
+              {{/each}}
+            </ul>
+          </div>
+        {{/if}}
+      </section>
+
+      {{#if LANGUAGES.length}}
+        <div class="card card-full card-accent-teal">
+          <h2 class="card-title">Languages</h2>
+          <div class="languages-list">
+            {{#each LANGUAGES}}
+            <div class="language-item">
+              {{#if name}}
+                <span class="language-name">{{name}}</span>
+              {{/if}}
+              {{#if level}}
+                <span class="language-level">{{level}}</span>
+              {{/if}}
+            </div>
+            {{/each}}
+          </div>
+        </div>
+      {{/if}}
+ 
+      {{#if EXPERIENCE.length}}
+        <div class="card card-accent-teal">
+          <h2 class="card-title">Professional Experience</h2>
+          <div class="experience-list">
+            {{#each EXPERIENCE}}
+            <div class="experience-card">
+              <div class="experience-header">
+                <div>
+                  {{#if title}}
+                    <h3 class="experience-title">{{title}}</h3>
+                  {{/if}}
+                  {{#if company}}
+                    <p class="experience-company">{{company}}</p>
+                  {{/if}}
+                </div>
+                {{#if period}}
+                  <span class="experience-badge">{{period}}</span>
+                {{/if}}
+              </div>
+              {{#if responsibilities}}
+              <div>
+                <p class="responsibilities-header">Responsibilities</p>
+                <ul class="responsibilities-list">
+                  {{#each responsibilities}}
+                  <li>{{this}}</li>
+                  {{/each}}
+                </ul>
+              </div>
+              {{/if}}
+              {{#if achievements}}
+              <div>
+                <p class="achievements-header">Achievements</p>
+                <ul class="achievements-list">
+                  {{#each achievements}}
+                  <li>{{this}}</li>
+                  {{/each}}
+                </ul>
+              </div>
+              {{/if}}
+            </div>
+            {{/each}}
+          </div>
+        </div>
+      {{/if}}
+
+      {{#if EDUCATION.length}}
+        <div class="card card-accent-teal">
+          <h2 class="card-title">Education</h2>
+          <div class="education-list">
+            {{#each EDUCATION}}
+            <div class="education-item">
+              <div class="education-header">
+                {{#if degree}}
+                  <h3 class="education-degree">{{degree}}</h3>
+                {{/if}}
+                {{#if year}}
+                  <span class="education-year">{{year}}</span>
+                {{/if}}
+              </div>
+              {{#if institution}}
+                <p class="education-institution">{{institution}}</p>
+              {{/if}}
+              {{#if fieldOfStudy}}
+              <p class="education-description">{{fieldOfStudy}}</p>
+              {{/if}}
+            </div>
+            {{/each}}
+          </div>
+        </div>
+      {{/if}}
+
+      {{#if CERTIFICATIONS.length}}
+      <div class="card card-accent-teal">
+        <h2 class="card-title">Certifications</h2>
+        <div class="certifications-list">
+          {{#each CERTIFICATIONS}}
+          <div class="certification-item">
+            {{#if name}}
+              <h3 class="certification-name">{{name}}</h3>
+            {{/if}}
+            <p class="certification-details">
+              {{#if issuer}}
+                {{issuer}} 
+              {{/if}}
+              {{#if year}}
+                • {{year}}
+              {{/if}}
+            </p>
+          </div>
+          {{/each}}
+        </div>
+      </div>
+      {{/if}}
+
+      {{#if MOTIVATIONAL_FACTORS.length}}
+      <div class="card card-full card-accent-teal">
+        <h2 class="card-title">Motivational Factors</h2>
+        <ul class="motivational-list">
+          {{#each MOTIVATIONAL_FACTORS}}
+          <li>{{this}}</li>
+          {{/each}}
+        </ul>
+      </div>
+      {{/if}}
+    </div>
+  </div>
+</div>
+</body>
+</html>

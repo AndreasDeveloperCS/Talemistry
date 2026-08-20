@@ -1,0 +1,57 @@
+@if(isVisible) {
+<section class="video-call-dock" [class.dragging]="isDragging" [style.transform]="dockTransform">
+    <div class="dock-toolbar">
+        <button type="button" class="dock-drag-handle" (pointerdown)="onDragHandlePointerDown($event)"
+            (click)="$event.preventDefault(); $event.stopPropagation()" aria-label="Move call window">
+            <mat-icon>drag_indicator</mat-icon>
+        </button>
+
+        <button type="button" class="dock-action-btn end" (click)="endCall($event)" aria-label="End call">
+            <mat-icon>call_end</mat-icon>
+        </button>
+    </div>
+
+    <button type="button" class="dock-preview-button" (click)="handleRestoreClick($event)"
+        aria-label="Return to active call">
+        <div class="dock-preview">
+            <video #previewVideo class="dock-preview-video" autoplay muted [attr.playsinline]="''"></video>
+            <audio #previewAudio autoplay></audio>
+
+            @if(!hasVideoPreview) {
+            <div class="dock-preview-fallback">
+                <mat-icon>videocam</mat-icon>
+            </div>
+            }
+
+            <div class="dock-preview-overlay"></div>
+
+            <div class="dock-preview-meta">
+                <span class="dock-chip">{{ dockState.participantCount || 1 }} participant{{ (dockState.participantCount
+                    ||
+                    1) === 1 ? '' : 's' }}</span>
+
+                <div class="dock-state-icons">
+                    <mat-icon [class.off]="!dockState.audioEnabled">{{ dockState.audioEnabled ? 'mic' : 'mic_off'
+                        }}</mat-icon>
+                    <mat-icon [class.off]="!dockState.videoEnabled || dockState.isAudioOnlyMode">{{
+                        dockState.videoEnabled
+                        && !dockState.isAudioOnlyMode ? 'videocam' : 'videocam_off' }}</mat-icon>
+                    <mat-icon [class.off]="!dockState.speakersEnabled">{{ dockState.speakersEnabled ? 'volume_up' :
+                        'volume_off' }}</mat-icon>
+                </div>
+            </div>
+        </div>
+    </button>
+
+    <div class="dock-body">
+        <div class="dock-copy">
+            <strong>{{ dockState.roomName || 'Active call' }}</strong>
+            <span>{{ previewLabel }}</span>
+        </div>
+
+        <button type="button" class="dock-return-btn" (click)="handleRestoreClick($event)">
+            Return
+        </button>
+    </div>
+</section>
+}

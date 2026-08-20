@@ -1,0 +1,38 @@
+<div class="pipeline-header">
+  <div class="pipeline-info">
+    <div class="pipeline-label">
+      <mat-icon class="material-icons icon-sm">account_tree</mat-icon>
+      <span>Pipeline Stages</span>
+    </div>
+    <div class="pipeline-stats">
+      <span class="total-count">{{ totalApplicants }} total applicants</span>
+      <button 
+        *ngIf="selectedStage" 
+        class="btn btn-ghost btn-sm"
+        (click)="clearFilter()"
+      >
+        <mat-icon class="material-icons icon-sm">close</mat-icon>
+        Clear filter
+      </button>
+    </div>
+  </div>
+
+  <div class="stages-container">
+    <button
+      *ngFor="let stageCount of stageCounts; let i = index"
+      class="stage-item"
+      [class.active]="selectedStage === stageCount.stage"
+      [class.has-applicants]="stageCount.count > 0"
+      (click)="onStageClick(stageCount.stage)"
+    >
+      <div class="stage-icon">
+        <mat-icon class="material-icons icon-sm">{{ getStageIcon(stageCount.stage) }}</mat-icon>
+      </div>
+      <div class="stage-content">
+        <span class="stage-name">{{ stageCount.stage }}</span>
+        <span class="stage-count">{{ stageCount.count }}</span>
+      </div>
+      <div class="stage-connector" *ngIf="i < stageCounts.length - 1"></div>
+    </button>
+  </div>
+</div>

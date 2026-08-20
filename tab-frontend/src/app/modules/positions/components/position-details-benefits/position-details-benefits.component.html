@@ -1,0 +1,39 @@
+<mat-label class="new-label">{{ content.txtBenefits }}</mat-label>
+<mat-form-field>
+  <div class="input-group__field" style="justify-content: flex-start;">
+    <input type="text" class="transparent-input-full-width" [placeholder]="content.txtBenefits" matInput [(ngModel)]="rawInputlValue"
+      [formControl]="inputControl" (input)="filterCollectionItems()" (click)="onAutocompleteOpened()"
+      (focus)="onAutocompleteOpened()" [matAutocomplete]="matAutocomplete">
+
+    <mat-autocomplete autoActiveFirstOption #matAutocomplete="matAutocomplete" (opened)="onAutocompleteOpened()">
+      <input class="input-group__dropdown transparent-input-full-width" [placeholder]='content.txtFilter'[formControl]="filterControl"
+        (keyup)="applyLocalFilter()" />
+
+      <div (scroll)="onScroll($event)" class="input-group__dropdown" (opened)="onAutocompleteOpened()">
+        @for (option of collection; track option) {
+        <mat-option [value]="getValue(option)">
+          <div class="container__middle">
+            {{ option.benefit }}
+          </div>
+        </mat-option>
+        }
+      </div>
+    </mat-autocomplete>
+    <div class="round-add-button container__center" (click)="add(rawInputlValue)">
+      <mat-icon>add</mat-icon>
+    </div>
+  </div>
+
+</mat-form-field>
+
+<div class="tag-items">
+  @for (item of benefitsList; track item) {
+  <div class="tag-item">
+    <span>{{getValue(item)}}</span>
+    <button (click)="remove(item)" inline="true" class="remove-btn">
+      <!-- <app-delete-icon></app-delete-icon> -->
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  }
+</div>

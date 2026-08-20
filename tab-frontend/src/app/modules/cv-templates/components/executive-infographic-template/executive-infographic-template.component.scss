@@ -1,0 +1,616 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.cv-preview-theme {
+  --cv-primary-dark: #037F8C;
+  --cv-primary-mid: #008C94;
+  --cv-primary-light: #04D9D9;
+}
+
+$slate-900: #0f172a;
+$slate-800: #1e293b;
+$slate-600: #475569;
+$slate-200: #e2e8f0;
+$slate-50: #f8fafc;
+
+.ei-wrapper {
+  background-color: $slate-50;
+  min-height: 100vh;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  width: 100%;
+  margin: 0.5rem auto;
+  max-width: 1100px;
+}
+
+// ───── HEADER ─────
+.ei-header {
+  background: linear-gradient(135deg, var(--cv-primary-dark), var(--cv-primary-mid));
+  color: #fff;
+
+  &__inner {
+    // max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 32px;
+  }
+
+  &__profile {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+
+  &__photo {
+    width: 128px;
+    height: 128px;
+    border-radius: 50%;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.2);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__initials {
+    font-size: 2.5rem;
+    font-weight: 700;
+  }
+
+  &__info {
+    flex: 1;
+  }
+
+  &__name {
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    margin: 0;
+  }
+
+  &__title {
+    font-size: 1.25rem;
+    color: var(--cv-primary-light);
+    font-weight: 500;
+    margin: 4px 0 0;
+  }
+
+  &__contacts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 16px;
+    font-size: 0.875rem;
+  }
+
+  &__contact-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    mat-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+    }
+  }
+}
+
+// ───── METRICS ─────
+.ei-metrics {
+  // max-width: 960px;
+  margin: -24px auto 0;
+  padding: 0 32px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+
+  &__card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    border: 1px solid $slate-200;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(var(--cv-primary-dark), 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    mat-icon {
+      color: var(--cv-primary-dark);
+    }
+  }
+
+  &__value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--cv-primary-dark);
+  }
+
+  &__label {
+    font-size: 0.75rem;
+    color: $slate-600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  @media(max-width: $screen-size-tab) {
+    scale: 0.75;
+  }
+}
+
+// ───── MAIN ─────
+.ei-main {
+  // max-width: 960px;
+  margin: 0 auto;
+  padding: 32px;
+}
+
+// ───── CARD ─────
+.ei-card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  border: 1px solid $slate-200;
+  margin-bottom: 24px;
+}
+
+// ───── SECTION LABEL (Objective / Summary) ─────
+.ei-section-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+
+  &__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+
+    &--teal {
+      background: var(--cv-primary-dark);
+    }
+  }
+
+  &__text {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: $slate-800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0;
+  }
+}
+
+.ei-objective-text {
+  color: $slate-800;
+  line-height: 1.6;
+  font-style: italic;
+  font-size: 1.125rem;
+  border-left: 4px solid var(--cv-primary-dark);
+  padding-left: 16px;
+  margin: 0;
+}
+
+.ei-summary-text {
+  color: $slate-600;
+  line-height: 1.6;
+  margin: 0;
+}
+
+// ───── COLUMNS ─────
+.ei-columns {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 24px;
+  min-height: 100vh;
+
+  @media(max-width: $screen-size-tab) {
+    grid-template-columns: 1fr 2.5fr;
+  }
+}
+
+// ───── SECTION HEADER ─────
+.ei-section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--cv-primary-dark);
+
+  mat-icon {
+    color: var(--cv-primary-dark);
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+
+  h2 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: $slate-800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0;
+  }
+}
+
+// ───── SKILL BAR ─────
+.ei-skill-bar {
+  margin-bottom: 12px;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+
+  &__name {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: $slate-800;
+  }
+
+  &__level {
+    font-size: 0.75rem;
+    color: var(--cv-primary-dark);
+    font-weight: 500;
+  }
+
+  &__track {
+    height: 8px;
+    background: $slate-200;
+    border-radius: 9999px;
+    overflow: hidden;
+  }
+
+  &__fill {
+    height: 100%;
+    border-radius: 9999px;
+    background: linear-gradient(90deg, var(--cv-primary-dark), var(--cv-primary-light));
+    transition: width 0.5s ease;
+  }
+}
+
+// ───── TAGS ─────
+.ei-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ei-tag {
+  padding: 6px 12px;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+
+  &--teal {
+    background: rgba(var(--cv-primary-dark), 0.1);
+    color: var(--cv-primary-dark);
+  }
+}
+
+// ───── LANGUAGES (circular) ─────
+.ei-languages {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+}
+
+.ei-language {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__circle {
+    position: relative;
+    width: 80px;
+    height: 80px;
+
+    svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+  }
+
+  &__track {
+    stroke: $slate-200;
+    stroke-width: 6;
+    fill: none;
+  }
+
+  &__progress {
+    stroke: var(--cv-primary-dark);
+    stroke-width: 6;
+    fill: none;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.5s ease;
+  }
+
+  &__label-inner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--cv-primary-dark);
+  }
+
+  &__name {
+    margin-top: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: $slate-800;
+  }
+
+  &__level {
+    font-size: 0.75rem;
+    color: $slate-600;
+  }
+}
+
+// ───── EXPERIENCE ─────
+.ei-experience-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.ei-experience {
+  &--bordered {
+    padding-top: 24px;
+    border-top: 1px solid $slate-200;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  &__title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: $slate-800;
+    margin: 0;
+  }
+
+  &__company {
+    color: var(--cv-primary-dark);
+    font-weight: 500;
+    margin: 2px 0 0;
+  }
+
+  &__date {
+    font-size: 0.875rem;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    white-space: nowrap;
+    background: var(--cv-primary-dark);
+    color: #fff;
+
+    &--current {
+      background: var(--cv-primary-dark);
+      color: #fff;
+      font-weight: 500;
+    }
+  }
+
+  &__desc {
+    font-size: 0.875rem;
+    color: $slate-600;
+    margin: 0 0 12px;
+  }
+
+  &__achievements, &__responsibilities {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 0.875rem;
+      color: $slate-600;
+
+      span {
+        color: $slate-900;
+      }
+    }
+  }
+}
+
+.responsibilities-header, .achievements-header {
+	color: var(--cv-primary-dark);
+	font-size: 1rem;
+	font-weight: 600;
+	margin: 0.5rem 0;
+}
+
+.ei-achievement-icon, .ei-responsibility-icon {
+  color: var(--cv-primary-dark);
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+// ───── EDUCATION ─────
+.ei-education-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ei-education {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+
+  &--bordered {
+    padding-top: 16px;
+    border-top: 1px solid $slate-200;
+  }
+
+  &__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    background: rgba(var(--cv-primary-dark), 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    mat-icon {
+      color: var(--cv-primary-dark);
+    }
+  }
+
+  &__content {
+    flex: 1;
+
+    h4 {
+      font-weight: 700;
+      color: $slate-800;
+      margin: 0;
+    }
+  }
+
+  &__institution {
+    color: var(--cv-primary-dark);
+    font-weight: 500;
+    margin: 2px 0 0;
+  }
+
+  &__dates {
+    font-size: 0.875rem;
+    color: $slate-600;
+    margin: 2px 0 0;
+  }
+
+  &__field {
+    font-size: 0.875rem;
+    color: $slate-600;
+    margin: 4px 0 0;
+  }
+}
+
+// ───── CERTIFICATIONS ─────
+.ei-certifications {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.ei-certification {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  background: $slate-50;
+  border-radius: 8px;
+
+  &__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(var(--cv-primary-dark), 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    mat-icon {
+      color: var(--cv-primary-dark);
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  h4 {
+    font-weight: 600;
+    color: $slate-800;
+    font-size: 0.875rem;
+    margin: 0;
+  }
+
+  p {
+    font-size: 0.75rem;
+    color: $slate-600;
+    margin: 2px 0 0;
+  }
+
+  &__date {
+    color: var(--cv-primary-dark);
+    font-weight: 500;
+  }
+}
+
+// ───── DOMAIN EXPERTISE ─────
+.ei-domains {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.ei-domain {
+  text-align: center;
+  padding: 12px;
+  background: linear-gradient(135deg, rgba(var(--cv-primary-dark), 0.05), rgba(var(--cv-primary-light), 0.1));
+  border-radius: 8px;
+  border: 1px solid rgba(var(--cv-primary-dark), 0.2);
+
+  &__years {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--cv-primary-dark);
+  }
+
+  &__name {
+    font-size: 0.875rem;
+    color: $slate-600;
+  }
+}

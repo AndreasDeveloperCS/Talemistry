@@ -1,0 +1,16 @@
+<div class="selected-filtered">
+  @for (certificate of certificates; track certificate) {
+    <div class="selected-filtered-items">
+      <div class="selected-filtered-item">
+        <span>{{ certificate.certificateName }}</span>
+        <span>{{ certificate.certificateDescription }}</span>
+        <span>{{ certificate.certificateNumber }}</span>
+        <span>{{ certificate.certificationCenter }}</span>
+        <span>{{ certificate.certificationDate | date: 'MM/yyyy' }}</span>
+      </div>
+      <button mat-icon-button (click)="certificates.splice(certificates.indexOf(certificate), 1)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  }
+</div>

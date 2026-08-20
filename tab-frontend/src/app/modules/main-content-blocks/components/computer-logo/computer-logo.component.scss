@@ -1,0 +1,158 @@
+@use 'variables' as *;
+
+.cbody {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: auto;
+  justify-content: center;
+  justify-self: center;
+  max-width: 1200px;
+  aspect-ratio: 16 / 9;
+  background-color: transparent;
+
+  @media (max-width: $screen-size-mobile) {
+    max-width: 100vh;
+  }
+
+  @media (max-width: $screen-size-small) {
+    max-width: 200px;
+    margin: 0 auto;
+  }
+}
+
+.cmain {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 95%;
+  background-color: black;
+  border-radius: 25px 25px 0 0;
+  overflow: hidden;
+  position: relative;
+
+  @media (max-width: $screen-size-mobile) {
+    border-radius: 15px 15px 0 0;
+  }
+
+  @media (max-width: $screen-size-small) {
+    max-width: 200px;
+    margin: 0 auto;
+  }
+}
+
+.ccontentwrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 98%;
+  height: 98%;
+  background-color: rgba(76, 76, 76, 0.42);
+  margin-top: 1%;
+  position: relative;
+  overflow: hidden;
+
+  @media (max-width: $screen-size-mobile) {
+    width: 95%;
+    height: 95%;
+    margin-top: 0%;
+  }
+
+}
+
+.ccontent {
+  width: 100%;
+  height: 100%;
+}
+
+.ccont {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: none;
+}
+
+.cbottom {
+  width: 100%;
+  height: 50px;
+  background: linear-gradient(35deg, rgb(114, 114, 114), rgb(197, 197, 197), rgb(218, 218, 218));
+  border-radius: 0 0 25px 25px;
+  border-bottom: 1px solid rgb(92, 91, 91);
+
+  @media (max-width: $screen-size-mobile) {
+    height: 10px;
+  }
+}
+
+.cleg {
+  display: inline-block;
+  vertical-align: top;
+  width: 100px;
+  height: 50px;
+  background: linear-gradient(0deg, rgb(114, 114, 114), rgb(255, 255, 255), rgb(197, 197, 197), rgb(114, 114, 114));
+  -webkit-clip-path: polygon(10% 0%, 90% 0%, 100% 100%, 0% 100%);
+  clip-path: polygon(10% 0%, 90% 0%, 100% 100%, 0% 100%);
+
+  @media (max-width: $screen-size-mobile) {
+    height: 20px;
+    width: 50px;
+  }
+}
+
+
+
+.cfoot {
+  display: inline-block;
+  vertical-align: top;
+  width: 130px;
+  height: 20px;
+  background: linear-gradient(0deg, rgb(197, 197, 197), rgb(197, 197, 197), rgb(114, 114, 114));
+  -webkit-clip-path: polygon(5% 0%, 95% 0%, 100% 100%, 0% 100%);
+  clip-path: polygon(12% 0%, 88% 0%, 100% 100%, 0% 100%);
+  border-bottom-right-radius: 45px;
+  border-bottom-left-radius: 55px;
+  border-bottom: 2px solid rgb(114, 114, 114);
+
+  @media (max-width: $screen-size-mobile) {
+    height: 10px;
+    width: 65px;
+  }
+}
+
+// @media (max-width: 768px) {
+//   .cbody {
+//     max-width: 100%;
+//     aspect-ratio: 4 / 3;
+//   }
+
+//   .cmain {
+//     border-radius: 15px 15px 0 0;
+//   }
+
+//   .ccontentwrap {
+//     width: 95%;
+//     height: 95%;
+//     margin-top: 0%;
+//   }
+
+//   .cbottom {
+//     height: 10px;
+//     border-radius: 0 0 15px 15px;
+//   }
+
+//   .cleg {
+//     width: 22%;
+//     height: 10px;
+//   }
+
+//   .cfoot {
+//     width: 18%;
+//     height: 15px;
+//     border-bottom-right-radius: 35px;
+//     border-bottom-left-radius: 35px;
+//   }
+// }

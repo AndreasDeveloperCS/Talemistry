@@ -1,0 +1,38 @@
+<!-- <h2>{{content.txtCompensationPackageExpectation}}</h2> -->
+<div class="container__flex container__gap-large container__space-between container__margin-x-middle container__margin-y-large">
+  <div style="width: 100%;">
+    <mat-label class="new-label"><mat-icon>schedule</mat-icon> {{content.txtCompensationTimeline}}</mat-label>
+    <mat-select [(ngModel)]="selectedCompensationTimeline" class="transparent-input-full-width">
+      <div class="input-group__dropdown">
+        @for (option of compensationTimelines; track option) {
+        <mat-option [value]="option">
+          <div>
+            {{ option }}
+          </div>
+        </mat-option>
+        }
+      </div>
+    </mat-select>
+  </div>
+
+  <div class="container__column container__space-between" style="width: 100%;">
+    <mat-label class="new-label"><mat-icon>currency_exchange</mat-icon>{{ content.txtCurrency }}</mat-label>
+    <app-currency-select 
+      (currencyChange)="updateCurrency($event)"
+      [predefinedCurrency]="service.model.preferences.compensationPackage.currency"
+      class="container__full-width">
+    </app-currency-select>
+  </div>
+</div>
+
+<div class="container__flex container__gap-large container__baseline container__margin-x-middle">
+
+  <app-primary-digit-input-element [labelText]="'Minimum'" [labelIcon]="'price_change'" style="width: 100%;"
+    [defaultValue]="service.model.preferences.compensationPackage.minimum" (valueChanged)="updateMin($event)">
+  </app-primary-digit-input-element>
+
+  <app-primary-digit-input-element [labelText]="'Comfort'" [labelIcon]="'workspace_premium'" style="width: 100%;"
+    [defaultValue]="service.model.preferences.compensationPackage.comfort" (valueChanged)="updateComfort($event)">
+  </app-primary-digit-input-element>
+
+</div>

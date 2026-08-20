@@ -1,0 +1,66 @@
+<div class="social-network">
+
+  <div class="container__nowrap container__flex container__middle mb-md">
+    <div class="square-add-button" (click)="add()">
+      <mat-icon>add</mat-icon>
+    </div>
+  </div>
+
+  <div class="social-media-list">
+  <table class="social-media-items container__column">
+    @for (media of userSocialMediaList; track media; let i = $index) {
+      <tr>
+        <div class="container_flex container__nowrap container__middle" style="gap: 10px;">       
+            <td>
+              <div class="container__nowrap">
+                <button (click)="moveUp(i)"
+                  [disabled]="i === 0"
+                  [alt]="numberToString(media?.priority)"
+                  [matTooltip]="numberToString(media?.priority)"
+                class="primary-icon__large cicon primary-icon__color ml-sm mr-sm">&#9650;</button>
+                <button (click)="moveDown(i)"
+                  [disabled]="i === userSocialMediaList.length - 1"
+                  [alt]="numberToString(media?.priority)"
+                  [matTooltip]="numberToString(media?.priority)"
+                class="primary-icon__large cicon primary-icon__color mr-sm">&#9660;</button>
+              </div>
+            </td>
+            <td>
+              <a [href]="media?.type?.mainUrl ?? ''"
+                target="_blank"
+                class="platform-icon">
+                <img class="img-small primary-icon__large"
+                  [src]="media?.type?.imagePath ?? ''"
+                  [matTooltip]="media?.type?.name ?? ''"
+                  [alt]="media?.type?.name ?? ''" />
+              </a>
+            </td>
+    
+            <td
+              class="link-name">
+              <a [href]="media?.profileLink ?? ''"
+                [matTooltip]="media?.profileLink ?? ''"
+                [alt]="media?.profileLink ?? ''" target="_blank">
+                {{ media?.profileLink }}
+              </a>
+            </td>
+
+            <td>
+              <button (click)="edit(media)"
+                [matTooltip]="'edit'">
+                <mat-icon>edit</mat-icon>
+              </button>
+            </td>
+            <td>
+              <button (click)="delete(media)"
+                [matTooltip]="'delete'">
+                <mat-icon>delete_sweep</mat-icon>
+              </button>
+            </td>
+        </div>
+      </tr>
+    }
+  </table>
+</div>
+
+</div>

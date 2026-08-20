@@ -1,0 +1,979 @@
+<!-- @if(!notParticipant) { -->
+<div class="call" [class.minimized]="isMinimized" (click)="unlockPlayback()">
+    @if(rtcDebugEnabled) {
+    <div class="rtc-debug-overlay" (click)="$event.stopPropagation()">
+        <div class="rtc-debug-title">RTC Debug</div>
+        <div class="rtc-debug-row">participantCount: {{ participantCount }}</div>
+        <div class="rtc-debug-row">
+            signaling peers: {{ rtcDebugParticipantIdsCount }}
+            @if(rtcDebugParticipantIdsLabel) { <span class="rtc-debug-muted">({{ rtcDebugParticipantIdsLabel }})</span>
+            }
+        </div>
+        <div class="rtc-debug-row">
+            remote streams: {{ rtcDebugRemoteStreamsCount }}
+            @if(rtcDebugRemoteStreamsLabel) { <span class="rtc-debug-muted">({{ rtcDebugRemoteStreamsLabel }})</span> }
+        </div>
+        <div class="rtc-debug-row">tiles: {{ allStreams.length }} (cams {{ participantStreams.length }}, screens {{
+            screenShares.length }})</div>
+        <div class="rtc-debug-hint">Enable: ?rtcDebug=1 or sessionStorage.rtcDebug=1</div>
+    </div>
+    }
+
+    @if(clientErrorsVisible && clientErrors.length > 0) {
+    <div class="client-error-overlay" (click)="$event.stopPropagation()">
+        <div class="client-error-header">
+            <div class="client-error-title">
+                <mat-icon>error_outline</mat-icon>
+                <span>Errors</span>
+                <span class="client-error-count">{{ clientErrors.length }}</span>
+            </div>
+            <div class="client-error-actions">
+                <button class="client-error-btn" (click)="copyClientErrors(); $event.stopPropagation()"
+                    title="Copy errors">
+                    <mat-icon>content_copy</mat-icon>
+                </button>
+                <button class="client-error-btn" (click)="clearClientErrors(); $event.stopPropagation()" title="Clear">
+                    <mat-icon>delete</mat-icon>
+                </button>
+                <button class="client-error-btn" (click)="hideClientErrors(); $event.stopPropagation()" title="Hide">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+        </div>
+
+        <div class="client-error-body">
+            <div class="client-error-item" *ngFor="let err of clientErrors; trackBy: trackByClientErrorId">
+                <div class="client-error-item-head">
+                    <div class="client-error-meta">
+                        <span class="client-error-time">{{ formatClientErrorTime(err.ts) }}</span>
+                        <span class="client-error-source">{{ err.source }}</span>
+                        @if(err.count > 1) { <span class="client-error-badge">x{{ err.count }}</span> }
+                    </div>
+                    <button class="client-error-btn" (click)="dismissClientError(err.id); $event.stopPropagation()"
+                        title="Dismiss">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </div>
+                <div class="client-error-message">{{ err.message }}</div>
+                @if(err.stack) {
+                <pre class="client-error-stack">{{ err.stack }}</pre>
+                }
+            </div>
+        </div>
+    </div>
+    }
+
+    @if(!isMinimized) {
+
+    <div class="top-right-actions">
+        <!-- Exit fullscreen button -->
+        <button class="exit-fullscreen-btn" (click)="exitFullscreen()" title="Exit fullscreen">
+            <mat-icon>close_fullscreen</mat-icon>
+        </button>
+
+        <!-- Minimize button -->
+        <button class="minimize-btn" (click)="toggleMinimize()" title="Minimize">
+            <mat-icon>minimize</mat-icon>
+        </button>
+        <!-- Copy join link (tokenized) -->
+        <button class="invite-link-btn" (click)="copyJoinLink()" title="Copy join link">
+            <mat-icon>link</mat-icon>
+        </button>
+
+        <!-- Switch account for public rooms (token join) -->
+        @if(route.snapshot.queryParamMap.get('token')) {
+        <button class="invite-link-btn" (click)="switchAccountInPublicRoom()" title="Switch account">
+            <mat-icon>switch_account</mat-icon>
+        </button>
+        }
+
+        <!-- Participant count indicator -->
+        <div class="participant-count">
+            <mat-icon>people</mat-icon>
+            <span>{{ participantCount }}
+                <!-- {{ participantCount === 1 ? 'Participant' : 'Participants' }} -->
+            </span>
+        </div>
+    </div>
+    }
+
+    @if(isMinimized) {
+    <!-- Minimized floating window -->
+    <div class="minimized-window">
+        <div class="minimized-header">
+            <span class="minimized-title">Video Call - {{ participantCount }} participant(s)</span>
+            <div class="minimized-controls">
+                <button class="mini-btn" (click)="toggleMinimize()" title="Maximize">
+                    <mat-icon>open_in_full</mat-icon>
+                </button>
+                <button class="mini-btn" (click)="endCall()" title="End call">
+                    <mat-icon>call_end</mat-icon>
+                </button>
+            </div>
+        </div>
+        <div class="minimized-video">
+            @if(mainStream) {
+            <video [srcObject]="mainStream.stream" autoplay [attr.playsinline]="''"
+                [muted]="isVideoElementMuted(mainStream)" [attr.data-peer-id]="mainStream.peerId"
+                (enterpictureinpicture)="onEnterPictureInPicture(mainStream.peerId)"
+                (leavepictureinpicture)="onLeavePictureInPicture(mainStream.peerId)" class="mini-video"></video>
+            @if(!mainStream.isLocal && hasAudio(mainStream.stream)) {
+            <audio [srcObject]="mainStream.stream" autoplay playsinline
+                [muted]="isMutedForPlayback(mainStream)"></audio>
+            }
+            @if(!mainStream.isScreen && isAudioOnly(mainStream.stream)) {
+            <div class="mini-avatar">
+                <mat-icon>person</mat-icon>
+            </div>
+            }
+            <div class="mini-label">
+                <span>{{ getParticipantName(mainStream) }}</span>
+                @if(mainStream.isSpeaking && !mainStream.isMuted) {
+                <mat-icon class="speaking-icon">graphic_eq</mat-icon>
+                }
+            </div>
+            }
+        </div>
+    </div>
+    }
+
+    @if(!isMinimized) {
+
+    <!-- Audio-only mode warning banner -->
+    @if(isAudioOnlyMode) {
+    <div class="audio-only-banner">
+        <mat-icon>mic</mat-icon>
+        <span>Audio-only mode: Camera is in use by another application</span>
+    </div>
+    }
+
+    <!-- ICE/STUN configuration banner -->
+    @if(iceWarningMessage) {
+    <div class="ice-warning-banner">
+        <mat-icon>warning</mat-icon>
+        <span>{{ iceWarningMessage }}</span>
+    </div>
+    }
+
+    @if(floatingMiniPlayerMessage) {
+    <div class="floating-mini-player-banner" (click)="$event.stopPropagation()">
+        <mat-icon>picture_in_picture_alt</mat-icon>
+        <span>{{ floatingMiniPlayerMessage }}</span>
+    </div>
+    }
+
+    <!-- <header class="call-header-bar">
+        <div class="call-heading">
+            <p class="call-eyebrow">Live collaboration</p>
+            <h1>{{ roomDisplayName }}</h1>
+            <p>{{ roomSubtitle }}</p>
+        </div>
+
+        <div class="call-stat-strip">
+            <div class="call-stat-card">
+                <span class="label">People</span>
+                <strong>{{ participantCount }}</strong>
+            </div>
+            <div class="call-stat-card">
+                <span class="label">Layout</span>
+                <strong>{{ layoutLabel }}</strong>
+            </div>
+        </div>
+    </header> -->
+
+    @if(showPreJoinPreview) {
+    <div class="prejoin-shell">
+        <section class="prejoin-card">
+            <div class="prejoin-copy">
+                <p class="call-eyebrow">Ready check</p>
+                <h2>{{ roomDisplayName }}</h2>
+                <p>{{ preJoinModeLabel }}. Check your camera and microphone before you join.</p>
+            </div>
+
+            <div class="prejoin-stage">
+                @if(localPreviewStream && !isAudioOnly(localCameraStream!)) {
+                <video class="prejoin-video" [srcObject]="localPreviewStream" autoplay muted
+                    [attr.playsinline]="''"></video>
+                } @else {
+                <div class="prejoin-avatar-stage">
+                    <mat-icon>person</mat-icon>
+                    <span>{{ currentUserDisplayName || currentUserEmail || 'You' }}</span>
+                </div>
+                }
+
+                <div class="prejoin-stage-status">
+                    <span>{{ audioOn ? 'Microphone on' : 'Microphone muted' }}</span>
+                    <span>Camera {{ preJoinCameraStatusLabel }}</span>
+                </div>
+            </div>
+
+            <div class="prejoin-actions-row">
+                <button type="button" class="control-btn" [class.active]="!audioOn" (click)="toggleAudio()"
+                    [title]="audioOn ? 'Mute microphone' : 'Unmute microphone'">
+                    <mat-icon>{{ audioOn ? 'mic' : 'mic_off' }}</mat-icon>
+                </button>
+
+                <button type="button" class="control-btn" [class.active]="!videoOn" [class.disabled]="isAudioOnlyMode"
+                    [disabled]="isAudioOnlyMode" (click)="toggleVideo()"
+                    [title]="isAudioOnlyMode ? 'Camera unavailable' : (videoOn ? 'Turn off camera' : 'Turn on camera')">
+                    <mat-icon>{{ videoOn ? 'videocam' : 'videocam_off' }}</mat-icon>
+                </button>
+
+                <button type="button" class="prejoin-join-btn" (click)="joinCall()" [disabled]="!canJoinRoom">
+                    {{ joinActionLabel }}
+                </button>
+            </div>
+
+            <div class="prejoin-device-grid">
+                <label class="prejoin-device-field">
+                    <span>Microphone</span>
+                    <select [ngModel]="selectedAudioInputDeviceId" (ngModelChange)="onAudioInputDeviceChange($event)"
+                        [disabled]="isPreparingPreview || availableAudioInputDevices.length === 0">
+                        @for(device of availableAudioInputDevices; track device.deviceId) {
+                        <option [ngValue]="device.deviceId">{{ device.label }}</option>
+                        }
+                    </select>
+                </label>
+
+                <label class="prejoin-device-field">
+                    <span>Camera</span>
+                    <select [ngModel]="selectedVideoInputDeviceId" (ngModelChange)="onVideoInputDeviceChange($event)"
+                        [disabled]="isPreparingPreview || availableVideoInputDevices.length === 0">
+                        @for(device of availableVideoInputDevices; track device.deviceId) {
+                        <option [ngValue]="device.deviceId">{{ device.label }}</option>
+                        }
+                    </select>
+                </label>
+            </div>
+
+            @if(isPreparingPreview) {
+            <p class="prejoin-hint">Preparing your camera and microphone preview...</p>
+            } @else if(isAudioOnlyMode) {
+            <p class="prejoin-hint">Camera preview is unavailable right now. You can still join with audio, or try
+                enabling video again.</p>
+            } @else {
+            <p class="prejoin-hint">Your microphone and camera settings will be applied when you join.</p>
+            }
+        </section>
+    </div>
+    } @else {
+    <div class="call-workspace" [class.sidebar-collapsed]="!sidebarVisible">
+        <aside class="call-sidebar room-sidebar" [class.dense]="useDenseSidebar"
+            [class.sidebar-hidden]="!sidebarVisible">
+            <div class="sidebar-panel-card">
+                <!-- <p class="call-eyebrow">Room overview</p> -->
+                <h3>{{ roomDisplayName }}</h3>
+                <!-- <p>{{ room?.type === 'group' ? 'A shared room for recurring collaboration, review calls, and live
+                    sessions.' : 'A focused space for direct calls, interviews, and quick handoffs.' }}</p> -->
+            </div>
+
+            <div class="sidebar-quick-actions">
+                <button class="sidebar-action-btn" (click)="copyJoinLink()">
+                    <mat-icon>link</mat-icon>
+                    <span>Copy invite link</span>
+                </button>
+                <!-- <button class="sidebar-action-btn" (click)="cycleLayout()">
+                    <mat-icon>{{ layoutIcon }}</mat-icon>
+                    <span>Switch layout</span>
+                </button> -->
+            </div>
+
+            <div class="sidebar-panel-card compact">
+                <div class="sidebar-line">
+                    <span>Speakers</span>
+                    <strong>{{ speakersOn ? 'On' : 'Muted' }}</strong>
+                </div>
+                <div class="sidebar-line">
+                    <span>Microphone</span>
+                    <strong>{{ audioOn ? 'Live' : 'Muted' }}</strong>
+                </div>
+                <div class="sidebar-line">
+                    <span>Camera</span>
+                    <strong>{{ videoOn ? 'On' : 'Off' }}</strong>
+                </div>
+                <div class="sidebar-line">
+                    <span>Sharing</span>
+                    <strong>{{ sharingScreen ? 'Screen on' : 'Idle' }}</strong>
+                </div>
+            </div>
+
+            <div class="sidebar-panel-card participant-panel" [class.dense]="useDenseSidebar">
+                <div class="panel-header">
+                    <h3>Participants</h3>
+                    <span>{{ connectedRoomParticipantsCount }}</span>
+                </div>
+
+                @if(roomPresenceEntries.length > 0) {
+                <div class="participant-list-panel" [class.dense]="useDenseSidebar">
+                    @for(participant of roomPresenceEntries; track trackByRoomPresenceParticipant($index, participant))
+                    {
+                    <div class="participant-row">
+                        <div class="participant-avatar">{{ getRoomPresenceAvatarLabel(participant) }}
+                        </div>
+                        <div class="participant-copy">
+                            <strong>{{ getRoomPresenceDisplayName(participant) }}</strong>
+                            <span>{{ getRoomPresenceStatusLabel(participant) }}</span>
+                        </div>
+
+                        <div class="participant-state-stack">
+                            <div class="participant-presence-chip" [class.in-room]="participant.inRoom"
+                                [class.online]="!participant.inRoom && participant.online"
+                                [class.offline]="!participant.inRoom && !participant.online">
+                                <mat-icon>{{ getRoomPresenceIcon(participant) }}</mat-icon>
+                            </div>
+
+                            @if(participant.inRoom) {
+                            <div class="participant-state" [class.muted]="isRoomPresenceMuted(participant)">
+                                <mat-icon>{{ participant.audioEnabled ? 'mic' : 'mic_off' }}</mat-icon>
+                            </div>
+                            }
+                        </div>
+                    </div>
+                    }
+                </div>
+                } @else {
+                <div class="empty-side-state">
+                    <mat-icon>groups</mat-icon>
+                    <p>Waiting for participants to join.</p>
+                </div>
+                }
+            </div>
+
+            <div class="sidebar-panel-card compact" *ngIf="screenShares.length > 0">
+                <div class="panel-header">
+                    <h3>Screen shares</h3>
+                    <span>{{ screenShares.length }}</span>
+                </div>
+
+                <div class="screen-pill-list">
+                    @for(screenStream of screenShares; track screenStream.peerId) {
+                    <button type="button" class="screen-pill" (click)="focusStream(screenStream.peerId)">
+                        <mat-icon>screen_share</mat-icon>
+                        <span>{{ getParticipantName(screenStream) }}</span>
+                    </button>
+                    }
+                </div>
+            </div>
+        </aside>
+
+        <section class="call-stage-panel">
+            <ng-template #inCallTextChatPanel>
+                <div class="text-chat-shell" (click)="$event.stopPropagation()">
+                    <header class="text-chat-header">
+                        <div class="text-chat-heading">
+                            <span class="text-chat-eyebrow">In-call chat</span>
+                            <h3>Text chat</h3>
+                            <p>{{ textChatStatusText }}</p>
+                        </div>
+
+                        <div class="text-chat-header-actions">
+                            @if(!isMobileViewport) {
+                            <button type="button" class="text-chat-close" (click)="minimizeTextChat()"
+                                title="Minimize text chat">
+                                <mat-icon>minimize</mat-icon>
+                            </button>
+                            }
+
+                            <button type="button" class="text-chat-close" (click)="closeTextChat()"
+                                title="Close text chat">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        </div>
+                    </header>
+
+                    <div class="text-chat-messages scrollbar-hidden" #inCallChatScroll
+                        (scroll)="onInCallTextChatScroll()">
+                        @if(isTextChatHistoryLoading || isTextChatLoadingOlder || textChatMessages.length > 0) {
+                        <div class="text-chat-history-state"
+                            [class.loading]="isTextChatHistoryLoading || isTextChatLoadingOlder">
+                            @if(isTextChatHistoryLoading || isTextChatLoadingOlder) {
+                            <app-sun-spinner></app-sun-spinner>
+                            <span>Loading earlier messages...</span>
+                            } @else if(canLoadOlderTextChatMessages) {
+                            <mat-icon>north</mat-icon>
+                            <span>Scroll up to load earlier messages</span>
+                            } @else {
+                            <mat-icon>history</mat-icon>
+                            <span>Full room history loaded</span>
+                            }
+                        </div>
+                        }
+
+                        @if(textChatMessages.length > 0) {
+                        @for(message of textChatMessages; track trackByTextChatMessageId($index, message)) {
+                        <article class="text-chat-message" [class.mine]="message.mine">
+                            <div class="text-chat-bubble">
+                                <div class="text-chat-meta">
+                                    <strong>{{ message.senderLabel }}</strong>
+                                    <span>{{ formatTextChatTime(message.sentAt) }}</span>
+                                </div>
+                                <p>{{ message.text }}</p>
+                            </div>
+                        </article>
+                        }
+                        } @else {
+                        <div class="text-chat-empty-state">
+                            <mat-icon>forum</mat-icon>
+                            <h3>No messages yet</h3>
+                            <p>Use chat for quick links, notes, and follow-up questions in this room.</p>
+                        </div>
+                        }
+                    </div>
+
+                    @if(textChatPeerTyping) {
+                    <div class="text-chat-typing">
+                        <mat-icon>more_horiz</mat-icon>
+                        <span>Someone is typing...</span>
+                    </div>
+                    }
+
+                    <footer class="text-chat-composer">
+                        <textarea #inCallChatComposer rows="3" [(ngModel)]="textChatDraft"
+                            (input)="onTextChatDraftChange()" (keydown)="onTextChatComposerKeydown($event)"
+                            [disabled]="!textChatConnected" placeholder="Type a message"></textarea>
+
+                        <button type="button" class="text-chat-send" (click)="sendTextChatMessage()"
+                            [disabled]="!textChatConnected || !textChatDraft.trim().length" title="Send message">
+                            <mat-icon>send</mat-icon>
+                        </button>
+                    </footer>
+                </div>
+            </ng-template>
+
+            @if(showMobileTextChatDrawer) {
+            <button type="button" class="text-chat-backdrop" (click)="closeTextChat()"
+                aria-label="Close text chat"></button>
+            }
+
+            <div class="call-stage-content" [class.with-text-chat]="showDockedTextChat"
+                [class.with-text-chat-preferred]="showDockedTextChat && shouldAutoDockTextChat"
+                [class.with-text-chat-rail]="showMinimizedTextChatRail">
+                <div class="call-stage-main">
+                    <div class="video-area" [class.has-screen]="hasScreenShare()"
+                        [class.layout-grid]="effectiveLayoutMode==='grid'"
+                        [class.layout-ribbon]="effectiveLayoutMode==='ribbon'"
+                        [class.layout-overlay]="effectiveLayoutMode==='overlay'"
+                        [class.layout-present]="effectiveLayoutMode==='present'"
+                        [class.pip-screen]="pipScreenShareActive" [class.solo]="isSoloView">
+
+                        <!-- Screen Shares Ribbon (hidden in Meet-like presentation mode) -->
+                        @if(screenShares.length > 0 && effectiveLayoutMode !== 'present') {
+                        <div class="screen-shares-ribbon" [class.fullscreen]="screenShareMode === 'fullscreen'"
+                            [class.overlay]="screenShareMode === 'overlay'">
+                            <div class="ribbon-header">
+                                <mat-icon>screen_share</mat-icon>
+                                <span>Shared Screens ({{ screenShares.length }})</span>
+                                <button class="control-btn-small" (click)="cycleScreenShareMode()"
+                                    [title]="'Screen mode: ' + screenShareMode">
+                                    <mat-icon>{{ screenShareModeIcon }}</mat-icon>
+                                </button>
+                            </div>
+                            <div class="ribbon-content">
+                                <ng-container *ngFor="let screenStream of screenShares; trackBy: trackByPeerStreamId">
+                                    <div class="video-container screen-share" [class.local]="screenStream.isLocal"
+                                        [class.pinned]="isPinned(screenStream.peerId)"
+                                        [class.pip-stream]="isPipStream(screenStream.peerId)"
+                                        (click)="focusStream(screenStream.peerId)"
+                                        (dblclick)="togglePinParticipant(screenStream.peerId)">
+                                        <button type="button" class="pin-btn"
+                                            [class.active]="isPinned(screenStream.peerId)"
+                                            (click)="$event.stopPropagation(); togglePinParticipant(screenStream.peerId)"
+                                            [title]="isPinned(screenStream.peerId) ? 'Unpin' : 'Pin'">
+                                            <mat-icon>push_pin</mat-icon>
+                                        </button>
+                                        <video [srcObject]="screenStream.stream" autoplay [attr.playsinline]="''"
+                                            [attr.data-peer-id]="screenStream.peerId"
+                                            (enterpictureinpicture)="onEnterPictureInPicture(screenStream.peerId)"
+                                            (leavepictureinpicture)="onLeavePictureInPicture(screenStream.peerId)"
+                                            [muted]="isVideoElementMuted(screenStream)"
+                                            class="participant-video"></video>
+                                        @if(!screenStream.isLocal && hasAudio(screenStream.stream)) {
+                                        <audio [srcObject]="screenStream.stream" autoplay playsinline
+                                            [muted]="isMutedForPlayback(screenStream)"></audio>
+                                        }
+                                        <div class="participant-label">
+                                            <span class="name">{{ getParticipantName(screenStream) }}</span>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+                        }
+
+                        <!-- Participants Grid/Ribbon -->
+                        @if(effectiveLayoutMode === 'grid') {
+                        <div class="participants-grid" [class.grid-balanced]="useBalancedGrid"
+                            [class.grid-compact]="useCompactGrid"
+                            [class.grid-speaker-priority]="useSpeakerPriorityGrid">
+                            <ng-container
+                                *ngFor="let peerStream of gridParticipantStreams; trackBy: trackByPeerStreamId">
+                                <div class="video-container" [class.local]="peerStream.isLocal"
+                                    [class.remote]="!peerStream.isLocal" [class.speaking]="peerStream.isSpeaking"
+                                    [class.video-off]="isAudioOnly(peerStream.stream)"
+                                    [class.pinned]="isPinned(peerStream.peerId)"
+                                    [class.speaker-featured]="isFeaturedGridSpeaker(peerStream.peerId)"
+                                    [class.pip-stream]="isPipStream(peerStream.peerId)"
+                                    (click)="focusStream(peerStream.peerId)"
+                                    (dblclick)="togglePinParticipant(peerStream.peerId)">
+
+                                    <button type="button" class="pin-btn" [class.active]="isPinned(peerStream.peerId)"
+                                        (click)="$event.stopPropagation(); togglePinParticipant(peerStream.peerId)"
+                                        [title]="isPinned(peerStream.peerId) ? 'Unpin' : 'Pin'">
+                                        <mat-icon>push_pin</mat-icon>
+                                    </button>
+
+                                    <!-- Always show video element to maintain space -->
+                                    <video [srcObject]="peerStream.stream" autoplay [attr.playsinline]="''"
+                                        [attr.data-peer-id]="peerStream.peerId"
+                                        (enterpictureinpicture)="onEnterPictureInPicture(peerStream.peerId)"
+                                        (leavepictureinpicture)="onLeavePictureInPicture(peerStream.peerId)"
+                                        [muted]="isVideoElementMuted(peerStream)" class="participant-video"></video>
+
+                                    @if(!peerStream.isLocal && hasAudio(peerStream.stream)) {
+                                    <audio [srcObject]="peerStream.stream" autoplay playsinline
+                                        [muted]="isMutedForPlayback(peerStream)"></audio>
+                                    }
+
+                                    <!-- Show avatar overlay when video is off -->
+                                    @if(isAudioOnly(peerStream.stream)) {
+                                    <div class="audio-only-avatar">
+                                        <div class="audio-only-avatar-core">
+                                            <span class="audio-only-avatar-initials">{{
+                                                getParticipantAvatarLabel(peerStream)
+                                                }}</span>
+                                            <div class="audio-only-avatar-status">
+                                                <mat-icon>videocam_off</mat-icon>
+                                            </div>
+                                        </div>
+                                        @if(peerStream.isSpeaking && !peerStream.isMuted) {
+                                        <div class="audio-indicator speaking">
+                                            <mat-icon>mic</mat-icon>
+                                        </div>
+                                        }
+                                    </div>
+                                    }
+
+                                    <div class="participant-label">
+                                        <span class="name">{{ getParticipantName(peerStream) }}</span>
+                                        @if(peerStream.isSpeaking && !peerStream.isMuted) {
+                                        <mat-icon class="speaking-icon">graphic_eq</mat-icon>
+                                        }
+                                        <!-- Always show mic icon -->
+                                        @if(peerStream.isMuted || (!audioOn && peerStream.isLocal)) {
+                                        <mat-icon class="muted-icon">mic_off</mat-icon>
+                                        } @else {
+                                        <mat-icon class="mic-on-icon">mic</mat-icon>
+                                        }
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
+                        }
+
+                        @if(effectiveLayoutMode !== 'grid') {
+                        <div class="layout-stage">
+                            @if(pipScreenShareActive) {
+                            <div class="pip-participants">
+                                <div class="participants-grid pip-participants-grid"
+                                    [class.grid-balanced]="useBalancedGrid" [class.grid-compact]="useCompactGrid"
+                                    [class.grid-speaker-priority]="useSpeakerPriorityGrid">
+                                    <ng-container
+                                        *ngFor="let peerStream of gridParticipantStreams; trackBy: trackByPeerStreamId">
+                                        <div class="video-container" [class.local]="peerStream.isLocal"
+                                            [class.remote]="!peerStream.isLocal"
+                                            [class.speaking]="peerStream.isSpeaking"
+                                            [class.video-off]="isAudioOnly(peerStream.stream)"
+                                            [class.pinned]="isPinned(peerStream.peerId)"
+                                            [class.speaker-featured]="isFeaturedGridSpeaker(peerStream.peerId)"
+                                            [class.pip-stream]="isPipStream(peerStream.peerId)"
+                                            (click)="focusStream(peerStream.peerId)"
+                                            (dblclick)="togglePinParticipant(peerStream.peerId)">
+
+                                            <button type="button" class="pin-btn"
+                                                [class.active]="isPinned(peerStream.peerId)"
+                                                (click)="$event.stopPropagation(); togglePinParticipant(peerStream.peerId)"
+                                                [title]="isPinned(peerStream.peerId) ? 'Unpin' : 'Pin'">
+                                                <mat-icon>push_pin</mat-icon>
+                                            </button>
+
+                                            <video [srcObject]="peerStream.stream" autoplay [attr.playsinline]="''"
+                                                [attr.data-peer-id]="peerStream.peerId"
+                                                (enterpictureinpicture)="onEnterPictureInPicture(peerStream.peerId)"
+                                                (leavepictureinpicture)="onLeavePictureInPicture(peerStream.peerId)"
+                                                [muted]="isVideoElementMuted(peerStream)"
+                                                class="participant-video"></video>
+
+                                            @if(!peerStream.isLocal && hasAudio(peerStream.stream)) {
+                                            <audio [srcObject]="peerStream.stream" autoplay playsinline
+                                                [muted]="isMutedForPlayback(peerStream)"></audio>
+                                            }
+
+                                            @if(isAudioOnly(peerStream.stream)) {
+                                            <div class="audio-only-avatar">
+                                                <div class="audio-only-avatar-core">
+                                                    <span class="audio-only-avatar-initials">{{
+                                                        getParticipantAvatarLabel(peerStream)
+                                                        }}</span>
+                                                    <div class="audio-only-avatar-status">
+                                                        <mat-icon>videocam_off</mat-icon>
+                                                    </div>
+                                                </div>
+                                                @if(peerStream.isSpeaking && !peerStream.isMuted) {
+                                                <div class="audio-indicator speaking">
+                                                    <mat-icon>mic</mat-icon>
+                                                </div>
+                                                }
+                                            </div>
+                                            }
+
+                                            <div class="participant-label">
+                                                <span class="name">{{ getParticipantName(peerStream) }}</span>
+                                                @if(peerStream.isSpeaking && !peerStream.isMuted) {
+                                                <mat-icon class="speaking-icon">graphic_eq</mat-icon>
+                                                }
+                                                @if(peerStream.isMuted || (!audioOn && peerStream.isLocal)) {
+                                                <mat-icon class="muted-icon">mic_off</mat-icon>
+                                                } @else {
+                                                <mat-icon class="mic-on-icon">mic</mat-icon>
+                                                }
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                            }
+                            @if(mainStream) {
+                            <div class="video-container stage" [class.screen-share]="mainStream.isScreen"
+                                [class.local]="mainStream.isLocal" [class.speaking]="mainStream.isSpeaking"
+                                [class.video-off]="!mainStream.isScreen && isAudioOnly(mainStream.stream)"
+                                [class.pinned]="isPinned(mainStream.peerId)"
+                                [class.pip-stream]="isPipStream(mainStream.peerId)"
+                                (click)="focusStream(mainStream.peerId)"
+                                (dblclick)="togglePinParticipant(mainStream.peerId)">
+                                <button type="button" class="pin-btn" [class.active]="isPinned(mainStream.peerId)"
+                                    (click)="$event.stopPropagation(); togglePinParticipant(mainStream.peerId)"
+                                    [title]="isPinned(mainStream.peerId) ? 'Unpin' : 'Pin'">
+                                    <mat-icon>push_pin</mat-icon>
+                                </button>
+                                <video [srcObject]="mainStream.stream" autoplay [attr.playsinline]="''"
+                                    [muted]="isVideoElementMuted(mainStream)" [attr.data-peer-id]="mainStream.peerId"
+                                    (enterpictureinpicture)="onEnterPictureInPicture(mainStream.peerId)"
+                                    (leavepictureinpicture)="onLeavePictureInPicture(mainStream.peerId)"
+                                    class="participant-video"></video>
+
+                                @if(!mainStream.isLocal && hasAudio(mainStream.stream)) {
+                                <audio [srcObject]="mainStream.stream" autoplay playsinline
+                                    [muted]="isMutedForPlayback(mainStream)"></audio>
+                                }
+
+                                @if(!mainStream.isScreen && isAudioOnly(mainStream.stream)) {
+                                <div class="audio-only-avatar">
+                                    <div class="audio-only-avatar-core">
+                                        <span class="audio-only-avatar-initials">{{
+                                            getParticipantAvatarLabel(mainStream)
+                                            }}</span>
+                                        <div class="audio-only-avatar-status">
+                                            <mat-icon>videocam_off</mat-icon>
+                                        </div>
+                                    </div>
+                                    @if(mainStream.isSpeaking && !mainStream.isMuted) {
+                                    <div class="audio-indicator speaking">
+                                        <mat-icon>mic</mat-icon>
+                                    </div>
+                                    }
+                                </div>
+                                }
+
+                                <div class="participant-label">
+                                    <span class="name">{{ getParticipantName(mainStream) }}</span>
+                                    @if(mainStream.isSpeaking && !mainStream.isMuted) {
+                                    <mat-icon class="speaking-icon">graphic_eq</mat-icon>
+                                    }
+                                    <!-- Always show mic icon -->
+                                    @if(mainStream.isMuted || (!audioOn && mainStream.isLocal)) {
+                                    <mat-icon class="muted-icon">mic_off</mat-icon>
+                                    } @else {
+                                    <mat-icon class="mic-on-icon">mic</mat-icon>
+                                    }
+                                </div>
+                            </div>
+                            }
+
+                            @if(!pipScreenShareActive) {
+                            <div class="participants-ribbon" [class.overlay]="effectiveLayoutMode==='overlay'">
+                                <ng-container *ngFor="let peerStream of secondaryStreams; trackBy: trackByPeerStreamId">
+                                    <div class="video-container thumb" [class.local]="peerStream.isLocal"
+                                        [class.screen-share]="peerStream.isScreen"
+                                        [class.speaking]="peerStream.isSpeaking"
+                                        [class.video-off]="!peerStream.isScreen && isAudioOnly(peerStream.stream)"
+                                        [class.pinned]="isPinned(peerStream.peerId)"
+                                        [class.pip-stream]="isPipStream(peerStream.peerId)"
+                                        (click)="focusStream(peerStream.peerId)"
+                                        (dblclick)="togglePinParticipant(peerStream.peerId)">
+                                        <button type="button" class="pin-btn"
+                                            [class.active]="isPinned(peerStream.peerId)"
+                                            (click)="$event.stopPropagation(); togglePinParticipant(peerStream.peerId)"
+                                            [title]="isPinned(peerStream.peerId) ? 'Unpin' : 'Pin'">
+                                            <mat-icon>push_pin</mat-icon>
+                                        </button>
+                                        <video [srcObject]="peerStream.stream" autoplay [attr.playsinline]="''"
+                                            [attr.data-peer-id]="peerStream.peerId"
+                                            (enterpictureinpicture)="onEnterPictureInPicture(peerStream.peerId)"
+                                            (leavepictureinpicture)="onLeavePictureInPicture(peerStream.peerId)"
+                                            [muted]="isVideoElementMuted(peerStream)" class="participant-video"></video>
+
+                                        @if(!peerStream.isLocal && hasAudio(peerStream.stream)) {
+                                        <audio [srcObject]="peerStream.stream" autoplay playsinline
+                                            [muted]="isMutedForPlayback(peerStream)"></audio>
+                                        }
+
+                                        @if(isAudioOnly(peerStream.stream)) {
+                                        <div class="audio-only-avatar">
+                                            <div class="audio-only-avatar-core">
+                                                <span class="audio-only-avatar-initials">{{
+                                                    getParticipantAvatarLabel(peerStream)
+                                                    }}</span>
+                                                <div class="audio-only-avatar-status">
+                                                    <mat-icon>videocam_off</mat-icon>
+                                                </div>
+                                            </div>
+                                            @if(peerStream.isSpeaking && !peerStream.isMuted) {
+                                            <div class="audio-indicator speaking">
+                                                <mat-icon>mic</mat-icon>
+                                            </div>
+                                            }
+                                        </div>
+                                        }
+
+                                        <div class="participant-label">
+                                            <span class="name">{{ getParticipantName(peerStream) }}</span>
+                                            @if(peerStream.isSpeaking && !peerStream.isMuted) {
+                                            <mat-icon class="speaking-icon">graphic_eq</mat-icon>
+                                            }
+                                            <!-- Always show mic icon -->
+                                            @if(peerStream.isMuted || (!audioOn && peerStream.isLocal)) {
+                                            <mat-icon class="muted-icon">mic_off</mat-icon>
+                                            } @else {
+                                            <mat-icon class="mic-on-icon">mic</mat-icon>
+                                            }
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                            }
+                        </div>
+                        }
+
+                        <!-- Hidden elements for backward compatibility -->
+                        <video #localVideo class="hidden-media"></video>
+                        <video #localScreen class="hidden-media"></video>
+                    </div>
+
+                    <div class="controls">
+                        <div class="controls-group controls-group-utility">
+                            <button class="control-btn" [class.active]="!sidebarVisible" (click)="toggleSidebar()"
+                                [title]="sidebarVisible ? 'Hide sidebar (P)' : 'Show sidebar (P)'">
+                                <mat-icon>view_sidebar</mat-icon>
+                            </button>
+
+                            <button class="control-btn" [class.active]="!speakersOn" (click)="toggleSpeakers()"
+                                [title]="speakersOn ? 'Mute speakers' : 'Unmute speakers'">
+                                <mat-icon>{{ speakersOn ? 'volume_up' : 'volume_off' }}</mat-icon>
+                            </button>
+
+                            <button class="control-btn" (click)="cycleLayout()" title="Change layout (L)">
+                                <mat-icon>{{ layoutIcon }}</mat-icon>
+                            </button>
+
+                            <button class="control-btn settings-btn" [class.active]="showDeviceSwitcher"
+                                (click)="toggleDeviceSwitcher()" title="Device settings (D)">
+                                <mat-icon>settings</mat-icon>
+                            </button>
+                        </div>
+
+                        <div class="controls-group controls-group-primary">
+                            <button class="control-btn" [class.active]="!audioOn" (click)="toggleAudio()"
+                                [title]="audioOn ? 'Mute microphone (M)' : 'Unmute microphone (M)'">
+                                <mat-icon>{{ audioOn ? 'mic' : 'mic_off' }}</mat-icon>
+                                <span class="control-label">{{ audioOn ? 'Mic' : 'Muted' }}</span>
+                            </button>
+
+                            <button class="control-btn" [class.active]="!videoOn" [class.disabled]="isAudioOnlyMode"
+                                [disabled]="isAudioOnlyMode" (click)="toggleVideo()"
+                                [title]="isAudioOnlyMode ? 'Camera unavailable' : (videoOn ? 'Turn off camera (V)' : 'Turn on camera (V)')">
+                                <mat-icon>{{ videoOn ? 'videocam' : 'videocam_off' }}</mat-icon>
+                                <span class="control-label">{{ videoOn ? 'Cam' : 'No cam' }}</span>
+                            </button>
+
+                            <button class="control-btn" [class.screen-sharing]="sharingScreen"
+                                (click)="toggleScreenShare()"
+                                [title]="sharingScreen ? 'Stop sharing screen (S)' : 'Share screen (S)'">
+                                <mat-icon>{{ sharingScreen ? 'stop_screen_share' : 'screen_share' }}</mat-icon>
+                                <span class="control-label">{{ sharingScreen ? 'Stop' : 'Share' }}</span>
+                            </button>
+
+                            <button class="control-btn text-chat-toggle"
+                                [class.chat-open]="isTextChatVisible || showMinimizedTextChatRail"
+                                (click)="toggleTextChat()" [title]="textChatToggleTitle + ' (C)'">
+                                <mat-icon>{{ isTextChatOpen ? 'chat' : 'forum' }}</mat-icon>
+                                @if(textChatUnreadCount > 0) {
+                                <span class="control-badge">{{ textChatUnreadCount > 99 ? '99+' : textChatUnreadCount
+                                    }}</span>
+                                }
+                            </button>
+
+                            <button class="control-btn floating-mini-player-btn"
+                                [class.floating-active]="isFloatingMiniPlayerActive"
+                                [class.disabled]="!canUseFloatingMiniPlayer" [disabled]="!canUseFloatingMiniPlayer"
+                                (click)="toggleFloatingMiniPlayer()" [title]="floatingMiniPlayerTitle">
+                                <mat-icon>{{ floatingMiniPlayerIcon }}</mat-icon>
+                            </button>
+                        </div>
+
+                        <div class="controls-group controls-group-danger">
+                            <button class="control-btn end-call" (click)="endCall()" title="End call">
+                                <mat-icon>call_end</mat-icon>
+                                <span class="control-label">End</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    @if(showDeviceSwitcher) {
+                    <div class="device-switcher-panel" (click)="$event.stopPropagation()">
+                        <div class="device-switcher-header">
+                            <span>Device Settings</span>
+                            <button type="button" class="device-switcher-close" (click)="showDeviceSwitcher = false">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        </div>
+
+                        @if(availableAudioInputDevices.length > 0) {
+                        <label class="device-switcher-field">
+                            <span class="device-switcher-label">
+                                <mat-icon>mic</mat-icon> Microphone
+                            </span>
+                            <select [ngModel]="selectedAudioInputDeviceId"
+                                (ngModelChange)="switchAudioInputDevice($event)">
+                                @for(device of availableAudioInputDevices; track device.deviceId) {
+                                <option [ngValue]="device.deviceId">{{ device.label }}</option>
+                                }
+                            </select>
+                        </label>
+                        }
+
+                        @if(availableVideoInputDevices.length > 0) {
+                        <label class="device-switcher-field">
+                            <span class="device-switcher-label">
+                                <mat-icon>videocam</mat-icon> Camera
+                            </span>
+                            <select [ngModel]="selectedVideoInputDeviceId"
+                                (ngModelChange)="switchVideoInputDevice($event)">
+                                @for(device of availableVideoInputDevices; track device.deviceId) {
+                                <option [ngValue]="device.deviceId">{{ device.label }}</option>
+                                }
+                            </select>
+                        </label>
+                        }
+
+                        <div class="device-switcher-shortcuts">
+                            <span class="shortcut-hint"><kbd>M</kbd> Toggle mic</span>
+                            <span class="shortcut-hint"><kbd>V</kbd> Toggle camera</span>
+                            <span class="shortcut-hint"><kbd>S</kbd> Screen share</span>
+                            <span class="shortcut-hint"><kbd>C</kbd> Text chat</span>
+                            <span class="shortcut-hint"><kbd>L</kbd> Layout</span>
+                            <span class="shortcut-hint"><kbd>D</kbd> Devices</span>
+                        </div>
+                    </div>
+                    }
+                </div>
+
+                @if(showMinimizedTextChatRail) {
+                <button type="button" class="text-chat-rail" (click)="restoreTextChat(false)" title="Restore text chat">
+                    <mat-icon>forum</mat-icon>
+                    <span>Chat</span>
+                    @if(textChatUnreadCount > 0) {
+                    <span class="text-chat-rail-badge">{{ textChatUnreadCount > 99 ? '99+' : textChatUnreadCount
+                        }}</span>
+                    }
+                </button>
+                }
+
+
+                <aside class="text-chat-dock" [class.chat-hidden]="!showDockedTextChat"
+                    [attr.aria-hidden]="!showDockedTextChat">
+                    @if(showDockedTextChat) {
+                    <ng-container [ngTemplateOutlet]="inCallTextChatPanel"></ng-container>
+                    }
+                </aside>
+
+                <aside class="text-chat-drawer" [class.open]="showMobileTextChatDrawer"
+                    [class.mobile]="isMobileViewport" [attr.aria-hidden]="!showMobileTextChatDrawer">
+                    <ng-container [ngTemplateOutlet]="inCallTextChatPanel"></ng-container>
+                </aside>
+            </div>
+        </section>
+
+        <!-- <aside class="call-sidebar people-sidebar">
+            <div class="sidebar-tabs">
+                <button type="button" class="sidebar-tab active">People</button>
+                <button type="button" class="sidebar-tab passive">Room</button>
+            </div>
+
+            <div class="sidebar-panel-card participant-panel">
+                <div class="panel-header">
+                    <h3>Participants</h3>
+                    <span>{{ visiblePeopleStreams.length }}</span>
+                </div>
+
+                @if(visiblePeopleStreams.length > 0) {
+                <div class="participant-list-panel">
+                    @for(peerStream of visiblePeopleStreams; track peerStream.peerId) {
+                    <div class="participant-row">
+                        <div class="participant-avatar">{{ getParticipantName(peerStream).slice(0, 2).toUpperCase() }}
+                        </div>
+                        <div class="participant-copy">
+                            <strong>{{ getParticipantName(peerStream) }}</strong>
+                            <span>{{ peerStream.isLocal ? 'You' : 'Connected' }}</span>
+                        </div>
+
+                        <div class="participant-state" [class.speaking]="peerStream.isSpeaking && !peerStream.isMuted">
+                            <mat-icon>{{ peerStream.isMuted || (!audioOn && peerStream.isLocal) ? 'mic_off' : 'mic'
+                                }}</mat-icon>
+                        </div>
+                    </div>
+                    }
+                </div>
+                } @else {
+                <div class="empty-side-state">
+                    <mat-icon>groups</mat-icon>
+                    <p>Waiting for participants to join.</p>
+                </div>
+                }
+            </div>
+
+            <div class="sidebar-panel-card compact" *ngIf="screenShares.length > 0">
+                <div class="panel-header">
+                    <h3>Screen shares</h3>
+                    <span>{{ screenShares.length }}</span>
+                </div>
+
+                <div class="screen-pill-list">
+                    @for(screenStream of screenShares; track screenStream.peerId) {
+                    <button type="button" class="screen-pill" (click)="focusStream(screenStream.peerId)">
+                        <mat-icon>screen_share</mat-icon>
+                        <span>{{ getParticipantName(screenStream) }}</span>
+                    </button>
+                    }
+                </div>
+            </div>
+        </aside> -->
+    </div>
+    }
+    }
+</div>
+<!-- } -->
+@if(notParticipant && errorMessage !== "") {
+<div class="error-message">
+    <mat-icon>lock_person</mat-icon> {{ errorMessage }}
+</div>
+}

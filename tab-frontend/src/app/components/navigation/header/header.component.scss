@@ -1,0 +1,244 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.navbar {
+  background-color: var(--sidebar);
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  align-items: center;
+  flex-wrap: nowrap;
+
+  @media(max-width: $screen-size-tab) {
+    padding: 0.65rem 0.9rem;
+  }
+
+  @media(max-width: $screen-size-mobile) {
+    flex-wrap: nowrap;
+    gap: 0.4rem;
+    padding: 0.5rem 0.65rem;
+  }
+}
+
+img {
+  height: 4rem;
+  width: 4rem;
+  flex-shrink: 0;
+
+  @media(max-width: $screen-size-mobile) {
+    height: 3rem;
+    width: 3rem;
+  }
+}
+
+mat-icon {
+  flex-shrink: 0;
+}
+
+.logo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+  transform: transition 0.5s ease;
+  gap: 10px;
+  min-width: 0;
+
+  img {
+    border: $pallete-0-color-14 2px solid;
+    border-radius: 50%;
+  }
+
+  &:hover {
+    scale: 1.1;
+  }
+
+  &:active {
+    scale: 0.9;
+  }
+}
+
+.logo-txt {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #fff;
+
+  @media(max-width: $screen-size-tab) {
+    font-size: 1rem;
+  }
+
+  @media(max-width: $screen-size-mobile) {
+    display: none;
+  }
+}
+
+.nav-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  flex-wrap: nowrap;
+  width: auto;
+  flex: 0 1 auto;
+  padding: 0;
+  margin: 0 0 0 auto;
+  max-width: none;
+  min-width: 0;
+
+  @media(max-width: $screen-size-mobile) {
+    width: auto;
+    flex: 0 1 auto;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+    gap: 0.35rem;
+  }
+}
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+
+  @media(max-width: $screen-size-mobile) {
+    gap: 0.5rem;
+  }
+
+  button {
+    background: transparent;
+    color: var(--accent-text);
+    border: 1px solid $pallete-0-color-11;
+    margin-left: 0;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    height: 3rem;
+    transform: transition 0.5s ease;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 3rem;
+
+    @media(max-width: $screen-size-tab) {
+      padding: 0.75rem;
+    }
+
+    @media(max-width: $screen-size-mobile) {
+      width: 3.25rem;
+      height: 3.25rem;
+      padding: 0.65rem;
+      border-radius: 0.9rem;
+      font-size: 1rem;
+    }
+
+    &:hover {
+      scale: 1.1;
+    }
+
+    &:active {
+      scale: 0.9;
+    }
+
+    &.cta-btn {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+
+      span {
+        color: #fff;
+      }
+    }
+
+    .btn-lbl {
+      color: #fff;
+      @media(max-width: $screen-size-mobile) {
+        display: none;
+      }
+    }
+  }
+}
+
+.login-block {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-end;
+
+  @media(max-width: $screen-size-mobile) {
+    gap: 0.35rem;
+  }
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  transform: transition 0.5s ease;
+  cursor: pointer;
+  border: none;
+
+  &:hover {
+    scale: 1.1;
+    color: $action;
+  }
+
+  &:active {
+    scale: 0.9;
+  }
+
+  mat-icon {
+    font-size: 2rem;
+    width: fit-content;
+    height: 100%;
+    color: #fff;
+  }
+}
+
+.career-btn {
+  display: flex;
+  gap: $gap-micro;
+  align-items: center;
+  font-size: 1.8rem;
+  padding: $padding-narrow;
+  border-radius: 6px;
+  color: #fff;
+  font-weight: 600;
+
+  mat-icon {
+    font-size: 2rem;
+    width: fit-content;
+    height: fit-content;
+  }
+
+  .career-lbl {
+    color: #fff;
+
+    @media(max-width: $screen-size-tab) {
+      display: none;
+    }
+  }
+
+  &:hover {
+    scale: 1.1;
+  }
+
+  @media(max-width: $screen-size-mobile) {
+    font-size: 1.35rem;
+    padding: 0.5rem;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    justify-content: center;
+    border-radius: 0.9rem;
+
+    mat-icon {
+      font-size: 1.65rem;
+    }
+  }
+}

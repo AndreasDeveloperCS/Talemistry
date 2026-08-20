@@ -1,0 +1,250 @@
+<div class="me-wrapper">
+  <header class="me-header">
+    <div class="me-header__inner">
+      <div class="me-header__topbar">
+        <span class="me-header__cv-label">
+          <span class="me-header__cv-dash"></span>
+          Curriculum Vitae
+        </span>
+        <span class="me-header__edition">{{ currentYear }} Edition</span>
+      </div>
+
+      <div class="me-header__headline">
+        <h1>{{ data.user.firstname }} {{ data.user.lastname }}</h1>
+        <div class="me-header__rule"></div>
+        <p class="me-header__position">{{ data.targetPosition }}</p>
+      </div>
+
+      <div class="me-header__contacts">
+        <a class="me-header__contact-item" [href]="'mailto:' + data.user.email">
+          <mat-icon>email</mat-icon>
+          <span>{{ data.user.email }}</span>
+        </a>
+        <a class="me-header__contact-item" *ngIf="data.user.phone" [href]="'tel:' + data.user.phone">
+          <mat-icon>phone</mat-icon>
+          <span>{{ data.user.phone }}</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="me-stats">
+    <div class="me-stats__inner">
+      <div class="me-stats__item">
+        <div class="me-stats__value">{{ yearsExperience }}+</div>
+        <div class="me-stats__label">Years Experience</div>
+      </div>
+      <div class="me-stats__divider"></div>
+      <div class="me-stats__item">
+        <div class="me-stats__value">{{ data.hardSkills.length }}</div>
+        <div class="me-stats__label">Technical Skills</div>
+      </div>
+      <div class="me-stats__divider"></div>
+      <div class="me-stats__item">
+        <div class="me-stats__value">{{ data.certification.length }}</div>
+        <div class="me-stats__label">Certifications</div>
+      </div>
+      <div class="me-stats__divider"></div>
+      <div class="me-stats__item">
+        <div class="me-stats__value">{{ data.languagesSkills.length }}</div>
+        <div class="me-stats__label">Languages</div>
+      </div>
+    </div>
+  </div>
+
+  <main class="me-main">
+    <div class="me-columns">
+      <div class="me-columns__main">
+        <section class="me-objective" *ngIf="data.objective">
+          <div class="me-section-icon-label">
+            <div class="me-section-icon-label__icon me-section-icon-label__icon--teal">
+              <mat-icon>track_changes</mat-icon>
+            </div>
+            <h2>Career Objective</h2>
+          </div>
+          <p class="me-objective__text">{{ data.objective }}</p>
+        </section>
+
+        <section class="me-summary-section">
+          <div class="me-section-icon-label">
+            <div class="me-section-icon-label__icon me-section-icon-label__icon--teal">
+              <mat-icon>description</mat-icon>
+            </div>
+            <h2>Professional Summary</h2>
+          </div>
+          <blockquote class="me-pullquote">
+            <p>"{{ data.summary }}"</p>
+          </blockquote>
+        </section>
+
+        <div class="me-divider">
+          <div class="me-divider__line"></div>
+          <h2 class="me-divider__label">Professional Experience</h2>
+          <div class="me-divider__line"></div>
+        </div>
+
+        <article class="me-featured" *ngIf="featuredExperience">
+          <div class="me-featured__badge">
+            <span class="me-featured__pulse"></span>
+            Featured Role
+          </div>
+          <h3 class="me-featured__title">{{ featuredExperience.jobTitle }}</h3>
+          <div class="me-featured__meta">
+            <span class="me-featured__company">{{ featuredExperience.companyName }}</span>
+            <span class="me-featured__sep">|</span>
+            <span class="me-featured__dates">{{ featuredExperience.startWorkDate | monthYearRange: featuredExperience.endWorkDate : featuredExperience.isCurrent }}</span>
+          </div>
+          <div *ngIf="featuredExperience.resposiblities">
+            <p class="me-featured__subheader">Responsibilities</p>
+            <div class="me-featured__responsibilities">
+              <div *ngFor="let responsibility of splitTextLines(featuredExperience.resposiblities)" class="me-featured__responsibility">
+                <mat-icon>arrow_forward</mat-icon>
+                <span>{{ responsibility }}</span>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="featuredExperience.achievements">
+            <p class="me-featured__subheader">Achievements</p>
+            <div class="me-featured__achievements">
+              <div *ngFor="let achievement of splitTextLines(featuredExperience.achievements)" class="me-featured__achievement">
+                <mat-icon>arrow_forward</mat-icon>
+                <span>{{ achievement }}</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="me-experience" *ngFor="let exp of otherExperience">
+          <div class="me-experience__period">{{ exp.startWorkDate | monthYearRange: exp.endWorkDate : exp.isCurrent }}</div>
+          <h3 class="me-experience__title">{{ exp.jobTitle }}</h3>
+          <div class="me-experience__company">{{ exp.companyName }}</div>
+          <div *ngIf="exp.resposiblities">
+            <p class="me-experience__subheader">Responsibilities</p>
+            <ul class="me-experience__responsibilities">
+              <li *ngFor="let responsibility of splitTextLines(exp.resposiblities)">
+                <span class="me-experience__plus">+</span>
+                <span>{{ responsibility }}</span>
+              </li>
+            </ul>
+          </div>
+          <div *ngIf="exp.achievements">
+            <p class="me-experience__subheader">Achievements</p>
+            <ul class="me-experience__achievements">
+              <li *ngFor="let achievement of splitTextLines(exp.achievements)">
+                <span class="me-experience__plus">+</span>
+                <span>{{ achievement }}</span>
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <div class="me-divider">
+          <div class="me-divider__line"></div>
+          <h2 class="me-divider__label">Education</h2>
+          <div class="me-divider__line"></div>
+        </div>
+
+        <div class="me-education-grid">
+          <div class="me-edu-card" *ngFor="let edu of data.academicEducation">
+            <div class="me-edu-card__dates">
+              {{ formatDate(edu.startStudyDate) }} — {{ formatDate(edu.graduationDate) }}
+            </div>
+            <h3 class="me-edu-card__degree">{{ getEducationDegree(edu.academicEducationLevelType) }}</h3>
+            <div class="me-edu-card__spec">{{ edu.specialication }}</div>
+            <div class="me-edu-card__institution">{{ edu.institutionName }}</div>
+            <div class="me-edu-card__field" *ngIf="edu.fieldOfStudy">{{ edu.fieldOfStudy }}</div>
+          </div>
+        </div>
+
+        <div class="me-divider">
+          <div class="me-divider__line"></div>
+          <h2 class="me-divider__label">Certifications</h2>
+          <div class="me-divider__line"></div>
+        </div>
+        <div class="me-sidebar-section">
+          <div class="me-sidebar-certs">
+            <div class="me-sidebar-cert" *ngFor="let cert of data.certification">
+              <div class="me-sidebar-cert__name">{{ cert.skillName }}</div>
+              <div class="me-sidebar-cert__meta">
+                {{ cert.certificationCenter }} —
+                <span class="me-sidebar-cert__date">{{ formatDate(cert.certificationDate) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="me-columns__sidebar">
+        <div class="me-photo">
+          <div class="me-photo__frame">
+            <img
+              *ngIf="data.user?.photo"
+              [src]="data.user?.photo"
+              [alt]="data.user.fullName"
+            />
+          </div>
+          <div class="me-photo__bar"></div>
+        </div>
+
+        <div class="me-sidebar-section">
+          <h3 class="me-sidebar-section__title">Technical Expertise</h3>
+          <div class="me-sidebar-skills">
+            <div class="me-sidebar-skill" *ngFor="let skill of data.hardSkills">
+              <span class="me-sidebar-skill__name">{{ skill.skillName }}</span>
+              <span class="me-sidebar-skill__badge">{{ getSkillLabelFromNumeric(skill.proficiencyEstimation) }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="me-domain-card">
+          <h3 class="me-domain-card__title">
+            <span class="me-domain-card__dash"></span>
+            Domain Expertise
+          </h3>
+          <div class="me-domain-list">
+            <div class="me-domain-item" *ngFor="let skill of data.domainSkills">
+              <div class="me-domain-item__header">
+                <span class="me-domain-item__name">{{ skill.skillName }}</span>
+                <span class="me-domain-item__years">{{ getProficiencyLabel(skill.proficiencyEstimation) }}</span>
+              </div>
+              <div class="me-domain-item__track">
+                <div
+                  class="me-domain-item__fill"
+                  [style.width.%]="getDomainBarWidth(skill.proficiencyEstimation || 0)"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="me-sidebar-section">
+          <h3 class="me-sidebar-section__title">Managerial Competencies</h3>
+          <div class="me-sidebar-tags">
+            <span class="me-sidebar-tag" *ngFor="let skill of data.managerialSkills">{{ skill.skillName }}</span>
+          </div>
+        </div>
+        
+        <div class="me-sidebar-section">
+          <h3 class="me-sidebar-section__title">Core Competencies</h3>
+          <div class="me-sidebar-tags">
+            <span class="me-sidebar-tag" *ngFor="let skill of data.softSkills">{{ skill.skillName }}</span>
+          </div>
+        </div>
+        
+        <div class="me-sidebar-section">
+          <h3 class="me-sidebar-section__title">Languages</h3>
+          <div class="me-sidebar-langs">
+            <div class="me-sidebar-lang" *ngFor="let lang of data.languagesSkills">
+              <span class="me-sidebar-lang__name">{{ lang.skillName }}</span>
+              <span class="me-sidebar-lang__level">{{ getLanguageProficiency(lang.proficiencyEstimation) }}</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="me-footer">
+    References Available Upon Request
+  </footer>
+</div>

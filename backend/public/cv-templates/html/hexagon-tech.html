@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CV - {{FIRSTNAME}} {{LASTNAME}}</title>
+  <link rel="stylesheet" href="../styles/hexagon-tech.css" />
+</head>
+<body>
+  <div class="ht-wrapper">
+
+    <div class="ht-circuit-bg">
+      <svg xmlns="http://www.w3.org/2000/svg">
+        <pattern id="circuit" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+          <path d="M10 10h80M10 10v30M90 10v30M10 40h30M60 40h30M40 40v30M60 40v30M40 70h20M10 70v20M90 70v20M10 90h30M60 90h30"
+            stroke="#037F8C" stroke-width="1" fill="none"/>
+          <circle cx="10" cy="10" r="3" fill="#037F8C"/>
+          <circle cx="90" cy="10" r="3" fill="#037F8C"/>
+          <circle cx="40" cy="40" r="3" fill="#037F8C"/>
+          <circle cx="60" cy="40" r="3" fill="#037F8C"/>
+          <circle cx="10" cy="90" r="3" fill="#037F8C"/>
+          <circle cx="90" cy="90" r="3" fill="#037F8C"/>
+        </pattern>
+        <rect width="100%" height="100%" fill="url(#circuit)"/>
+      </svg>
+    </div>
+
+    <!-- HEADER -->
+    <header class="ht-header">
+      <div class="ht-header__content">
+        {{#if PHOTO}}
+        <div class="ht-header__hex-photo">
+          <svg width="130" height="150" viewBox="0 0 130 150">
+            <defs>
+              <clipPath id="hexClip">
+                <polygon points="65,5 120,40 120,110 65,145 10,110 10,40" />
+              </clipPath>
+            </defs>
+            <polygon
+              points="65,5 120,40 120,110 65,145 10,110 10,40"
+              fill="white"
+              stroke="#f97316"
+              stroke-width="3"
+            />
+            <image
+              href="{{PHOTO}}" x="10" y="5" width="110" height="140"
+              clip-path="url(#hexClip)" preserveAspectRatio="xMidYMid slice" />
+          </svg>
+        </div>
+        {{/if}}
+        
+        <div class="ht-header__info">
+          <h1 class="ht-header__name">{{FIRSTNAME}} {{LASTNAME}}</h1>
+          <p class="ht-header__title">{{TITLE}}</p>
+          <div class="ht-header__contacts">
+            {{#if EMAIL}}
+              <span class="ht-header__contact">✉ {{EMAIL}}</span>
+            {{/if}}
+            {{#if PHONE}}
+              <span class="ht-header__contact">☎ {{PHONE}}</span>
+            {{/if}}
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="ht-main">
+
+      {{#if OBJECTIVE}}
+      <section class="ht-section">
+        <div class="ht-section-header">
+          <div class="ht-section-header__icon ht-section-header__icon--teal">
+            <!-- <mat-icon>track_changes</mat-icon> -->
+            🔄
+          </div>
+          <h2>Career Objective</h2>
+          <div class="ht-section-header__line"></div>
+        </div>
+        <p class="ht-objective-text">{{OBJECTIVE}}</p>
+      </section>
+      {{/if}}
+
+      {{#if SUMMARY}}
+      <section class="ht-section">
+        <div class="ht-section-header">
+          <div class="ht-section-header__icon ht-section-header__icon--teal">
+            <!-- <mat-icon>description</mat-icon> -->
+            📝
+          </div>
+          <h2>Professional Summary</h2>
+          <div class="ht-section-header__line"></div>
+        </div>
+        <p class="ht-summary-text">{{SUMMARY}}</p>
+      </section>
+      {{/if}}
+
+      <div class="ht-columns">
+
+        <!-- EXPERIENCE -->
+        <div class="ht-columns__main">
+          {{#if EXPERIENCE.length}}
+          <section class="ht-section">
+            <div class="ht-section-header">
+              <div class="ht-section-header__icon ht-section-header__icon--teal">
+                <!-- <mat-icon>work</mat-icon> -->
+                💼
+              </div>
+              <h2>Professional Experience</h2>
+              <div class="ht-section-header__line"></div>
+            </div>
+            <div class="ht-exp-list">
+              {{#each EXPERIENCE}}
+              <div class="ht-exp">
+                <div class="ht-exp__node"></div>
+                <div class="ht-exp__content">
+                  <div class="ht-exp__header">
+                    <div>
+                      {{#if title}}
+                        <h3 class="ht-exp__title">{{title}}</h3>
+                      {{/if}}
+                      {{#if company}}
+                        <p class="ht-exp__company">{{company}}</p>
+                      {{/if}}
+                    </div>
+                    {{#if period}}
+                      <span class="ht-exp__date">{{period}}</span>
+                    {{/if}}
+                  </div>
+
+                  {{#if responsibilities}}
+                  <p class="responsibilities-header">Responsibilities</p>
+                  <ul class="ht-exp__responsibilities">
+                    {{#each responsibilities}}
+                    <li>
+                      <span class="ht-exp__bullet"></span>
+                      <span class="ht-exp__desc">{{this}}</span>
+                    </li>
+                    {{/each}}
+                  </ul>
+                  {{/if}}
+
+                  {{#if achievements}}
+                  <p class="achievements-header">Achievements</p>
+                  <ul class="ht-exp__achievements">
+                    {{#each achievements}}
+                    <li>
+                      <span class="ht-exp__bullet"></span>
+                      <span class="ht-exp__desc">{{this}}</span>
+                    </li>
+                    {{/each}}
+                  </ul>
+                  {{/if}}
+                </div>
+              </div>
+              {{/each}}
+            </div>
+          </section>
+          {{/if}}
+
+          {{#if EDUCATION.length}}
+          <section class="ht-section">
+            <div class="ht-section-header">
+              <div class="ht-section-header__icon ht-section-header__icon--teal">
+                <!-- <mat-icon>work</mat-icon> -->
+                💼
+              </div>
+              <h2>Education</h2>
+              <div class="ht-section-header__line"></div>
+            </div>
+            <div class="ht-edu-list">
+              {{#each EDUCATION}}
+              <div class="ht-edu">
+                {{#if degree}}
+                  <h3>{{ degree }}</h3>
+                {{/if}}
+                {{#if specialisation}}
+                  <p class="ht-edu__spec">{{ specialisation }}</p>
+                {{/if}}
+                {{#if institution}}
+                  <p class="ht-edu__institution">{{ institution }}</p>
+                {{/if}}
+                {{#if year}}
+                  <p class="ht-edu__date">{{ year }}</p>
+                {{/if}}
+              </div>
+              {{/each}}
+            </div>
+          </section>
+          {{/if}}
+
+          {{#if CERTIFICATIONS.length}}
+          <section class="ht-section">
+            <div class="ht-section-header">
+              <div class="ht-section-header__icon ht-section-header__icon--teal">
+                <!-- <mat-icon>work</mat-icon> -->
+                💼
+              </div>
+              <h2>Certifications</h2>
+              <div class="ht-section-header__line"></div>
+            </div>
+            <div class="ht-cert-list">
+              {{#each CERTIFICATIONS}}
+              <div class="ht-cert">
+                {{#if name}}
+                  <h4>{{ name }}</h4>
+                {{/if}}
+                {{#if issuer}}
+                  <p class="ht-cert__issuer">{{ issuer }}</p>
+                {{/if}}
+                {{#if year}}
+                  <p class="ht-cert__date">{{ year }}</p>
+                {{/if}}
+              </div>
+              {{/each}}
+            </div>
+          </section>
+          {{/if}}
+        </div>
+
+        <!-- SIDE COLUMN -->
+        <div class="ht-columns__side">
+
+          {{#if HARD_SKILLS.length}}
+          <section class="ht-section">
+            <div class="ht-section-header">
+              <div class="ht-section-header__icon ht-section-header__icon--teal">
+                <!-- <mat-icon>hexagon</mat-icon> -->
+                ⬡
+              </div>
+              <h2>Technical Expertise</h2>
+              <div class="ht-section-header__line"></div>
+            </div>
+            <div class="ht-skills">
+              {{#each HARD_SKILLS}}
+              <div class="ht-skill">
+                {{#if name}}
+                  <span class="ht-skill-name">{{name}}</span>
+                {{/if}}
+                {{#if level}}
+                  <span class="ht-skill__badge">{{level}}</span>
+                {{/if}}
+              </div>
+              {{/each}}
+            </div>
+          </section>
+          {{/if}}
+
+          {{#if DOMAIN_SKILLS.length}}
+          <section class="ht-section">
+            <div class="ht-section-header">
+              <div class="ht-section-header__icon ht-section-header__icon--teal">
+                <!-- <mat-icon>hexagon</mat-icon> -->
+                ⬡
+              </div>
+              <h2>Domain Expertise</h2>
+              <div class="ht-section-header__line"></div>
+            </div>
+            <div class="ht-skills">
+              {{#each DOMAIN_SKILLS}}
+              <div class="ht-skill">
+                {{#if name}}
+                  <span class="ht-skill-name">{{name}}</span>
+                {{/if}}
+                {{#if level}}
+                  <span class="ht-skill__badge">{{level}}</span>
+                {{/if}}
+              </div>
+              {{/each}}
+            </div>
+          </section>
+          {{/if}}
+
+          {{#if MANAGERIAL_SKILLS.length}}
+          <section class="ht-section">
+            <div class="ht-section-header">
+              <div class="ht-section-header__icon ht-section-header__icon--teal">
+                <!-- <mat-icon>hexagon</mat-icon> -->
+                ⬡
+              </div>
+              <h2>Managerial Skills</h2>
+              <div class="ht-section-header__line"></div>
+            </div>
+            <div class="ht-soft-skills">
+              {{#each MANAGERIAL_SKILLS}}
+                {{#if name}}
+                  <span class="ht-soft-skill">{{ name }}</span>
+                {{/if}}
+              {{/each}}
+            </div>
+          </section>
+          {{/if}}
+
+          {{#if SOFT_SKILLS.length}}
+          <section class="ht-section">
+            <div class="ht-section-header">
+              <div class="ht-section-header__icon ht-section-header__icon--teal">
+                <!-- <mat-icon>hexagon</mat-icon> -->
+                ⬡
+              </div>
+              <h2>Soft Skills</h2>
+              <div class="ht-section-header__line"></div>
+            </div>
+            <div class="ht-soft-skills">
+              {{#each SOFT_SKILLS}}
+                {{#if name}}
+                  <span class="ht-soft-skill">{{ name }}</span>
+                {{/if}}
+              {{/each}}
+            </div>
+          </section>
+          {{/if}}
+
+          {{#if LANGUAGES.length}}
+          <section class="ht-section">
+            <div class="ht-section-header">
+              <div class="ht-section-header__icon ht-section-header__icon--teal">
+                <!-- <mat-icon>translate</mat-icon> -->
+                🌍
+              </div>
+              <h2>Languages</h2>
+              <div class="ht-section-header__line"></div>
+            </div>
+
+            <div class="ht-lang-list">
+              {{#each LANGUAGES}}
+              <div class="ht-lang">
+                <div class="ht-lang__header">
+                  {{#if name}}
+                    <span class="ht-lang__name">{{name}}</span>
+                  {{/if}}
+                  {{#if level}}
+                    <span class="ht-lang__level">{{level}}</span>
+                  {{/if}}
+                </div>
+                <div class="ht-lang__track">
+                  <div class="ht-lang__fill" style="width: {{barWidth}}%;"></div>
+                </div>
+              </div>
+              {{/each}}
+            </div>
+          </section>
+          {{/if}}
+
+        </div>
+      </div>
+
+    </main>
+
+    <!-- <div class="ht-bottom-bar"></div> -->
+  </div>
+</body>
+</html>

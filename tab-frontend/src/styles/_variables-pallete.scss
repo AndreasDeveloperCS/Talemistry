@@ -1,0 +1,209 @@
+$bg1: #003b5c;
+$bg2: #001524;
+$bg3: rgb(20, 52, 73);
+$bg4: #247c7c;
+$text: #00fafb;
+$action: #F66411;
+
+// Primary 
+$color-accent: #00a1a1;
+$color-active: #037F8C;
+$color-hover: #04D9D9;
+
+// Secondary 
+$color-secondary: #d65e1d;
+$color-secondary-hover: #e25a00;
+$color-secondary-active: #a33900;
+
+$teal-17-5024-TCX: #0F7D7A;
+$teal-17-4018-TPX: #445E79;
+$teal-17-4914-TCX: #25545C;
+$teal-19-4922-TPX: #0B6563;
+$teal: #008080;
+
+$blue-19-4050-TPX: #1A4C8B;
+
+$blue1: #d1dbe4;
+$blue2: #a3b7ca;
+$blue3: #7593af;
+$blue4: #476f95;
+$blue5: #194a7a;
+$blue6: #004554;
+
+$alternative-color-0: #064066;
+$alternative-color-1: #004664;
+$alternative-color-2: #009288;
+$alternative-color-3: #FF6900;
+$alternative-color-4: #BCD500;
+$alternative-color-5: #00588D;
+$alternative-color-7: #335366;
+$alternative-color-8: #305470;
+$alternative-color-9: #236B5C;
+$alternative-color-10: #E66400;
+$alternative-color-11: #1E4E71;
+$alternative-color-12: #164E7F;
+
+$pallete-0-color-1: #003D54;
+$pallete-0-color-2: #023859;
+$pallete-0-color-3: #011826;
+$pallete-0-color-4: #037F8C;
+$pallete-0-color-5: #04D9D9;
+$pallete-0-color-6: #33B0B5;
+$pallete-0-color-7: #35747E;
+$pallete-0-color-8: #112c3d;
+$pallete-0-color-9: #1D3A4B;
+$pallete-0-color-10: #2B4A5D;
+$pallete-0-color-11: #00fafb;
+$pallete-0-color-12: #008C94;
+$pallete-0-color-13: #f97316;
+$pallete-0-color-14: #ff8d23; // #F66411;
+$pallete-0-color-15: #f27916;
+$pallete-0-color-16: #b0b0b0;
+$pallete-0-color-17: #ffffff33;
+$pallete-0-color-18: #081E2B;
+$pallete-0-color-19: #081E2B;
+$pallete-0-color-20: #ffffff0d;
+$pallete-0-color-21: #ef4444;
+$pallete-0-color-22: #ffffff14;
+$pallete-0-color-23: #1f2937;
+$pallete-0-color-24: #003b5c;
+$pallete-0-color-25: #143449;
+$pallete-0-color-26: #0d293e;
+$pallete-0-color-27: #08E8DE;
+$pallete-0-color-28: #10244b;
+$pallete-0-color-29: #00e676;
+$pallete-0-color-30: #1a4f6b;
+$pallete-0-color-31: #247c7c;
+$pallete-0-color-32: #02243c;
+
+$pallete-1-color-1: #662400;
+$pallete-1-color-2: #B33F00;
+$pallete-1-color-3: #FF6B1A;
+$pallete-1-color-4: #006663;
+$pallete-1-color-5: #00B3AD;
+
+$pallete-2-color-1: #012E40;
+$pallete-2-color-2: #024959;
+$pallete-2-color-3: #026773;
+$pallete-2-color-4: #3CA6A6;
+$pallete-2-color-5: #F2E3D5;
+
+$pallete-3-color-1: #011826;
+$pallete-3-color-2: #093040;
+$pallete-3-color-3: #F2DFBB;
+$pallete-3-color-4: #F2DFBB;
+$pallete-3-color-5: #BF9B6F;
+
+$pallete-4-color-1: #003840;
+$pallete-4-color-2: #005A5B;
+$pallete-4-color-3: #007369;
+$pallete-4-color-4: #008C72;
+$pallete-4-color-5: #02A676;
+
+$gradient-color-1: #001221;
+$gradient-color-2: #004258;
+$gradient-color-3: #01415F;
+$gradient-color-4: #003048;
+$gradient-color-5: #014553;
+$gradient-color-6: #1E5A69;
+$gradient-color-7: #FFFFFF;
+
+$gradient-1-color-1: #d1dbe4;
+$gradient-1-color-2: #a3b7ca;
+$gradient-1-color-2: #7593af;
+$gradient-1-color-4: #476f95;
+$gradient-1-color-5: #194a7a;
+
+$color-gradient-main-1: linear-gradient($gradient-color-1,
+                $gradient-color-2,
+                $gradient-color-3,
+                $gradient-color-4,
+                $gradient-color-5,
+                $gradient-color-6,
+                $gradient-color-7 100%);
+
+//Primary Colors (Trust & Professionalism)
+$color-gradient-trust-1: linear-gradient(#007BFF, #0056b3, #003d80);
+$color-gradient-trust-2: linear-gradient(#008080, #20B2AA);
+$color-gradient-trust-3: linear-gradient(#333333, #444444);
+
+//Blue (#007BFF, #0056b3, #003d80) – The most trusted color in tech and business; symbolizes trust, reliability, and expertise.
+//Teal (#008080, #20B2AA) – A modern and fresh color, conveying balance, clarity, and efficiency.
+//Dark Gray (#333333, #444444) – Used for typography and contrast, adding a sophisticated and tech-savvy look.
+
+//Accent Colors (Call-to-Action & Engagement)
+$color-gradient-accent-1: linear-gradient(#28A745, #20C20E); //Signals success, growth, and reliability; great for CTA buttons.
+$color-gradient-accent-2: linear-gradient(#FF8C00, #E65100); //Encourages action and stands out against blue without being aggressive.
+$color-gradient-accent-3: linear-gradient(#6A0DAD, #8A2BE2); //Represents innovation and creativity, often used in AI and high-tech branding. 
+
+$menu-background-color: #3f51b5;
+$primary: #00145abf;
+$primary-half: rgba(0, 20, 90, 0.5);
+$primaryOne: #006F8F;
+$primaryTwo: #15429B;
+$primaryThree: #28AFB0;
+$primary-dark: rgba(#000D3D, (1.0));
+$nav-active: rgba(40, 175, 176, 1);
+$secondary: #ACCCF9;
+$active-text: white;
+$text-field-color: #022c47;
+$active-text-half: rgba(255, 255, 255, 0.1);
+$dark-text: #161515;
+
+$text-input-color: rgb(180, 180, 180);
+
+$disabled-button-bg: rgb(94, 94, 94);
+$disabled-button-color: rgb(240, 240, 255);
+$switcher-approved: rgb(240, 240, 255);
+$switcher-not-approved: rgb(240, 240, 255);
+$alternative-background: #161515;
+$attentionColor: rgb(255, 120, 120);
+$successfulColor: rgb(0, 150, 0);
+
+$primary-hover :#006F8F;
+$primary-text-color: rgb(64, 227, 228, 90);
+$tags-text-color: #3bd3d4;
+
+$menu-item-color: rgb(0, 0, 6);
+$hover-border-color: rgb(64, 255, 228, 100);
+$border-color: white;
+
+$slider-background-color: rgb(180, 180, 180);
+
+$primary-border-color: rgb(64, 227, 228, 90);
+$secondary-border-color: rgba(237, 237, 237, 1);
+$aqua-border-color: #3bd3d4;
+$hover-border-color: rgb(64, 255, 228, 100);
+$table-dark-border-color: rgba(85, 90, 223, 0.20);
+$table-light-border-color: rgb(180, 180, 180);
+
+$active-border-color: #03ffc8; //linear-gradient(to right, #26D0CE, #8191e8);
+$disabled-border-color: rgb(154, 156, 156);
+
+$primary-background-color: rgb(0, 9, 35);
+$primary-semitransparentbackground-color: rgba(0, 9, 35, 0.75);
+$hover-background-color: rgb(4, 20, 144, 0.25);
+$active-background-color: rgb(38, 62, 245, 0.35);
+$disabled-background-color: rgb(44, 45, 60);
+
+$alternative-background: radial-gradient($primary-dark 0%, $primaryTwo 55%, $primary-dark 100%);
+$secondary-background: radial-gradient($primary-dark, $primary, $primary-dark);
+$main-background-image: linear-gradient(45deg, $active-text 0%, $secondary 50%, $primaryOne 65%, $primaryTwo 80%, $primary-dark 100%);
+$misterious-background-image: radial-gradient($primary, $primary-dark);
+$main-button-gradient: linear-gradient(225deg, #28AFB0 0%, #186582 52.1%, #0A2158 100%);
+
+$background-dark-main: #0B1C2E;
+$hover-elements-highlight-background: rgba(210, 245, 250, 0.35);
+$elements-highlight-background: rgba(240, 240, 240, 0.1);
+$input-hover: rgba(0, 20, 90, 0.2);
+$background-editor-menu: #0B1C2E;
+
+$main-dark-background: rgba(26, 28, 40, 1);
+$main-dark-background-start: rgba(26, 28, 40, 1);
+$main-dark-background-end: rgb(10, 15, 46);
+$blue-light-background: rgba(113, 169, 247, 1);
+$secondary-dark-background: rgba(38, 40, 77);
+$form-background: #001524; // #FFFFFF; // #22254f;
+$form-border: #caeaff; // #064066; // #22254f;
+
+$input-value-background: linear-gradient(51.06deg, #9358F7 0.87%, #7B78F2 25.96%, #6197EE 49.23%, #45B5E9 74.93%, #10D7E2 97.48%);

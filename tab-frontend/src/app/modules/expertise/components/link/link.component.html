@@ -1,0 +1,28 @@
+
+<form class="" [formGroup]="userSocialMediaForm" (ngSubmit)="onSave()">
+  <mat-form-field>
+    <mat-select formControlName="name" placeholder="Social Media" class="transparent-input-full-width">
+      @for (socialMedia of socialMediaList; track socialMedia) {
+        <mat-option [value]="socialMedia">
+          <img [src]="socialMedia.icon" width="20" height="20" alt="{{socialMedia.name}}">
+          {{ socialMedia.name }}
+        </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput formControlName="link" placeholder="Link" />
+  </mat-form-field>
+
+  <mat-button (click)="remove()">
+    <!-- <app-delete-icon></app-delete-icon> -->
+     <mat-icon>delete_sweep</mat-icon>
+  </mat-button>
+
+</form>
+
+
+
+
+

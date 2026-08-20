@@ -1,0 +1,30 @@
+@use 'variables' as *;
+
+.mat-datepicker-content .mat-calendar {
+  background-color: $form-background !important;
+  opacity: 1;
+  color: var(--text);
+  height: 100% !important;
+}
+
+ .mat-calendar-next-button,
+ .mat-calendar-previous-button {
+  color: $active-text !important;
+}
+
+ .mat-calendar-arrow {
+  color: $active-text !important;
+}
+
+ .mat-datepicker-content .mat-calendar .mat-calendar-body-selected {
+  background-color: $primaryOne;
+}
+
+
+
+// new
+
+::ng-deep .mat-calendar-body-label,
+::ng-deep .mat-calendar-body-cell-content {
+  color: $active-text !important;
+}

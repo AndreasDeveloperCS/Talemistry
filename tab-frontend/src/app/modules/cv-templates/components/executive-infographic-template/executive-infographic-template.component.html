@@ -1,0 +1,275 @@
+<div class="ei-wrapper">
+  <header class="ei-header">
+    <div class="ei-header__inner">
+      <div class="ei-header__profile">
+        <div class="ei-header__photo">
+          <img
+            *ngIf="data.user?.photo"
+            [src]="data.user?.photo"
+            [alt]="data.user.fullName"
+          />
+          <span *ngIf="!data.user.photo" class="ei-header__initials">
+            {{ data.user.firstname[0] }}{{ data.user.lastname[0] }}
+          </span>
+        </div>
+
+        <div class="ei-header__info">
+          <h1 class="ei-header__name">{{ data.user.firstname }} {{ data.user.lastname }}</h1>
+          <p class="ei-header__title">{{ data.targetPosition }}</p>
+          <div class="ei-header__contacts">
+            <div class="ei-header__contact-item">
+              <mat-icon>email</mat-icon>
+              <span>{{ data.user.email }}</span>
+            </div>
+            <div class="ei-header__contact-item" *ngIf="data.user.phone">
+              <mat-icon>phone</mat-icon>
+              <span>{{ data.user.phone }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="ei-metrics">
+    <div class="ei-metrics__card">
+      <div class="ei-metrics__icon">
+        <mat-icon>work</mat-icon>
+      </div>
+      <div class="ei-metrics__content">
+        <div class="ei-metrics__value">{{ yearsExperience }}+</div>
+        <div class="ei-metrics__label">Years Experience</div>
+      </div>
+    </div>
+    <div class="ei-metrics__card">
+      <div class="ei-metrics__icon">
+        <mat-icon>gps_fixed</mat-icon>
+      </div>
+      <div class="ei-metrics__content">
+        <div class="ei-metrics__value">{{ data.hardSkills.length }}</div>
+        <div class="ei-metrics__label">Technical Skills</div>
+      </div>
+    </div>
+    <div class="ei-metrics__card">
+      <div class="ei-metrics__icon">
+        <mat-icon>trending_up</mat-icon>
+      </div>
+      <div class="ei-metrics__content">
+        <div class="ei-metrics__value">{{ totalAchievements }}</div>
+        <div class="ei-metrics__label">Key Achievements</div>
+      </div>
+    </div>
+    <div class="ei-metrics__card">
+      <div class="ei-metrics__icon">
+        <mat-icon>verified</mat-icon>
+      </div>
+      <div class="ei-metrics__content">
+        <div class="ei-metrics__value">{{ data.certification.length }}</div>
+        <div class="ei-metrics__label">Certifications</div>
+      </div>
+    </div>
+  </div>
+
+  <main class="ei-main">
+    <div class="ei-card" *ngIf="data.objective">
+      <div class="ei-section-label">
+        <div class="ei-section-label__icon ei-section-label__icon--teal">
+          <mat-icon>track_changes</mat-icon>
+        </div>
+        <h2 class="ei-section-label__text">Career Objective</h2>
+      </div>
+      <p class="ei-objective-text">{{ data.objective }}</p>
+    </div>
+
+    <div class="ei-card">
+      <div class="ei-section-label">
+        <div class="ei-section-label__icon ei-section-label__icon--teal">
+          <mat-icon>description</mat-icon>
+        </div>
+        <h2 class="ei-section-label__text">Professional Summary</h2>
+      </div>
+      <p class="ei-summary-text">{{ data.summary }}</p>
+    </div>
+
+    <div class="ei-columns">
+      <div class="ei-columns__left">
+        <div class="ei-card" *ngIf="data.hardSkills?.length">
+          <div class="ei-section-header">
+            <mat-icon>gps_fixed</mat-icon>
+            <h2>Technical Skills</h2>
+          </div>
+          <div class="ei-skill-bar" *ngFor="let skill of data.hardSkills">
+            <div class="ei-skill-bar__header">
+              <span class="ei-skill-bar__name">{{ skill.skillName }}</span>
+              <span class="ei-skill-bar__level">{{ getSkillLabelFromNumeric(skill.proficiencyEstimation) }}</span>
+            </div>
+            <div class="ei-skill-bar__track">
+              <div
+                class="ei-skill-bar__fill"
+                [style.width.%]="getSkillPercentage(skill.proficiencyEstimation)"
+              ></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ei-card">
+          <div class="ei-section-header">
+            <mat-icon>star</mat-icon>
+            <h2>Domain Expertise</h2>
+          </div>
+          <div class="ei-domains">
+            <div class="ei-domain" *ngFor="let skill of data.domainSkills">
+              <div class="ei-domain__years">{{ getSkillLabelFromNumeric(skill.proficiencyEstimation) }}</div>
+              <div class="ei-domain__name">{{ skill.skillName }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ei-card" *ngIf="data.managerialSkills?.length">
+          <div class="ei-section-header">
+            <mat-icon>groups</mat-icon>
+            <h2>Managerial Skills</h2>
+          </div>
+          <div class="ei-tags">
+            <span class="ei-tag ei-tag--teal" *ngFor="let skill of data.managerialSkills">
+              {{ skill.skillName }}
+            </span>
+          </div>
+        </div>
+
+        <div class="ei-card" *ngIf="data.softSkills?.length">
+          <div class="ei-section-header">
+            <mat-icon>groups</mat-icon>
+            <h2>Soft Skills</h2>
+          </div>
+          <div class="ei-tags">
+            <span class="ei-tag ei-tag--teal" *ngFor="let skill of data.softSkills">
+              {{ skill.skillName }}
+            </span>
+          </div>
+        </div>
+
+        <div class="ei-card">
+          <div class="ei-section-header">
+            <mat-icon>language</mat-icon>
+            <h2>Languages</h2>
+          </div>
+          <div class="ei-languages">
+            <div class="ei-language" *ngFor="let lang of data.languagesSkills">
+              <div class="ei-language__circle">
+                <svg viewBox="0 0 80 80">
+                  <circle cx="40" cy="40" r="36" class="ei-language__track" />
+                  <circle
+                    cx="40" cy="40" r="36"
+                    class="ei-language__progress"
+                    [attr.stroke-dasharray]="getLanguageCircumference()"
+                    [attr.stroke-dashoffset]="getLanguageStrokeDashoffset(lang.proficiencyEstimation)"
+                  />
+                </svg>
+                <span class="ei-language__label-inner">
+                  {{ getLanguageProficiencyShort(lang.proficiencyEstimation) }}
+                </span>
+              </div>
+              <span class="ei-language__name">{{ lang.skillName }}</span>
+              <span class="ei-language__level">{{ getLanguageProficiency(lang.proficiencyEstimation) }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ei-columns__right">
+        <div class="ei-card">
+          <div class="ei-section-header">
+            <mat-icon>work</mat-icon>
+            <h2>Professional Experience</h2>
+          </div>
+          <div class="ei-experience-list">
+            <div
+              class="ei-experience"
+              *ngFor="let exp of data.operationalExperience; let i = index"
+              [class.ei-experience--bordered]="i !== 0"
+            >
+              <div class="ei-experience__header">
+                <div>
+                  <h3 class="ei-experience__title">{{ exp.jobTitle }}</h3>
+                  <p class="ei-experience__company">{{ exp.companyName }}</p>
+                </div>
+                <span
+                  class="ei-experience__date"
+                  [class.ei-experience__date--current]="isCurrent(exp)"
+                >
+                  {{ exp.startWorkDate | monthYearRange: exp.endWorkDate : exp.isCurrent }}
+                </span>
+              </div>
+              <div *ngIf="exp.resposiblities">
+                <p class="responsibilities-header">Responsibilities</p>
+                <ul class="ei-experience__responsibilities">
+                  <li *ngFor="let responsibility of splitTextLines(exp.resposiblities)">
+                    <mat-icon class="ei-responsibility-icon">star</mat-icon>
+                    <span>{{ responsibility }}</span>
+                  </li>
+                </ul>
+              </div>
+              <div *ngIf="exp.achievements">
+                <p class="achievements-header">Achievements</p>
+                <ul class="ei-experience__achievements">
+                  <li *ngFor="let achievement of splitTextLines(exp.achievements)">
+                    <mat-icon class="ei-achievement-icon">star</mat-icon>
+                    <span>{{ achievement }}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ei-card">
+          <div class="ei-section-header">
+            <mat-icon>school</mat-icon>
+            <h2>Education</h2>
+          </div>
+          <div class="ei-education-list">
+            <div
+              class="ei-education"
+              *ngFor="let edu of data.academicEducation; let i = index"
+              [class.ei-education--bordered]="i !== 0"
+            >
+              <div class="ei-education__icon">
+                <mat-icon>school</mat-icon>
+              </div>
+              <div class="ei-education__content">
+                <h4>{{ getEducationDegree(edu.academicEducationLevelType) }} in {{ edu.specialication }}</h4>
+                <p class="ei-education__institution">{{ edu.institutionName }}</p>
+                <p class="ei-education__dates">
+                  {{ formatDate(edu.startStudyDate) }} - {{ formatDate(edu.graduationDate) }}
+                </p>
+                <p class="ei-education__field" *ngIf="edu.fieldOfStudy">{{ edu.fieldOfStudy }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ei-card">
+          <div class="ei-section-header">
+            <mat-icon>verified</mat-icon>
+            <h2>Certifications</h2>
+          </div>
+          <div class="ei-certifications">
+            <div class="ei-certification" *ngFor="let cert of data.certification">
+              <div class="ei-certification__icon">
+                <mat-icon>verified</mat-icon>
+              </div>
+              <div>
+                <h4>{{ cert.skillName }}</h4>
+                <p>
+                  {{ cert.certificationCenter }} |
+                  <span class="ei-certification__date">{{ formatDate(cert.certificationDate) }}</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

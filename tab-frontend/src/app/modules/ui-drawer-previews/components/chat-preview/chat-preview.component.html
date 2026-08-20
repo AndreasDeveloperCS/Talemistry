@@ -1,0 +1,82 @@
+@if(isLoading) {
+  <app-sun-spinner></app-sun-spinner>
+}
+@if(!isLoading) {
+<div class="chat-preview">
+  <div class="chat-header">
+    <div class="candidate-section clickable" (click)="openCandidate(contactId)">
+      <div class="avatar">
+        <img *ngIf="candidatePhotoUrl"
+            [src]="candidatePhotoUrl"
+            [alt]="candidateName"/>
+        <span *ngIf="!candidatePhotoUrl">{{ candidateName?.charAt(0) || 'C' }}</span>
+      </div>
+      <div class="candidate-info">
+        <div class="candidate-name">
+          {{ candidateName || 'Candidate' }}
+        </div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <div class="communication-icons">
+        <button type="button" class="icon-wrapper"
+            *ngFor="let communicationMean of communicationMeans"
+            [ngClass]="{ 'selected': selectedCommunicationMeans.includes(communicationMean) }"
+            (click)="toggleCommunicationMean(communicationMean)">
+            <img [src]="getIcon(communicationMean)" [alt]="communicationMean" class="icon" />
+        </button>
+      </div>
+      <button class="action-btn">
+        <mat-icon>videocam</mat-icon>
+      </button>
+    </div>
+  </div>
+  <div class="messages-container scrollbar-hidden" #messagesContainer (scroll)="onMessagesScroll()">
+    @if(isLoading || isLoadingMoreMessages) {
+      <app-sun-spinner></app-sun-spinner>
+    }
+    @if(!messages.length) {
+      <div class="no-messages">
+        No messages yet. Start the conversation!
+      </div>
+    } 
+    @if(messages.length) {
+      <ng-container *ngFor="let message of messages; let i = index">
+        <div class="date-separator" *ngIf="isNewDate(message, messages[i - 1])">
+          <span>{{ message.createdDate | date:'MMMM d, y' }}</span>
+        </div>
+        <div class="message-row" [ngClass]="{ 'own-message': message.senderId === userId }">
+          <div class="message-avatar"
+            *ngIf=" message.senderId !== userId && shouldShowAvatar(message, messages[i - 1])">
+            <img *ngIf="message.senderPhotoUrl"
+              [src]="message.senderPhotoUrl" [alt]="message.senderName"/>
+            <span *ngIf="!message.senderPhotoUrl">{{ message.senderName?.charAt(0) || 'C' }}</span>
+          </div>
+          <div class="message-avatar spacer"
+            *ngIf="message.senderId !== userId && !shouldShowAvatar(message, messages[i - 1])">
+          </div>
+
+          <div class="message-bubble">
+            <div class="message-content">{{ message.content }}</div>
+            <div class="message-footer">
+              <div class="message-time">{{ message.createdDate | date:'dd MMM, HH:mm' }}</div>
+              <div class="message-status" *ngIf="message.senderId === userId">
+                <mat-icon *ngIf="message.status?.readBy?.length">done_all</mat-icon>
+                <mat-icon *ngIf="!message.status?.readBy?.length">done</mat-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    }
+  </div>
+  <div class="chat-input-section">
+    <textarea rows="1" [(ngModel)]="messageText" placeholder="Type your message..."
+      class="message-input" (keydown.enter)="sendMessage($event)">
+    </textarea>
+    <button class="send-btn" (click)="sendMessage()" [disabled]="!messageText.trim()">
+      <mat-icon>send</mat-icon>
+    </button>
+  </div>
+</div>
+}

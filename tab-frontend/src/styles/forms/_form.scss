@@ -1,0 +1,56 @@
+@use 'variables' as *;
+
+.form {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  border-radius: $borderFormRadius;
+  background-color: $form-background;
+  padding: 2.5rem;
+  gap: $gap-middle;
+  border: 2px solid $form-border;
+
+  &__flex {
+    display: flex;
+    gap: $gap-large;
+    padding-bottom: $padding-xxxl;
+
+    @media (max-width: $screen-size-netbook) {
+      flex-direction: column;
+      gap: $gap-middle;
+      //padding-bottom: $padding-s;
+    }
+  }
+
+  @media (max-width: $screen-size-tab) {
+    flex-direction: column;
+    //padding-bottom: $padding-s;
+  }
+}
+
+.recaptcha {
+  width: 304px;
+  height: 78px;
+  display: block;
+  position: relative;
+  text-align: center;
+  padding: $padding-s;
+  margin: $margin-narrow;
+}
+
+.wrapper-textarea {
+  max-width: $screen-size-netbook;
+  width: 100%;
+  display: flex;
+}
+
+.modal-form {
+  padding: var(--space-2xl);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}

@@ -1,0 +1,78 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.tab-settings {
+  width: 100%;
+  height: 90%;
+  @media (max-width: $screen-size-mobile) {
+    padding: $padding-s;
+  }
+  &__items{
+    width: 100%;
+    height: 100%;
+    @media (max-width: $screen-size-tab) {
+        height: auto;
+      }
+  }
+  &__full{
+    width: 100%;
+    align-items: baseline;
+  }
+}
+
+.toolbar-buttons {
+  display: flex;
+  gap: 10px; 
+  align-items: center;
+}  
+
+.container-of-editors {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  height: 100%;
+  gap: 20px;
+  overflow-x: auto; 
+  position: relative;
+  width: 100%;
+}
+
+.edit-buttons {
+  z-index: 1000;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  align-items: center;
+  border-radius: 50%;
+  opacity: 0.8;
+}
+
+.menu-button {
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.menu-button:hover,
+.menu-button:active:focus,
+.menu-button:active {
+  border: 1px solid $active-text;
+  opacity: 1;
+}
+
+.disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}

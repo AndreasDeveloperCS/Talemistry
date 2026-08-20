@@ -1,0 +1,374 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+
+.booking-request {
+  overflow-y: hidden;
+  display: flex;
+  width: 97%;
+  flex-grow: 1;
+
+  .booking-request__header {
+    color: var(--text);
+    font-size: $font-size-header-middle;
+    padding: $padding-narrow $padding-middle;
+    gap: $gap-micro;
+    align-items: center;
+    font-weight: bold;
+    display: flex;
+    width: 100%;
+    background-color: $pallete-0-color-13;
+    border-radius: $borderRadiusMiddle $borderRadius;
+
+    border-bottom: 1px solid #ddd;
+    flex-shrink: 0;
+    overflow-y: hidden;
+  }
+
+  .booking-request__platforms {
+    justify-content: space-between;
+    padding: $padding-extra-wide 0;
+    align-items: center;
+    display: flex;
+
+    @media(max-width: $screen-size-tab) {
+      flex-direction: column;
+      gap: $gap-narrow;
+    }
+  }
+
+  .booking-request__height {
+    overflow-y: auto;
+    width: 100%;
+    position: relative;
+    padding: $padding-middle;
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: 69vh;
+  }
+
+  .booking-request__time-info {
+    margin-bottom: $margin-middle;
+    margin-top: $margin-middle;
+    width: 100%;
+  }
+
+  .booking-request__time-item {
+    align-items: center;
+    background-color: transparent;
+    box-shadow: var(--box-shadow-light);
+    border: none;
+    border-radius: $borderRadiusMiddle;
+    display: flex;
+    flex-direction: row;
+    font-size: $font-size-header-narrow;
+    gap: $gap-small;
+    padding: $padding-narrow;
+    width: fit-content;
+
+    mat-icon {
+      color: var(--accent-text);
+    }
+  }
+
+  .booking-request__form {
+    padding: $padding-narrow;
+    gap: $gap-small;
+    width: 100%;
+    align-items: center;
+  }
+
+  .booking-request__fields {
+    align-items: center;
+    display: flex;
+    gap: $gap-small;
+    width: 100%;
+
+    @media (max-width: $screen-size-tab) {
+      flex-direction: column;
+
+      mat-form-field {
+        margin-bottom: -2rem !important;
+      }
+    }
+  }
+
+  .booking-request__items {
+    display: flex;
+    flex-direction: column;
+
+    @media (max-width: $screen-size-mobile) {
+      gap: $gap-small;
+    }
+  }
+
+  .booking-request__wrapper-logo {
+    align-items: center;
+    text-align: center;
+    width: 100%;
+  }
+
+  .booking-request__item {
+    font-size: $font-size-paragraph;
+    width: 100%;
+    gap: $gap-middle;
+    display: flex;
+    flex-direction: row;
+
+    @media (max-width: $screen-size-mobile) {
+      flex-direction: column;
+    }
+  }
+
+  .booking-request__label {
+    font-size: $font-size-paragraph;
+    white-space: nowrap;
+  }
+
+  .booking-request__link {
+    font-size: $font-size-paragraph;
+    text-align: right;
+    width: 100%;
+  }
+
+  .booking-request__item a img {
+    @media (max-width: $screen-size-mobile) {
+      width: $button-small-height;
+      height: $button-small-height;
+    }
+  }
+
+  .booking-request__panel-content {
+    &::after {
+      content: '';
+      display: block;
+      width: 0.5rem;
+      visibility: hidden;
+    }
+
+    &:has(.primary-icon) {
+      &::after {
+        display: none;
+      }
+    }
+  }
+
+  .booking-request__logo {
+    border-radius: 50%;
+  }
+
+}
+
+.input__background__primary {
+  background-color: $form-background !important;
+  color: $active-text !important;
+}
+
+.collapsed-button mat-icon {
+  font-size: 38px;
+}
+
+.custom-border-pseudo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  font-weight: $font-textarea-weight;
+  padding-left: $padding-narrow;
+  font-size: $font-size-header-middle;
+  color: $active-text !important;
+  gap: $gap-small;
+
+  mat-icon {
+    font-size: 30px;
+    width: fit-content;
+    height: 100%;
+  }
+}
+
+.expansion-panel,
+.platform-select {
+  border-radius: $borderRadiusMiddle $borderRadius !important;
+  width: 97%;
+  margin: 1rem auto;
+  box-shadow: var(--box-shadow-light) !important;
+  min-width: 410px;
+}
+
+.expansion-panel mat-expansion-panel-header {
+  background-color: $pallete-0-color-13;
+}
+
+.platform-select {
+  height: fit-content;
+  margin-top: $margin-middle;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+
+  mat-icon {
+    color: var(--text);
+    font-size: $font-size-quote;
+    min-width: fit-content;
+    height: 100%;
+  }
+
+  @media(max-width: $screen-size-mobile) {
+    flex-direction: column;
+  }
+}
+
+.new-label {
+  padding-left: 0;
+}
+
+.link {
+  padding: $padding-narrow;
+
+  @media (max-width: $screen-size-mobile) {
+    width: 70%;
+  }
+}
+
+.link-block {
+  @media (max-width: $screen-size-mobile) {
+    width: 100%;
+  }
+}
+
+.platform-button {
+  display: inline-block;
+  padding: $padding-semi-small;
+  border: $border-narrow solid $pallete-0-color-11;
+  border-radius: $borderRadiusMiddle $borderRadius;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  opacity: 0.8;
+
+  &:active {
+    transform: scale(0.8);
+  }
+
+  &:hover {
+    border-color: var(--accent-text);
+    scale: 1.1;
+  }
+
+  &.platform-button--active {
+    border: $border-narrow solid $pallete-0-color-13;
+    border: 2px solid $color-accent;
+    background-color: rgba($color-accent, 0.1);
+    filter: brightness(1.2);
+    box-shadow: 0 0 12px rgba($color-accent, 0.5);
+    transform: scale(1.05);
+  }
+
+  img {
+    transition: transform 0.8s ease;
+  }
+
+  &:active img {
+    transform: scale(0.8);
+  }
+}
+
+.meeting-topic {
+  width: 98%;
+  margin: 1rem auto;
+  box-shadow: var(--box-shadow-light);
+  border-radius: $borderRadiusMiddle $borderRadius;
+
+  &__header {
+    color: var(--text);
+    font-size: $font-size-header-middle;
+    gap: $gap-micro;
+    align-items: center;
+    font-weight: bold;
+    padding: $padding-middle;
+    display: flex;
+    background-color: $pallete-0-color-13;
+    border-radius: $borderRadiusMiddle $borderRadius;
+  }
+
+  &__fields {
+    padding: $padding-middle;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  min-height: fit-content;
+  justify-content: center;
+  padding: 0.5rem;
+  border: none;
+  background: transparent;
+  color: $blue5;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    filter 0.2s ease,
+    box-shadow 0.2s ease,
+    border 0.2s ease;
+  border-radius: 0.75rem;
+  outline: none;
+
+  &:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba($color-hover, 0.4);
+    filter: brightness(1.1);
+  }
+
+  &:active {
+    transform: scale(0.95);
+    box-shadow: 0 0 6px rgba($color-active, 0.4);
+    filter: brightness(0.9);
+  }
+
+  &:focus-visible {
+    outline: 2px dashed $color-accent;
+    outline-offset: 4px;
+  }
+
+  &.icon-button--active {
+    border: $border-narrow solid $pallete-0-color-13;
+    border: 2px solid $color-accent;
+    background-color: rgba($color-accent, 0.1);
+    filter: brightness(1.2);
+    box-shadow: 0 0 12px rgba($color-accent, 0.5);
+    transform: scale(1.05);
+  }
+
+  // Selected state class
+  &.selected {
+    border: 2px solid $color-accent;
+    background-color: rgba($color-accent, 0.1);
+    filter: brightness(1.2);
+    box-shadow: 0 0 12px rgba($color-accent, 0.5);
+    transform: scale(1.05);
+  }
+
+  // Optional secondary variant
+  &.secondary {
+    color: $color-secondary;
+
+    &:hover {
+      box-shadow: 0 0 10px rgba($color-secondary-hover, 0.4);
+      color: $color-secondary-hover;
+    }
+
+    &:active {
+      color: $color-secondary-active;
+      box-shadow: 0 0 6px rgba($color-secondary-active, 0.4);
+    }
+
+    &.selected {
+      border: 2px solid $color-secondary;
+      background-color: rgba($color-secondary, 0.1);
+      filter: brightness(1.15);
+    }
+  }
+}

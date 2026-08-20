@@ -1,0 +1,40 @@
+<h5>{{ content.titleRoles }}</h5>
+<div class="container__align">
+  <button class="button__primary-color button--micro" (click)="add(selectedItem.code)">
+    <mat-icon>add</mat-icon>
+  </button>
+  <mat-select class="container__full-width width-definition" [(ngModel)]="selectedItem"
+    (selectionChange)="select($event.value)" (click)="populateCollection()">
+
+    <mat-select-trigger>
+      <div class="container__flex container__baseline ">
+        <span>{{ selectedItem.description }}</span>
+      </div>
+    </mat-select-trigger>
+
+    <input class="dropdown-filter container__full-width" placeholder="Filter..." [formControl]="filterControl"
+      (keyup)="applyLocalFilter()" (selectionChange)="applyLocalFilter()" />
+
+    <div (scroll)="onScroll($event)" class="drop-down-list-scroll">
+      @for (option of collection; track option) {
+      <mat-option [value]="option">
+        {{ option.description || option }}
+      </mat-option>
+      }
+    </div>
+
+  </mat-select>
+
+</div>
+
+<div class="input-group__items">
+  @for (item of rolesList; track item) {
+  <div class="input-group__item orange-back">
+    <button (click)="remove(item)" inline="true">
+      <!-- <app-delete-icon></app-delete-icon> -->
+      <mat-icon>delete_sweep</mat-icon>
+    </button>
+    <span>{{getValue(item)}}</span>
+  </div>
+  }
+</div>

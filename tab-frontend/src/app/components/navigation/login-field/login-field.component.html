@@ -1,0 +1,17 @@
+@if (isLoggedIn$ | async) {
+  @if (imgSrc) {
+    <button auth-btn (click)="openProfilePage()" #authIcon>
+      <img class="profile-photo" [src]="imgSrc | sanitizerUrl" alt="profile photo" />
+    </button>
+  }
+  @else {
+    <button auth-btn (click)="openProfilePage()" #authIcon>
+      <mat-icon class="login-glow" auth-mat-icon>account_circle</mat-icon>
+    </button>
+  }
+}
+@if (!(isLoggedIn$ | async)) {
+  <button auth-btn (click)="loginAction()">
+    <mat-icon class="login-glow" auth-mat-icon>account_circle</mat-icon>
+  </button>
+}

@@ -1,0 +1,70 @@
+<div class="position-card">
+  <div class="card-header">
+    @if(positionData.creationDate) {
+        <p>
+            <mat-icon>event</mat-icon>
+            {{ positionData.creationDate }}
+        </p>
+    }
+    @if(positionData.proficiencyLevel) {
+        <span class="single-tag">
+            <mat-icon class="custom-icon">bar_chart</mat-icon> 
+            {{ positionData.proficiencyLevel }}
+        </span>
+    }
+  </div>
+  <div class="card-header">
+    <h3 (click)="navigateToPosition()">{{ positionData.positionTitle }}</h3>
+  </div>
+
+  <div class="tags">
+    @if(positionData.cooperationType) {
+      <span class="tag">
+        <mat-icon class="custom-icon">handshake</mat-icon>
+        {{ positionData.cooperationType }}
+      </span> 
+    }
+    @if(positionData.involvementType) {
+      <span class="tag">
+        <mat-icon class="custom-icon">how_to_reg</mat-icon>
+        {{ positionData.involvementType }}
+      </span>
+    }
+    @if(positionData.workPlace) {
+      <span class="tag">
+        <mat-icon class="custom-icon">work</mat-icon>
+        {{ positionData.workPlace }}
+      </span>
+    }
+    @if(positionData.jobType) {
+      <span class="tag">
+        <mat-icon class="custom-icon">schedule</mat-icon>
+        {{ positionData.jobType }}
+      </span>
+    }
+    @if(positionData.requiredEducation) {
+      <span class="tag">
+        <mat-icon class="custom-icon">school</mat-icon>
+        {{ positionData.requiredEducation }}
+      </span>
+    }
+    @if(positionData.requiredCertification) {
+      <span class="tag">
+        <mat-icon class="custom-icon">workspace_premium</mat-icon>
+        {{ positionData.requiredCertification }}
+      </span>
+    }
+    @if(positionData.specificRequirements) {
+      <span class="tag">
+        <mat-icon class="custom-icon">assignment_turned_in</mat-icon>
+        {{ positionData.specificRequirements }}
+      </span>
+    }
+    @if(positionData.compensationPackage) {
+      <span class="tag">
+        <mat-icon class="custom-icon">attach_money</mat-icon>
+        {{ positionData.compensationPackage }}
+      </span>
+    }
+  </div>
+</div>

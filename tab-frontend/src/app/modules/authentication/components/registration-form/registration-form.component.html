@@ -1,0 +1,97 @@
+<div class="register-wrapper">
+  <div class="register-card">
+    <h2>Create Your Account</h2>
+    <p class="subtitle">Join our AI-powered talent acquisition platform</p>
+
+    <div class="user-type-toggle">
+      <button [class.active]="activeTab === roles.TALENT" (click)="onChangeRole(roles.TALENT)">👤 I'm a Talent</button>
+      <button [class.active]="activeTab === roles.RC" (click)="onChangeRole(roles.RC)">🏢 I'm a Recruiter</button>
+    </div>
+
+    <form [formGroup]="signUpForm">
+      <div class="form-group">
+        <div class="form-item">
+          <label for="firstName">{{content.txtName}}</label>
+          <input id="firstName" autofocus type="text" [placeholder]="content.txtName"
+            [class]="signUpForm.controls.firstname?.invalid && signUpForm.controls.firstname?.touched ? 'invalid' : 'valid'"
+            name="firstname" formControlName="firstname" [(ngModel)]="signUpData.firstname" required />
+          @if (signUpForm.controls.firstname?.invalid
+          && (signUpForm.controls.firstname?.touched
+          || signUpForm.controls.firstname?.dirty)) {
+          <div class="errors">
+            @if (signUpForm.controls.firstname?.errors) {
+            <p>
+              {{content.txtFieldRequired}}
+            </p>
+            }
+          </div>
+          }
+        </div>
+
+        <div class="form-item">
+          <label for="lastName">{{content.txtSurname}}</label>
+          <input id="lastName" type="text" autofocus autocomplete="on" name="lastname" formControlName="lastname"
+            [class]="signUpForm.controls.lastname?.invalid && signUpForm.controls.lastname?.touched ? 'invalid' : 'valid'"
+            [placeholder]="content.txtSurname" [(ngModel)]="signUpData.lastname" required />
+          @if (signUpForm.controls.lastname?.invalid
+          && (signUpForm.controls.lastname?.touched
+          || signUpForm.controls.lastname?.dirty)) {
+          <div class="errors">
+            @if (signUpForm.controls.lastname?.errors) {
+            <p>{{content.txtFieldRequired}}</p>
+            }
+          </div>
+          }
+        </div>
+      </div>
+
+      <div class="form-item">
+        <label for="email">{{content.txtEmail}}</label>
+        <input id="email" autofocus autocomplete="on" type="email" name="email"
+          [class]="signUpForm.controls.email?.invalid && signUpForm.controls.email?.touched ? 'invalid' : 'valid'"
+          formControlName="email" [placeholder]="content.txtEmail" [(ngModel)]="signUpData.email" required />
+        @if (signUpForm.controls.email?.invalid
+        && (signUpForm.controls.email?.touched
+        || signUpForm.controls.email?.dirty)) {
+        <div class="errors">
+          @if (signUpForm.controls.email?.errors) {
+          <p>{{content.txtFieldRequired}}&nbsp;{{content.txtValidationEmailError}}</p>
+          }
+        </div>
+        }
+      </div>
+
+      <div class="form-item">
+        <label for="phone">{{content.txtPhone}}</label>
+        <input id="phone" type="tel" autofocus autocomplete="on" name="phone"
+          [class]="signUpForm.controls.phone?.invalid && signUpForm.controls.phone?.touched ? 'invalid' : 'valid'"
+          formControlName="phone" [placeholder]="content.txtPhone" [value]="signUpData.phone"
+          [(ngModel)]="signUpData.phone" required />
+        @if (signUpForm.controls.phone?.invalid
+        && (signUpForm.controls.phone?.touched
+        || signUpForm.controls.phone?.dirty)) {
+        <div class="errors">
+          @if (signUpForm.controls.phone?.errors) {
+          <p>{{content.txtFieldRequired }}&nbsp;{{content.txtValidationPhoneNumber }}</p>
+          }
+        </div>
+        }
+      </div>
+
+      <div class="recaptcha button-centralized">
+        <re-captcha id="recaptcha" name="recaptcha" [(ngModel)]="signUpData.recaptcha" [siteKey]="capchaKey"
+          formControlName="recaptcha" required class="button-centralized" [class.is-invalid]="signUpForm.controls.recaptcha?.invalid
+          && (signUpForm.controls.recaptcha?.dirty
+          || signUpForm.controls.recaptcha?.touched)">
+        </re-captcha>
+      </div>
+
+      <button type="submit" class="action-btn" (click)="signUp()" [disabled]="!signUpForm.valid">Sign Up</button>
+    </form>
+
+    <p class="footer-msg">
+      Already have an account?
+      <span (click)="onLogin()">Sign in</span>
+    </p>
+  </div>
+</div>

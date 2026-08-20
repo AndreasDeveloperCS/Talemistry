@@ -1,0 +1,151 @@
+<div class="cv-container">
+  <div class="cv-wrapper">
+    <header class="header">
+      <div class="header-left">
+        <img *ngIf="cvData.user.photo" [src]="cvData.user.photo"
+          [alt]="cvData.user.firstname + ' ' + cvData.user.lastname" class="profile-photo">
+        <div class="header-info">
+          <h1 class="name">
+            {{ cvData.user.firstname }} {{ cvData.user.lastname }}
+          </h1>
+          <p class="title">{{ cvData.targetPosition }}</p>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="contact-item">
+          <span class="contact-label">Email</span>
+          <span class="contact-value">{{ cvData.user.email }}</span>
+        </div>
+        <div class="contact-item">
+          <span class="contact-label">Phone</span>
+          <span class="contact-value">{{ cvData.user.phone }}</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="main-content">
+      <aside class="sidebar">
+        <section class="sidebar-section">
+          <h2 class="sidebar-title">Objective</h2>
+          <p class="sidebar-text">{{ cvData.objective }}</p>
+        </section>
+
+        <section class="sidebar-section">
+          <h2 class="sidebar-title">Summary</h2>
+          <p class="sidebar-text">{{ cvData.summary }}</p>
+        </section>
+
+        <section class="sidebar-section">
+          <h2 class="sidebar-title">Hard Skills</h2>
+          <div class="skills-list">
+            <span class="skill-tag skill-tag-colorful" *ngFor="let skill of cvData.hardSkills">{{ skill.skillName
+              }}</span>
+          </div>
+        </section>
+
+        <section class="sidebar-section">
+          <h2 class="sidebar-title">Domain Skills</h2>
+          <div class="skills-list">
+            <span class="skill-tag skill-tag-transparent" *ngFor="let skill of cvData.domainSkills">{{ skill.skillName
+              }}</span>
+          </div>
+        </section>
+        
+        <section class="sidebar-section">
+          <h2 class="sidebar-title">Managerial Skills</h2>
+          <ul class="simple-list">
+            <li *ngFor="let skill of cvData.managerialSkills">{{ skill.skillName }}</li>
+          </ul>
+        </section>
+
+        <section class="sidebar-section">
+          <h2 class="sidebar-title">Soft Skills</h2>
+          <div class="skills-list">
+            <span class="skill-tag skill-tag-transparent" *ngFor="let skill of cvData.softSkills">{{ skill.skillName
+              }}</span>
+          </div>
+        </section>
+
+        <section class="sidebar-section">
+          <h2 class="sidebar-title">Languages</h2>
+          <div class="languages-list">
+            <div class="language-item" *ngFor="let language of cvData.languagesSkills">
+              <span class="language-name">{{ language.skillName }}</span>
+              <span class="language-level">{{ cvDataTemplateService.getLanguageLevel(language.proficiencyEstimation)
+                }}</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="sidebar-section">
+          <h2 class="sidebar-title">Motivational Factors</h2>
+          <ul class="simple-list">
+            <li *ngFor="let motivation of cvData.preferences.motivationalFactors">{{ motivation.factor }}</li>
+          </ul>
+        </section>
+      </aside>
+
+      <main class="content">
+        <section class="content-section">
+          <h2 class="content-title">Professional Experience</h2>
+          <div class="timeline">
+            <div class="timeline-item" *ngFor="let exp of cvData.operationalExperience; let i = index">
+              <div class="timeline-marker"></div>
+              <div class="timeline-content">
+                <div class="timeline-header">
+                  <div>
+                    <h3 class="timeline-title">{{ exp.jobTitle }}</h3>
+                    <p class="timeline-subtitle">{{ exp.companyName }}</p>
+                  </div>
+                  <span class="timeline-period">{{ exp.startWorkDate | monthYearRange: exp.endWorkDate : exp.isCurrent }}</span>
+                </div>
+                <div *ngIf="exp.resposiblities">
+                  <p class="responsibilities-header">Responsibilities</p>
+                  <ul class="responsibilities-list">
+                    <li *ngFor="let resposiblity of splitTextLines(exp.resposiblities)">{{ resposiblity }}</li>
+                  </ul>
+                </div>
+                <div *ngIf="exp.achievements">
+                  <p class="achievements-header">Achievements</p>
+                  <ul class="achievements-list">
+                    <li *ngFor="let achievement of splitTextLines(exp.achievements)">{{ achievement }}</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="content-section">
+          <h2 class="content-title">Education</h2>
+          <div class="timeline">
+            <div class="timeline-item" *ngFor="let edu of cvData.academicEducation">
+              <div class="timeline-marker timeline-marker-education"></div>
+              <div class="timeline-content">
+                <div class="timeline-header">
+                  <div>
+                    <h3 class="timeline-title">{{ edu.academicEducationLevelType }}</h3>
+                    <p class="timeline-subtitle">{{ edu.institution.internationalName }}</p>
+                  </div>
+                  <span class="timeline-period">{{ edu.graduationDate | date: 'yyyy' }}</span>
+                </div>
+                <p class="timeline-description" *ngIf="edu.fieldOfStudy">{{ edu.fieldOfStudy }}</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="content-section">
+          <h2 class="content-title">Certifications</h2>
+          <div class="certifications-grid">
+            <div class="certification-card" *ngFor="let cert of cvData.certification">
+              <h3 class="certification-name">{{ cert.skillName }}</h3>
+              <p class="certification-issuer">{{ cert.certificationCenter }}</p>
+              <span class="certification-year">{{ cert.certificationDate | date: 'yyyy' }}</span>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+</div>

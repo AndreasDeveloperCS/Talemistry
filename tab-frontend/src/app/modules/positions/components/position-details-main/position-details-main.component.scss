@@ -1,0 +1,57 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.details {
+  overflow: auto;
+  height: 85%;
+  //padding-bottom: var(--space-4xl);
+  &__option {
+    color: var(--text);
+  }
+
+  &-items {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    height: 100%;
+    @media (max-width: $screen-size-mobile) {
+      max-height: 100%;
+    }
+  }
+
+  &-wrapper-column {
+    display: grid;
+    max-width: 100%;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
+    gap: $gap-narrow;
+    padding: $padding-narrow;
+
+    @media (max-width: $screen-size-tab) {
+      :nth-child(3) {
+        grid-column: 1 / -1;
+        grid-row: 2;
+      }
+    }
+
+    @media (max-width: $screen-size-mobile) {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
+  &__block-style {
+    border: 1px solid $hover-elements-highlight-background;;
+    padding: var(--space-sm);
+  }
+}
+
+
+
+app-position-details-benefits,
+app-position-details-location,
+app-position-details-company {
+  width: 100%;
+}
+
+.container__flex {
+  align-items: center !important;
+}

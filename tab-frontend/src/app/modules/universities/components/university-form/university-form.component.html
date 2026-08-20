@@ -1,0 +1,69 @@
+<div class="universal-input">
+
+    <button mat-icon-button class="close-button" (click)="onCancel()">
+      <mat-icon class>
+        <svg class="icon-close" width="24px" height="24px" viewBox="0 0 108 107"
+          fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M27 26.75L54 53.5L81 26.75" stroke="white" stroke-width="10"
+            stroke-linecap="round" />
+          <path d="M27 80.25L54 53.5L81 80.25" stroke="white" stroke-width="10"
+            stroke-linecap="round" />
+        </svg>
+      </mat-icon>
+    </button>
+  
+    <div class="university">
+  
+      <h2
+        class="padding-vertical-wide padding-horizontal-middle text-center">{{ content.txtUniversityForm }}</h2>
+  
+    <form [formGroup]="universityForm">
+
+      <div>
+        <mat-form-field>
+            <mat-label>{{content.name}}</mat-label>
+            <input matInput name="name" formControlName="name" placeholder="University Name: " />
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>{{content.alphaTwoCode}}</mat-label>
+            <input matInput name="alpha_two_code" formControlName="alpha_two_code" placeholder="Alpha Two Code: " />
+        </mat-form-field>
+
+        <!-- <app-position-details-location></app-position-details-location> -->
+        <mat-form-field>
+            <mat-label>{{content.country}}</mat-label>
+            <input matInput name="country" formControlName="country" placeholder="Country: " />
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>{{content.webPages}}</mat-label>
+            <input matInput name="web_pages" formControlName="web_pages" placeholder="Web Pages: " />
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>{{content.domains}}</mat-label>
+            <input matInput name="domains" formControlName="domains" placeholder="Domains: " />
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>{{content.stateProvince}}</mat-label>
+            <input matInput name="stateProvince" formControlName="stateProvince" placeholder="State/Province: " />
+        </mat-form-field>
+      </div>
+
+    </form>
+  
+      <div mat-dialog-actions [align]="'end'" class="container__center">
+        <button type="submit" (click)="onApply()" class="button__primary-color button--medium container__center">
+            {{ controlButtonContent }}
+        </button>
+      </div>
+  
+      @for (notification of notificationMessages; track notification) {
+      <div class="notification">
+        {{notification}}
+      </div>
+      }
+    </div>
+</div>

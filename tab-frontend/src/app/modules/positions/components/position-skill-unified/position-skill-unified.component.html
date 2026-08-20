@@ -1,0 +1,116 @@
+<mat-label class="new-label">{{ content.txtSkillName }}</mat-label>
+<div class="custom-toggle container__column_gap">
+  <div class="container__flex skill-block">
+    <div class="skill-input-block">
+      <mat-form-field>
+        <div class="input-group__field" style="justify-content: flex-start;">
+          <input type="text" class="transparent-input-full-width" [placeholder]="content.txtSkillName" 
+            matInput [(ngModel)]="rawInputlValue" [formControl]="inputControl" 
+            (input)="filterCollectionItems()" (click)="applyLocalFilter()"
+            (focus)="onAutocompleteOpened()" [matAutocomplete]="matAutocomplete">
+
+          <mat-autocomplete autoActiveFirstOption #matAutocomplete="matAutocomplete" (opened)="onAutocompleteOpened()">
+            <input class="input-group__dropdown transparent-input-full-width" [placeholder]='content.txtFilter' [formControl]="filterControl"
+              (keyup)="applyLocalFilter()" />
+
+            @for (option of collection; track option) {
+            <mat-option [value]="getValue(option)">
+              <div class="container__middle">
+                {{ getValue(option) }}
+              </div>
+            </mat-option>
+            }
+          </mat-autocomplete>
+        </div>
+      </mat-form-field>
+
+      <div class="wrapper-item proficiency-block container__space-between container__flex">
+        <div style="width: 100%;">
+          <mat-label class="new-label">{{content.txtType}}</mat-label>
+          <div class="proficiency-options">
+            <mat-select [(ngModel)]="skillTypeInputValue" class="transparent-select-full-width">
+              <div class="selected-filtered-skill">
+                @for (option of skillTypes; track option) {
+                <mat-option [value]="option">
+                  <div class="container__middle">
+                    {{option}}
+                  </div>
+                </mat-option>
+                }
+              </div>
+            </mat-select>
+          </div>
+        </div>
+        <div style="width: 100%;">
+          <mat-label class="new-label">{{content.txtSeniorityLevel}}</mat-label>
+          <div class="proficiency-options">
+            <mat-select [(ngModel)]="skillProficiencyInputValue" class="transparent-select-full-width">
+              <div class="selected-filtered-skill">
+                @for (option of proficiencyLevels; track option) {
+                <mat-option [value]="option">
+                  <div class="container__middle">
+                    {{option}}
+                  </div>
+                </mat-option>
+                }
+              </div>
+            </mat-select>
+          </div>
+        </div>
+        <div class="importance-block">
+          <mat-label class="new-label" style="margin-bottom: 1rem;">{{content.txtImportance}}</mat-label>
+          <mat-button-toggle-group matInput aria-label="Skill Importance" 
+            class="toggle-group" [(ngModel)]="skillImportanceInputValue">
+            @for (importance of SkillImportanceCollection; track importance) {
+            <mat-button-toggle [value]="importance">
+              <span>{{importance}}</span>
+            </mat-button-toggle>
+            }
+          </mat-button-toggle-group>
+        </div>
+      </div>
+    </div>
+    <button class="container__center add-skill-btn" (click)="add()">
+      <mat-icon>add</mat-icon>{{ content.txtAdd }}
+    </button>
+  </div>
+
+  <div class="skill-chip-list">
+    @for (item of positionsList; track item) {
+      <div class="skill-chip">
+
+        <div class="chip-content">
+
+          <span class="chip-icon">
+            <mat-icon>{{ getSkillTypeIcon(item.skillType) }}</mat-icon>
+          </span>
+
+          @if(item.proficiencyLevel) {
+          <span class="chip-text">
+            {{ getValue(item) }}
+            ({{ item.proficiencyLevel[0] | uppercase }})
+          </span>
+          }
+
+          <button class="chip-delete-btn" (click)="remove(item)">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+
+        <div class="chip-fill" [style.width.%]="getWeightedCoefficient(item.skillImportance)"></div>
+
+      </div>
+    }
+  </div>
+
+  @if(positionsList.length > 0) {
+    <div class="skill-legend">
+      @for (type of skillTypes; track type) {
+        <div class="legend-item">
+          <mat-icon>{{ getSkillTypeIcon(type) }}</mat-icon>
+          <span>{{ getFirstWord(type) }}</span>
+        </div>
+      }
+    </div>
+    }
+</div>

@@ -1,0 +1,41 @@
+<mat-label class="new-label">{{content.txtCompanyName}}</mat-label>
+@if(!selectedCompany.data.companyName) {
+<div class="container__nowrap">
+  <div class="container__full-width" [formGroup]="companyForm">
+    <mat-select class="container__full-width transparent-select-full-width" [(ngModel)]="selectedCompany"
+      (selectionChange)="select($event.value)" (click)="populateCollection()">
+
+      <mat-select-trigger>
+        <div class="container__left">
+          <span>{{ selectedCompany.data.companyName }}</span>
+        </div>
+      </mat-select-trigger>
+
+      <input class="dropdown-filter container__full-width" [placeholder]='content.txtFilter'
+        [formControl]="filterControl" (keyup)="applyLocalFilter()" (selectionChange)="applyLocalFilter()" />
+
+
+      <div class="input-group__dropdown" (scroll)="onScroll($event)">
+        @for (option of collection; track option) {
+        <mat-option [value]="option" class="container__middle">
+          {{option?.data?.companyName}}
+        </mat-option>
+        }
+      </div>
+
+    </mat-select>
+  </div>
+
+  <div class="container__center round-add-button outer-button" (click)="openAddNewCompany()"
+    matTooltip="Add new company">
+    <mat-icon>add</mat-icon>
+  </div>
+</div>
+} @else {
+<div class="selected-company">
+  <span>{{ selectedCompany.data.companyName }}</span>
+  <button (click)="deleteCompany()" inline="true">
+    <mat-icon>edit</mat-icon>
+  </button>
+</div>
+}

@@ -1,0 +1,532 @@
+@use 'variables' as *;
+$bg-gradient: linear-gradient(45deg, #C78A00, #D77400, #E76A00, #F66411);
+
+@mixin button-styles($bg-color, $text-color, $border-color) {
+  background: $bg-color;
+  color: $text-color;
+  padding: $padding-m;
+  border-radius: $borderRadius;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: $gap-small;
+  text-align: center;
+  border: 2px solid $border-color;
+  font-size: $font-button-md;
+  font-weight: $font-button-weight;
+  height: 3rem;
+  filter: drop-shadow(0px 12px 12px rgba(0, 20, 40, 0.5));
+
+  &:hover {
+    color: $active-text;
+    background-color: rgba(0, 9, 35, 0.9);
+    box-shadow: 0 5px 15px rgba(59, 211, 212, 0.4);
+    transform: scale(1.05);
+    filter: drop-shadow(0px 12px 12px rgba(0, 20, 40, 0.5));
+  }
+
+  &:active {
+    background-color: darken($primary-semitransparentbackground-color, 10%);
+    color: var(--secondary-evryka-verdigris, #3bd3d4);
+    transform: scale(0.98);
+  }
+
+  &:disabled {
+    background: $disabled-button-bg;
+    color: $active-text;
+    box-shadow: none;
+    border: 2px solid $disabled-button-bg;
+    transform: scale(1);
+  }
+}
+
+button {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.button {
+  &__centralized {
+    justify-self: center;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  &__primary-color {
+    @include button-styles($bg-gradient, //$primary-semitransparentbackground-color,
+      $active-text,
+      var(--secondary-evryka-verdigris, $aqua-border-color));
+  }
+
+  &__secondary-color {
+    @include button-styles($active-text,
+      $active-text,
+      var(--secondary-evryka-verdigris, $aqua-border-color));
+    background: radial-gradient(circle at center,
+        #28afb0 20%,
+        #186582 50%,
+        #0a2158 80%);
+    animation: gradientPulse 20s infinite ease-in-out;
+    transition: all 0.3s ease;
+    background-size: 200% 200%;
+  }
+
+  &--large {
+    width: 100%;
+    max-width: 23rem;
+  }
+
+  &--medium {
+    width: 100%;
+    max-width: 14rem;
+  }
+
+  &--small {
+    width: 100%;
+    max-width: 8rem;
+  }
+
+  &--absolute {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    position: sticky;
+    bottom: 25px;
+    z-index: 1000;
+    margin: auto;
+    margin-bottom: $margin-wide;
+  }
+}
+
+@keyframes gradientPulse {
+  0% {
+    background-position: 50% 50%;
+    filter: brightness(1);
+  }
+
+  25% {
+    background-position: 80% 20%;
+    filter: brightness(1.1);
+  }
+
+  50% {
+    background-position: 100% 100%;
+    filter: brightness(1.2);
+  }
+
+  75% {
+    background-position: 20% 80%;
+    filter: brightness(1.1);
+  }
+
+  100% {
+    background-position: 50% 50%;
+    filter: brightness(1);
+  }
+}
+
+.close-button {
+  z-index: 1000;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background: $main-button-gradient;
+  opacity: 0.7;
+
+  @media (max-width: $screen-size-mobile) {
+    top: 0px;
+    right: 0px;
+  }
+}
+
+.close-button:hover,
+.close-button:active:focus,
+.close-button:active {
+  border: 1px solid $active-text;
+  opacity: 1;
+}
+
+.close-button mat-icon svg {
+  scale: 1.2;
+}
+
+.back-button {
+  width: 2.8rem;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+
+  svg {
+    width: 45px;
+    height: 46px;
+  }
+}
+
+.add-button {
+  padding: $padding-s;
+  opacity: 0.75;
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  transition: all 0.3s;
+  scale: 2;
+
+  mat-icon {
+    color: $active-text;
+
+    &:hover {
+      scale: 2;
+      opacity: 1;
+      cursor: pointer;
+    }
+
+    &:active {
+      color: $color-active;
+    }
+  }
+
+  &:hover {
+    scale: 2;
+    opacity: 1;
+    color: $color-hover;
+    cursor: pointer;
+  }
+
+  &:active {
+    scale: 2;
+    opacity: 1;
+    color: $color-active;
+  }
+}
+
+.add-button-large {
+  scale: 2.5;
+
+  mat-icon {
+    color: $active-text;
+
+    &:hover {
+      scale: 3;
+      opacity: 1;
+      cursor: pointer;
+    }
+
+    &:active {
+      color: $color-active;
+    }
+  }
+
+  &:hover {
+    scale: 3;
+    opacity: 1;
+    color: $color-hover;
+    cursor: pointer;
+  }
+
+  &:active {
+    scale: 3;
+    opacity: 1;
+    color: $color-active;
+    cursor: pointer;
+  }
+}
+
+.toggle-visibility-btn {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  outline: none;
+
+  @media (max-width: $screen-size-mobile) {
+    bottom: 1px;
+  }
+
+  mat-icon {
+    font-size: 20px;
+    color: $primaryOne;
+  }
+
+  &:hover mat-icon {
+    color: $primaryOne;
+  }
+}
+
+.form-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: $padding-s $padding-sxm;
+  width: fit-content;
+  z-index: 1000;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: $borderRadiusMiddle $borderRadius !important;
+  gap: $gap-micro;
+  margin: 0;
+  min-height: fit-content;
+  min-width: fit-content;
+  font-size: 1.5rem;
+}
+
+.exit-button {
+  opacity: 0.8;
+  background-color: transparent;
+  border: 1px solid $pallete-0-color-6;
+  right: 15px;
+  top: 15px;
+  min-height: fit-content;
+  min-width: fit-content;
+
+  @media (max-width: $screen-size-mobile) {
+    top: 7px;
+    right: 7px;
+  }
+
+  mat-icon svg {
+    height: 1.5rem;
+    width: 1.5rem;
+  }
+}
+
+.next-step-button {
+  background: linear-gradient(45deg, #C78A00, #D77400, #E76A00, #F66411);
+  opacity: 1;
+  bottom: 2rem;
+  right: 2rem;
+  border: 1px solid $active-text;
+
+  @media (max-width: $screen-size-mobile) {
+    right: 0px;
+    bottom: 0px;
+  }
+}
+
+.previous-step-button {
+  border: 1px solid $pallete-0-color-6;
+  color: $pallete-0-color-6;
+  opacity: 0.8;
+  background-color: transparent;
+  bottom: 2rem;
+  left: 2rem;
+
+  @media (max-width: $screen-size-mobile) {
+    left: 0px;
+    bottom: 0px;
+  }
+}
+
+.next-step-button:not(:disabled):hover,
+.next-step-button:not(:disabled):active,
+.next-step-button:not(:disabled):focus,
+.previous-step-button:hover,
+.previous-step-button:active:focus,
+.previous-step-button:active,
+.exit-button:hover,
+.exit-button:active:focus,
+.exit-button:active {
+  color: $active-text;
+  opacity: 1;
+  scale: 1.2;
+}
+
+
+.button-group {
+  margin: $margin-middle auto;
+  padding: $padding-m auto;
+  display: flex;
+  justify-content: center;
+  gap: $gap-narrow;
+
+  button {
+    justify-content: center;
+    min-width: 8rem;
+    width: fit-content;
+    gap: $gap-micro;
+    flex-shrink: 0;
+  }
+}
+
+.primary-button,
+.secondary-button {
+  background-color: $pallete-0-color-14;
+  color: $active-text;
+  border: none;
+  padding: $padding-m;
+  font-size: $font-size-header-narrow;
+  border-radius: $borderRadiusMiddle;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transform: transition 0.2s ease;
+  width: fit-content;
+  height: fit-content;
+  gap: $gap-micro;
+
+  span {
+    white-space: nowrap;
+  }
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+
+  &:active {
+    transform: translateY(5px);
+  }
+}
+
+.secondary-button {
+  background-color: transparent;
+  border: $border solid $pallete-0-color-11;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  background: $pallete-0-color-14 !important;
+  opacity: 0.6;
+}
+
+.square-add-button {
+  cursor: pointer;
+  background-color: $pallete-0-color-14;
+  padding: 1rem;
+  margin: 0.5rem;
+  border-radius: 6px;
+  display: flex;
+  color: $active-text;
+  font-size: 1.5rem;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+.round-add-button {
+  margin-left: -3rem;
+  cursor: pointer;
+  background-color: $pallete-0-color-14;
+  padding: 0.3rem;
+  border-radius: 50%;
+  display: flex;
+  color: $active-text;
+  font-size: 1.5rem;
+  transition: transform .2s ease;
+}
+
+.btn-text-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $gap-micro;
+
+  mat-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    width: fit-content;
+    height: fit-content;
+    color: $active-text;
+  }
+}
+
+.btn-scale {
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(0.9);
+  }
+}
+
+.remove-btn {
+  mat-icon {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    font-size: 1.5rem;
+    color: $pallete-0-color-14;
+    margin-top: 0.2rem;
+
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
+}
+
+.transparent-button {
+  background-color: transparent !important;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  width: fit-content;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #f97316 0%, #F66411 100%);
+  color: white;
+
+  &:hover {
+    background: linear-gradient(135deg, #ea6a0f 0%, #e55a08 100%);
+  }
+}
+
+.btn-secondary {
+  background: transparent;
+  color: $active-text;
+  box-shadow: var(--box-shadow-light);
+
+  &:hover {
+    background: $pallete-0-color-12;
+  }
+}

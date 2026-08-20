@@ -1,0 +1,416 @@
+@use "sass:color";
+
+$bg-dark: #0d1a2a;
+$bg-card: #132234;
+$bg-card-hover: #1a2d42;
+$accent-orange: #f59e0b;
+$text-primary: #ffffff;
+$text-secondary: #94a3b8;
+$text-muted: #64748b;
+$border-color: #1e3a52;
+$success-color: #10b981;
+$error-color: #ef4444;
+$info-color: #3b82f6;
+
+.payment-methods-page {
+    min-height: 60vh;
+    padding: 2rem 1rem 3rem;
+    color: $text-primary;
+}
+
+.pm-container {
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.pm-header {
+    margin-bottom: 1.5rem;
+
+    h2 {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 0 0 0.25rem;
+
+        mat-icon {
+            color: $accent-orange;
+        }
+    }
+
+    p {
+        color: $text-secondary;
+        margin: 0;
+        font-size: 0.95rem;
+    }
+}
+
+.pm-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.25rem;
+    font-size: 0.9rem;
+
+    &.success {
+        background: rgba($success-color, 0.1);
+        border: 1px solid rgba($success-color, 0.25);
+        color: lighten($success-color, 12%);
+    }
+
+    &.error {
+        background: rgba($error-color, 0.1);
+        border: 1px solid rgba($error-color, 0.25);
+        color: lighten($error-color, 12%);
+    }
+
+    &.info {
+        background: rgba($info-color, 0.1);
+        border: 1px solid rgba($info-color, 0.25);
+        color: lighten($info-color, 12%);
+    }
+
+    mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+    }
+}
+
+.pm-subscription-info {
+    background: $bg-card;
+    border: 1px solid $border-color;
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+
+    &__row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.4rem 0;
+
+        &:not(:last-child) {
+            border-bottom: 1px solid rgba($border-color, 0.5);
+        }
+    }
+
+    &__label {
+        color: $text-secondary;
+        font-size: 0.85rem;
+    }
+}
+
+.pm-subscription-badge {
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    background: rgba($text-muted, 0.15);
+    color: $text-secondary;
+
+    &.active {
+        background: rgba($success-color, 0.15);
+        color: lighten($success-color, 10%);
+    }
+}
+
+// --- List ---
+
+.pm-list {
+    margin-bottom: 1.25rem;
+
+    &__empty {
+        text-align: center;
+        padding: 2rem 1rem;
+        color: $text-secondary;
+
+        mat-icon {
+            font-size: 48px;
+            width: 48px;
+            height: 48px;
+            color: $text-muted;
+            margin-bottom: 0.5rem;
+        }
+
+        p {
+            margin: 0.25rem 0;
+            font-size: 0.9rem;
+        }
+    }
+}
+
+.pm-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: $bg-card;
+    border: 1px solid $border-color;
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    transition: border-color 0.2s;
+
+    &:not(:last-child) {
+        margin-bottom: 0.75rem;
+    }
+
+    &--default {
+        border-color: rgba($accent-orange, 0.4);
+    }
+
+    &__icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        background: rgba($accent-orange, 0.1);
+        flex-shrink: 0;
+
+        mat-icon {
+            color: $accent-orange;
+        }
+    }
+
+    &__info {
+        flex: 1;
+        min-width: 0;
+
+        strong {
+            display: block;
+            font-size: 0.95rem;
+        }
+
+        small {
+            display: block;
+            color: $text-secondary;
+            font-size: 0.8rem;
+        }
+    }
+
+    &__default-badge {
+        display: inline-block;
+        margin-top: 0.25rem;
+        padding: 1px 8px;
+        border-radius: 10px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        background: rgba($accent-orange, 0.15);
+        color: lighten($accent-orange, 15%);
+    }
+
+    &__actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-shrink: 0;
+    }
+}
+
+// --- Buttons ---
+
+.pm-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1.1rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: background 0.15s, opacity 0.15s;
+    white-space: nowrap;
+
+    &:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+    }
+
+    mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+    }
+
+    &--primary {
+        background: $accent-orange;
+        color: #000;
+
+        &:hover:not(:disabled) {
+            background: lighten($accent-orange, 6%);
+        }
+    }
+
+    &--secondary {
+        background: rgba($text-secondary, 0.12);
+        color: $text-secondary;
+
+        &:hover:not(:disabled) {
+            background: rgba($text-secondary, 0.2);
+            color: $text-primary;
+        }
+    }
+
+    &--danger {
+        background: rgba($error-color, 0.1);
+        color: lighten($error-color, 10%);
+        padding: 0.5rem;
+
+        &:hover:not(:disabled) {
+            background: rgba($error-color, 0.2);
+        }
+    }
+}
+
+.pm-add-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+// --- Add Form ---
+
+.pm-add-form {
+    background: $bg-card;
+    border: 1px solid $border-color;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+
+    h3 {
+        margin: 0 0 1rem;
+        font-size: 1.1rem;
+    }
+}
+
+.pm-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+
+    @media (max-width: 560px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.pm-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+
+    span {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: $text-secondary;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+
+    &--wide {
+        grid-column: 1 / -1;
+    }
+
+    &--element .stripe-element-host {
+        min-height: 52px;
+        display: flex;
+        align-items: center;
+        padding: 0.95rem 1rem;
+        background: $bg-dark;
+        border: 1px solid $border-color;
+        border-radius: 8px;
+        transition: border-color 0.2s, box-shadow 0.2s;
+
+        &:focus-within {
+            border-color: $accent-orange;
+            box-shadow: 0 0 0 1px rgba($accent-orange, 0.25);
+        }
+    }
+}
+
+.pm-input {
+    width: 100%;
+    padding: 0.95rem 1rem;
+    background: $bg-dark;
+    border: 1px solid $border-color;
+    border-radius: 8px;
+    color: $text-primary;
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+
+    &::placeholder {
+        color: $text-secondary;
+    }
+
+    &:focus {
+        outline: none;
+        border-color: $accent-orange;
+        box-shadow: 0 0 0 1px rgba($accent-orange, 0.25);
+    }
+}
+
+.pm-inline-error {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 0.9rem;
+    margin-top: 0.75rem;
+    border-radius: 8px;
+    background: rgba($error-color, 0.08);
+    border: 1px solid rgba($error-color, 0.24);
+    color: lighten($error-color, 12%);
+    font-size: 0.875rem;
+
+    mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+    }
+}
+
+.pm-form-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+}
+
+.pm-note {
+    color: $text-secondary;
+    font-size: 0.85rem;
+    margin-top: 0.75rem;
+    line-height: 1.5;
+}
+
+// --- Quick Actions ---
+
+.pm-quick-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.pm-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: $text-muted;
+    font-size: 0.8rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba($border-color, 0.5);
+
+    mat-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+        color: $success-color;
+    }
+}

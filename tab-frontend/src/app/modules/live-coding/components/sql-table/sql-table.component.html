@@ -1,0 +1,71 @@
+<div class="sql-table">
+  <div class="table-header">
+    <button
+      class="collapse-button"
+      (click)="toggleCollapse()">
+      {{ isCollapsed ? '▶' : '▼' }}
+    </button>
+    <input class="table-name" [(ngModel)]="table.name"
+      (ngModelChange)="tableChange.emit(table)" />
+    <button class="delete-button" (click)="deleteTable()">
+      Delete Table
+    </button>
+  </div>
+  <div *ngIf="!isCollapsed">
+    <div class="columns-panel">
+      <div class="header-block">
+        <h5>Columns</h5>
+        <button class="action-button" (click)="addColumn()">
+          + Add Column
+        </button>
+      </div>
+      <div class="column-row" *ngFor="let column of table.columns">
+        <input class="column-name" [value]="column.name"
+          [disabled]="column.primaryKey && column.autoIncrement"
+          (change)="renameColumn(column.name, $any($event.target).value)" />
+        <select class="column-type" [(ngModel)]="column.type"
+          (ngModelChange)="tableChange.emit(table)">
+          <option *ngFor="let type of columnTypes" [ngValue]="type">
+            {{ type }}
+          </option>
+        </select>
+        <button class="delete-button" (click)="deleteColumn(column.name)">
+          Delete
+        </button>
+      </div>
+    </div>
+    <div class="rows-panel">
+      <div class="header-block">
+        <h5>Rows</h5>
+        <button class="action-button" (click)="addRow()">
+          + Add Row
+        </button>
+      </div>
+      <div class="grid-container">
+        <table>
+          <thead>
+            <tr>
+              <th *ngFor="let column of table.columns">
+                {{ column.name }}
+              </th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of table.rows; let i = index">
+              <td *ngFor="let column of table.columns">
+                <input [value]="row[column.name]"
+                  (change)="updateCell(i, column.name, $any($event.target).value)" />
+              </td>
+              <td>
+                <button class="delete-button" (click)="deleteRow(i)">
+                  Delete
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

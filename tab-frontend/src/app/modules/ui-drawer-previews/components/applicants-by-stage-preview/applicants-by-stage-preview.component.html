@@ -1,0 +1,93 @@
+@if(loading) {
+  <app-sun-spinner></app-sun-spinner>
+}
+@if(!loading) {
+  <div class="stage-preview">
+    <div class="stage-preview__header">
+      <div>
+        <div class="stage-preview__eyebrow">
+          Applications by stage
+        </div>
+        <h2>{{ stageName || (stageType | titlecase) }}</h2>
+        <div class="stage-preview__subtitle">
+            {{ applicants.length }}
+            application{{ applicants.length === 1 ? '' : 's' }}
+            @if(positionTitle) {
+              • {{ positionTitle }}
+            }
+        </div>
+      </div>
+
+      @if(positionId) {
+        <button class="header-btn"
+          (click)="openPosition(positionId, $event)">
+          <mat-icon class="material-icons">work</mat-icon>
+          Position
+        </button>
+      }
+    </div>
+
+    @if(applicants.length === 0) {
+      <div class="empty-state">
+        <mat-icon class="empty-state__icon">groups</mat-icon>
+        <div class="empty-state__title">No applicants found</div>
+        <div class="empty-state__text">There are currently no applicants in this stage.</div>
+      </div>
+    }
+
+    @for(applicant of applicants; track applicant.talentId) {
+      <div class="candidate-card">
+        <div class="candidate-card__left">
+          <img [src]="applicant.photoUrl || 'assets/images/default-avatar.png'"
+            class="candidate-avatar"
+            alt="Candidate avatar">
+          <div class="candidate-info">
+            <div class="candidate-name">{{ applicant.talentName }}</div>
+            @if(!positionId) {
+              <div class="candidate-position clickable"
+                (click)="openPosition(applicant.positionId, $event)">
+                <mat-icon class="material-icons">work</mat-icon>
+                {{ applicant?.positionTitle }}
+              </div>
+            }
+            <div class="candidate-meta">
+              <span class="decision-badge"
+                [ngClass]="{
+                  'passed': applicant.finalDecision === 'passed',
+                  'rejected': applicant.finalDecision === 'rejected',
+                  'pending': applicant.finalDecision === 'pending'}">
+                {{ applicant.finalDecision || 'pending' }}
+              </span>
+              @if(applicant.assessmentScore !== undefined) {
+                <span class="score-badge">Score: {{ applicant.assessmentScore }}</span>
+              }
+            </div>
+            @if(applicant.skills?.length) {
+              <div class="candidate-skills">
+                @for(skill of applicant.skills | slice:0:8;track skill.skillName) {
+                  <span class="skill-chip">{{ skill.skillName }}</span>
+                }
+              </div>
+            }
+            @if(applicant.latestModifiedDate) {
+              <div class="candidate-date">Updated: {{ applicant.latestModifiedDate | date:'mediumDate' }}</div>
+            }
+          </div>
+        </div>
+        <div class="candidate-card__actions">
+          <button class="action-btn"
+            (click)="openCandidate(applicant.talentId, $event)">
+            <mat-icon class="material-icons">person</mat-icon>
+            Candidate
+          </button>
+
+          <button class="action-btn"
+            (click)="openPipeline(applicant, $event)">
+            <mat-icon class="material-icons">insights</mat-icon>
+            Pipeline
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+}

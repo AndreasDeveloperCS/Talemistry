@@ -1,0 +1,145 @@
+@use 'variables' as *;
+
+mat-form-field {
+    width: 100%;
+    padding: 0;
+}
+
+input.empty-animation {
+    width: 100%;
+    font-size: larger;
+    font-weight: 700;
+    color: $attentionColor;
+    animation: blinker 1s linear infinite;
+    background: transparent;
+}
+
+input.file-selected {
+    width: 100%;
+    color: var(--text);
+}
+
+
+input.import-title {
+    display: flex;
+    border-radius: $borderRadius;
+    justify-self: stretch;
+    justify-items: stretch;
+    justify-content: stretch;
+    align-items: stretch;
+    align-self: stretch;
+    align-content: stretch;
+    text-align: justify;
+    height: fit-content;
+    overflow: visible;
+    color: var(--text);
+    font-size: medium;
+    word-wrap: normal;
+    background-color: transparent;
+    padding: $padding-m;
+}
+
+.tech-content {
+    display: inline-block;
+    flex-direction: column;
+    position: relative;
+    // align-items: flex-start;
+    // align-self: flex-start;
+    // align-content: flex-start;
+    // justify-self: flex-start;
+    // justify-content: flex-start;
+    // justify-items: flex-start;
+
+    @media (max-width: $screen-size-mobile) {
+        margin: 0;
+        padding: 0;
+    }
+
+    .tech-logo-item {
+
+        display: inline-block;
+        flex-direction: column;
+        position: relative;
+        justify-content: space-between;
+        padding: 0.5em;
+        opacity: 0.5;
+        color: var(--text);
+
+        transition: opacity 0.295s linear $transition_time;
+
+        @media (max-width: $screen-size-mobile) {
+            margin: 0;
+            padding: 0;
+        }
+
+        &.visible {
+            opacity: 1;
+        }
+
+        .carousel-content {
+            display: inline-block;
+            flex-direction: column;
+            position: relative;
+
+            width: 100%;
+
+            background-size: cover;
+            background-position: center;
+
+            padding: $padding-l;
+
+            justify-content: center;
+            align-items: flex-start;
+            justify-content: flex-start;
+            justify-items: center;
+            align-items: start;
+            justify-self: center;
+            align-self: start;
+            vertical-align: middle;
+            object-fit: cover;
+            object-position: center;
+            word-wrap: break-word;
+            word-break: keep-all;
+            flex-wrap: wrap;
+
+            @media (max-width: $screen-size-tab) {
+                margin-bottom: 2 * $padding-l;
+            }
+
+            &:hover {
+                display: inline-block;
+                flex-direction: column;
+                position: relative;
+                object-fit: cover;
+                object-position: center;
+                transition-delay: 500ms 500ms;
+                transition-property: font;
+                backdrop-filter: blur(30px);
+            }
+
+            .logo-element {
+                display: inline-flex;
+                flex-direction: column;
+                position: relative;
+            }
+        }
+    }
+}
+
+span.center {
+    align-self: center;
+    font-size: 1.2rem;
+}
+
+.clickable {
+  cursor: pointer;
+
+  :hover {
+    transform: translateY(-2px);
+    color: var(--text);
+  }
+}
+
+mat-icon {
+    flex-shrink: 0;
+}

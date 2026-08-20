@@ -1,0 +1,256 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.opened-position-form {
+  box-shadow: var(--box-shadow-light);
+  border: none;
+  border-radius: $borderRadiusMiddle;
+  transition: transform 0.3s ease;
+  background: transparent;
+  padding: $padding-large;
+  color: var(--text);
+  font-weight: 400;
+  position: relative;
+  text-align: left;
+  opacity: 0.8;
+  max-width: $screen-size-tab;
+  margin: $margin-wide $margin-narrow 0 $margin-narrow;
+
+  &:hover {
+    box-shadow: var(--box-shadow-light);
+  }
+
+  @media (max-width: $screen-size-tab) {
+    max-width: $screen-size-tab;
+    width: 95%;
+  }
+
+  @media (max-width: $screen-size-mobile) {
+    max-width: 450px !important;
+    width: 95%;
+    padding: $padding-middle;
+    transition: all 0.3s;
+    margin-top: $margin-wide;
+    margin-right: auto; 
+    margin-left: auto;
+    border-radius: $borderRadiusMiddle;
+  }
+
+  @media (max-width: $screen-size-small) {
+    max-width: 350px;
+    width: 95%;
+  }
+
+  mat-slide-toggle {
+    padding: $padding-middle;
+
+    @media (max-width: $screen-size-mobile) {
+      width: $screen-size-small;
+      padding: $padding-narrow;
+    }
+  }
+
+  .position-title {
+    cursor: pointer;
+    align-self: flex-start;
+    text-align: left;
+    line-height: 1.8;
+    color: var(--text);
+    font-weight: 600;
+    font-size: $font-size-header-wide;
+    // text-decoration: underline;
+
+    @media (max-width: $screen-size-mobile) {
+      font-size: $font-size-header-narrow;
+      line-height: 1.2;
+    }
+
+    @media (max-width: $screen-size-small) {
+      width: 100%;
+    }
+
+  }
+
+  .position-requirements {
+    text-align: left;
+    justify-content: left;
+
+    .position-content-section {
+      padding: $padding-extra-wide 0;
+
+      @media (max-width: $screen-size-mobile) {
+        padding: $padding-middle 0;
+        line-height: 1.2;
+      }
+
+      .position-content-section-name {
+        font-size: $font-size-header-middle;
+        text-decoration: underline;
+        align-content: left;
+        padding: $padding-narrow 0;
+
+        @media (max-width: $screen-size-mobile) {
+          font-size: $font-size-description-small;
+        }
+      }
+
+      .position-content-section-content {
+        font-size: $font-size-header-narrow;
+
+        @media (max-width: $screen-size-mobile) {
+          font-size: $font-size-description-small;
+        }
+
+      }
+    }
+
+  }
+
+  .controls {
+
+    position: relative;
+    display: inline;
+    display: inline-flex;
+    flex-direction: row;
+
+    .position-switcher {
+
+      position: relative;
+      display: inline-flex;
+      flex-direction: column;
+    }
+  }
+
+  ::ng-deep .mat-mdc-slide-toggle {
+    position: relative;
+    display: inline-flex;
+
+    align-content: center;
+    align-self: center;
+    align-items: center;
+    justify-content: center;
+    justify-self: center;
+    vertical-align: middle;
+    vertical-align: middle;
+    flex-direction: column;
+  }
+
+}
+
+.title {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: var(--box-shadow-light);
+  border-radius: $borderRadiusMiddle !important;
+  color: var(--accent-text) !important;
+  font-weight: 700;
+  text-decoration: none !important;
+  padding: $padding-narrow;
+  font-size: 2rem;
+}
+
+.title:hover {
+  text-decoration: underline !important;
+  text-decoration-color: var(--accent-text);
+}
+
+.icon-container {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+
+  .custom-icon {
+    font-size: 48px;
+    color: #673ab7;
+    transition: transform 0.2s ease;
+
+    &:hover {
+      color: #ff9800;
+      transform: scale(1.2);
+    }
+  }
+}
+
+.position-title span {
+  color: $pallete-0-color-14;
+  text-decoration: underline;
+  text-decoration-color: $secondary;
+}
+
+.vacancy-id {
+  font-size: $font-size-vacancy-id;
+  margin-bottom: $margin-narrow;
+}
+
+.job-info-wrapper {
+  display: flex;
+  flex-wrap: wrap; 
+  gap: 10px; 
+  align-items: center;
+  margin: 20px 0;
+  font-size: 16px;
+
+  mat-icon {
+    flex-shrink: 0;
+  }
+}
+
+.job-info-wrapper span, .salary {
+  display: flex;
+  align-items: center;
+  gap: 5px; 
+  white-space: break-word; 
+}
+
+.details {
+  display: inline-flex; 
+  align-items: center; 
+  gap: $gap-small;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.details mat-icon {
+  flex-shrink: 0;
+}
+
+.single-detail {
+  padding: $padding-narrow;
+  background-color: transparent !important;
+  border: none !important;
+  border-radius: $borderRadius !important;
+  box-shadow: var(--box-shadow-light);
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+}
+
+.details-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $gap-small; 
+  margin: 10px 0;
+}
+
+.detail-date {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  font-size: 16px;
+  gap: 5px;
+}
+
+mat-icon {
+  color: $pallete-0-color-14 !important;
+}
+
+.position-header {
+  gap: $gap-narrow;
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  justify-content: space-between;
+  margin: $margin-narrow 0;
+}

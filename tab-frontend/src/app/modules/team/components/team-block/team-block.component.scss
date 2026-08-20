@@ -1,0 +1,10 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+mat-tab-group {
+    margin-bottom: $margin-extra-wide;
+}
+
+:host {
+    width: 100%;
+}

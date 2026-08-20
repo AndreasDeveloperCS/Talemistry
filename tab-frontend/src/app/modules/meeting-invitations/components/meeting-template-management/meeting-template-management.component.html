@@ -1,0 +1,24 @@
+@if(isLoading) {
+<app-loading-spinner></app-loading-spinner>
+}
+@if(!isLoading) {
+  <div class="container__space-between" style="padding: 1rem;">
+      <h1>Meeting Templates</h1>
+      <button class="create-button" (click)="createMeetingTemplate()">
+          <mat-icon>add</mat-icon>
+          Add Template
+      </button>
+  </div>
+  @if(meetingTemplates.length > 0) {
+  <div class="meeting-list-container">
+    <app-meeting-template-card
+      *ngFor="let template of meetingTemplates"
+      [template]="template"
+      (delete)="onDeleteTemplate($event)">
+    </app-meeting-template-card>
+  </div>
+  }
+  @if(meetingTemplates.length === 0) {
+    <div class="no-templates-label">You haven't created any meeting templates yet.</div>
+  }
+}

@@ -1,0 +1,395 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.career-container {
+  width: 100%;
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  background-image: url("/assets/registration-background-optimized.png");
+}
+
+.career {
+  position: relative;
+  align-items: center;
+  max-width: $screen-size-netbook;
+  background: transparent;
+  //overflow-x: hidden;
+
+  .new-position-controls {
+    position: relative;
+    text-align: center;
+    align-self: center;
+    justify-content: center;
+    display: block;
+    width: 100%;
+    margin: 0 0;
+    position: relative;
+    padding: $padding-middle;
+  }
+
+  app-opened-position-plate-view,
+  app-opened-position-full {
+    align-self: center;
+    display: flex;
+    justify-self: center;
+    width: $screen-size-tab;
+
+    @media (max-width: $screen-size-tab) {
+      max-width: $screen-size-tab;
+      width: 95%;
+    }
+
+    @media (max-width: $screen-size-mobile) {
+      max-width: $screen-size-mobile;
+      width: 95%;
+    }
+
+    @media (max-width: $screen-size-small) {
+      max-width: $screen-size-small;
+      width: 95%;
+    }
+  }
+
+  .filters {
+    position: relative;
+    text-align: center;
+    align-self: center;
+    justify-content: center;
+    display: flex;
+    width: 100%;
+  }
+
+  .new-opened-positions {
+    position: relative;
+    display: block;
+    width: 100%;
+  }
+
+  h2 {
+    color: $pallete-0-color-14;
+    font-weight: 600;
+  }
+}
+
+.fixed {
+  position: sticky;
+  //max-height: calc(100vh - 35px);
+
+  @media (max-width: $screen-size-tab) {
+    max-width: $screen-size-mobile;
+  }
+
+  @media (max-width: $screen-size-mobile) {
+    width: 20rem;
+  }
+}
+
+.positions-list {
+  height: fit-content;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.scrollable-content {
+  flex-grow: 1;
+  overflow-y: auto;
+  //max-height: calc(100vh - 60px);
+  width: 100%;
+  margin: auto;
+}
+
+.width {
+  width: 100%;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.positions-list-title {
+  display: inline-block;
+  position: relative;
+  font-size: $font-size-header-wide;
+
+  padding: $padding-large;
+  margin-top: $margin-extra-large;
+  text-align: center;
+
+  line-height: $line-height-large;
+}
+
+.positions-gallery {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  justify-self: center;
+  width: 100%;
+  flex-wrap: wrap;
+  line-height: $line-height-large;
+  max-width: $screen-size-tab !important;
+  margin: auto;
+  height: fit-content;
+
+  @media (max-width: $screen-size-tab) {
+    max-width: $screen-size-tab;
+  }
+
+  @media (max-width: $screen-size-mobile) {
+    max-width: $screen-size-mobile;
+  }
+
+  @media (max-width: $screen-size-small) {
+    max-width: $screen-size-small;
+  }
+
+  .position-item {
+    max-width: $screen-size-tab;
+
+    @media (max-width: $screen-size-tab) {
+      width: 100%;
+    }
+
+    .position-title {
+      color: var(--text);
+      font-size: $font-size-header-extra-wide;
+      line-height: $line-height-large;
+      margin-bottom: $margin-middle;
+    }
+
+    .position-salary {
+      font-weight: $font-textarea-weight;
+      font-size: $font-size-header-middle;
+      color: $primaryThree;
+    }
+
+    .position-desc {
+      font-size: $font-size-header-small;
+      color: var(--text);
+    }
+
+    button {
+      font-size: $font-size-button-narrow;
+      width: auto;
+      padding: $padding-narrow $padding-middle;
+      margin: $margin-narrow 0;
+    }
+  }
+
+  div {
+    width: 30rem;
+
+    padding: $padding-narrow;
+
+    @media (max-width: $screen-size-mobile) {
+      width: 100%;
+      flex-wrap: wrap;
+      height: fit-content;
+    }
+
+    .element {
+      width: 100%;
+      padding: $padding-middle;
+
+      div {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.wrap-tiles {
+  display: flex;
+  // height: fit-content;
+  max-height: min-content;
+  align-items: flex-start;
+  gap: $gap-middle;
+  justify-content: space-between;
+  width: $screen-size-netbook;
+  margin: $margin-wide auto;
+}
+
+.job-list {
+  flex-direction: column;
+  display: flex;
+  gap: $gap-narrow;
+  width: 33%;
+  height: 100%;
+  overflow-y: auto;
+  padding: $padding-narrow-two;
+  margin-top: 2rem;
+  max-height: 150vh;
+  min-height: 100vh;
+}
+
+.job-details {
+  min-height: fit-content;
+  overflow: hidden;
+  width: 65%;
+  padding: $padding-narrow-two;
+
+  @media (max-width: $screen-size-mobile) {
+    display: none;
+  }
+}
+
+.toggle-margin {
+  margin: $margin-narrow;
+}
+
+.single-tile {
+  border: none;
+  transition: transform 0.3s ease;
+  background: transparent;
+  border-radius: $borderRadiusMiddle;
+
+  &:not(.selected) {
+    box-shadow: var(--box-shadow-light);
+
+    &:hover {
+      box-shadow: var(--box-shadow-light);
+    }
+  }
+
+  &.selected {
+    border: $border-thick solid $pallete-1-color-3 !important;
+    box-shadow: none;
+
+    &:hover {
+      box-shadow: none; 
+    }
+  }
+
+  &:hover {
+    cursor: pointer;
+    transform: translateY(-4px);
+  }
+}
+
+.infographic-block {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: $gap-small;
+  margin: $margin-narrow 0;
+  width: 90%;
+  margin-right: 5rem;
+
+  @media (max-width: 1450px) {
+    width: 80%;
+    margin-right: 10rem;
+  }
+
+  @media (max-width: $screen-size-extra-middle) {
+    width: 75%;
+    margin-right: 10rem;
+  }
+
+  @media (max-width: $screen-size-netbook) {
+    margin-right: 0;
+    width: 90%;
+  }
+}
+
+.infographic {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: $gap-small;
+  min-width: 100%;
+
+  img {
+    width: 80px; 
+    height: 100px; 
+    align-self: flex-end;
+
+    @media (max-width: $screen-size-netbook) {
+      align-self: flex-start;
+      margin-top: -0.5rem;
+    }
+  }
+}
+
+.infographic-actions {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
+  gap: 1rem;
+  align-self: center;
+  position: relative;
+
+  input {
+    width: 100%;
+  }
+
+  @media (max-width: $screen-size-netbook) {
+    flex-direction: column;
+  }
+}
+
+.button-block {
+  position: relative;
+
+  @media (max-width: $screen-size-netbook) {
+    display: flex;
+    justify-content: center;
+  }
+
+  button {
+    @media (max-width: $screen-size-netbook) {
+      position: relative;
+    }
+  }
+}
+
+.toggle-group {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.custom-toggle-group {
+  display: flex;
+  border-radius: 10px;
+  box-shadow: var(--box-shadow-light);
+  overflow: hidden;
+
+  .toggle-btn {
+    background-color: $gradient-color-4;
+    padding: 0.7rem;
+    height: 4rem;
+    width: 4rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    mat-icon {
+      font-size: 36px;
+      height: fit-content;
+      width: 100%;
+    }
+
+    &.active-toggle {
+      background-color: $pallete-0-color-12;
+      color: var(--text);
+      border-color: var(--accent-text);
+    }
+
+    &:hover:not(.active-toggle) {
+      background-color: $pallete-0-color-6;
+      opacity: 0.8;
+    }
+  }
+}

@@ -1,0 +1,40 @@
+<div class="app-container">
+  <header class="app-header">
+    <div class="header-content">
+      <h1 class="header-title">Notification Settings</h1>
+    </div>
+  </header>
+
+  <nav class="variant-selector">
+    <button 
+      class="variant-button"
+      [class.active]="selectedVariant === 'v1'"
+      (click)="selectVariant('v1')">
+      <mat-icon class="material-icons">view_stream</mat-icon>
+      <span class="variant-label">Variant 1</span>
+      <span class="variant-desc">Toggle Cards</span>
+    </button>
+    <button 
+      class="variant-button"
+      [class.active]="selectedVariant === 'v2'"
+      (click)="selectVariant('v2')">
+      <mat-icon class="material-icons">checklist</mat-icon>
+      <span class="variant-label">Variant 2</span>
+      <span class="variant-desc">List View</span>
+    </button>
+    <button 
+      class="variant-button"
+      [class.active]="selectedVariant === 'v3'"
+      (click)="selectVariant('v3')">
+      <mat-icon class="material-icons">grid_view</mat-icon>
+      <span class="variant-label">Variant 3</span>
+      <span class="variant-desc">Grid Cards</span>
+    </button>
+  </nav>
+
+  <main class="content-area">
+    <app-notification-preferences-toggle-cards *ngIf="selectedVariant === 'v1'"></app-notification-preferences-toggle-cards>
+    <app-notification-preferences-list-view *ngIf="selectedVariant === 'v2'"></app-notification-preferences-list-view>
+    <app-notification-preferences-grid-cards *ngIf="selectedVariant === 'v3'"></app-notification-preferences-grid-cards>
+  </main>
+</div>

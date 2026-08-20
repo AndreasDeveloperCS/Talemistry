@@ -1,0 +1,17 @@
+@use 'variables' as *; 
+@use 'global' as *;
+
+:host {
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.theme-toggle {
+    padding: 0.5rem;
+    box-shadow: var(--box-shadow-light);
+    border-radius: 10rem;
+}
+
+mat-icon {
+    color: $active-text;
+}

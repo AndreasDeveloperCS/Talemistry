@@ -1,0 +1,420 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+// Root Container
+.position-container {
+  max-width: $screen-size-netbook;
+  margin: 0 auto;
+  padding: $padding-wide;
+  color: var(--text);
+  background-color: transparent;
+  width: 100%;
+}
+
+.position-upper-part {
+  background-color: transparent;
+  border-radius: $borderRadiusMiddle;
+  margin-bottom: $margin-extra-large;
+  padding: $padding-wide;
+  box-shadow: var(--box-shadow-light);
+}
+
+.position-company-info {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  @media (max-width: $screen-size-tab) {
+    flex-direction: column;
+  }
+}
+
+.position-company-header {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: $gap-small;
+  color: var(--text);
+  width: 100%;
+
+  img {
+    height: 100%;
+    width: fit-content;
+  }
+}
+
+.position-actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: $gap-small;
+  align-items: flex-end;
+
+  @media (max-width: $screen-size-tab) {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  @media (max-width: $screen-size-mobile) {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+}
+
+.like-btn {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: $gap-small;
+  border: $border solid $pallete-0-color-14;
+  border-radius: $borderRadius;
+  padding: 0 $padding-narrow;
+  width: fit-content;
+  font-weight: $font-textarea-weight;
+  font-size: $font-size-header-small;
+  justify-content: center;
+}
+
+.position-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: $gap-large;
+
+  @media (max-width: $screen-size-tab) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.position-header {
+  gap: $gap-narrow;
+  display: block;
+  align-items: center;
+  margin-bottom: $margin-extra-wide;
+
+  .position-title {
+    display: flex;
+    font-size: $font-size-header-extra-wide;
+    font-weight: $font-textarea-weight;
+    margin: $margin-narrow 0;
+    color: $pallete-0-color-14;
+  }
+
+  .position-meta {
+    font-size: $font-size-header-small;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    margin-bottom: $margin-mini-narrow;
+    gap: $gap-micro;
+    flex-wrap: wrap;
+
+    span {
+      display: flex;
+      align-items: center;
+      gap: $gap-micro;
+    }
+
+    mat-icon {
+      color: $pallete-0-color-14;
+    }
+  }
+}
+
+.tag-list {
+  gap: $gap-semi-small;
+  margin-bottom: $margin-middle;
+  display: inline-flex;
+  align-items: center;
+  white-space: normal;
+  word-break: break-word;
+  width: 100%;
+
+  .tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $gap-small;
+    margin: $margin-narrow 0;
+  }
+
+  .tag {
+    padding: $padding-narrow;
+    background-color: transparent;
+    border: none;
+    border-radius: $borderRadius;
+    box-shadow: var(--box-shadow-light);
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+  }
+
+  mat-icon {
+    color: $pallete-0-color-14;
+    flex-shrink: 0;
+  }
+}
+
+.section {
+  margin-bottom: $margin-extra-large;
+  background-color: transparent;
+  border-radius: $borderRadiusMiddle;
+  justify-content: flex-start;
+  flex-direction: column;
+  display: flex;
+  padding: $padding-wide;
+  box-shadow: var(--box-shadow-light);
+
+
+  .section-title {
+    font-size: $font-size-header-middle;
+    font-weight: $font-textarea-weight;
+    margin-bottom: $margin-middle;
+    color: var(--accent-text);
+    display: flex;
+  }
+
+  .section-text {
+    font-size: $font-size-header-small;
+    line-height: $line-height-extra-large;
+    color: var(--text);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 0;
+    text-align: left;
+  }
+}
+
+
+.company-card {
+  background-color: transparent;
+  border-radius: $borderRadiusMiddle;
+  padding: $padding-wide;
+  margin-bottom: $margin-extra-large;
+  box-shadow: var(--box-shadow-light);
+  position: relative;
+
+  .company-card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: $gap-narrow;
+
+    h3 {
+      color: $pallete-0-color-14;
+    }
+
+    .link-button {
+      background-color: transparent;
+      border: none;
+      color: var(--accent-text);
+      font-weight: $font-standart-weight;
+      font-size: $font-size-header-narrow;
+      cursor: pointer;
+      border-radius: $borderRadius;
+      padding: $padding-semi-small;
+      transform: transition 0.3s ease;
+      box-shadow: var(--box-shadow-light);
+      width: 100%;
+
+      &:hover {
+        box-shadow: var(--box-shadow-light);
+        transform: translateY(-3px);
+      }
+    }
+  }
+}
+
+.company-header {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: $gap-small;
+  border-radius: $borderRadius;
+  color: var(--text);
+  width: 100%;
+
+  img {
+    height: 100%;
+    width: fit-content;
+  }
+}
+
+.company-header-info,
+.company-extra-info {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.company-extra-info {
+  gap: $gap-small;
+}
+
+.company-name {
+  display: flex;
+  font-size: $font-size-header-narrow;
+  font-weight: $font-textarea-weight;
+  width: 100%;
+  color: var(--accent-text);
+  text-align: left;
+
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+    transform: translateY(-2px);
+  }
+}
+
+.company-industry {
+  text-align: left;
+  display: flex;
+  font-size: $font-size-header-small;
+  opacity: $opacity-90;
+  width: 100%;
+}
+
+.company-employees {
+  display: flex;
+  font-size: $font-size-placeholder;
+  opacity: $opacity-80;
+}
+
+.company-extra-info-line {
+  display: flex;
+  flex-direction: row;
+  gap: $gap-small;
+  align-items: center;
+  font-size: $font-size-placeholder;
+
+  mat-icon {
+    color: $pallete-0-color-14;
+  }
+}
+
+.apply-card {
+  background-color: transparent;
+  border-radius: $borderRadiusMiddle;
+  padding: $padding-wide;
+  position: relative;
+  box-shadow: var(--box-shadow-light);
+
+  .apply-card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: $gap-narrow;
+
+    h3 {
+      color: $pallete-0-color-14;
+    }
+
+    .apply-header {
+      display: flex;
+    }
+
+    .apply-info {
+      font-size: $font-size-header-small;
+      font-weight: $font-textarea-weight;
+    }
+  }
+}
+
+.btn-primary {
+  background-color: $pallete-0-color-14;
+  color: var(--text);
+  padding: $padding-narrow-two $padding-middle;
+  border: none;
+  border-radius: $borderRadiusSemiMiddle;
+  font-weight: $font-textarea-weight;
+  font-size: $font-size-header-narrow;
+  width: 100%;
+  height: fit-content;
+  max-width: $button-standard-width;
+  min-width: $button-standard-width;
+  cursor: pointer;
+  transition: 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0px 0px 20px $pallete-0-color-14;
+  }
+}
+
+button {
+  @media (max-width: $screen-size-mobile) {
+    max-height: none;
+  }
+}
+
+
+.custom-list {
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  color: var(--accent-text);
+  text-align: left;
+
+  li {
+    margin-bottom: $margin-narrow;
+    display: flex;
+    font-size: $font-size-header-small;
+  }
+
+  li::before {
+    content: "🔵";
+    margin-right: $margin-narrow;
+  }
+}
+
+::ng-deep .custom-h3 {
+  text-decoration: underline;
+  margin: 1rem 0;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: $pallete-0-color-14;
+}
+
+.company-logo {
+  border: $border solid $pallete-0-color-14;         
+  border-radius: 8px;             
+  background-color: #f5f5f5;     
+  box-shadow: 0 2px 6px $pallete-0-color-14; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;   
+  
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+    transform: translateY(-2px);
+  }
+}
+
+.logo-small {
+  width: 60px;
+  aspect-ratio: 1 / 1;
+}
+
+.logo-large {
+  width: 80px;
+  aspect-ratio: 1 / 1;
+}
+
+.company-logo img {
+  object-fit: contain;  
+}
+
+.logo-placeholder {
+  color: #999;
+  font-size: 12px;
+  text-align: center;
+
+  span {
+    font-size: 1rem;
+    font-weight: 600;
+    color: $pallete-0-color-12;
+  }
+}

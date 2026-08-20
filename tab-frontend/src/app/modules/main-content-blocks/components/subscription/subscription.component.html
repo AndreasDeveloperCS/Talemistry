@@ -1,0 +1,422 @@
+<section class="subscription-page">
+    <div class="subscription-page__container">
+        <!-- Header -->
+        <div class="subscription-page__header">
+            <button type="button" class="subscription-page__back" (click)="goBackToPlans()">
+                <mat-icon>arrow_back</mat-icon>
+                Back to pricing
+            </button>
+            <h1 class="subscription-page__title">Complete Your Subscription</h1>
+            <p class="subscription-page__subtitle">
+                Choose your perfect plan and get started with your recruiting journey.
+            </p>
+        </div>
+
+        <!-- Progress Steps -->
+        <div class="subscription-steps">
+            <div class="subscription-steps__item"
+                [class.active]="currentStepIndex === 1"
+                [class.completed]="currentStepIndex > 1">
+                <div class="subscription-steps__number">1</div>
+                <span>Select Plan</span>
+            </div>
+            <div
+                class="subscription-steps__connector"
+                [class.completed]="currentStepIndex > 1">
+            </div>
+            <div
+                class="subscription-steps__item"
+                [class.active]="currentStepIndex === 2"
+                [class.completed]="currentStepIndex > 2">
+                <div class="subscription-steps__number">2</div>
+                <span>{{ isUserAuthenticated ? 'Authenticated' : 'Sign In' }}</span>
+            </div>
+            <div
+                class="subscription-steps__connector"
+                [class.completed]="currentStepIndex > 2">
+            </div>
+            <div
+                class="subscription-steps__item"
+                [class.active]="currentStepIndex === 3">
+                <div class="subscription-steps__number">3</div>
+                <span>Complete</span>
+            </div>
+        </div>
+
+        <!-- Status Message -->
+        <div class="subscription-status" [class.success]="statusTone === 'success'"
+            [class.error]="statusTone === 'error'" [class.info]="statusTone === 'info'">
+            <mat-icon *ngIf="statusTone === 'success'">check_circle</mat-icon>
+            <mat-icon *ngIf="statusTone === 'error'">error</mat-icon>
+            <mat-icon *ngIf="statusTone === 'info'">info</mat-icon>
+            <span>{{ busy ? busyAction + '...' : statusMessage }}</span>
+        </div>
+
+        <!-- Step 1: Plan Selection -->
+        <div class="subscription-section" *ngIf="currentStep === 'select-plan'">
+            <h2 class="subscription-section__title">Choose Your Plan</h2>
+
+            <!-- Billing Cycle Toggle -->
+            <div class="billing-switch" aria-label="Billing cycle selector">
+                <button type="button" [class.active]="billingCycle === 'monthly'" (click)="setBillingCycle('monthly')">
+                    Monthly
+                </button>
+                <button type="button" [class.active]="billingCycle === 'yearly'" (click)="setBillingCycle('yearly')">
+                    Yearly
+                    <span class="billing-switch__badge">Save {{ yearlyDiscountPercent }}%</span>
+                </button>
+            </div>
+            <p class="billing-caption">Annual billing applies a {{ yearlyDiscountPercent }}% discount, roughly equal to
+                two months free.</p>
+
+            <!-- Pricing Cards -->
+            <div class="pricing-grid">
+                <div *ngFor="let planCard of planCards; trackBy: trackByPlanId" class="pricing-card"
+                    [class.popular]="planCard.plan.isPopular" [class.selected]="selectedPlan?.id === planCard.plan.id"
+                    (click)="selectPlan(planCard.plan)">
+
+                    <!-- Popular Badge -->
+                    <div *ngIf="planCard.plan.isPopular" class="popular-badge">Most Popular</div>
+
+                    <!-- Card Header -->
+                    <div class="card-header">
+                        <h3 class="plan-name">
+                            <mat-icon>{{ planCard.plan.icon }}</mat-icon>
+                            {{ planCard.plan.name }}
+                        </h3>
+                        <div class="price-container">
+                            <ng-container *ngIf="planCard.hasFixedPrice && planCard.amount !== 0">
+                                <span class="currency">$</span>
+                                <span class="price">{{ planCard.amount }}</span>
+                                <span class="period">/ {{ planCard.periodLabel }}</span>
+                            </ng-container>
+                            <ng-container *ngIf="planCard.hasFixedPrice && planCard.amount === 0">
+                                <span class="price">Free</span>
+                            </ng-container>
+                            <ng-container *ngIf="!planCard.hasFixedPrice">
+                                <span class="price price--custom">{{ planCard.plan.enterpriseLabel || 'Custom' }}</span>
+                            </ng-container>
+                        </div>
+                        <p *ngIf="planCard.plan.priceCaption" class="price-caption">{{ planCard.plan.priceCaption }}</p>
+                        <p class="plan-description">{{ planCard.plan.description }}</p>
+                    </div>
+
+                    <!-- Features List -->
+                    <div class="features-container">
+                        <ul class="features-list">
+                            <li *ngFor="let feature of planCard.plan.features" class="feature-item"
+                                [class.included]="feature.included" [class.not-included]="!feature.included">
+                                <span class="feature-icon">
+                                    <mat-icon *ngIf="feature.included">verified</mat-icon>
+                                    <mat-icon *ngIf="!feature.included">highlight_off</mat-icon>
+                                </span>
+                                <span class="feature-text">{{ feature.name }}</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Card Footer -->
+                    <div class="card-footer">
+                        <div class="plan-details">
+                            <div *ngIf="planCard.plan.maxUsers" class="detail-item">
+                                <strong>{{ planCard.plan.maxUsers }}</strong> users included
+                            </div>
+                            <div class="detail-item-support">{{ planCard.plan.support }}</div>
+                        </div>
+                        <button class="cta-button" [class.primary]="planCard.plan.isPopular"
+                            [class.secondary]="!planCard.plan.isPopular"
+                            (click)="selectPlan(planCard.plan); $event.stopPropagation()">
+                            {{ planCard.plan.buttonText }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2: Authentication -->
+        <div class="subscription-section" *ngIf="currentStep === 'authenticate'">
+            <div class="auth-section">
+                <div class="auth-section__summary">
+                    <h3>Selected Plan: {{ selectedPlan?.name }}</h3>
+                    <p *ngIf="selectedPlanHasFixedPrice">
+                        <strong>${{ selectedPlanAmount }}</strong> / {{ selectedPlanPeriodLabel }}
+                    </p>
+                    <p *ngIf="selectedPlan && !selectedPlanHasFixedPrice">
+                        <strong>Custom pricing</strong> - Our team will contact you
+                    </p>
+                    <button type="button" class="auth-section__change-plan" (click)="goBackToPlans()">
+                        Change plan
+                    </button>
+                </div>
+
+                <div class="auth-section__form">
+                    <h2 *ngIf="authMode === 'signup'">Create Your Account</h2>
+                    <h2 *ngIf="authMode === 'login'">Sign In to Continue</h2>
+
+                    <p *ngIf="authMode === 'signup'">
+                        Create a free account to get started with the {{ selectedPlan?.name }} plan.
+                    </p>
+                    <p *ngIf="authMode === 'login'">
+                        Sign in to your account to complete your subscription to the {{ selectedPlan?.name }} plan.
+                    </p>
+
+                    <div class="auth-section__actions">
+                        <button *ngIf="authMode === 'signup'" class="auth-button auth-button--primary"
+                            (click)="navigateToSignup()">
+                            <mat-icon>person_add</mat-icon>
+                            Create Account
+                        </button>
+                        <button *ngIf="authMode === 'login'" class="auth-button auth-button--primary"
+                            (click)="navigateToLogin()">
+                            <mat-icon>login</mat-icon>
+                            Sign In
+                        </button>
+
+                        <div class="auth-section__divider">
+                            <span>or</span>
+                        </div>
+
+                        <button *ngIf="authMode === 'signup'" class="auth-button auth-button--secondary"
+                            (click)="authMode = 'login'">
+                            Already have an account? Sign In
+                        </button>
+                        <button *ngIf="authMode === 'login'" class="auth-button auth-button--secondary"
+                            (click)="authMode = 'signup'">
+                            Don't have an account? Sign Up
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3a: Freemium Confirmation -->
+        <div class="subscription-section" *ngIf="currentStep === 'confirm-details' && selectedPlan?.id === 'freemium'">
+            <div class="confirmation-section">
+                <div class="confirmation-section__icon">
+                    <mat-icon>celebration</mat-icon>
+                </div>
+                <h2>Welcome to {{ selectedPlan?.name }}!</h2>
+                <p>You're about to activate your free account with the following features:</p>
+
+                <ul class="confirmation-features">
+                    <li *ngFor="let feature of selectedPlan?.features">
+                        <mat-icon *ngIf="feature.included" class="included">check_circle</mat-icon>
+                        <mat-icon *ngIf="!feature.included" class="not-included">remove_circle_outline</mat-icon>
+                        <span [class.not-included]="!feature.included">{{ feature.name }}</span>
+                    </li>
+                </ul>
+
+                <div class="confirmation-section__actions">
+                    <button class="cta-button primary" (click)="confirmFreemiumSubscription()" [disabled]="busy">
+                        {{ busy ? 'Activating...' : 'Activate Free Account' }}
+                    </button>
+                    <button class="cta-button secondary" (click)="goBackToPlans()">
+                        Choose Different Plan
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3b: Paid Plan Checkout -->
+        <div class="subscription-section" *ngIf="currentStep === 'checkout'">
+            <div class="checkout-layout">
+                <aside class="checkout-summary">
+                    <div class="checkout-summary__card">
+                        <span class="checkout-summary__label">Selected Plan</span>
+                        <strong>{{ selectedPlan?.name }}</strong>
+                        <!-- <p>{{ selectedPlan?.description }}</p> -->
+                    </div>
+
+                    <div class="checkout-summary__card">
+                        <span class="checkout-summary__label">Billing Cycle</span>
+                        <div class="billing-switch billing-switch--small">
+                            <button type="button" [class.active]="billingCycle === 'monthly'"
+                                (click)="setBillingCycle('monthly')">
+                                Monthly
+                            </button>
+                            <button type="button" [class.active]="billingCycle === 'yearly'"
+                                (click)="setBillingCycle('yearly')">
+                                Yearly
+                            </button>
+                        </div>
+                        <strong class="checkout-summary__price">${{ selectedPlanAmount }} / {{ selectedPlanPeriodLabel }}</strong>
+                    </div>
+
+                    <div class="checkout-summary__card checkout-summary__card--provider">
+                        <span class="checkout-summary__label">Active Provider</span>
+                        <strong>{{ selectedProviderTitle }}</strong>
+                        <!-- <p>{{ selectedProviderMeta }}</p> -->
+                    </div>
+
+                    <!-- <div class="checkout-summary__card" *ngIf="currentSubscription">
+                        <span class="checkout-summary__label">Current Subscription</span>
+                        <strong>{{ currentSubscription.planName || currentSubscription.planId || 'None' }}</strong>
+                        <p>Status: {{ currentSubscription.status || 'unknown' }}</p>
+                    </div> -->
+
+                    <button type="button" class="checkout-summary__change" (click)="goBackToPlans()">
+                        <mat-icon>swap_horiz</mat-icon>
+                        Change Plan
+                    </button>
+                </aside>
+
+                <section class="checkout-panel checkout-panel--enhanced">
+                    <div class="checkout-panel__header">
+                        <div>
+                            <h2>Secure your subscription</h2>
+                            <p>Keep your billing email, name, and surname here, then choose the provider configured for
+                                this environment.</p>
+                            <div class="checkout-panel__security-badge">
+                                <mat-icon>shield</mat-icon>
+                                Secure payment setup
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- <div class="checkout-form__grid checkout-form__grid--billing">
+                        <label class="checkout-form__field checkout-form__field--full">
+                            <span>Billing Email</span>
+                            <input [(ngModel)]="billingForm.email" type="email" placeholder="billing@company.com" />
+                        </label>
+                        <div class="checkout-form__name-row">
+                            <label class="checkout-form__field">
+                                <span>Name</span>
+                                <input [(ngModel)]="billingForm.givenName" type="text" placeholder="Alex" />
+                            </label>
+                            <label class="checkout-form__field">
+                                <span>Surname</span>
+                                <input [(ngModel)]="billingForm.familyName" type="text" placeholder="Taylor" />
+                            </label>
+                        </div>
+                    </div> -->
+
+                    <div class="provider-switcher provider-switcher--cards">
+                        <button type="button" [class.active]="selectedProvider === 'stripe'"
+                            [class.disabled]="!isProviderSelectableForView('stripe')"
+                            [disabled]="!isProviderSelectableForView('stripe')" (click)="setSelectedProvider('stripe')">
+                            <mat-icon>credit_card</mat-icon>
+                            <span>{{ stripeProviderTitle }}</span>
+                            <small>{{ getProviderDescription('stripe') }}</small>
+                        </button>
+                        <button type="button" [class.active]="selectedProvider === 'gocardless'"
+                            [class.disabled]="!isProviderSelectableForView('gocardless')"
+                            [disabled]="!isProviderSelectableForView('gocardless')"
+                            (click)="setSelectedProvider('gocardless')">
+                            <mat-icon>account_balance</mat-icon>
+                            <span>{{ goCardlessProviderTitle }}</span>
+                            <small>{{ getProviderDescription('gocardless') }}</small>
+                        </button>
+                    </div>
+
+                    <!-- <div class="checkout-provider checkout-provider--stripe"
+                        [class.checkout-provider--hidden]="selectedProvider !== 'stripe'">
+                        <div class="checkout-provider__intro">
+                            <div>
+                                <strong>Card details</strong>
+                                <p>Enter cardholder name, card number, expiration month/year, and CVC using the same
+                                    editable billing form as GoCardless.</p>
+                            </div>
+                            <span class="checkout-provider__chip">Billing</span>
+                        </div>
+
+                        <div class="card-fields-grid">
+                            <label class="checkout-form__field checkout-form__field--wide">
+                                <span>Name on card</span>
+                                <input [(ngModel)]="cardForm.cardholderName" type="text" autocomplete="cc-name"
+                                    placeholder="Alex Taylor" class="checkout-form__input" />
+                            </label>
+                            <label class="checkout-form__field checkout-form__field--wide">
+                                <span>Card Number</span>
+                                <input [(ngModel)]="cardForm.cardNumber" type="text" inputmode="numeric"
+                                    autocomplete="cc-number" placeholder="1234 5678 9012 3456" maxlength="19"
+                                    (ngModelChange)="onCardNumberInput($event, 'stripe')"
+                                    class="checkout-form__input" />
+                            </label>
+                            <label class="checkout-form__field">
+                                <span>Expiration</span>
+                                <input [(ngModel)]="cardForm.expiration" type="text" inputmode="numeric"
+                                    autocomplete="cc-exp" placeholder="MM / YY" maxlength="7"
+                                    (ngModelChange)="onExpirationInput($event, 'stripe')"
+                                    class="checkout-form__input" />
+                            </label>
+                            <label class="checkout-form__field">
+                                <span>CVC</span>
+                                <input [(ngModel)]="cardForm.cvc" type="text" inputmode="numeric" autocomplete="cc-csc"
+                                    placeholder="123" maxlength="4" (ngModelChange)="onCvcInput($event, 'stripe')"
+                                    class="checkout-form__input" />
+                            </label>
+                        </div>
+
+                        <p class="checkout-form__note">
+                            Continue to Stripe after reviewing these billing details. Stripe will handle the secure
+                            checkout step for card authorization and recurring billing.
+                        </p>
+                    </div> -->
+
+                    <!-- <div class="checkout-provider checkout-provider--gocardless"
+                        [class.checkout-provider--hidden]="selectedProvider !== 'gocardless'">
+                        <div class="checkout-provider__intro">
+                            <div>
+                                <strong>Card details</strong>
+                                <p>Enter cardholder name, card number, expiration month/year, and CVC to authorize
+                                    recurring billing with GoCardless.</p>
+                            </div>
+                            <span class="checkout-provider__chip">Card billing</span>
+                        </div>
+
+                        <div class="card-fields-grid">
+                            <label class="checkout-form__field checkout-form__field--wide">
+                                <span>Name on card</span>
+                                <input [(ngModel)]="gcCardForm.cardholderName" type="text" autocomplete="cc-name"
+                                    placeholder="Alex Taylor" class="checkout-form__input" />
+                            </label>
+                            <label class="checkout-form__field checkout-form__field--wide">
+                                <span>Card number</span>
+                                <input [(ngModel)]="gcCardForm.cardNumber" type="text" inputmode="numeric"
+                                    autocomplete="cc-number" placeholder="1234 5678 9012 3456" maxlength="19"
+                                    (ngModelChange)="onCardNumberInput($event, 'gocardless')"
+                                    class="checkout-form__input" />
+                            </label>
+                            <label class="checkout-form__field">
+                                <span>Expiration</span>
+                                <input [(ngModel)]="gcCardForm.expiration" type="text" inputmode="numeric"
+                                    autocomplete="cc-exp" placeholder="MM / YY" maxlength="7"
+                                    (ngModelChange)="onExpirationInput($event, 'gocardless')"
+                                    class="checkout-form__input" />
+                            </label>
+                            <label class="checkout-form__field">
+                                <span>CVC</span>
+                                <input [(ngModel)]="gcCardForm.cvc" type="text" inputmode="numeric"
+                                    autocomplete="cc-csc" placeholder="123" maxlength="4"
+                                    (ngModelChange)="onCvcInput($event, 'gocardless')" class="checkout-form__input" />
+                            </label>
+                        </div>
+
+                        <p class="checkout-form__note">
+                            GoCardless will securely verify your card details and set up recurring billing.
+                            Your card information is sent directly to GoCardless and is not stored in this
+                            application.</p>
+                    </div> -->
+
+                    <div class="checkout-panel__security">
+                        <mat-icon>verified_user</mat-icon>
+                        <span>Your payment is secured with industry-standard encryption</span>
+                    </div>
+                    
+                    <div class="checkout-panel__actions checkout-panel__actions--stacked">
+                        <button class="cta-button primary" (click)="proceedToCheckout()"
+                            [disabled]="!canProceedWithSelectedProvider()">
+                            <mat-icon>lock</mat-icon>
+                            {{ busy ? busyAction : getProviderCtaLabel() }}
+                        </button>
+                        <!-- <button *ngIf="selectedProvider === 'stripe'" class="cta-button secondary"
+                            (click)="openBillingPortal()" [disabled]="!canOpenBillingPortal()">
+                            <mat-icon>settings</mat-icon>
+                            Manage billing portal
+                        </button> -->
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</section>

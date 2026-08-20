@@ -1,0 +1,81 @@
+<div class="wizard-container">
+  @if(loading) {
+      <app-loading-spinner></app-loading-spinner>
+  }
+  <div *ngIf="step === 0 && !isAiMode" class="intro-screen">
+
+    <button class="btn btn-primary" (click)="startWizard()">
+      🤖 I want AI to generate my position
+    </button>
+  </div>
+
+  <div *ngIf="isAiMode && !generatedPosition" class="ai-mode-block">
+
+    <div class="container__flex">
+      <button class="btn btn-secondary" (click)="disableAiMode()">
+        <mat-icon>arrow_back</mat-icon>
+        Back
+      </button>
+    </div>
+  </div>
+
+  <form *ngIf="step === 1 && isAiMode && !generatedPosition"
+        [formGroup]="wizardForm"
+        class="wizard-form">
+
+      <div class="form-group container__full-width">
+        <label class="new-label">Position Title</label>
+        <input formControlName="title" type="text" class="transparent-input-full-width"
+              placeholder="e.g. Senior Java Developer">
+      </div>
+
+    <div class="form-group container__full-width">
+      <label class="new-label">Main Skills / Technologies</label>
+      <div class="container__flex" style="position: relative;">
+        <input [(ngModel)]="rawSkill" 
+              [ngModelOptions]="{ standalone: true }"
+              type="text" 
+              class="transparent-input-full-width"
+              placeholder="Add the required skills" 
+              name="skillInput">
+        <div class="round-add-button add-btn" (click)="add(rawSkill)">
+          <mat-icon>add</mat-icon>
+        </div>
+      </div>
+      <div class="tag-items">
+        @for (item of skills.controls; track item.value) {
+          <div class="tag-item">
+            <span>{{ item.value }}</span>
+
+            <button (click)="remove(item.value)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="form-group container__full-width">
+      <label class="new-label">Brief Description</label>
+      <textarea formControlName="description"
+                rows="4"
+                class="transparent-input-full-width"
+                placeholder="Describe the project or context...">
+      </textarea>
+    </div>
+
+    <button class="btn btn-success"
+            [disabled]="wizardForm.invalid"
+            (click)="submitForm()">
+      🚀 Generate Position
+    </button>
+  </form>
+
+  <div *ngIf="generatedPosition" class="result-block">
+    <h2>🎉 Everything is ready!</h2>
+    <p class="lead">
+      Please review the generated position and make small amendments if needed.
+    </p>
+  </div>
+
+</div>

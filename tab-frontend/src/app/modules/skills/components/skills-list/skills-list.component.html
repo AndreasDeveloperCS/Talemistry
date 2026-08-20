@@ -1,0 +1,86 @@
+<div class="container__center">
+  <button
+      class="button__primary-color button--large "
+      (click)="create()">
+      {{content.txtAddNewSkill}}
+  </button>
+</div>
+
+<div class="users-wrapper">
+  <h3>{{ content.txtSkills }}</h3>
+
+  <div class="mat-elevation-z8">
+
+    <mat-paginator class="container__center paginator__new" [pageSize]="selectedPageSize" (page)="getServerData($event)" [length]="totalItems"
+      [pageIndex]="pageIndex" [showFirstLastButtons]="true" [pageSizeOptions]="pageSizes" aria-label="Select page">
+    </mat-paginator>
+
+    <div class="mat-elevation-z8">
+
+      <table mat-table [dataSource]="dataSource" mat-table class="table-content" matSort>
+
+        @for (column of displayedColumns; track column) {
+        <ng-container [matColumnDef]="column">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="new-table__header">
+            @if (column!='edit' && column!='delete' && column!='isVerified') {
+              <div class="header-info" >
+                <!-- class="local-search-filter" -->
+                <mat-form-field >
+                  <input matInput (keyup)="applyLocalFilter($event, column)" #inputLocalFilter
+                    [placeholder]="headerNames.get(column) ?? ''">
+                </mat-form-field>
+              </div>
+            }
+          </th>
+          <td mat-cell *matCellDef="let rowValue" class="new-table__cell">
+            @if (column=='edit') {
+              <div class="container__center">
+                <mat-button mat-icon-button class="primary-icon cicon" (click)="edit(rowValue)">
+                  <mat-icon>
+                    <svg width="1.5rem" height="1.5rem" fill="var(--icon-stroke-color)" viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path d="m18.988 2.012 3 3L19.701 7.3l-3-3zM8 16h3l7.287-7.287-3-3L8 13z" />
+                      <path
+                        d="M19 19H8.158c-.026 0-.053.01-.079.01-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .896-2 2v14c0 1.104.897 2 2 2h14a2 2 0 0 0 2-2v-8.668l-2 2V19z" />
+                    </svg>
+                  </mat-icon>
+                </mat-button>
+              </div>
+            }
+            @else if (column=='delete') {
+              <mat-button mat-icon-button (click)="delete(rowValue)" class="container__center">
+                <mat-icon>delete_sweep</mat-icon>
+              </mat-button>
+            }
+            @else if (column=='isVerified') {
+              <div class="container__center">
+                <app-toggle-button
+                  [isActive]="rowValue.isVerified" (toggle)="isVerifiedSwitched(rowValue)">
+                </app-toggle-button>
+              </div>
+            }
+            @else {
+              <div>
+                {{ getValue(rowValue, column) }}
+              </div>
+            }
+          </td>
+        </ng-container>
+        }
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></tr>
+        <tr mat-row *matRowDef="let rowValue; columns: displayedColumns;"></tr>
+
+        @if (dataSource.data.length === 0) {
+        <tr class="mat-row">
+          <td class="mat-cell" colspan="10">No data matching the filter</td>
+        </tr>
+        }
+      </table>
+    </div>
+
+    <mat-paginator class="container__center paginator__new" [pageSize]="selectedPageSize" (page)="getServerData($event)" [length]="totalItems"
+      [pageIndex]="pageIndex" [showFirstLastButtons]="true" [pageSizeOptions]="pageSizes" aria-label="Select page">
+    </mat-paginator>
+  </div>
+</div>

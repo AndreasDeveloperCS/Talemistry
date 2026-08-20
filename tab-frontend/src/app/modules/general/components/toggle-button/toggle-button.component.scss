@@ -1,0 +1,36 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.toggle-btn {
+    width: 44px;
+    height: 22px;
+    border-radius: $borderRadiusMiddle;
+    justify-self: center;
+    display: flex;
+    background-color: #ccc; 
+    position: relative;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .toggle-btn::before {
+    content: "";
+    width: 21px;
+    height: 21px;
+    background-color: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    transition: transform 0.3s ease;
+  }
+  
+  .toggle-btn.active {
+    background: linear-gradient(45deg, #C78A00, #D77400, #E76A00, #F66411);
+  }
+  
+  .toggle-btn.active::before {
+    transform: translateX(20px);
+  }  

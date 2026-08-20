@@ -1,0 +1,170 @@
+<div class="schedule-wrapper">
+  <div class="schedule-header">
+    <div class="container header-container">
+      <h1 class="page-title">{{ content.txtScheduleSettingsManagement }}</h1>
+      <div class="header-actions">
+      </div>
+    </div>
+  </div>
+
+  <div class="container schedule-body">
+    <div class="tabs">
+      <button (click)="setActiveTab('timeFrames')" class="tab-btn" [class.active-tab]="activeTab === 'timeFrames'">
+        <mat-icon>calendar_month</mat-icon>
+        <span class="tabs-lbl">{{ content.txtTimeFrames }}</span>
+      </button>
+      <button (click)="setActiveTab('settings')" class="tab-btn" [class.active-tab]="activeTab === 'settings'">
+        <mat-icon>settings</mat-icon>
+        <span class="tabs-lbl">{{ content.txtSettings }}</span>
+      </button>
+    </div>
+    @if(loading) {
+      <app-loading-spinner></app-loading-spinner>
+    }
+    @if(!loading) {
+      @if(activeTab === 'timeFrames') {
+      <div class="tab-content-frames">
+        <app-schedule-calendar-availability [userId]="userId"></app-schedule-calendar-availability>
+      </div>
+      }
+
+      @if(activeTab === 'settings') {
+      <div class="tab-content-settings settings-section">
+              <div class="settings-card">
+          <div class="settings-card-block">
+            <h3 class="card-title">
+              <mat-icon>link</mat-icon>
+              {{ content.txtYourAvailabilityLink }}
+            </h3>
+            <p class="card-description">
+              {{ content.txtShareYourAvailabilityLink }}
+            </p>
+            <div class="link-wrapper">
+              <textarea 
+                type="text" readonly 
+                [value]="getScheduleLink()" 
+                class="link-input link">
+              </textarea>
+              <button class="link-copy-btn" (click)="copyToClipboard()">
+                <mat-icon>file_copy</mat-icon>
+                {{ content.txtCopy }}
+              </button>
+            </div>
+          </div>
+
+          <div class="settings-card-block">
+            <h3 class="card-title">
+              <mat-icon>calendar_today</mat-icon>
+              {{ content.txtEmbedCalendar }}
+            </h3>
+            <p class="card-description">
+              {{ content.txtEmbedYourAvailabilityCalendar }}
+            </p>
+            <div class="link-wrapper">
+              <div class="embed-code" style="width: 100%; resize: none; overflow-wrap: break-word;">
+                <code>
+                    &lt;iframe src="{{getScheduleLink()}}" width="100%" height="600" frameborder="0"&gt;&lt;/iframe&gt;
+                </code>
+              </div>
+              <button class="link-copy-btn" (click)="copyIFrameToClipboard()">
+                <mat-icon>file_copy</mat-icon>
+                {{ content.txtCopy }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-card">
+          <div class="settings-container">
+
+            <div class="setting-group" [hidden]="true">
+              <label for="buffer-time">
+                <mat-icon>more_time</mat-icon>
+                {{ content.txtBufferTime }}
+              </label>
+              <p>{{ content.txtMinimumTimeBetweenAppointments }}</p>
+              <select id="buffer-time" [value]="bufferTime" (ngModelChange)="updateBufferTime($event)">
+                @for(bufferTime of bufferTimeOptions; track bufferTime) {
+                <option [value]="bufferTime.value">
+                  {{ bufferTime.label }}
+                </option>
+                }
+              </select>
+            </div>
+
+            <div class="setting-group">
+              <label for="default-duration" class="duration-label">
+                <mat-icon aria-hidden="true">hourglass_bottom</mat-icon>
+                {{ content.txtDefaultAppointmentDuration }}
+              </label>
+              <p class="description">{{ content.txtStandardAppointmentLength }}</p>
+              <select [(ngModel)]="selectedMeetingDuration" id="default-duration" 
+                (ngModelChange)="updateDefaultDuration($event)" class="transparent-input-full-width">
+                @for(duration of durationOptions; track duration) {
+                <option [ngValue]="duration.value">
+                  {{ duration.label }}
+                </option>
+                }
+              </select>
+            </div>
+
+            <div class="setting-group">
+              <label for="planning-perspective">
+                <mat-icon>timeline</mat-icon>
+                {{ content.txtPlanningPerspective }}
+              </label>
+              <p>{{ content.txtDefinePlanningPerspective }}</p>
+              <select id="planning-perspective" [(ngModel)]="selectedPlanningPerspectiveOption"
+                (ngModelChange)="updatePlanningPerspective($event)" class="transparent-input-full-width">
+                @for(planningPerspective of planningPerspectiveOptions; track planningPerspective) {
+                <option [ngValue]="planningPerspective.value">
+                  {{ planningPerspective.label }}
+                </option>
+                }
+              </select>
+            </div>
+
+            <div class="setting-group">
+              <app-timezone-select
+                [selectedTimezone]="selectedTimezone"
+                (timezoneChange)="onTimezoneChange($event)">
+              </app-timezone-select>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-text">
+                <label for="auto-accept">{{ content.txtAutoAcceptBookings }}</label>
+                <p>{{ content.txtAutomaticallyAcceptBookings }}</p>
+              </div>
+
+              <div class="toggle-wrapper" (click)="toggleAutoAccept()">
+                <span class="toggle-bg" [class.bg-on]="autoAcception" [class.bg-off]="!autoAcception"></span>
+                <span class="toggle-dot" [class.toggled]="autoAcception"></span>
+              </div>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-text">
+                <label for="auto-extend">{{ content.txtAutoExtendAvailability }}</label>
+                <p>{{ content.txtAutomaticallyExtendAvailability }}</p>
+              </div>
+              <div class="toggle-wrapper" (click)="toggleAutoExtend()">
+                <span class="toggle-bg" [class.bg-on]="autoExtension" [class.bg-off]="!autoExtension"></span>
+                <span class="toggle-dot" [class.toggled]="autoExtension"></span>
+              </div>
+            </div>
+
+            <div mat-dialog-actions [align]="'center'" class="container__center">
+              <button class="button__primary-color button--medium" (click)="save()">
+                <mat-icon>save</mat-icon>
+                <span>{{ content.saveText }}</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      }
+    }
+  </div>
+</div>

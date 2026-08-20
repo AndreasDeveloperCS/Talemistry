@@ -1,0 +1,22 @@
+<mat-label class="new-label">{{ content.txtHiringManagers }}</mat-label>
+  <mat-form-field>
+    <div class="input-group__field" style="justify-content: flex-start;">
+      <input type="text" class="transparent-input-full-width" [placeholder]="content.txtHiringManagers" matInput 
+        [(ngModel)]="rawInputlValue">
+      <div class="round-add-button container__center" (click)="add(rawInputlValue)">
+        <mat-icon inline="true">add</mat-icon>
+      </div>
+    </div>
+  </mat-form-field>
+
+  <div class="tag-items">
+    @for (item of hiringManagersList; track item) {
+    <div class="tag-item">
+        <div class="input-group__item-text">{{ item }}</div>
+        <button (click)="remove(item)" inline="true" class="remove-btn">
+          <!-- <app-delete-icon></app-delete-icon> -->
+            <mat-icon>close</mat-icon>
+        </button>          
+    </div>
+    }
+  </div>

@@ -1,0 +1,56 @@
+<div class="calendar-container">
+  <div class="calendar-header">
+
+    <div class="view-tabs">
+      <button 
+        class="tab-button"
+        [class.active]="activeView === 'week'"
+        (click)="setView('week')">
+        Week View
+      </button>
+      <button 
+        class="tab-button"
+        [class.active]="activeView === 'day'"
+        (click)="setView('day')">
+        Day View
+      </button>
+    </div>
+
+    <div class="nav-buttons">
+      <button 
+        class="nav-button"
+        (click)="activeView === 'week' ? goToPreviousWeek() : goToPreviousDay()">
+        <mat-icon class="material-icons">chevron_left</mat-icon>
+        <!-- Previous -->
+      </button>
+      <button class="today-button" (click)="goToToday()">
+        Today
+      </button>
+      <button 
+        class="nav-button"
+        (click)="activeView === 'week' ? goToNextWeek() : goToNextDay()">
+        <!-- Next -->
+        <mat-icon class="material-icons">chevron_right</mat-icon>
+      </button>
+    </div>
+
+    <button class="new-time-frame-btn" (click)="openAddTimeSlotForm()">
+      <mat-icon>add</mat-icon> 
+      <span class="new-time-frame-lbl">{{ content.txtAddTimeFrame }}</span>
+    </button>
+  </div>
+
+  <div class="calendar-content">
+    <app-weekly-view 
+      *ngIf="activeView === 'week'"
+      [currentDate]="currentDate"
+      (onMeetingClick)="handleMeetingClick($event)">
+    </app-weekly-view>
+    
+    <app-daily-view 
+      *ngIf="activeView === 'day'"
+      [currentDate]="currentDate"
+      (onMeetingClick)="handleMeetingClick($event)">
+    </app-daily-view>
+  </div>
+</div>

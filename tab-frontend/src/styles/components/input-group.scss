@@ -1,0 +1,88 @@
+@use 'variables' as *;
+
+.input-group {
+  color: var(--text);
+  width: 100%;
+  display: inline-flex !important;
+
+  @media (max-width: $screen-size-tab) {
+    max-width: 100%;
+  }
+
+  &__field {
+    display: inline-flex !important;
+    width: 100%;
+
+    justify-content: flex-end;
+    justify-self: flex-end;
+    justify-items: flex-end;
+    align-content: center;
+    align-self: center;
+    align-items: center;
+  }
+
+  &__button {
+    position: absolute;
+    display: inline-flex;
+    margin-right: 0.3rem;
+    margin-top: 0;
+  }
+
+  &__dropdown {
+    background-color: transparent;
+    width: 100%;
+    max-height: 20rem;
+  }
+
+  &__items {
+    display: flex;
+    gap: $gap-middle;
+    text-align: center;
+    font-size: $font-size-header-narrow;
+    line-height: $line-height-small;
+    flex-wrap: wrap-reverse;
+    margin: $margin-narrow 0;
+
+    @media (max-width: $screen-size-mobile) {
+      gap: $gap-small;
+    }
+  }
+
+  &__item {
+    display: flex;
+    justify-content: space-between;
+    padding: $padding-narrow;
+    background: $main-button-gradient; //$input-value-backgrouns;
+    gap: $gap-small;
+    justify-self: center;
+    justify-items: flex-start;
+    justify-content: flex-start;
+    align-items: center;
+    align-content: center;
+    align-self: center;
+    text-align: left;
+    border-radius: $borderRadius;
+
+    @media (max-width: $screen-size-mobile) {
+      padding: $padding-narrow;
+      gap: $gap-small;
+      font-size: $font-size-button-narrow;
+    }
+  }
+
+  &__middle-width {
+    max-width: 20rem;
+  }
+}
+
+.selected-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background: $gradient-color-4 !important;
+  padding: $padding-narrow;
+  margin-bottom: $margin-narrow;
+  border: 1px solid $pallete-0-color-11 !important;
+  border-radius: $borderRadiusMiddle $borderRadius !important;
+  gap: $gap-micro;
+}

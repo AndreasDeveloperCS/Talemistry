@@ -1,0 +1,196 @@
+<div class="universal-input details">
+
+  <div class="details-wrapper-column">
+    <div [formGroup]="generalInfoForm"
+      class="details-items details__block-style">
+      <h5>{{content.txtGeneralInfo}}</h5>
+      <app-position-details-company></app-position-details-company>
+      <div class="container__flex container__start">
+        <mat-form-field class="container__full-width">
+          <mat-label>{{content.txtWorkPlace}}</mat-label>
+          <mat-select
+            formControlName="workPlaces">
+            <div>
+              @for (option of workPlaces; track option) {
+              <mat-option [value]="option">
+                <div class="container__middle">
+                  {{option}}
+                </div>
+              </mat-option>
+              }
+            </div>
+          </mat-select>
+        </mat-form-field>
+        <!-- [(ngModel)]="positionsService.model.positionDetails.general.workPlace"
+        [(ngModel)]="positionsService.model.positionDetails.general.specificRequirements" -->
+
+        <app-position-details-location 
+          [placeholderText]="content.txtLocation">
+        </app-position-details-location>
+
+      </div>
+
+      <mat-form-field>
+        <mat-label>{{content.txtSpecificRequirement}}</mat-label>
+        <mat-select multiple
+          formControlName="specificRequirement">
+          <div class="input-group__dropdown">
+            @for (option of specificRequirements; track option) {
+            <mat-option [value]="option">
+              <div>
+                {{option}}
+              </div>
+            </mat-option>
+            }
+          </div>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>{{content.txtHiringManagers}}</mat-label>
+        <input matInput
+          formControlName="hiringManagers">
+      </mat-form-field>
+
+    </div>
+
+    <div [formGroup]="contractConditionsForm"
+      class="details-items details__block-style">
+      <h5>{{content.txtContractConditions}} </h5>
+
+      <mat-form-field>
+        <mat-label>{{content.txtCooperationType}}</mat-label>
+        <mat-select
+          formControlName="cooperationType">
+          <div class="input-group__dropdown">
+            @for (option of cooperationType; track option) {
+            <mat-option [value]="option">
+              <div class="container__middle">
+                {{option}}
+              </div>
+            </mat-option>
+            }
+          </div>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="container__flex container__space-between ">
+        <mat-form-field>
+          <mat-label
+            class="mat-label-select">{{content.txtWorkInvolvement}}</mat-label>
+          <mat-select
+            formControlName="jobType">
+            <div class="input-group__dropdown">
+              @for (option of jobType; track option) {
+              <mat-option [value]="option">
+                <div class="container__middle">
+                  {{ option }}
+                </div>
+              </mat-option>
+              }
+            </div>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>{{content.txtJobFormat}}</mat-label>
+          <mat-select
+            formControlName="involevementType">
+            <div class="input-group__dropdown">
+              @for (option of involevementTypes; track option) {
+              <mat-option [value]="option">
+                <div class="container__middle">
+                  {{option}}
+                </div>
+              </mat-option>
+              }
+            </div>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="container__flex container__space-between">
+        <mat-form-field>
+          <mat-label>{{content.txtBudget}}</mat-label>
+          <input matInput
+            formControlName="maxBudgetAmount">
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>{{content.txtCooperationType}}</mat-label>
+          <mat-select
+            formControlName="timeline">
+            <div class="input-group__dropdown">
+              @for (option of timeline; track option) {
+              <mat-option [value]="option">
+                <div class="container__middle">
+                  {{option}}
+                </div>
+              </mat-option>
+              }
+            </div>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="container__flex container__space-between">
+        <app-position-details-benefits [placeholderText]="'Benefits'">
+        </app-position-details-benefits>
+      </div>
+    </div>
+
+  </div>
+
+    <div class="details-items pt-md">
+      <div [formGroup]="positionRequirementsForm">
+        <h5>{{content.txtPositionRequirements}}</h5>
+
+        <mat-form-field>
+          <mat-label>{{content.txtSeniorityLevel}}</mat-label>
+          <mat-select
+            formControlName="ProficiencyLevel">
+            <div class="input-group__dropdown">
+              @for (option of proficiencyLevels; track option) {
+              <mat-option [value]="option">
+                <div class="container__middle">
+                  {{option}}
+                </div>
+              </mat-option>
+              }
+            </div>
+          </mat-select>
+        </mat-form-field>
+        <app-position-details-required-education>
+        </app-position-details-required-education>
+
+        <app-position-details-required-certification>
+        </app-position-details-required-certification>
+      </div>
+      <div>
+        <app-position-details-skill [placeholderText]="'Hard skills'"
+          [skillType]="SkillType.hard"
+          [roleProfessioncyLevel]="ProficiencyLevel.Regular"></app-position-details-skill>
+        <app-position-details-skill [placeholderText]="'Soft skills'"
+          [skillType]="SkillType.soft"
+          [roleProfessioncyLevel]="ProficiencyLevel.Regular"></app-position-details-skill>
+        <app-position-details-skill
+          [placeholderText]="'Managirial skills'"
+          [skillType]="SkillType.managirial"
+          [roleProfessioncyLevel]="ProficiencyLevel.Regular"></app-position-details-skill>
+        <app-position-details-skill
+          [placeholderText]="'Domain skills'"
+          [skillType]="SkillType.domain"
+          [roleProfessioncyLevel]="ProficiencyLevel.Regular"></app-position-details-skill>
+        <app-position-details-skill [placeholderText]="'Languages'"
+          [skillType]="SkillType.language"
+          [roleProfessioncyLevel]="ProficiencyLevel.Regular"></app-position-details-skill>
+      </div>
+    </div>
+    <div [formGroup]="additionalInfoForm">
+      <mat-form-field class="details-items ">
+        <mat-label>{{content.txtAdditionalInformation}}</mat-label>
+        <textarea matInput
+          formControlName="additionalInfo" rows="4" placeholder>
+        </textarea>
+      </mat-form-field>
+    </div>
+</div>

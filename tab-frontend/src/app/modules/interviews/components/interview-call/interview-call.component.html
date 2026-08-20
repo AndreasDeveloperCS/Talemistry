@@ -1,0 +1,35 @@
+<!-- <div class="call">
+    <div class="videos">
+        <video #remoteVideo playsinline autoplay></video>
+    </div>
+
+    <div class="videos">
+        <video #localVideo playsinline autoplay></video>
+    </div>
+
+    <div class="videos">
+        <video #localVideo playsinline autoplay class="local"></video>
+    </div>
+
+    <div class="controls">
+        <button (click)="toggleAudio()">{{ audioOn ? 'Mute' : 'Unmute' }}</button>
+        <button (click)="toggleVideo()">{{ videoOn ? 'Stop Video' : 'Start Video' }}</button>
+        <button (click)="screenshare()">Share Screen</button>
+    </div>
+</div> -->
+
+<div class="call">
+    <div class="videos">
+        <video #localVideo autoplay playsinline muted class="local"></video>
+    </div>
+
+    <div class="remote-videos">
+        <video *ngFor="let s of remoteStreams" autoplay playsinline [srcObject]="s"></video>
+    </div>
+
+    <div class="controls">
+        <button (click)="toggleAudio()">{{ audioOn ? 'Mute' : 'Unmute' }}</button>
+        <button (click)="toggleVideo()">{{ videoOn ? 'Stop Video' : 'Start Video' }}</button>
+        <button (click)="screenshare()">Share Screen</button>
+    </div>
+</div>

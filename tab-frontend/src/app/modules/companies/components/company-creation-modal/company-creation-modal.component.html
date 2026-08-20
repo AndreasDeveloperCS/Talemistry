@@ -1,0 +1,160 @@
+<button type="button" mat-icon-button class="form-button exit-button" (click)="onCancel()">
+    <mat-icon>
+        <svg width="1.5rem" height="1.5rem" viewBox="0 0 108 107" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M27 26.75L54 53.5L81 26.75" stroke="white" stroke-width="10" stroke-linecap="round" />
+            <path d="M27 80.25L54 53.5L81 80.25" stroke="white" stroke-width="10" stroke-linecap="round" />
+        </svg>
+    </mat-icon>
+</button>
+
+<form [formGroup]="companyForm"
+    class="universal-input details custom-toggle modal-window details-items company-block-style modal-dialog">
+    <h2 class="dialog-header">{{ controlButtonContent }} {{ content.txtCompany }}</h2>
+    <div class="container__full-width">
+        <label class="form-field new-label">{{ content.txtCompanyName }}</label>
+        <input matInput formControlName="companyName" class="transparent-input-full-width" required>
+        @if(companyForm.get('companyName')?.hasError('required')) {
+        <p>Company name is <strong>required</strong></p>
+        }
+    </div>
+
+    <div class="container__full-width">
+        <label class="new-label">{{ content.txtShortDescription }}</label>
+        <textarea class="transparent-input-full-width" matInput formControlName="shortDescription" rows="3"
+            placeholder="">
+            </textarea>
+    </div>
+
+    <div class="container__full-width">
+        <label class="new-label">Company Logo</label>
+        <div class="file-input-row">
+            <input matInput [readonly]="true" name="icon" formControlName="icon" [(ngModel)]="companyVersion.data.logo"
+                [value]="fileName == '' || fileName == undefined ? content.txtSelectSocialMediaIconPlaceholder: fileName"
+                class="transparent-input-full-width" />
+
+            <div class="import-profile-image">
+
+                <a class="import-profile-image-link" (click)="fileInput.click()" target="_blank">
+                </a>
+
+                <input hidden (change)="onFileSelected($event)" [accept]="extensions" #fileInput type="file" />
+
+                <button type="button" class="button__primary-color button--small " (click)="fileInput.click()">
+                    {{ content.btnSelect }}
+                </button>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="container__full-width container__flex">
+        <div class="container__full-width">
+            <app-countries (countryChange)="onCountrySelected($event)"
+                [selectedCountry]="companyForm.get('country')?.value">
+            </app-countries>
+        </div>
+        <div class="container__full-width">
+            <app-cities (cityChange)="onCitySelected($event)" [selectedCity]="companyForm.get('city')?.value"
+                [selectedCountry]="companyForm.get('country')?.value">
+            </app-cities>
+        </div>
+    </div>
+
+    <div class="container__full-width">
+        <app-main-industry-domain (industryDomainChange)="onIndustryDomainSelected($event)"
+            [selectedMainIndustryDomain]="companyForm.get('mainIndustryDomain')?.value"
+            [selectedIndustryCategories]="companyForm.get('industryCategories')?.value">
+        </app-main-industry-domain>
+    </div>
+
+    <div class="container__full-width">
+        <div class="container__full-width">
+            <label class="new-label">{{ content.txtCompanyType }}</label>
+            <input class="transparent-input-full-width" matInput formControlName="companyType">
+        </div>
+
+        <div class="container__full-width">
+            <label class="new-label">{{ content.txtCompanySite }}</label>
+            <input matInput class="transparent-input-full-width" formControlName="companySite">
+        </div>
+    </div>
+
+    <div class="container__flex container__space-between">
+        <div class="container__full-width">
+            <label class="new-label">{{ content.txtCompanySize }}</label>
+            <input class="transparent-input-full-width" matInput formControlName="companySize">
+        </div>
+
+        <div class="container__full-width">
+            <label class="new-label">{{ content.txtCompanySizeRange }}</label>
+            <input class="transparent-input-full-width" matInput formControlName="companySizeRange">
+        </div>
+    </div>
+
+    <div class="container__flex container__space-between">
+        <div class="currencyField">
+            <label class="labelText new-label">{{ content.txtCurrency }}*</label>
+            <app-currency-select [predefinedCurrency]="data.data.currency"
+                (currencyChange)="onCurrencySelected($event)">
+            </app-currency-select>
+        </div>
+
+        <div class="container__full-width">
+            <label class="new-label">{{ content.txtCompanyRevenue }}</label>
+            <input class="transparent-input-full-width" matInput formControlName="companyRevenue" type="number" min="0"
+                (keydown)="preventMinus($event)">
+        </div>
+    </div>
+
+    <div class="container__flex container__space-between">
+        <div class="container__full-width">
+            <label class="new-label">{{ content.txtRegistrationNumber }}</label>
+            <input class="transparent-input-full-width" matInput formControlName="registrationNumber">
+        </div>
+
+        <div class="container__full-width">
+            <label class="new-label">{{ content.txtTaxNumber }}</label>
+            <input class="transparent-input-full-width" matInput formControlName="taxNumber">
+        </div>
+    </div>
+
+    <div class="container__flex container__space-between">
+        <div class="container__full-width">
+            <label class="new-label">{{ content.txtManagerContacts }}</label>
+            <input class="transparent-input-full-width" matInput formControlName="managerContacts">
+        </div>
+    </div>
+
+    <div class="container__flex container__space-between">
+        <div class="container__full-width">
+            <label class="new-label">{{ content.txtCompanyEmail }}</label>
+            <input class="transparent-input-full-width" matInput formControlName="companyEmail">
+        </div>
+
+        <div class="container__full-width">
+            <label class="new-label">{{ content.txtCompanyPhone }}</label>
+            <input class="transparent-input-full-width" matInput formControlName="companyPhone">
+        </div>
+    </div>
+
+    <div class="container__flex container__space-between">
+        <div class="container__full-width">
+            <app-company-benefits (companyBenefitChange)="onCompanyBenefitSelected($event)"
+                [selectedCompanyBenefits]="companyForm.get('companyBenefits')?.value">
+            </app-company-benefits>
+        </div>
+
+        <div class="container__full-width">
+            <app-company-values (companyValueChange)="onCompanyValueSelected($event)"
+                [selectedCompanyValues]="companyForm.get('companyValues')?.value">
+            </app-company-values>
+        </div>
+    </div>
+
+    <div [align]="'end'" class="container__center">
+        <button type="button" (click)="save()" [class.disabled]="!companyForm.valid"
+            class="button__primary-color button--medium container__center">
+            {{ controlButtonContent }}
+        </button>
+    </div>
+</form>

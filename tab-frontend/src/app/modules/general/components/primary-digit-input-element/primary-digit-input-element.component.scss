@@ -1,0 +1,107 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+input[type="number"] {
+    -moz-appearance: textfield;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    text-align: right;
+    justify-content: flex-end;
+    justify-items: flex-end;
+    justify-self: flex-end;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+    /* Firefox */
+    -webkit-appearance: none;
+    /* Safari and Chrome */
+    appearance: none;
+    /* Standard */
+    text-align: right;
+    /* Align digits to the right */
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.increment {
+    mat-icon {
+        opacity: 0.75;
+
+        scale: 2;
+        color: var(--text);
+
+        &:hover {
+            color: $color-hover;
+            opacity: 0.9;
+        }
+
+        &:active {
+            opacity: 1;
+            color: $color-active;
+        }
+    }
+
+    &:hover {
+        opacity: 1;
+    }
+
+    &:active {
+        color: $color-active;
+    }
+}
+
+.decrement {
+    mat-icon {
+        opacity: 0.75;
+        scale: 2;
+        color: var(--text);
+
+        &:hover {
+            opacity: 0.8;
+            color: $color-secondary-hover;
+        }
+
+        &:active {
+            opacity: 0.9;
+            color: $color-secondary;
+        }
+    }
+
+    &:hover {
+        opacity: 0.8;
+        color: $color-secondary-hover;
+    }
+
+    &:active {
+        opacity: 0.9;
+        color: $color-secondary;
+    }
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+    /* Убирает стрелки в Firefox */
+}
+
+.primary-digit-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    width: 100%;
+}

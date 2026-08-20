@@ -1,0 +1,75 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.copy-toast {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 280px;
+  max-width: 420px;
+  padding: 16px 18px;
+  border-radius: 22px;
+  background: rgba(17, 24, 39, 0.92);
+  backdrop-filter: blur(16px);
+  color: white;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.25);
+  animation: toast-slide-up 0.28s ease, toast-fade-out 0.3s ease 2.7s forwards;
+}
+
+.copy-toast__icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, $pallete-0-color-14, $pallete-0-color-15);
+  flex-shrink: 0;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.copy-toast__content {
+  display: flex;
+  flex-direction: column;
+}
+
+.copy-toast__title {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.copy-toast__message {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.4;
+}
+
+@keyframes toast-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes toast-fade-out {
+  to {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+    pointer-events: none;
+  }
+}

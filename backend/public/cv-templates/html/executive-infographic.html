@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>CV - {{FIRSTNAME}} {{LASTNAME}}</title>
+  <link rel="stylesheet" href="../styles/executive-infographic.css" />
+</head>
+
+<body>
+<div class="ei-wrapper">
+
+  <!-- HEADER -->
+  <header class="ei-header">
+    <div class="ei-header__inner">
+      <div class="ei-header__profile">
+
+        <div class="ei-header__photo">
+          {{#if PHOTO}}
+            <img src="{{PHOTO}}" alt="{{FIRSTNAME}} {{LASTNAME}}">
+          {{else}}
+            <span class="ei-header__initials">
+              {{INITIALS}}
+            </span>
+          {{/if}}
+        </div>
+
+        <div class="ei-header__info">
+          <h1 class="ei-header__name">{{FIRSTNAME}} {{LASTNAME}}</h1>
+          {{#if TITLE}}
+            <p class="ei-header__title">{{TITLE}}</p>
+          {{/if}}
+
+          <div class="ei-header__contacts">
+            {{#if EMAIL}}
+            <div class="ei-header__contact-item">✉ {{EMAIL}}</div>
+            {{/if}}
+            {{#if PHONE}}
+            <div class="ei-header__contact-item">☎ {{PHONE}}</div>
+            {{/if}}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+
+  <!-- METRICS -->
+  <div class="ei-metrics">
+
+    {{#if HAS_EXPERIENCE}}
+    <div class="ei-metrics__card">
+      <div class="ei-metrics__icon">
+        <!-- <mat-icon>work</mat-icon> -->
+        💼
+      </div>
+      <div class="ei-metrics__content">
+          <div class="ei-metrics__value">{{YEARS_EXPERIENCE}}+</div>
+          <div class="ei-metrics__label">Years Experience</div>
+      </div>
+    </div>
+    {{/if}}
+
+    {{#if SKILLS_COUNT}}
+    <div class="ei-metrics__card">
+      <div class="ei-metrics__icon">
+        <!-- <mat-icon>gps_fixed</mat-icon> -->
+        📍
+      </div>
+      <div class="ei-metrics__content">
+        <div class="ei-metrics__value">{{SKILLS_COUNT}}</div> 
+        <div class="ei-metrics__label">Technical Skills</div>
+      </div>
+    </div>
+    {{/if}}
+
+    {{#if LANG_COUNT}}
+    <!-- Achievements count -->
+    <div class="ei-metrics__card">
+      <div class="ei-metrics__icon">
+        <!-- <mat-icon>trending_up</mat-icon> -->
+        📈
+      </div>
+      <div class="ei-metrics__content">
+        <div class="ei-metrics__value">{{LANG_COUNT}}</div>
+        <div class="ei-metrics__label">Languages</div>
+      </div>
+    </div>
+    {{/if}}
+
+    {{#if CERT_COUNT}}
+    <div class="ei-metrics__card">
+      <div class="ei-metrics__icon">
+        <!-- <mat-icon>verified</mat-icon> -->
+        ✔️
+      </div>
+      <div class="ei-metrics__content">
+        <div class="ei-metrics__value">{{CERT_COUNT}}</div>
+        <div class="ei-metrics__label">Certifications</div>
+      </div>
+    </div>
+    {{/if}}
+
+  </div>
+
+
+  <!-- MAIN -->
+  <main class="ei-main">
+
+    {{#if OBJECTIVE}}
+    <div class="ei-card">
+      <div class="ei-section-label">
+        <div class="ei-section-label__icon ei-section-label__icon--teal">
+          <!-- <mat-icon>track_changes</mat-icon> -->
+           🔄
+        </div>
+        <h2 class="ei-section-label__text">Career Objective</h2>
+      </div>
+      <p class="ei-objective-text">{{OBJECTIVE}}</p>
+    </div>
+    {{/if}}
+
+    {{#if SUMMARY}}
+    <div class="ei-card">
+      <div class="ei-section-label">
+        <div class="ei-section-label__icon ei-section-label__icon--teal">
+          <!-- <mat-icon>description</mat-icon> -->
+           📝
+        </div>
+        <h2 class="ei-section-label__text">Professional Summary</h2>
+      </div>
+      <p class="ei-summary-text">{{SUMMARY}}</p>
+    </div>
+    {{/if}}
+
+
+    <div class="ei-columns">
+
+      <!-- LEFT COLUMN -->
+      <div class="ei-columns__left">
+
+        {{#if HARD_SKILLS.length}}
+        <div class="ei-card">
+          <div class="ei-section-header">
+            <!-- <mat-icon>gps_fixed</mat-icon> -->
+             📍
+            <h2>Technical Skills</h2>
+          </div>
+          {{#each HARD_SKILLS}}
+          <div class="ei-skill-bar">
+            <div class="ei-skill-bar__header">
+              {{#if name}}
+                <span class="ei-skill-bar__name">{{ name }}</span>
+              {{/if}}
+              {{#if level}}
+              <span class="ei-skill-bar__level">{{ level }}</span>
+              {{/if}}
+            </div>
+            <div class="ei-skill-bar__track">
+              <div
+                class="ei-skill-bar__fill"
+                style="width: {{barWidth}}%;"
+              ></div>
+            </div>
+          </div>
+          {{/each}}
+        </div>
+        {{/if}}
+        
+        {{#if DOMAIN_SKILLS.length}}
+        <div class="ei-card">
+          <div class="ei-section-header">
+            <!-- <mat-icon>star</mat-icon> -->
+             ⭐
+            <h2>Domain Expertise</h2>
+          </div>
+          <div class="ei-domains">
+            {{#each DOMAIN_SKILLS}}
+            <div class="ei-domain">
+              {{#if level}}
+                <div class="ei-domain__years">{{level}}</div>
+              {{/if}}
+              {{#if name}}
+                <div class="ei-domain__name">{{name}}</div>
+              {{/if}}
+            </div>
+            {{/each}}
+          </div>
+        </div>
+        {{/if}}
+
+        {{#if MANAGERIAL_SKILLS.length}}
+        <div class="ei-card">
+          <div class="ei-section-header">
+            <!-- <mat-icon>groups</mat-icon> -->
+             👥
+            <h2>Managerial Skills</h2>
+          </div>
+          <div class="ei-tags">
+            {{#each MANAGERIAL_SKILLS}}
+              {{#if name}}
+                <span class="ei-tag ei-tag--teal">{{name}}</span>
+              {{/if}}
+            {{/each}}
+          </div>
+        </div>
+        {{/if}}
+
+        {{#if SOFT_SKILLS.length}}
+        <div class="ei-card">
+          <div class="ei-section-header">
+            <!-- <mat-icon>groups</mat-icon> -->
+             👥
+            <h2>Soft Skills</h2>
+          </div>
+          <div class="ei-tags">
+            {{#each SOFT_SKILLS}}
+              {{#if name}}
+                <span class="ei-tag ei-tag--teal">{{name}}</span>
+              {{/if}}
+            {{/each}}
+          </div>
+        </div>
+        {{/if}}
+
+        {{#if LANGUAGES.length}}
+        <div class="ei-card">
+          <div class="ei-section-header">
+            <!-- <mat-icon>language</mat-icon> -->
+             🌐
+            <h2>Languages</h2>
+          </div>
+          <div class="ei-languages">
+            {{#each LANGUAGES}}
+            <div class="ei-language">
+              <div class="ei-language__circle">
+                <svg viewBox="0 0 80 80">
+                  <circle
+                    cx="40" cy="40" r="36" class="ei-language__track"
+                    stroke-dasharray="{{circumference}}" />
+                  <circle
+                    cx="40" cy="40" r="36" class="ei-language__progress"
+                    stroke-dasharray="{{circumference}}"
+                    stroke-dashoffset="{{dashoffset}}" />
+                </svg>
+                <span class="ei-language__label-inner">{{short}}</span>
+              </div>
+              {{#if name}}
+                <div class="ei-language__name">{{name}}</div>
+              {{/if}}
+              {{#if level}}
+                <div class="ei-language__level">{{level}}</div>
+              {{/if}}
+            </div>
+            {{/each}}
+          </div>
+        </div>
+        {{/if}}
+      </div>
+
+
+      <!-- RIGHT COLUMN -->
+      <div class="ei-columns__right">
+
+        <div>
+        {{#if EXPERIENCE.length}}
+          <div class="ei-card">
+            <div class="ei-section-header">
+              <!-- <mat-icon>work</mat-icon> -->
+              💼
+              <h2>Professional Experience</h2>
+            </div>
+            <div class="ei-experience-list">
+              {{#each EXPERIENCE}}
+              <div class="ei-experience {{#if isBordered}}ei-experience--bordered{{/if}}">
+                <div class="ei-experience__header">
+                  <div>
+                    {{#if title}}
+                      <h3 class="ei-experience__title">{{title}}</h3>
+                    {{/if}}
+                    {{#if company}}
+                      <p class="ei-experience__company">{{company}}</p>
+                    {{/if}}
+                  </div>
+                  {{#if period}}
+                    <span class="ei-experience__date {{#if isCurrent}}ei-experience__date--current{{/if}}">{{period}}</span>
+                  {{/if}}
+                </div>
+
+                {{#if responsibilities}}
+                  <p class="ei-experience__subheader">Responsibilities</p>
+                  <ul class="ei-experience__achievements">
+                    {{#each responsibilities}}
+                    <li>
+                      ⭐
+                      <span class="ei-experience__desc">{{this}}</span>
+                    </li>
+                    {{/each}}
+                  </ul>
+                {{/if}}
+
+                {{#if achievements}}
+                <p class="ei-experience__subheader">Achievements</p>
+                <ul class="ei-experience__achievements">
+                  {{#each achievements}}
+                  <li>
+                    <!-- <mat-icon class="ei-achievement-icon">star</mat-icon> -->
+                    ⭐
+                    <span class="ei-experience__desc">{{this}}</span>
+                  </li>
+                  {{/each}}
+                </ul>
+                {{/if}}
+              </div>
+            </div>
+            {{/each}}
+
+          </div>
+        {{/if}}
+
+        {{#if EDUCATION.length}}
+          <div class="ei-card">
+            <div class="ei-section-header">
+              <!-- <mat-icon>school</mat-icon> -->
+              🎓
+              <h2>Education</h2>
+            </div>
+            <div class="ei-education-list">
+              {{#each EDUCATION}}
+              <div class="ei-education">
+                <div class="ei-education__icon">
+                  <!-- <mat-icon>school</mat-icon> -->
+                   🎓
+                </div>
+                <div class="ei-education__content">
+                  {{#if degree}}
+                    <h4>{{degree}} {{#if specialisation}}in {{specialisation}}{{/if}}</h4>
+                  {{/if}}
+                  {{#if institution}}
+                    <p class="ei-education__institution">{{institution}}</p>
+                  {{/if}}
+                  {{#if period}}
+                    <p class="ei-education__dates">{{period}}</p>
+                  {{/if}}
+                  {{#if fieldOfStudy}}
+                    <p class="ei-education__field">{{fieldOfStudy}}</p>
+                  {{/if}}
+                </div>
+              </div>
+              {{/each}}
+            </div>
+          </div>
+        {{/if}}
+
+        {{#if CERTIFICATIONS.length}}
+          <div class="ei-card">
+            <div class="ei-section-header">
+              <!-- <mat-icon>verified</mat-icon> -->
+               ✔️
+              <h2>Certifications</h2>
+            </div>
+            <div class="ei-certifications">
+
+              {{#each CERTIFICATIONS}}
+              <div class="ei-certification">
+                <div class="ei-certification__icon">
+                  <!-- <mat-icon>verified</mat-icon> -->
+                  ✔️
+                </div>
+                <div>
+                  {{#if name}}
+                    <h4>{{name}}</h4>
+                  {{/if}}
+                  <p>
+                    {{#if issuer}}{{issuer}} |{{/if}}
+                    {{#if year}}
+                      <span class="ei-certification__date">{{year}}</span>
+                    {{/if}}
+                  </p>
+                </div>
+              </div>
+              {{/each}}
+
+            </div>
+          </div>
+        {{/if}}
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

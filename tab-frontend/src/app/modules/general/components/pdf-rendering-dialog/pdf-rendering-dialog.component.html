@@ -1,0 +1,25 @@
+<button class="form-button exit-button" 
+  style="display: flex; position: absolute;" (click)="closeModal()">
+  <mat-icon class="icon-close">
+    <svg class="icon-close" width="1.5rem" height="1.5rem" viewBox="0 0 108 107"
+      fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M27 26.75L54 53.5L81 26.75" stroke="white" stroke-width="10"
+        stroke-linecap="round" />
+      <path d="M27 80.25L54 53.5L81 80.25" stroke="white" stroke-width="10"
+        stroke-linecap="round" />
+    </svg>
+  </mat-icon>
+</button>
+
+<div class="modal">
+    
+  <div class="modal-content">
+    @if (fileUrl) {
+      <iframe
+        [src]="fileUrl"
+        frameborder="0"
+      style="width: 100%; height: 100%;"></iframe>
+    }
+
+  </div>
+</div>

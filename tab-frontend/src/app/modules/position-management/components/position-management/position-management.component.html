@@ -1,0 +1,31 @@
+@if(initialLoading) {
+<app-loading-spinner></app-loading-spinner>
+}
+@if(!initialLoading) {
+<div class="dashboard-container" #scrollContainer>
+  <div class="content">
+    <div class="header">
+      <h2>Position Management</h2>
+      <button class="create-button" (click)="openCreatePositionDialog()">
+        <mat-icon>add</mat-icon>
+        Create Position
+      </button>
+    </div>
+
+    @if(dataItems.length > 0) {
+      <div class="positions-wrapper">
+        @for(position of dataItems; track position) {
+          <app-position-card
+            (positionsListUpdated)="onPositionsListUpdated($event)"
+            [position]="position"
+            [statuses]="statuses">
+          </app-position-card>
+        }
+      </div>
+    }
+    @if(dataItems.length === 0) {
+      <p>There are no positions created</p>
+    }
+  </div>
+</div>
+}

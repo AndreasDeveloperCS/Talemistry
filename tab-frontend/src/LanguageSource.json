@@ -1,0 +1,56 @@
+{
+	"English": {
+		"Main": "Main",
+		"Search": "Search",
+		"About Us": "AboutUs",
+		"Enter": "Enter",
+		"SignUp": "SignUp",
+		"Support": "Support",
+		"Contact": "Contact"
+	},
+	"Greek": {
+		"Main": "Κεντρική σελίδα",
+		"Search": "Αναζήτηση",
+		"About Us": "Σχετικά",
+		"Enter": "Είσοδος",
+		"SignUp": "Εγγραφή",
+		"Support": "Υποστήριξη",
+		"Contact": "Επικοινωνία"
+	},
+	"German": {
+		"Main": "Hauptsächlich",
+		"Search": "Suche",
+		"About Us": "Über uns",
+		"Enter": "Eintreten",
+		"SignUp": "Anmeldung",
+		"Support": "Die Unterstützung",
+		"Contact": "Kontakt"
+	},
+	"Ukrainian": {
+		"Main": "Головна",
+		"Search": "Пошук",
+		"About Us": "Про нас",
+		"Enter": "Вхід",
+		"SignUp": "Зареєструватися",
+		"Support": "Підтримка",
+		"Contact": "Контакти"
+	},
+	"Arabic": {
+		"Main": "رئيسي",
+		"Search": "يبحث",
+		"About Us": "معلومات عنا",
+		"Enter": "يدخل",
+		"SignUp": "اشتراك",
+		"Support": "الدعم",
+		"Contact": "اتصال"
+	},
+	"Spanish": {
+		"Main": "Main",
+		"Search": "Search",
+		"About Us": "AboutUs",
+		"Enter": "Enter",
+		"SignUp": "SignUp",
+		"Support": "Support",
+		"Contact": "Contact"
+	}
+}

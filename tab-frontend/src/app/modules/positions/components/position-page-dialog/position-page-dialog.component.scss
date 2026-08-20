@@ -1,0 +1,137 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.description-item {
+  width: 100%;
+  position: relative;
+  flex-grow: 1;
+  overflow: hidden;
+}
+app-position-details-main {
+  overflow-y: auto;
+}
+
+.step-indicator {
+  align-items: flex-start;
+  display: flex;
+  justify-content: flex-start;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: $pallete-0-color-14;
+  margin: 1rem 0;
+  height: fit-content;
+}
+
+.step-track-container {
+  position: relative;
+  margin: 0 0 $margin-extra-wide 0;
+  height: 4rem;
+}
+
+.step-track-line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 0.5rem;
+  background-color: var(--text);
+  border-radius: 2px;
+  border: $border solid $pallete-0-color-14;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.step-track-progress {
+  height: 100%;
+  background-color: $pallete-0-color-14;
+  border-radius: 2px;
+  transition: width 0.4s ease-in-out;
+  z-index: 2;
+  position: relative;
+}
+
+.step-icons {
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  z-index: 3;
+  cursor: pointer;
+}
+
+.step-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid $pallete-0-color-14;
+  background-color: var(--text);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s;
+  z-index: 3;
+  cursor: pointer;
+
+  mat-icon {
+    align-self: center;
+    display: flex;
+    justify-self: center;
+    font-size: 2rem !important;
+    color: $pallete-0-color-14 !important;
+    transition: color 0.3s ease;
+    height: fit-content;
+    width: fit-content;
+  }
+
+  @media (max-width: $screen-size-mobile) {
+      width: 40px;
+      height: 40px;
+
+      mat-icon {
+        font-size: 1.5rem !important;
+      }
+  }
+
+  &.active {
+    background-color: $pallete-0-color-14;
+
+    mat-icon {
+      color: $active-text !important;
+      scale: 1.2;
+    }
+  }
+
+  &.current-step {
+    animation: pulseScale 1.2s ease-in-out infinite;
+  }
+}
+
+@keyframes pulseScale {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.step-icon.disabled-step {
+  cursor: default;
+  pointer-events: none;
+
+  mat-icon {
+    opacity: 0.5;
+  }
+}

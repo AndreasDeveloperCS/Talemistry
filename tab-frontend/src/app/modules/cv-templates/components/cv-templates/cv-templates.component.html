@@ -1,0 +1,102 @@
+@if(isLoadingCV) {
+<div class="loading-overlay">
+  <app-loading-spinner></app-loading-spinner>
+</div>
+}
+<main class="home-container">
+  <div class="content-wrapper">
+    <div class="cv-layout">
+      <aside class="sidebar-panel">
+        <div class="sidebar-panel__intro">
+          <p class="eyebrow">CV Builder</p>
+        </div>
+
+        @if(!isMobilePreview) {
+          <div class="preview-toggle">
+            <button 
+              (click)="setMode('sample')" 
+              [class.active]="mode==='sample'">
+              Sample
+            </button>
+
+            <button 
+              (click)="setMode('user')" 
+              [class.active]="mode==='user'" 
+              [disabled]="!userId">
+              My Data
+            </button>
+          </div>
+        }
+
+        <div class="sidebar-content">
+          <section class="sidebar-section">
+            <div class="color-toggle-group">
+              @for (color of colorOptions; track color.value) {
+              <button type="button" class="color-toggle" [class.active]="selectedColor === color.value"
+                [attr.aria-pressed]="selectedColor === color.value" (click)="selectColor(color.value)">
+                <span class="color-toggle__swatches" aria-hidden="true">
+                  @for (tone of color.tones; track tone) {
+                  <span class="color-toggle__swatch" [style.background]="tone"></span>
+                  }
+                </span>
+                <span class="color-toggle__label">{{ color.label }}</span>
+              </button>
+              }
+            </div>
+          </section>
+
+          <section class="sidebar-section sidebar-section--grow">
+            <div class="sidebar-section__header">
+              <h2 class="sidebar-title">Templates</h2>
+              <span class="sidebar-meta">{{ templates.length }} layouts</span>
+            </div>
+            <div class="templates-grid scrollbar-hidden">
+              @for(template of templates; track template) {
+              <div class="template-card" (click)="changeTemplate(template.type)"
+                [class.active-template]="isActive(template.route)">
+                <div class="template-preview">
+                  <img *ngIf="template.imageUrl" [src]="template.imageUrl" [alt]="template.name">
+                </div>
+                <div class="template-content">
+                  <h3 class="template-name" [class.active-template]="isActive(template.route)">
+                    {{ template.name }}
+                  </h3>
+                  <p class="template-description">{{ template.description }}</p>
+                </div>
+              </div>
+              }
+            </div>
+          </section>
+        </div>
+
+        <button class="download-cv-btn" (click)="downloadCvPdf()" [disabled]="!userId">
+          <mat-icon>download</mat-icon>
+          <span>{{ userId ? 'Download PDF' : 'Sign in to Download' }}</span>
+        </button>
+        
+      </aside>
+
+      <section class="preview-panel">
+        <div class="preview-surface">
+          @if (isMobilePreview) {
+          <div class="mobile-preview">
+            <img *ngIf="currentTemplate" [src]="getPreviewImage()" [alt]="currentTemplate.name"
+              class="template-mobile-image" />
+            <p class="mobile-preview-note">
+              Preview is simplified on small screens. Download the PDF to review the full layout.
+            </p>
+          </div>
+          } @else {
+          <div #previewWrapper class="cv-preview-wrapper">
+            <div #previewScale class="cv-preview-scale">
+              <div #previewTheme class="cv-preview-theme">
+                <router-outlet></router-outlet>
+              </div>
+            </div>
+          </div>
+          }
+        </div>
+      </section>
+    </div>
+  </div>
+</main>

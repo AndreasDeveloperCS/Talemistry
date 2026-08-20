@@ -1,0 +1,447 @@
+<section class="checkout-page">
+    <div class="checkout-page__container">
+        <div class="checkout-page__hero">
+            <button type="button" class="checkout-page__back" (click)="goBackToPricing()">
+                Back to pricing
+            </button>
+            <p class="checkout-page__eyebrow">Subscription checkout</p>
+            <h1>Complete your subscription</h1>
+            <p>Choose your plan, confirm your billing details, and continue to the provider configured for this
+                environment.</p>
+
+            <div class="checkout-page__stepper" aria-label="Checkout progress">
+                <div class="checkout-page__step" [class.is-active]="checkoutProgressStep >= 1">
+                    <span class="checkout-page__step-index">1</span>
+                    <span class="checkout-page__step-copy">Select plan</span>
+                </div>
+                <span class="checkout-page__step-line" [class.is-active]="checkoutProgressStep >= 2"></span>
+                <div class="checkout-page__step" [class.is-active]="checkoutProgressStep >= 2">
+                    <span class="checkout-page__step-index">2</span>
+                    <span class="checkout-page__step-copy">Billing info</span>
+                </div>
+                <span class="checkout-page__step-line" [class.is-active]="checkoutProgressStep >= 3"></span>
+                <div class="checkout-page__step" [class.is-active]="checkoutProgressStep >= 3">
+                    <span class="checkout-page__step-index">3</span>
+                    <span class="checkout-page__step-copy">Secure checkout</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="subscription-status subscription-status--hero" [class.success]="statusTone === 'success'"
+            [class.error]="statusTone === 'error'">
+            <strong>{{ statusTitle }}</strong>
+            <span>{{ statusMessage }}</span>
+        </div>
+
+        <div class="checkout-page__layout">
+            <aside class="checkout-summary">
+                <div class="checkout-summary__amount-card">
+                    <span class="checkout-summary__label">Subscription total</span>
+                    <strong>{{ selectedPlanPriceSummary }}</strong>
+                    <p>{{ selectedProviderLabel }} • {{ billingCycle | titlecase }} billing</p>
+                </div>
+
+                <div class="checkout-summary__card">
+                    <span class="checkout-summary__label">Selected plan</span>
+                    <strong>{{ planSummaryLabel }}</strong>
+                    <p *ngIf="selectedPlan">{{ selectedPlan.description }}</p>
+                </div>
+
+                <div class="checkout-summary__card checkout-summary__card--highlight">
+                    <span class="checkout-summary__label">Checkout route</span>
+                    <strong>{{ selectedProviderLabel }}</strong>
+                    <p>{{ selectedProviderSupportCopy || selectedProviderJourneyCopy }}</p>
+                </div>
+
+                <div class="checkout-summary__card checkout-summary__card--cycle">
+                    <span class="checkout-summary__label">Billing cycle</span>
+                    <div class="billing-switch" aria-label="Billing cycle selector">
+                        <button type="button" [class.active]="billingCycle === 'monthly'"
+                            (click)="setBillingCycle('monthly')">
+                            Monthly
+                        </button>
+                        <button type="button" [class.active]="billingCycle === 'yearly'"
+                            (click)="setBillingCycle('yearly')">
+                            Yearly
+                            <span class="billing-switch__badge">Save {{ yearlyDiscountPercent }}%</span>
+                        </button>
+                    </div>
+                    <strong *ngIf="selectedPlan">${{ selectedPlanAmount }} / {{ billingPeriodLabel }}</strong>
+                </div>
+
+                <div class="checkout-summary__card" *ngIf="currentSubscription">
+                    <span class="checkout-summary__label">Current subscription</span>
+                    <strong>{{ currentSubscription.planName || currentSubscription.planId }}</strong>
+                    <p>Status: {{ currentSubscription.status || 'unknown' }}</p>
+                    <p *ngIf="hasStoredBillingContact()">Billing contact: {{ getStoredBillingContactLabel() }}</p>
+                </div>
+
+                <div class="checkout-summary__card checkout-summary__card--plans">
+                    <span class="checkout-summary__label">Switch plan</span>
+                    <div class="checkout-summary__plans">
+                        <button *ngFor="let plan of pricingPlans; trackBy: trackByPlanId" type="button"
+                            [class.active]="selectedPlan?.id === plan.id" (click)="choosePlan(plan)">
+                            {{ plan.name }}
+                        </button>
+                    </div>
+                </div>
+            </aside>
+
+            <section class="checkout-panel">
+                <div class="checkout-panel__header">
+                    <div>
+                        <p class="checkout-panel__eyebrow">Secure billing</p>
+                        <h2>Secure your subscription</h2>
+                        <p>Keep your billing email, name, and surname here, then choose the provider configured for this
+                            environment.</p>
+                        <div class="checkout-panel__header-chip">
+                            <span class="checkout-panel__header-chip-dot"></span>
+                            Secure payment setup
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checkout-panel__intro-grid">
+                    <div class="checkout-panel__intro-card">
+                        <span class="label">Selected plan</span>
+                        <strong>{{ planSummaryLabel }}</strong>
+                        <p>{{ selectedPlanPriceSummary }}</p>
+                    </div>
+                    <div class="checkout-panel__intro-card">
+                        <span class="label">Provider</span>
+                        <strong>{{ selectedProviderLabel }}</strong>
+                        <p>{{ selectedProviderEnvironmentLabel }}</p>
+                    </div>
+                    <div class="checkout-panel__intro-card">
+                        <span class="label">Billing contact</span>
+                        <strong>{{ selectedProviderContactSummary }}</strong>
+                        <p>Used to prefill the secure hosted checkout.</p>
+                    </div>
+                </div>
+
+                <div class="provider-switcher">
+                    <button type="button" class="provider-switcher__option"
+                        [class.active]="selectedProvider === 'stripe'"
+                        [class.provider-switcher__option--disabled]="!providerViewState.stripe.selectable"
+                        [attr.title]="providerViewState.stripe.unavailableReason || null"
+                        [attr.aria-pressed]="selectedProvider === 'stripe'" (click)="selectProvider('stripe')">
+                        <span class="provider-switcher__badge">{{ providerViewState.stripe.badge }}</span>
+                        <span class="provider-switcher__title-row">
+                            <span class="provider-switcher__title">Stripe</span>
+                            <span class="provider-switcher__state" [class.ready]="providerViewState.stripe.ready">{{
+                                providerViewState.stripe.stateLabel }}</span>
+                        </span>
+                        <span class="provider-switcher__copy">Cards and wallet checkout with a hosted secure payment
+                            page.</span>
+                        <span class="provider-switcher__support">{{ providerViewState.stripe.supportCopy }}</span>
+                    </button>
+                    <button type="button" class="provider-switcher__option"
+                        [class.active]="selectedProvider === 'gocardless'"
+                        [class.provider-switcher__option--disabled]="!providerViewState.gocardless.selectable"
+                        [attr.title]="providerViewState.gocardless.unavailableReason || null"
+                        [attr.aria-pressed]="selectedProvider === 'gocardless'" (click)="selectProvider('gocardless')">
+                        <span class="provider-switcher__badge">{{ providerViewState.gocardless.badge }}</span>
+                        <span class="provider-switcher__title-row">
+                            <span class="provider-switcher__title">GoCardless</span>
+                            <span class="provider-switcher__state" [class.ready]="providerViewState.gocardless.ready">{{
+                                providerViewState.gocardless.stateLabel }}</span>
+                        </span>
+                        <span class="provider-switcher__copy">Recurring direct debit mandate flow for compliant bank
+                            billing.</span>
+                        <span class="provider-switcher__support">{{ providerViewState.gocardless.supportCopy }}</span>
+                    </button>
+                </div>
+
+                <div class="provider-meta">
+                    <div>
+                        <span class="label">Plan</span>
+                        <strong>{{ planSummaryLabel }}</strong>
+                    </div>
+                    <div>
+                        <span class="label">Billing cycle</span>
+                        <strong>{{ billingCycle }}</strong>
+                    </div>
+                    <div *ngIf="selectedProvider === 'stripe'">
+                        <span class="label">Stripe price</span>
+                        <strong>{{ getResolvedStripePriceId() || 'Waiting for backend pricing config' }}</strong>
+                    </div>
+                    <div *ngIf="selectedProvider === 'gocardless' && goCardlessConfig">
+                        <span class="label">GoCardless environment</span>
+                        <strong>{{ goCardlessConfig.environment }}</strong>
+                    </div>
+                </div>
+
+                <section class="checkout-journey-card">
+                    <div class="checkout-journey-card__copy">
+                        <p class="checkout-journey-card__eyebrow">What happens next</p>
+                        <h3>{{ selectedProviderJourneyTitle }}</h3>
+                        <p>{{ selectedProviderJourneyCopy }}</p>
+                    </div>
+
+                    <div class="checkout-journey-card__facts">
+                        <div class="checkout-journey-card__fact">
+                            <span class="label">Provider</span>
+                            <strong>{{ selectedProviderLabel }}</strong>
+                        </div>
+                        <div class="checkout-journey-card__fact">
+                            <span class="label">Billing contact</span>
+                            <strong>{{ selectedProviderContactSummary }}</strong>
+                        </div>
+                        <div class="checkout-journey-card__fact">
+                            <span class="label">Flow</span>
+                            <strong>{{ selectedProviderEnvironmentLabel }}</strong>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="billing-details-card">
+                    <div class="billing-details-card__header">
+                        <div>
+                            <p class="billing-details-card__eyebrow">Billing contact</p>
+                            <h3>Review your billing details</h3>
+                        </div>
+                        <div class="billing-details-card__badge"
+                            *ngIf="billingForm.email || billingForm.givenName || billingForm.familyName">
+                            Prefilled from your account
+                        </div>
+                    </div>
+
+                    <div class="provider-form-grid provider-form-grid--billing">
+                        <label class="provider-field provider-field--full">
+                            <span>Billing email</span>
+                            <input [(ngModel)]="billingForm.email" #billingEmailModel="ngModel" name="billingEmail"
+                                type="email" inputmode="email" autocomplete="email" placeholder="billing@company.com"
+                                [class.invalid]="shouldShowEmailError(billingEmailModel.value, (billingEmailModel.touched || billingEmailModel.dirty || checkoutAttempted))" />
+                            <small class="provider-field__hint provider-field__hint--error"
+                                *ngIf="shouldShowEmailError(billingEmailModel.value, (billingEmailModel.touched || billingEmailModel.dirty || checkoutAttempted))">
+                                Enter a valid billing email, for example billing@company.com.
+                            </small>
+                        </label>
+
+                        <div class="provider-name-row">
+                            <label class="provider-field">
+                                <span>Name</span>
+                                <input [(ngModel)]="billingForm.givenName" type="text" autocomplete="given-name"
+                                    placeholder="Alex" />
+                            </label>
+                            <label class="provider-field">
+                                <span>Surname</span>
+                                <input [(ngModel)]="billingForm.familyName" type="text" autocomplete="family-name"
+                                    placeholder="Taylor" />
+                            </label>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card-details-card" *ngIf="selectedProvider === 'stripe'">
+                    <div class="card-details-card__header">
+                        <div>
+                            <h3>Card details</h3>
+                            <p>Enter cardholder name, card number, expiration month/year, and CVC inside the secure
+                                fields below.</p>
+                        </div>
+                        <div class="card-details-card__badge">Billing</div>
+                    </div>
+
+                    <div class="provider-form-grid provider-form-grid--card">
+                        <label class="provider-field provider-field--full">
+                            <span>Name on card</span>
+                            <input [(ngModel)]="cardForm.cardholderName" type="text" autocomplete="cc-name"
+                                placeholder="Alex Taylor" />
+                        </label>
+
+                        <label class="provider-field provider-field--full">
+                            <span>Card number</span>
+                            <input [(ngModel)]="cardForm.cardNumber" type="text" inputmode="numeric"
+                                autocomplete="cc-number" placeholder="1234 5678 9012 3456" maxlength="19"
+                                (ngModelChange)="onCardNumberInput($event, 'stripe')" />
+                        </label>
+
+                        <label class="provider-field">
+                            <span>Expiration</span>
+                            <input [(ngModel)]="cardForm.expiration" type="text" inputmode="numeric"
+                                autocomplete="cc-exp" placeholder="MM / YY" maxlength="7"
+                                (ngModelChange)="onExpirationInput($event, 'stripe')" />
+                        </label>
+                        <label class="provider-field">
+                            <span>CVC</span>
+                            <input [(ngModel)]="cardForm.cvc" type="text" inputmode="numeric" autocomplete="cc-csc"
+                                placeholder="123" maxlength="4" (ngModelChange)="onCvcInput($event, 'stripe')" />
+                        </label>
+                    </div>
+
+                    <p class="card-details-card__note">
+                        Your card details are collected here and submitted securely to Stripe when you continue.
+                        Card data is transmitted over an encrypted connection and is never stored in this application.
+                    </p>
+                    <p class="card-details-card__secure-note">
+                        <span class="card-details-card__secure-icon">&#x2714;</span>
+                        Your payment is secured with industry-standard encryption
+                    </p>
+                </section>
+
+                <section class="card-details-card" *ngIf="selectedProvider === 'gocardless'">
+                    <div class="card-details-card__header">
+                        <div>
+                            <h3>Card details</h3>
+                            <p>Enter cardholder name, card number, expiration month/year, and CVC inside the secure
+                                fields below.</p>
+                        </div>
+                        <div class="card-details-card__badge">Billing</div>
+                    </div>
+
+                    <div class="provider-form-grid provider-form-grid--card">
+                        <label class="provider-field provider-field--full">
+                            <span>Name on card</span>
+                            <input [(ngModel)]="gcCardForm.cardholderName" type="text" autocomplete="cc-name"
+                                placeholder="Alex Taylor" />
+                        </label>
+
+                        <label class="provider-field provider-field--full">
+                            <span>Card number</span>
+                            <input [(ngModel)]="gcCardForm.cardNumber" type="text" inputmode="numeric"
+                                autocomplete="cc-number" placeholder="1234 5678 9012 3456" maxlength="19"
+                                (ngModelChange)="onCardNumberInput($event, 'gocardless')" />
+                        </label>
+
+                        <label class="provider-field">
+                            <span>Expiration</span>
+                            <input [(ngModel)]="gcCardForm.expiration" type="text" inputmode="numeric"
+                                autocomplete="cc-exp" placeholder="MM / YY" maxlength="7"
+                                (ngModelChange)="onExpirationInput($event, 'gocardless')" />
+                        </label>
+                        <label class="provider-field">
+                            <span>CVC</span>
+                            <input [(ngModel)]="gcCardForm.cvc" type="text" inputmode="numeric" autocomplete="cc-csc"
+                                placeholder="123" maxlength="4" (ngModelChange)="onCvcInput($event, 'gocardless')" />
+                        </label>
+                    </div>
+
+                    <p class="card-details-card__note">
+                        GoCardless will securely verify your card details and set up recurring billing. Your card
+                        information is transmitted over an encrypted connection and is not stored in this application.
+                    </p>
+                    <p class="card-details-card__secure-note">
+                        <span class="card-details-card__secure-icon">&#x2714;</span>
+                        Your payment is secured with industry-standard encryption
+                    </p>
+                </section>
+
+                <section *ngIf="selectedProvider === 'stripe'"
+                    class="provider-reference-card provider-reference-card--stripe">
+                    <div class="provider-reference-card__header">
+                        <div>
+                            <h3>Stripe card checkout</h3>
+                            <p>We will send your billing email and full name to Stripe Checkout on the next step.</p>
+                        </div>
+                    </div>
+
+                    <div class="provider-reference-grid" *ngIf="hasStripeReferenceData()">
+                        <div *ngIf="stripeForm.customerId" class="provider-reference-item">
+                            <span class="label">Customer</span>
+                            <strong>{{ stripeForm.customerId }}</strong>
+                        </div>
+                        <div *ngIf="stripeForm.subscriptionId" class="provider-reference-item">
+                            <span class="label">Subscription</span>
+                            <strong>{{ stripeForm.subscriptionId }}</strong>
+                        </div>
+                    </div>
+                </section>
+
+                <div *ngIf="selectedProvider === 'stripe'" class="checkout-panel__actions">
+                    <button type="button" class="checkout-panel__primary" (click)="continueWithSelectedProvider()"
+                        [disabled]="isContinueDisabled()" [attr.title]="getContinueDisabledReason() || null">
+                        {{ getPrimaryActionLabel() }}
+                    </button>
+                    <button type="button" class="checkout-panel__secondary" (click)="openBillingPortal()"
+                        [disabled]="isBillingPortalDisabled()" [attr.title]="getBillingPortalDisabledReason() || null">
+                        Manage billing portal
+                    </button>
+                </div>
+
+                <div *ngIf="selectedProvider === 'stripe' && getContinueDisabledReason()"
+                    class="checkout-panel__disabled-reason">
+                    {{ getContinueDisabledReason() }}
+                </div>
+
+                <div *ngIf="selectedProvider === 'stripe' && getBillingPortalDisabledReason()"
+                    class="checkout-panel__disabled-reason checkout-panel__disabled-reason--muted">
+                    {{ getBillingPortalDisabledReason() }}
+                </div>
+
+                <div *ngIf="selectedProvider === 'stripe'" class="checkout-panel__note">
+                    Stripe will handle secure card entry and payment method binding outside this page.
+                </div>
+
+                <section *ngIf="selectedProvider === 'gocardless'"
+                    class="provider-reference-card provider-reference-card--gocardless">
+                    <div class="provider-reference-card__header">
+                        <div>
+                            <h3>GoCardless billing</h3>
+                            <p>GoCardless will use the card details and billing contact above to set up recurring
+                                billing.</p>
+                        </div>
+                    </div>
+
+                    <div class="provider-reference-grid">
+                        <div class="provider-reference-item">
+                            <span class="label">Currency</span>
+                            <strong>{{ goCardlessForm.currency }}</strong>
+                        </div>
+                        <div *ngIf="goCardlessForm.mandateId" class="provider-reference-item">
+                            <span class="label">Mandate</span>
+                            <strong>{{ goCardlessForm.mandateId }}</strong>
+                        </div>
+                        <div *ngIf="goCardlessForm.subscriptionId" class="provider-reference-item">
+                            <span class="label">Subscription</span>
+                            <strong>{{ goCardlessForm.subscriptionId }}</strong>
+                        </div>
+                    </div>
+                </section>
+
+                <div *ngIf="selectedProvider === 'gocardless'" class="checkout-panel__actions">
+                    <button type="button" class="checkout-panel__primary" (click)="continueWithSelectedProvider()"
+                        [disabled]="isContinueDisabled()" [attr.title]="getContinueDisabledReason() || null">
+                        {{ getPrimaryActionLabel() }}
+                    </button>
+                    <button type="button" class="checkout-panel__secondary" (click)="openBillingPortal()"
+                        [disabled]="isBillingPortalDisabled()" [attr.title]="getBillingPortalDisabledReason() || null">
+                        Manage billing portal
+                    </button>
+                </div>
+
+                <div *ngIf="selectedProvider === 'gocardless' && getContinueDisabledReason()"
+                    class="checkout-panel__disabled-reason">
+                    {{ getContinueDisabledReason() }}
+                </div>
+
+                <div *ngIf="selectedProvider === 'gocardless' && getBillingPortalDisabledReason()"
+                    class="checkout-panel__disabled-reason checkout-panel__disabled-reason--muted">
+                    {{ getBillingPortalDisabledReason() }}
+                </div>
+
+                <div *ngIf="selectedProvider === 'gocardless'" class="checkout-panel__note">
+                    GoCardless will handle secure bank verification and mandate setup outside this page.
+                </div>
+
+                <div class="checkout-trustbar">
+                    <div class="checkout-trustbar__item">
+                        <span class="checkout-trustbar__title">Encrypted redirect</span>
+                        <span class="checkout-trustbar__copy">Sensitive payment details are entered on the
+                            provider-hosted page.</span>
+                    </div>
+                    <div class="checkout-trustbar__item">
+                        <span class="checkout-trustbar__title">Plan-aware billing</span>
+                        <span class="checkout-trustbar__copy">The selected plan and billing cycle are carried into the
+                            checkout session.</span>
+                    </div>
+                    <div class="checkout-trustbar__item">
+                        <span class="checkout-trustbar__title">Reusable billing profile</span>
+                        <span class="checkout-trustbar__copy">Customer and mandate references are restored here for
+                            later management actions.</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</section>

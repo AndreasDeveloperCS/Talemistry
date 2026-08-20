@@ -1,0 +1,73 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.success-block {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 70%;
+    gap: $gap-extra-giggant;
+}
+
+.add-position {
+    color: var(--text);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: $padding-s $padding-sm;
+    width: fit-content;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: $borderRadiusMiddle $borderRadius !important;
+    gap: $gap-micro;
+    margin: 0;
+    background: linear-gradient(45deg, #C78A00, #D77400, #E76A00, #F66411);
+    opacity: 1;
+    border: 1px solid $active-text;
+    min-height: fit-content;
+    min-width: fit-content;
+}  
+
+.tick-block {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    pointer-events: none;
+    border: 2px solid $active-text;
+    background-color: $pallete-0-color-14 !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s;
+    z-index: 3;
+
+    mat-icon {
+        width: fit-content;
+        height: fit-content;
+        color: var(--text);
+        font-size: 80px;   
+        transition: color 0.3s ease;
+    }
+}
+
+.success-message {
+    justify-content: center;
+    gap: $gap-small;
+    align-items: center;
+    font-size: 2rem;
+    font-weight: 600;
+    display: flex;
+    color: $pallete-0-color-6;
+    gap: $gap-small;
+    min-width: fit-content;
+    line-height: 2.2rem;
+    min-height: fit-content;
+
+    mat-icon {
+        min-width: fit-content;
+        min-height: fit-content;
+    }
+}

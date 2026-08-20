@@ -1,0 +1,124 @@
+@use 'variables' as *;
+
+::ng-deep .mat-mdc-tab .mdc-tab__text-label {
+  color: $active-text !important;
+}
+
+::ng-deep .mat-mdc-tab {
+  align-items: end;
+  display: flex;
+  color: $active-text !important;
+  font-size: $font-size-header-middle;
+  padding: $padding-s $padding-l;
+}
+
+::ng-deep .mat-mdc-tab-labels {
+  // background-color: $menu-background-color !important;
+}
+
+::ng-deep .mat-mdc-tab-label-container {
+  background-color: transparent !important;
+  border-radius: $borderRadiusMiddle !important;
+  border: none !important;
+  box-shadow: var(--box-shadow-light);
+  margin: $margin-narrow $margin-narrow $margin-middle $margin-narrow;
+  align-items: end;
+  display: flex;
+  height: 4rem;
+  // background-color: $menu-background-color !important;
+}
+
+::ng-deep .mat-mdc-tab .mdc-tab-indicator__content--underline {
+
+}
+
+::ng-deep .mat-mdc-tab .mdc-tab-indicator__content--underline {
+  border-bottom: 4px solid $pallete-0-color-14 !important;
+}
+
+::ng-deep .mat-mdc-tab:hover {
+  //background-color: $hover-elements-highlight-background;
+  scale: 1.1;
+  transition: transform 2s ease-in-out;
+}
+
+::ng-deep .mat-mdc-tab.mat-mdc-tab-active {
+  border: $border solid $pallete-0-color-11 !important;
+
+}
+
+::ng-deep .mat-mdc-tab-header-pagination-controls-enabled .mat-mdc-tab-header-pagination {
+  // background-color: $menu-background-color !important;
+}
+
+::ng-deep .mat-mdc-tab-header-pagination-chevron {
+  border-color: $active-text !important;
+}
+
+
+.menu {
+  ::ng-deep mat-accordion {
+    color: var(--text);
+    border-radius: 8px;
+  }
+
+
+  ::ng-deep mat-expansion-panel {
+    color: var(--text);
+    background-color: $primary-semitransparentbackground-color;
+  }
+
+  ::ng-deep mat-expansion-panel-header {
+    // background-color: $elements-highlight-background;
+    font-weight: bold;
+    padding: $padding-m;
+  }
+
+  ::ng-deep mat-panel-title {
+    background-color: transparent;
+    color: var(--text);
+    font-size: 1.2rem;
+  }
+
+  ::ng-deep mat-expansion-panel {
+
+    // background-color: $elements-highlight-background; 
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 0;
+      height: 2px;
+      background-color: $active-text;
+      transition: width 0.5s ease;
+    }
+
+    &:hover::after {
+      width: 100%;
+    }
+  }
+
+
+  ::ng-deep mat-expansion-panel .mat-expansion-panel-header-title:hover {
+    padding: 0;
+    margin: 0;
+  }
+
+  ::ng-deep mat-expansion-panel.mat-expanded {
+    // background-color: $primary-half; 
+    color: var(--text);
+  }
+
+  ::ng-deep .mat-expansion-indicator {
+    display: none;
+  }
+
+  ::ng-deep .mat-expansion-panel-header-title::selection {
+    color: $nav-active !important;
+  }
+
+  ::ng-deep .mat-expansion-panel-header-title {
+    color: $active-text !important;
+  }
+}

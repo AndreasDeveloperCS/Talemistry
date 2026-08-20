@@ -1,0 +1,43 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.timezone-container {
+  width: 100%;
+  position: relative;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 1.5rem;
+  width: 90%; 
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  max-height: 200px;
+  overflow-y: auto;
+  background: #001524; 
+  z-index: 1000;
+}
+
+.dropdown-item {
+  padding: 8px;
+  cursor: pointer;
+
+  color: $active-text;
+  background-color: #001524;
+}
+
+.dropdown-item:hover {
+  background-color: $gradient-color-4;
+  opacity: 0.9;
+}
+
+.dropdown-item.selected {
+  color: $pallete-0-color-13;
+  font-weight: bold;
+}
+
+.no-results {
+  padding: 8px;
+  color: #999;
+}

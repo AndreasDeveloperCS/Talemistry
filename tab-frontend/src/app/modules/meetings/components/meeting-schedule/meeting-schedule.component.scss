@@ -1,0 +1,121 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+app-meeting-booking-request-form {
+  display: flex;
+  width: 100%;
+}
+
+// .fixed-button {
+//   position: absolute;
+//   bottom: -4rem;
+//   right: 40%;
+//   border-radius: $borderRadiusMiddle;
+//   //transform: translateX(-50%);
+//   @media (max-width: $screen-size-mobile) {
+//     transform: translateX(30%) !important;
+//   }
+// }
+
+.previous-step-button {
+  left: $line-height-large;
+  bottom: $line-height-large;
+  @media (max-width: $screen-size-mobile) {
+    left: $line-height-small;
+    bottom: $line-height-small;
+  }
+}
+
+button:disabled {
+  cursor: not-allowed;
+  //background: $pallete-0-color-14 !important;
+  opacity: 0.6;
+}
+
+///
+.schedule-container {
+  padding: 1rem 0.5rem;
+  text-align: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: $gap-small;
+  align-items: center;
+
+  h2 {
+    font-size: $font-size-header-extra-wide;
+    margin-bottom: $margin-narrow;
+    color: var(--accent-text);
+    font-weight: bold;
+  }
+
+  p {
+    font-size: $font-size-header-small;
+    color: var(--accent-text);
+    margin-bottom: $margin-wide;
+  }
+
+  .schedule-box {
+    display: flex;
+    justify-content: center;
+    gap: $gap-extra-large;
+    height: 100%;
+    flex-direction: row;
+    align-items: baseline;
+
+    @media (max-width: $screen-size-tab) {
+      flex-wrap: wrap;
+    }
+  }
+
+  .left-panel {
+    border-radius: $borderRadiusMiddle;
+    box-shadow: var(--box-shadow-light);
+    height: fit-content;
+
+    @media(max-width: $screen-size-tab) {
+      width: 100%;
+    }
+  }
+
+  .panel-header {
+    display: flex;
+    font-weight: bold;
+    font-size: $font-size-header-narrow;
+    color: var(--text);
+    background: linear-gradient(to right, $pallete-0-color-13, $pallete-0-color-15);
+    padding: $padding-middle;
+    border-radius: $borderRadiusMiddle $borderRadiusMiddle 0 0;
+  }
+}
+
+button {
+  transition: transform 0.5s ease;
+
+  &:hover {
+    scale: 1.1;
+  }
+
+  &:active {
+    transform: scale(0.9);
+  }
+}
+
+app-meeting-request-form {
+  width: 100%;
+}
+
+.scheduled-info-header {
+  display: flex;
+  width: fit-content;
+  justify-self: center;
+  align-self: center;
+  margin: auto;
+  padding: 1.5rem;
+  border-radius: 10px;
+  border: 1px solid teal;
+  h4 {
+    color: $pallete-0-color-14;
+    font-weight: 600;
+  }
+}

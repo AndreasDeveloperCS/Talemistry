@@ -1,0 +1,131 @@
+<header class="mobile-header" *ngIf="isMobile">
+  <div class="mobile-header-content">
+    <div class="logo-section" (click)="onMainPage()">
+      <svg class="logo-mark" width="28" height="28" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+        <path d="M20 5 L32 12 L32 27 L20 34 L8 27 L8 12 Z" stroke="#126f66" stroke-width="1.4" stroke-linejoin="round" opacity="0.55" />
+        <circle cx="20" cy="5" r="3" fill="#24af4f" />
+        <circle cx="32" cy="12" r="2.6" fill="#126f66" />
+        <circle cx="32" cy="27" r="2.6" fill="#383c5b" />
+        <circle cx="20" cy="34" r="3" fill="#24af4f" />
+        <circle cx="8" cy="27" r="2.6" fill="#383c5b" />
+        <circle cx="8" cy="12" r="2.6" fill="#126f66" />
+        <circle cx="20" cy="20" r="3.4" fill="#0b1b2a" />
+        <circle cx="20" cy="20" r="1.4" fill="#ae0301" />
+      </svg>
+      <span class="logo-text">TALEMISTRY</span>
+    </div>
+    <button class="hamburger-btn" (click)="toggleMenu()" [class.active]="isOpen">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</header>
+
+<div class="backdrop" *ngIf="isMobile && isOpen" (click)="toggleMenu()"></div>
+
+<nav class="sidebar" [class.mobile-open]="isOpen" [class.mobile]="isMobile">
+  <div class="logo-container" *ngIf="!isMobile" (click)="onMainPage()">
+    <svg class="logo-mark" width="30" height="30" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+      <path d="M20 5 L32 12 L32 27 L20 34 L8 27 L8 12 Z" stroke="#126f66" stroke-width="1.4" stroke-linejoin="round" opacity="0.55" />
+      <circle cx="20" cy="5" r="3" fill="#24af4f" />
+      <circle cx="32" cy="12" r="2.6" fill="#126f66" />
+      <circle cx="32" cy="27" r="2.6" fill="#383c5b" />
+      <circle cx="20" cy="34" r="3" fill="#24af4f" />
+      <circle cx="8" cy="27" r="2.6" fill="#383c5b" />
+      <circle cx="8" cy="12" r="2.6" fill="#126f66" />
+      <circle cx="20" cy="20" r="3.4" fill="#0b1b2a" />
+      <circle cx="20" cy="20" r="1.4" fill="#ae0301" />
+    </svg>
+    <span class="logo-words">
+      <span class="logo-text">TALEMISTRY</span>
+      <span class="logo-endorsement">Nomado Innovations</span>
+    </span>
+  </div>
+
+  @if (isLoggedIn$ | async) {
+    <div class="user-block" (click)="openProfilePage()">
+      @if (imgSrc) {
+        <button auth-btn (click)="openProfilePage()" #authIcon>
+          <img class="profile-photo" [src]="imgSrc | sanitizerUrl" alt="profile photo" />
+        </button>
+      }
+      @else {
+        <button auth-btn (click)="openProfilePage()" #authIcon>
+          <lucide-icon class="login-glow" name="user-circle" auth-mat-icon></lucide-icon>
+        </button>
+      }
+    </div>
+  }
+
+  <div class="nav-groups">
+    @for (group of groupedLinks; track group.label) {
+      <div class="nav-group">
+        <p class="nav-group-label">{{ group.label }}</p>
+        <ul class="nav-list">
+          @for (link of group.items; track link.route) {
+            <li class="nav-item">
+              <a
+                [routerLink]="link.route"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: false }"
+                class="nav-link"
+                [class.active]="isActive(link.route)"
+                (click)="isMobile && toggleMenu()">
+                <lucide-icon class="nav-icon" [name]="link.icon" [size]="18"></lucide-icon>
+                <span class="nav-label">{{ link.label }}</span>
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+    }
+  </div>
+
+  <div class="sidebar-promo">
+    <div class="sidebar-promo-title">
+      <lucide-icon name="sparkles" [size]="16"></lucide-icon>
+      <span>Pipeline Copilot</span>
+    </div>
+    <p class="sidebar-promo-text">Candidates waiting in review for 14+ days. Action needed.</p>
+    <a class="sidebar-promo-link" [routerLink]="links[0]?.route">Review pipeline →</a>
+  </div>
+
+  <div class="sidebar-footer">
+    <app-theme-switcher></app-theme-switcher>
+    <button class="footer-btn" (click)="onPositions()">
+      <lucide-icon name="search" [size]="18"></lucide-icon>
+      <span>Job Search</span>
+    </button>
+    <button class="footer-btn" (click)="navigateToPricingPlans()">
+      <lucide-icon name="credit-card" [size]="18"></lucide-icon>
+      <span>Pricing Plans</span>
+    </button>
+    <button class="footer-btn" (click)="navigateToPrivacyPolicy()">
+      <lucide-icon name="shield-check" [size]="18"></lucide-icon>
+      <span>Privacy Policy</span>
+    </button>
+    @if(isLoggedIn$ | async) {
+      <button class="footer-btn logout-btn" (click)="logOut()">
+        <lucide-icon name="log-out" [size]="18"></lucide-icon>
+        <span>Logout</span>
+      </button>
+    }
+  </div>
+</nav>
+
+<header class="app-topbar" *ngIf="!isMobile">
+  <div class="topbar-search">
+    <lucide-icon name="search" [size]="16" class="topbar-search-icon"></lucide-icon>
+    <input type="search" placeholder="Search talent, roles, notes..." aria-label="Search" />
+  </div>
+  <div class="topbar-actions">
+    <button type="button" class="topbar-icon-btn" aria-label="Help">
+      <lucide-icon name="help-circle" [size]="16"></lucide-icon>
+    </button>
+    <button type="button" class="topbar-icon-btn" aria-label="Notifications">
+      <lucide-icon name="bell" [size]="16"></lucide-icon>
+      <span class="topbar-dot"></span>
+    </button>
+  </div>
+</header>

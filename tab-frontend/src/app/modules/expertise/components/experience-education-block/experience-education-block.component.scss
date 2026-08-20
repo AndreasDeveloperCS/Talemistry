@@ -1,0 +1,78 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.experience-section {
+  background: #001524;
+  padding: 20px;
+  border-radius: 10px;
+  color: var(--accent-text);
+  font-family: Arial, sans-serif;
+
+  h2 {
+    font-size: 20px;
+    margin: 20px 0 10px;
+    color: var(--accent-text);
+  }
+
+  .card {
+    background: #003b5c;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: none;
+      border-radius: 6px;
+      background: #143449;
+      color: var(--accent-text);
+      outline: none;
+    }
+
+    textarea {
+      min-height: 60px;
+      resize: vertical;
+    }
+
+    .dates {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+
+      input {
+        flex: 1;
+      }
+    }
+
+    .add-btn, .secondary-btn {
+      background: #F66411;
+      color: var(--text);
+      border: none;
+      border-radius: 6px;
+      padding: 6px 12px;
+      margin: 10px 0;
+      cursor: pointer;
+    }
+
+    .secondary-btn {
+      background: #247c7c;
+    }
+  }
+
+  .save-btn {
+    background: #F66411;
+    color: var(--text);
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+  }
+}

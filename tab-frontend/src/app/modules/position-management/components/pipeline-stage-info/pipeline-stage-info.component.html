@@ -1,0 +1,89 @@
+<button mat-icon-button class="form-button exit-button" (click)="onCancel()">
+    <mat-icon class="icon-close">
+      <svg class="icon-close" width="1.5rem" height="1.5rem" viewBox="0 0 108 107"
+        fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M27 26.75L54 53.5L81 26.75" stroke="white" stroke-width="10"
+          stroke-linecap="round" />
+        <path d="M27 80.25L54 53.5L81 80.25" stroke="white" stroke-width="10"
+          stroke-linecap="round" />
+      </svg>
+    </mat-icon>
+</button>
+@if(isLoading) {
+  <app-loading-spinner></app-loading-spinner>
+}
+
+@if(stageProgress && !isLoading) {
+<div class="stage-form">
+  <p class="applied-date">
+    <mat-icon>calendar_today</mat-icon>
+    <span>{{ stageProgress.createdDate | date:'yyyy-MM-dd' }}</span>
+  </p>
+
+  <form class="form-body">
+    <div class="form-group">
+      <label class="new-label" for="status">Stage Status</label>
+      <select class="transparent-input" id="status" [(ngModel)]="stageProgress.status" name="status" (change)="onStatusChange()">
+        @for(s of stageStatuses; track s) {
+        <option [value]="s">{{ s }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="new-label" for="score">Assessment Score (1–10)</label>
+      <input
+        id="score"
+        type="number"
+        class="transparent-input"
+        min="1"
+        max="10"
+        [(ngModel)]="stageProgress.assessmentScore"
+        name="assessmentScore"
+      />
+    </div>
+
+    <div class="form-group">
+      <label class="new-label" for="feedback">Feedback</label>
+      <textarea
+        id="feedback"
+        class="transparent-input"
+        [(ngModel)]="stageProgress.interviewFeedback"
+        name="feedback"
+        placeholder="Write your feedback here..."
+        rows="4"
+      ></textarea>
+    </div>
+
+    @if(stageProgress.status === 'failed') {
+    <div class="form-group">
+      <label class="new-label" for="reason">Rejection Reason</label>
+      <select class="transparent-input" id="reason" [(ngModel)]="stageProgress.finalRejectionReason" name="rejectionReason">
+        <option [ngValue]="undefined" disabled selected>Select reason</option>
+        @for(reason of rejectionReasons; track reason) {
+        <option [value]="reason">{{ reason }}</option>
+        }
+      </select>
+    </div>
+    }
+
+    @if(stageProgress.stageName === 'Screening' && isScreeningFormFilled) {
+    <div class="extra-info-block">
+      <button class="extra-info" (click)="viewScreeningResponse()">
+        Screening Info
+      </button>
+    </div>
+    }
+
+    @if(stageProgress.stageName === 'Interview') {
+    <div class="extra-info-block">
+      <button class="extra-info" (click)="viewInterviewResponse()">
+        Interview Info
+      </button>
+    </div>
+    }
+
+    <button class="save-button" (click)="onSave()"><mat-icon>save</mat-icon>Save</button>
+  </form>
+</div>
+}

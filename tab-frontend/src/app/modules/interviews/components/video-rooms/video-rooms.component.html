@@ -1,0 +1,112 @@
+<div class="video-chat-room-container">
+  <aside class="sidebar">
+    <!-- <div class="sidebar-head">
+      <div>
+        <p class="eyebrow">Collaboration</p>
+        <h3 class="sidebar-title">Chat rooms</h3>
+      </div>
+
+      <button class="create-mini-btn" (click)="createVideoChatRoom()" title="Create room">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div> -->
+
+    <div class="section-header">
+      <h3>Rooms</h3>
+      <span>{{ dataItems.length }}</span>
+    </div>
+
+    <ul class="room-list scrollbar-hidden" (scroll)="onRoomsScroll($event)">
+      <li *ngFor="let room of dataItems" (click)="joinRoom(room)" class="room-item">
+        <div class="room-badge">{{ (room.name || 'VR').slice(0, 2).toUpperCase() }}</div>
+
+        <div class="room-info">
+          <div class="room-name-row">
+            <div class="room-name">{{ room.name }}</div>
+            <!-- <span class="live-pill">Live</span> -->
+          </div>
+          <div class="room-meta">{{ room.participants.length || 0 }} participants ({{ room._id?.slice(-6) }})
+          </div>
+        </div>
+
+        <div class="room-actions">
+          <button mat-icon-button class="edit-icon" (click)="$event.stopPropagation(); editVideoChatRoom(room)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button class="edit-icon danger"
+            (click)="$event.stopPropagation(); deleteVideoChatRoom(room)">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <mat-icon class="join-icon">arrow_forward</mat-icon>
+        </div>
+      </li>
+      @if(isLoadingRooms) {
+          <div class="loading-older">
+              <app-sun-spinner></app-sun-spinner>
+          </div>
+      }
+    </ul>
+  </aside>
+
+  <main class="main-area">
+    <div class="hero-card">
+      <div class="hero-copy">
+        <p class="eyebrow">Video collaboration</p>
+        <!-- <h1>Designed for focused calls and fast room access</h1> -->
+        <p class="hero-text">
+          Launch a new room, jump in with an ID, or continue an existing collaboration space.
+          The layout is tuned for quick scanning and low-friction joining.
+        </p>
+      </div>
+
+      <div class="hero-actions">
+        <button class="main-btn new-chat" (click)="createVideoChatRoom()">
+          <mat-icon>video_call</mat-icon>
+          <span>New video chat</span>
+        </button>
+
+        <div class="join-section">
+          <label class="join-input-shell" for="joinRoomId">
+            <mat-icon>key</mat-icon>
+            <input id="joinRoomId" name="joinRoomId" [(ngModel)]="joinRoomId" placeholder="Enter room ID" />
+          </label>
+          <button class="main-btn join-btn" (click)="joinRoomById()">
+            <mat-icon>login</mat-icon>
+            <span>Join via ID</span>
+          </button>
+        </div>
+
+        @if(warningMessage) {
+        <div class="warning-banner">
+          <mat-icon>info</mat-icon>
+          <span>{{ warningMessage }}</span>
+        </div>
+        }
+      </div>
+    </div>
+
+    <!-- <div class="lobby-grid">
+      <section class="lobby-card">
+        <div class="card-head">
+          <h2>Why this layout works</h2>
+        </div>
+        <ul>
+          <li>Quick room browsing on the left with clear live indicators</li>
+          <li>Fast actions centered for creating or joining rooms</li>
+          <li>Large dark surfaces to fit your current product language</li>
+        </ul>
+      </section>
+
+      <section class="lobby-card accent">
+        <div class="card-head">
+          <h2>Recommended flow</h2>
+        </div>
+        <ol>
+          <li>Create a room for a new session.</li>
+          <li>Share the invite link from inside the call.</li>
+          <li>Keep recurring teams in the room list for one-click entry.</li>
+        </ol>
+      </section>
+    </div> -->
+  </main>
+</div>

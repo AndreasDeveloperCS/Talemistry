@@ -1,0 +1,173 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+::-webkit-scrollbar {
+    width: 8px !important;
+    overflow: scroll;
+    background: $hover-background-color;
+    box-shadow: inset 0 0 8px transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: $hover-background-color;
+    border-radius: 2px;
+    border: 1px solid $hover-border-color;
+    margin: 1px;
+
+    &:hover {
+        border: 3px solid $hover-border-color;
+        background-color: $hover-background-color;
+        cursor: pointer;
+    }
+}
+
+.table-wrapper {
+    min-width: 100vw;
+    /* Adjust to the minimum width of your table content */
+}
+
+
+.paginator-decoration {
+    background-color: transparent;
+    border-radius: $borderRadius;
+    border: 1px solid $active-text;
+    font-size: $font-size-header-small;
+    color: $active-text !important;
+    right: 0;
+    position: sticky;
+}
+
+.paginator-position {
+    //position: static;
+    // width: 100%;
+    // z-index: 1200;
+    display: flex;
+    align-self: flex-end;
+    align-items: flex-end;
+    justify-content: flex-end;
+    justify-self: flex-end;
+    justify-items: flex-end;
+    height: 3rem;
+
+    @media (max-width: $screen-size-mobile) {
+        justify-items: flex-start;
+    }
+
+}
+
+.table-content {
+    width: 100%;
+    // height: 100%;
+    position: relative;
+    overflow-x: visible;
+}
+
+::ng-deep .mat-mdc-table {
+    // display: flex;
+    position: relative;
+    // border: none;
+    // padding: 0;
+    background-color: transparent;
+    width: 100vw;
+    overflow-x: scroll !important;
+}
+
+::ng-deep .mdc-data-table__table {
+    // display: flex;
+    position: relative;
+    // border: none;
+    // padding: 0;
+    background-color: transparent;
+    width: 100vw;
+    overflow: scroll !important;
+}
+
+::ng-deep .mat-mdc-paginator {
+    position: sticky;
+    background-color: transparent !important;
+    width: 100vw !important;
+    // z-index: 1200;
+    display: flex;
+    align-self: flex-end;
+    align-items: flex-end;
+    justify-content: flex-end;
+    justify-self: flex-end;
+    justify-items: flex-end;
+}
+
+::ng-deep {
+    .mat-mdc-cell {
+        border-right: 1px solid $table-dark-border-color;
+        border-bottom: 1px solid $table-light-border-color !important;
+    }
+
+    .mdc-text-field {
+        color: $active-text !important;
+    }
+}
+
+
+::ng-deep .mat-mdc-form-field-focus-overlay {
+    color: var(--text);
+}
+
+
+::ng-deep .mat-mdc-option {
+    background-color: transparent;
+}
+
+::ng-deep .mat-mdc-option-active {
+    background-color: $hover-background-color;
+}
+
+::ng-deep .mat-mdc-option:hover {
+    background-color: $active-background-color;
+}
+
+// ::ng-deep .mdc-notched-outline{
+//   border: 1px solid $active-text !important;
+// }
+
+// ::ng-deep .mat-mdc-icon-button svg {
+//   fill: $active-text !important;
+// }
+
+
+
+::-webkit-scrollbar {
+    width: 12px;
+    /* Ширина вертикального скроллбара */
+    height: 12px;
+    /* Высота горизонтального скроллбара */
+}
+
+::-webkit-scrollbar-track {
+    background: #3d0101;
+    /* Цвет фона трека (поле) */
+    border-radius: 10px;
+    /* Закругленные углы трека */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    /* Цвет ползунка (скролл-бара) */
+    border-radius: 10px;
+    /* Закругленные углы ползунка */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+    /* Цвет ползунка при наведении */
+}
+
+
+
+.mat-mdc-text-field-wrapper.mdc-text-field {
+    margin: 0;
+    // border-bottom: 1px solid $secondary-border-color; 
+}
+
+// .mat-elevation-z8 {
+//     position: relative;
+//     background-color: $secondary-dark-background;
+// }

@@ -1,0 +1,38 @@
+@use 'variables' as *;
+
+.wrapper {
+    // background-color: $form-background;
+    // background-image: url("/assets/registration-background-optimized.png");
+}
+
+.nav-header {
+    padding: 2rem 1rem 0;
+    max-width: 1280px;
+    margin: 0 auto;
+
+    .back-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background-color: transparent;
+        border: 1px solid $pallete-0-color-11;
+        color: var(--text);
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+
+        &:hover {
+            box-shadow: var(--box-shadow-light);
+            transform: translateX(-5px);
+        }
+
+        mat-icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            width: fit-content;
+            height: fit-content;
+        }
+    }
+}

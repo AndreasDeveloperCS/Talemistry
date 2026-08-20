@@ -1,0 +1,83 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;    
+  height: 100%;   
+  box-sizing: border-box;
+  padding: $padding-m $padding-narrow;
+  max-width: $screen-size-extra-middle;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--text);
+  margin-bottom: $margin-middle;
+  width: 100%;
+  gap: $gap-middle;
+
+  @media (max-width: $screen-size-mobile) {
+    gap: $gap-small;
+    flex-direction: column-reverse;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: $margin-narrow;
+  }
+
+  h2 {
+    color: $pallete-0-color-27;
+  }
+}
+
+.add-btn {
+  background-color: $pallete-0-color-14;
+  color: var(--text);
+  border: none;
+  padding: $padding-m;
+  font-size: $font-size-header-narrow;
+  border-radius: $borderRadiusMiddle;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transform: transition $transition_time ease;
+
+  &:hover {
+    scale: $scale-110;
+  }
+
+  &:active {
+    scale: $scale-90;
+  }
+}
+
+.company-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $gap-middle;
+  width: 100%;
+
+  @media (max-width: $screen-size-extra-middle) {
+    grid-template-columns: 1fr;
+    width: fit-content;
+    margin: 0 auto;
+  }
+
+  @media (max-width: $screen-size-tab) {
+    grid-template-columns: 1fr;
+    width: fit-content;
+    margin: 0 auto;
+  }
+}

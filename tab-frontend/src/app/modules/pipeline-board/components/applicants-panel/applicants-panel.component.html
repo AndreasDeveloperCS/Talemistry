@@ -1,0 +1,113 @@
+<div class="panel">
+  <div class="panel-header">
+    <div class="panel-title">
+      <mat-icon class="material-icons icon-sm text-primary">people</mat-icon>
+      <span>Applicants</span>
+      <span *ngIf="selectedStage" class="filter-badge">{{ selectedStage }}</span>
+    </div>
+    <span class="panel-count">{{ applicantsView.length }}</span>
+  </div>
+
+  <div class="panel-content scrollbar-hidden">
+    @if(isLoading) {
+    <app-sun-spinner></app-sun-spinner>
+    }
+
+    @if(!isLoading) {
+    @if(applicantsView.length > 0) {
+    <div *ngFor="let applicant of applicantsView" class="applicant-card card"
+      [class.card-selected]="selectedApplicant?.talentId === applicant.talentId" [class.card-interactive]="true"
+      (click)="onSelectApplicant(applicant, $event)">
+      <!-- Header -->
+      <div class="applicant-header">
+        <div class="applicant-avatar avatar avatar-md" (click)="openProfile(applicant.talentId, $event)">
+          <img *ngIf="applicant.photoUrl; else noPhoto" [src]="applicant.photoUrl"
+            alt="Photo of {{ applicant.talentName }}" />
+          <ng-template #noPhoto>
+            {{ getInitials(applicant) }}
+          </ng-template>
+        </div>
+        <div class="applicant-info">
+          <div class="applicant-name-row">
+            <h3 class="applicant-name" (click)="openProfile(applicant.talentId, $event)">
+              {{ applicant.talentName }}
+            </h3>
+            <div class="applicant-actions">
+              <button class="btn btn-ghost btn-icon btn-sm" title="Send message" (click)="startChat(applicant, $event)">
+                <mat-icon class="material-icons icon-sm">chat</mat-icon>
+              </button>
+              <button class="btn btn-ghost btn-icon btn-sm" title="Video call" (click)="startCall(applicant, $event)">
+                <mat-icon class="material-icons icon-sm">videocam</mat-icon>
+              </button>
+              <button class="btn btn-ghost btn-icon btn-sm" title="View profile"
+                (click)="openProfile(applicant.talentId, $event)">
+                <mat-icon class="material-icons icon-sm">open_in_new</mat-icon>
+              </button>
+            </div>
+          </div>
+          <span class="stage-select" [ngClass]="getApplicantStageClass(applicant.stages)">
+            {{ getCurrentStageName(applicant.stages) || 'No stage' }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Skills -->
+      <div class="skills-list">
+        <span *ngFor="let skill of applicant.skills.slice(0, 6)" class="skill-badge">
+          {{ skill.skillName }}
+        </span>
+        <span *ngIf="applicant.skills.length > 6" class="skill-badge skill-more">
+          +{{ applicant.skills.length - 6 }}
+        </span>
+      </div>
+
+      <div class="applicant-match">
+        <div class="match-bar" [ngClass]="getMatchScoreClass(applicant.overallScore)">
+          <div class="match-bar-fill" [style.width.%]="applicant.overallScore"></div>
+        </div>
+
+        <span class="match-score" [ngClass]="getMatchScoreClass(applicant.overallScore)">
+          {{ applicant.overallScore }}%
+        </span>
+      </div>
+
+      <!-- Actions -->
+      <div class="applicant-footer">
+        <!-- HR Comment -->
+        <div class="hr-comment">
+          <mat-icon class="material-icons icon-sm icon-light-teal">comment</mat-icon>
+
+          @if (editingTalentId !== applicant.talentId) {
+          <p [class.text-active]="applicant.talentNote?.text" [class.text-muted]="!applicant.talentNote?.text">
+            {{ applicant.talentNote?.text || 'Leave your comment here...' }}
+          </p>
+          <mat-icon class="material-icons icon-sm icon-light-teal" (click)="startEditHrComment(applicant, $event)">
+            edit
+          </mat-icon>
+          } @else {
+          <textarea [(ngModel)]="hrComment" class="comment-input" placeholder="Leave your comment..."
+            rows="3"></textarea>
+          <mat-icon class="material-icons icon-sm icon-success"
+            (click)="saveHrComment(applicant, $event)">check</mat-icon>
+          <mat-icon class="material-icons icon-sm icon-cancel" (click)="cancelEditHrComment($event)">close</mat-icon>
+          }
+        </div>
+        <div class="applicant-footer-buttons">
+          <span class="meta-item">
+            <mat-icon class="material-icons icon-sm icon-light-teal">event</mat-icon>
+            {{ formatDate(applicant.createdDate) }}
+          </span>
+        </div>
+      </div>
+    </div>
+    }
+
+    @if(applicantsView.length === 0) {
+    <div class="empty-state">
+      <mat-icon class="material-icons icon-lg">person_off</mat-icon>
+      <p>No applicants found</p>
+    </div>
+    }
+    }
+  </div>
+</div>

@@ -1,0 +1,83 @@
+<div class="panel">
+  <div class="panel-header">
+    <div class="panel-title">
+      <mat-icon class="material-icons icon-sm text-primary">work</mat-icon>
+      <span>Positions</span>
+    </div>
+    <span class="panel-count">{{ dataItems.length }}</span>
+  </div>
+
+  <div class="panel-filters">
+    <div class="input-wrapper">
+      <mat-icon class="material-icons icon-sm input-icon">search</mat-icon>
+      <input
+        type="text"
+        class="input input-with-icon"
+        placeholder="Search positions..."
+        [(ngModel)]="searchQuery"
+        (ngModelChange)="onSearchChange()"
+      />
+    </div>
+    <select class="select" [(ngModel)]="statusFilter" (ngModelChange)="onChangeStatusFilter()">
+      <option value="all">All Statuses</option>
+
+        <option *ngFor="let status of statusOptions" [value]="status">
+          {{ status | titlecase }}
+        </option>
+    </select>
+  </div>
+
+  <div class="panel-content scrollbar-hidden" #scrollContainer (scroll)="onScroll()">
+    @if(initialLoading) {
+      <app-sun-spinner></app-sun-spinner>
+    }
+    @if(!initialLoading) {
+      @if(dataItems.length > 0) {
+        <div
+          *ngFor="let position of dataItems"
+          class="position-card card"
+          [class.card-selected]="selectedPosition?._id === position._id"
+          [class.card-interactive]="true"
+          (click)="onSelectPosition(position)"
+        >
+          <div class="position-header">
+            <h3 class="position-title" (click)="onNavigateToPositionPage(position._id, $event)">{{ position.title }}</h3>
+            <span class="badge" [ngClass]="getStatusClass(position.status)">
+              {{ position.status }}
+            </span>
+          </div>
+
+          <div class="position-meta">
+            <span class="meta-item company-name" (click)="onNavigateToCompanyPage(position?.positionDetails?.company?._id, $event)">
+              <mat-icon class="material-icons icon-sm icon-light-teal">business</mat-icon>
+              {{ position?.positionDetails?.company?.data?.companyName }}
+            </span>
+            <span class="meta-item">
+              <mat-icon class="material-icons icon-sm icon-light-teal">location_on</mat-icon>
+              {{ getLocation(position) }}
+            </span>
+          </div>
+
+          <div class="position-footer">
+            <span class="meta-item">
+              <mat-icon class="material-icons icon-sm icon-light-teal">event</mat-icon>
+              {{ formatDate(position.createdDate) }}
+            </span>
+            <span class="applicant-count">
+              <mat-icon class="material-icons icon-sm">people</mat-icon>
+              {{ position.applicantsCount }}
+            </span>
+          </div>
+        </div>
+      }
+
+      @if(dataItems.length === 0) {
+        <div class="empty-state">
+          <mat-icon class="material-icons icon-lg">work_off</mat-icon>
+          <p>No positions found</p>
+        </div>
+      }
+    }
+
+  </div>
+</div>

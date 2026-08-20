@@ -1,0 +1,59 @@
+<div class="preferences-container">
+
+  @if(isLoading) {
+    <app-sun-spinner></app-sun-spinner>
+  }
+  @if(!isLoading) {
+    <div class="preferences-body">
+      <div class="channels-list">
+        @for(channel of channels; track channel.id) {
+          <label 
+            class="channel-item"
+            [class.channel-checked]="channel.enabled">
+            <div class="checkbox-wrapper">
+              <input 
+                type="checkbox" 
+                [checked]="channel.enabled"
+                (change)="onCheckboxChange(channel, $event)"
+                class="channel-checkbox"
+              />
+              <span class="checkbox-custom"></span>
+            </div>
+            
+            <div class="channel-icon-wrapper">
+              <img [src]="channel.image" class="material-icons"/>
+            </div>
+            
+            <div class="channel-details">
+              <div class="channel-header">
+                <span class="channel-name">{{ channel.name }}</span> 
+                <span class="channel-description channel-hint" *ngIf="channel.id === CommunicationMean.telegram" style="color: #f97316;">
+                  {{ telegramProgressInfo }}
+                </span>
+                <span class="popular-badge" *ngIf="channel.popular">Popular</span>
+              </div>
+              <p class="channel-description">{{ channel.description }}</p>
+            </div>
+          </label>
+        }
+      </div>
+    </div>
+
+    <div class="preferences-footer">
+      <div class="alert-info">
+        <mat-icon class="material-icons alert-icon">info</mat-icon>
+        <p class="alert-text">
+          You'll receive instant notifications when recruiters send you messages. 
+          You can change these preferences anytime.
+        </p>
+      </div>
+    </div>
+
+    <div class="edit-actions">
+      <button type="button" class="btn btn-primary" (click)="savePreferrences()">
+        <mat-icon>save</mat-icon>
+        <span>{{ content.saveText }}</span>
+      </button>
+    </div>  
+  }
+</div>

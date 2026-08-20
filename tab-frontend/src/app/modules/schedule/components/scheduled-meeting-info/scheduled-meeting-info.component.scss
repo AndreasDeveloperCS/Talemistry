@@ -1,0 +1,73 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.meeting-container {
+    width: 100%;
+  //max-width: 650px;
+  background: transparent;
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
+  color: #333;
+}
+
+.meeting-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: $pallete-0-color-14;
+  margin-bottom: 20px;
+  border-bottom: 2px solid $pallete-0-color-14;
+  padding-bottom: 8px;
+}
+
+.info-row {
+  margin-bottom: 18px;
+
+  .label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: $pallete-0-color-14;
+    margin-bottom: 6px;
+  }
+
+  .value {
+    font-size: 1rem;
+    line-height: 1.5;
+    white-space: pre-wrap;
+  }
+
+  &.highlight .value {
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  &.agenda .value {
+    background: transparent;
+    box-shadow: var(--box-shadow-light);
+    border-radius: $borderRadius;
+    padding: $padding-narrow;
+  }
+
+  &.link .value,
+  &.links a {
+    color: var(--accent-text);
+    text-decoration: none;
+    font-weight: 500;
+
+    &:hover {
+      text-decoration: underline;
+      transform: translateY(-3px);
+    }
+  }
+
+  .calendar-links {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+}
+
+.participants ul {
+  list-style: none;
+}

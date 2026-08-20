@@ -1,0 +1,17 @@
+<div class="saved-wrapper" #tabMenu>
+  <div class="container saved-body">
+    <div class="tabs">
+      @for(item of filteredRoutes; track item) {
+        <button [routerLink]="item.route" 
+          routerLinkActive="active" 
+          [routerLinkActiveOptions]="{ exact: false }"
+          [class.active-tab]="isActive(item.route)"
+          class="tab-btn">
+        <mat-icon>{{ item.icon }}</mat-icon>
+        <span class="label">{{ item.label }}</span>
+      </button>
+      } 
+    </div>
+    <router-outlet></router-outlet>
+  </div>
+</div>

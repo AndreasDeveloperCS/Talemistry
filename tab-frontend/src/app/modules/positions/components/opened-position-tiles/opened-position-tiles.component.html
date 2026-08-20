@@ -1,0 +1,100 @@
+<div class="tiles-content">
+  <div class="opened-position-form modal hover-container" data-toggle="modal" data-backdrop="static"
+    data-keyboard="false">
+    <div class="container__space-between">
+      @if (canEditItem) {
+      <app-toggle-button [isActive]="position.isVerified" (toggle)="valueChanged($event)">
+      </app-toggle-button>
+      }
+      <app-like-button [positionId]="position._id">
+      </app-like-button>
+    </div>
+    <div id="cvDiscription ">
+
+      <div class="tile-header">
+        <div class="position-title" (click)="navigateToPosition(position._id)">
+          <p class="vacancy-id">Vacancy ID:
+            {{' ('}}{{position && position.titleCode ? position.titleCode :
+            position._id ?
+            'HRP-'+ position._id.slice(-6).toUpperCase()
+            : '120256'
+            }}{{') '}}
+          </p>
+          <span>
+            {{position.title}}
+          </span>
+        </div>
+      </div>
+      <div class="position-content-section">
+        <div class="position-content-section-content">
+          @if(positionData.creationDate) {
+          <p>
+            <span class="detail-date">
+              <mat-icon class="custom-icon">event</mat-icon>
+              {{ positionData.creationDate }}
+            </span>
+          </p>
+          }
+          @if(positionData.companyName) {
+          <p>
+            <span class="details">
+              <mat-icon class="custom-icon">business</mat-icon>
+              <strong>{{ positionData.companyName }}</strong>
+            </span>
+          </p>
+          }
+          <div class="job-info-wrapper">
+            @if(positionData.locations) {
+            <span>
+              <mat-icon class="custom-icon">location_on</mat-icon> 
+              {{ positionData.locations }}
+            </span>
+            }
+            @if(positionData.jobType) {
+            <span>
+              <mat-icon class="custom-icon">schedule</mat-icon> 
+              {{ positionData.jobType }}
+            </span>
+            }
+            @if(positionData.workPlace) {
+            <span>
+              <mat-icon class="custom-icon">work</mat-icon> 
+              {{ positionData.workPlace }}
+            </span>
+            }
+            @if(positionData.proficiencyLevel) {
+            <span>
+              <mat-icon class="custom-icon">bar_chart</mat-icon> 
+              {{ positionData.proficiencyLevel }}
+            </span>
+            }
+            @if(positionData.cooperationType) {
+            <span>
+              <mat-icon class="custom-icon">handshake</mat-icon> 
+              {{ positionData.cooperationType }}
+            </span>
+            }
+            @if(positionData.involvementType) {
+            <span>
+              <mat-icon class="custom-icon">how_to_reg</mat-icon> 
+              {{ positionData.involvementType }}
+            </span>
+            }
+            @if(positionData.specificRequirements !== '') {
+            <span>
+              <mat-icon class="custom-icon">assignment_turned_in</mat-icon> 
+              {{ positionData.specificRequirements }}
+            </span>
+            }
+            @if(positionData.compensationPackage !== '') {
+            <span class="single-detail">
+              <mat-icon class="custom-icon">attach_money</mat-icon> 
+              {{ positionData.compensationPackage }}
+            </span>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

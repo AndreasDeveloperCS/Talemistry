@@ -1,0 +1,45 @@
+@use 'variables' as *;
+
+
+  ::ng-deep .mat-button-toggle-group-appearance-standard.mat-button-toggle-group-appearance-standard {
+    border: none;
+  }
+
+  ::ng-deep .mat-button-toggle {
+    background-color: $primary-dark;
+    transition: background-color 0.3s ease-in-out;
+    width: 100%;
+    border: $border solid transparent !important;
+  }
+
+  ::ng-deep .mat-button-toggle-checked {
+    background-color: $primaryOne;
+  }
+
+  .mat-button-toggle:hover {
+    background-color: $hover-background-color;
+  }
+
+  mat-button-toggle {
+    background-color: transparent;
+    width: 100%;
+    height: 2.5rem;
+    align-content: center;
+  }
+
+  mat-button-toggle.mat-button-toggle-checked {
+    background-color: $primaryThree;
+    width: 100%;
+  }
+
+  ::ng-deep .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
+    line-height: 2.3;
+    width: 100%;
+  }
+  ::ng-deep .mat-pseudo-checkbox-minimal.mat-pseudo-checkbox-checked::after{
+    color: $active-text !important;
+  }
+
+  .toggle-group-align {
+    min-width: 140px;
+  }

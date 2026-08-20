@@ -1,0 +1,44 @@
+@use 'variables' as *;
+
+.label-id {
+    font-size: $font-size-description-small;
+    margin-top: $margin-narrow;
+    line-height: $line-height-micro;
+    display: flex;
+    width: 100%;
+    color: var(--text);
+    text-decoration: underline;
+}
+
+.label-icon-orange {
+  display: flex;
+  align-items: center;
+  gap: $gap-micro;
+  color: $pallete-0-color-14;
+  font-size: 1.5rem;
+  font-weight: 600;
+
+  mat-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+    width: fit-content;
+    height: fit-content;
+    color: $pallete-0-color-14;
+  }
+}
+
+.label-aqua-icon-orange {
+  display: flex;
+  align-items: center;
+  gap: $gap-micro;
+  color: var(--accent-text);
+  font-size: 1.2rem;
+
+  mat-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    width: fit-content;
+    height: fit-content;
+    color: $pallete-0-color-14;
+  }
+}

@@ -1,0 +1,72 @@
+<div class="schedule-wrapper">
+  <div class="schedule-header">
+    <div class="container header-container">
+      <h1 class="page-title">{{ content.txtScheduleSettings }}</h1>
+      <div class="header-actions">
+      </div>
+    </div>
+  </div>
+
+  <div class="container schedule-body">
+    <div class="tabs">
+      <button (click)="setActiveTab('timeSlots')" class="tab-btn" [class.active-tab]="activeTab === 'timeSlots'">
+        <mat-icon>calendar_today</mat-icon>
+        {{ content.txtTimeFrames }}
+      </button>
+      <button (click)="setActiveTab('settings')" class="tab-btn" [class.active-tab]="activeTab === 'settings'">
+        <mat-icon>settings</mat-icon>
+        {{ content.txtSettings }}
+      </button>
+    </div>
+
+    @if(activeTab === 'timeSlots') {
+    <div class="tab-content">
+      <app-schedule-calendar-availability [userId]="userId"></app-schedule-calendar-availability>
+    </div>
+    }
+
+    @if(activeTab === 'settings') {
+    <div class="tab-content settings-section">
+      <app-schedule-settings></app-schedule-settings>
+
+      <div class="settings-card">
+        <div class="settings-card-block">
+          <h3 class="card-title">
+            <mat-icon>link</mat-icon>
+            {{ content.txtYourAvailabilityLink }}
+          </h3>
+          <p class="card-description">
+            {{ content.txtShareYourAvailabilityLink }}
+          </p>
+          <div class="link-wrapper">
+            <input type="text" readonly [value]="getScheduleLink()" class="link-input" />
+            <button class="link-copy-btn" (click)="copyToClipboard()">
+              <mat-icon>file_copy</mat-icon>
+              {{ content.txtCopy }}
+            </button>
+          </div>
+        </div>
+        <div class="settings-card-block">
+          <h3 class="card-title">
+            <mat-icon>calendar_today</mat-icon>
+            {{ content.txtEmbedCalendar }}
+          </h3>
+          <p class="card-description">
+            {{ content.txtEmbedYourAvailabilityCalendar }}
+          </p>
+          <div class="link-wrapper embed-code">
+            <code>
+                &lt;iframe src="{{getScheduleLink()}}" width="100%" height="600" frameborder="0"&gt;&lt;/iframe&gt;
+            </code>
+
+            <button class="link-copy-btn" (click)="copyIFrameToClipboard()">
+              <mat-icon>file_copy</mat-icon>
+              {{ content.txtCopy }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+</div>

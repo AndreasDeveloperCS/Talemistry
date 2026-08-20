@@ -1,0 +1,115 @@
+<div class="feature-detail-container" *ngIf="feature">
+    <!-- Navigation Header -->
+    <div class="nav-header">
+        <button (click)="goBack()" class="back-btn">
+            <mat-icon>arrow_back</mat-icon>
+            Back to Features
+        </button>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">{{ feature.title }}</h1>
+                <p class="hero-subtitle">{{ feature.subtitle }}</p>
+                <p class="hero-description">{{ feature.description }}</p>
+
+                <div class="hero-actions">
+                    <button (click)="startTrial()" class="secondary-btn is-hidden">
+                        Start Free Trial
+                    </button>
+                    <button (click)="onContactSales()" class="secondary-btn large">
+                        Contact Us
+                    </button>
+                    <button (click)="scheduleDemo()" class="primary-btn">
+                        Schedule Demo
+                    </button>
+                </div>
+            </div>
+
+            <div class="hero-image">
+                <img [src]="feature.image" [alt]="feature.title" />
+                <div class="image-glow"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="stats-section">
+        <h2 class="section-title">Performance Metrics</h2>
+        <div class="stats-grid">
+            <div *ngFor="let stat of feature.stats" class="stat-card">
+                <div class="stat-value">{{ stat.value }}</div>
+                <div class="stat-label">{{ stat.label }}</div>
+                <div class="stat-trend"
+                    [class]="'trend-' + (stat.trend?.includes('+') ? 'up' : stat.trend?.includes('-') ? 'down' : 'stable')">
+                    {{ stat.trend }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="features-section">
+        <div class="features-grid">
+            <div class="features-content">
+                <h2 class="section-title">Key Features</h2>
+                <ul class="features-list">
+                    <li *ngFor="let item of feature.features" class="feature-item">
+                        <!-- Replaced lucide-check-circle with Material Design icon -->
+                        <mat-icon>check_circle</mat-icon>
+                        {{ item }}
+                    </li>
+                </ul>
+            </div>
+
+            <div class="benefits-content">
+                <h2 class="section-title">Benefits</h2>
+                <ul class="benefits-list">
+                    <li *ngFor="let benefit of feature.benefits" class="benefit-item">
+                        <!-- Replaced lucide-star with Material Design icon -->
+                        <mat-icon>star</mat-icon>
+                        {{ benefit }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demo Section -->
+    <div class="demo-section">
+        <h2 class="section-title">See It In Action</h2>
+        <div class="demo-container">
+            <div class="demo-image">
+                <img [src]="feature.demoImage || feature.image" [alt]="feature.title + ' Demo'" />
+                <div class="play-overlay">
+                    <!-- Replaced lucide-play-circle with Material Design icon -->
+                    <mat-icon>play_circle</mat-icon>
+                    <span>Interactive Demo</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="cta-section">
+        <div class="cta-content">
+            <h2 class="cta-title">Ready to Get Started?</h2>
+            <p class="cta-description">
+                Join thousands of companies already using {{ feature.title }} to transform their recruitment process.
+            </p>
+            <div class="cta-actions">
+                <button (click)="startTrial()" class="secondary-btn large is-hidden">
+                    Start Your Free Trial
+                </button>
+                <button (click)="onContactSales()" class="secondary-btn large">
+                    Contact Us
+                </button>
+                <button (click)="scheduleDemo()" class="primary-btn large">
+                    Schedule a Demo
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

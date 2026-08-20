@@ -1,0 +1,255 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.candidate-pipeline {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100%;
+}
+
+.pipeline-hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 28px;
+  border-radius: 24px;
+  background: var(--bg-secondary);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+}
+
+.pipeline-eyebrow {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--primary);
+  margin-bottom: 10px;
+}
+
+.pipeline-title {
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.pipeline-subtitle {
+  color: var(--text-secondary);
+  font-size: 15px;
+}
+
+.context-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  border-radius: 14px;
+  padding: 12px 18px;
+  background: var(--primary);
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+}
+
+.action-btn.secondary {
+  background: rgba(255,255,255,0.06);
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 18px;
+}
+
+.stats-card {
+  padding: 24px;
+  border-radius: 22px;
+  background: var(--bg-secondary);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+
+.stats-card mat-icon {
+  width: 28px;
+  height: 28px;
+  font-size: 28px;
+  color: var(--primary);
+}
+
+.stats-card__value {
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.stats-card__label {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.timeline-item {
+  display: flex;
+  gap: 18px;
+}
+
+.timeline-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.timeline-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--primary);
+  margin-top: 8px;
+}
+
+.timeline-line {
+  width: 2px;
+  flex: 1;
+  background: rgba(255,255,255,0.08);
+  margin-top: 6px;
+}
+
+.timeline-content {
+  flex: 1;
+  padding: 20px;
+  border-radius: 20px;
+  background: var(--bg-secondary);
+  border: 1px solid rgba(255,255,255,0.05);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+}
+
+.timeline-content__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.timeline-stage {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.timeline-status {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.timeline-status.success {
+  background: rgba(40, 167, 69, 0.18);
+  color: #62d884;
+}
+
+.timeline-status.pending {
+  background: rgba(255, 193, 7, 0.15);
+  color: #ffd86b;
+}
+
+.timeline-status.danger {
+  background: rgba(220, 53, 69, 0.18);
+  color: #ff7d91;
+}
+
+.timeline-meta {
+  color: var(--text-secondary);
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+
+.timeline-feedback,
+.timeline-notes {
+  padding: 14px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.03);
+  line-height: 1.6;
+  font-size: 14px;
+  margin-top: 12px;
+}
+
+.skills-section {
+  padding: 24px;
+  border-radius: 22px;
+  background: var(--bg-secondary);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+
+.section-title mat-icon {
+  color: var(--primary);
+}
+
+.skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.skill-chip {
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: rgba(var(--primary-rgb), 0.12);
+  border: 1px solid rgba(var(--primary-rgb), 0.25);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+
+@media (max-width: 768px) {
+
+  .candidate-pipeline {
+    padding: 18px;
+  }
+
+  .pipeline-hero {
+    flex-direction: column;
+  }
+
+  .pipeline-title {
+    font-size: 24px;
+  }
+
+  .timeline-content__top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

@@ -1,0 +1,124 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.company-card {
+  background-color: transparent;
+  padding: 16px;
+  border-radius: 8px;
+  width: 620px;
+  color: var(--text);
+  position: relative;
+  border: 3px solid transparent;
+  box-shadow: 0 0px 10px $pallete-0-color-11;
+
+  @media (max-width: $screen-size-tab) {
+    width: 500px;
+  }
+
+  @media (max-width: $screen-size-mobile) {
+    width: 350px;
+  }
+}
+
+.company-card.current {
+  border-color: $pallete-0-color-14;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.company-name {
+  font-weight: 700;
+
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+    color: $pallete-0-color-14;
+  }
+}
+
+.actions span {
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+button {
+  margin-top: 10px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.set-btn {
+  background: transparent;
+  border: 2px solid $pallete-0-color-14;
+  color: $pallete-0-color-14;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+
+  &:active {
+    transform: translateY(5px);
+  }
+}
+
+.current-btn {
+  background: $pallete-0-color-14;
+  color: var(--text);
+}
+
+h4 {
+  color: var(--accent-text);
+}
+
+.icon {
+  align-self: center;
+
+  mat-icon {
+    color: $pallete-0-color-14;
+  }
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin: 1rem 0;
+
+  div {
+    display: flex;
+    flex-direction: row;
+    gap: $gap-micro;
+    align-items: center;
+    font-size: 1.2rem;
+
+    mat-icon {
+      width: fit-content;
+      height: 100%;
+      font-size: 1.5rem;
+      margin-right: 0.25rem;
+      color: $pallete-0-color-13;
+      flex-shrink: 0;
+    }
+  }
+}
+
+.edit,
+.delete {
+  background: transparent;
+  cursor: pointer;
+  font-size: $font-size-button-wide;
+  color: var(--text);
+  transition: transform 0.3s;
+
+  &:hover {
+    scale: 1.2;
+    color: $pallete-0-color-14;
+  }
+}

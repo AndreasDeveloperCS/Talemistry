@@ -1,0 +1,137 @@
+<div class="cv-container">
+
+  <div class="cv-wrapper">
+    <header class="header">
+      <div class="header-content">
+        <div class="header-text">
+          <h1 class="name">
+            {{ cvData.user.firstname }} {{ cvData.user.lastname }}
+          </h1>
+          <p class="title">{{ cvData.targetPosition }}</p>
+        </div>
+        <img *ngIf="cvData?.user?.photo" [src]="cvData?.user?.photo"
+          [alt]="cvData?.user?.firstname + ' ' + cvData?.user?.lastname" class="profile-photo">
+      </div>
+      <div class="contact-bar">
+        <span class="contact-item">{{ cvData?.user?.email }}</span>
+        <span class="divider">|</span>
+        <span class="contact-item">{{ cvData?.user?.phone }}</span>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <section class="section">
+        <h2 class="section-title">Objective</h2>
+        <p class="text-content">{{ cvData.objective }}</p>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">Professional Summary</h2>
+        <p class="text-content">{{ cvData.summary }}</p>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">Skills</h2>
+        <div class="skills-category">
+          <h3 class="skills-category-title">Hard Skills</h3>
+          <div class="skills-list">
+            <span class="skill-item" *ngFor="let skill of cvData.hardSkills">{{ skill.skillName }}</span>
+          </div>
+        </div>
+        <div class="skills-category">
+          <h3 class="skills-category-title">Soft Skills</h3>
+          <div class="skills-list">
+            <span class="skill-item" *ngFor="let skill of cvData.softSkills">{{ skill.skillName }}</span>
+          </div>
+        </div>
+        <div class="skills-category">
+          <h3 class="skills-category-title">Domain Skills</h3>
+          <div class="skills-list">
+            <span class="skill-item" *ngFor="let skill of cvData.domainSkills">{{ skill.skillName }}</span>
+          </div>
+        </div>
+        <div class="skills-category">
+          <h3 class="skills-category-title">Managerial Skills</h3>
+          <div class="skills-list">
+            <span class="skill-item" *ngFor="let skill of cvData.managerialSkills">{{ skill.skillName }}</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">Languages</h2>
+        <div class="languages-grid">
+          <div class="language-item" *ngFor="let language of cvData.languagesSkills">
+            <span class="language-name">{{ language.skillName }}</span>
+            <span class="language-level">{{ cvDataTemplateService.getLanguageLevel(language.proficiencyEstimation)
+              }}</span>
+          </div>
+        </div>
+      </section>
+      
+      <section class="section">
+        <h2 class="section-title">Professional Experience</h2>
+        <div class="experience-item" *ngFor="let exp of cvData.operationalExperience">
+          <div class="experience-header">
+            <div>
+              <h3 class="experience-title">{{ exp.jobTitle }}</h3>
+              <p class="experience-company">{{ exp.companyName }}</p>
+            </div>
+            <span class="experience-period">
+              {{ exp.startWorkDate | monthYearRange: exp.endWorkDate : exp.isCurrent }}
+            </span>
+          </div>
+          <div *ngIf="exp.resposiblities">
+            <p class="responsibilities-header">Responsibilities</p>
+            <ul class="responsibilities-list">
+              <li *ngFor="let respos of splitTextLines(exp.resposiblities)">
+                {{ respos }}<br />
+              </li>
+            </ul>
+          </div>
+
+          <div *ngIf="exp.achievements">
+            <p class="achievements-header">Achievements</p>
+            <ul class="achievements-list">
+              <li *ngFor="let achievement of splitTextLines(exp.achievements)">
+                {{ achievement }}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">Education</h2>
+        <div class="education-item" *ngFor="let edu of cvData.academicEducation">
+          <div class="education-header">
+            <div>
+              <h3 class="education-degree">{{ edu.academicEducationLevelType }}</h3>
+              <p class="education-institution">{{ edu.institution.internationalName }}</p>
+            </div>
+            <span class="education-year">{{ edu.graduationDate | date: 'yyyy' }}</span>
+          </div>
+          <p class="education-description" *ngIf="edu.fieldOfStudy">{{ edu.fieldOfStudy }}</p>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">Certifications</h2>
+        <div class="certifications-grid">
+          <div class="certification-item" *ngFor="let cert of cvData.certification">
+            <h3 class="certification-name">{{ cert.skillName }}</h3>
+            <p class="certification-details">{{ cert.certificationCenter }} • {{ cert.certificationDate | date: 'yyyy'
+              }}</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">Motivational Factors</h2>
+        <ul class="motivational-list">
+          <li *ngFor="let motivation of cvData.preferences.motivationalFactors">{{ motivation.factor }}</li>
+        </ul>
+      </section>
+    </main>
+  </div>
+</div>

@@ -1,0 +1,55 @@
+<div class="video-interview-container">
+
+@if (recordingState === RecordingState.Idle) {
+  <div class="question-box">
+    <mat-icon>quiz</mat-icon>
+    <p>{{ defaultInstruction }}</p>
+  </div>
+}
+
+@if (recordingState !== RecordingState.Idle) {
+  <div class="question-box">
+    <mat-icon>quiz</mat-icon> 
+    <p>{{ questionText }}</p>
+  </div>
+  }
+
+  <div class="video-wrapper">
+    <video #camera autoplay muted playsinline></video>
+    <div class="countdown" *ngIf="showCountdown">
+        {{ countdownValue }}
+    </div>
+    <div class="recording-timer" *ngIf="isRecording">
+        ● Recording • {{ remainingSeconds }}s
+    </div>
+  </div>
+
+  <div class="controls">
+    @if (recordingState === RecordingState.Idle) {
+      <button class="start-btn"
+              (click)="startCountdown()">
+        <mat-icon>fiber_manual_record</mat-icon>
+        Start Recording
+      </button>
+    }
+
+    @if (recordingState === RecordingState.Recording) {
+      <button class="stop-btn"
+              (click)="onStop()"
+              [disabled]="!canStopRecording">
+        <mat-icon>stop</mat-icon>
+        Stop
+      </button>
+    }
+  </div>
+  @if (recordingState === RecordingState.Recording && !canStopRecording) {
+    <small class="hint">
+      You can stop after {{ MIN_DURATION - elapsedSeconds }} more seconds
+    </small>
+  }
+  @if (recordingState === RecordingState.Finished) {
+    <small class="hint">
+      Your video has been recorded successfully.
+    </small>
+  }
+</div>

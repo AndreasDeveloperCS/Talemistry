@@ -1,0 +1,31 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+:host {
+  width: 100%;
+}
+
+.selected-company {
+  width: 95%;
+  justify-content: space-between;
+  align-items: center;
+  justify-self: baseline;
+  display: flex;
+  background: transparent;
+  box-shadow: var(--box-shadow-light);
+  padding: $padding-s;
+  border: none;
+  border-radius: $borderRadius;
+  font-size: 20px;
+  font-weight: 600;
+  word-wrap: break-word !important;
+  flex-wrap: wrap !important;
+  gap: $gap-small;
+  margin: 0.5rem;
+}
+
+.outer-button {
+  margin-left: $margin-narrow;
+  height: fit-content;
+  align-self: center;
+}

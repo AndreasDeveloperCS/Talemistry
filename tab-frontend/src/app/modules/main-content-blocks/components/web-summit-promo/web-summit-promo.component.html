@@ -1,0 +1,40 @@
+<section class="ws-hero">
+    <div class="ws-glass">
+        <div class="ws-badge">{{ t('badge') }}</div>
+
+
+        <h1 class="ws-title">
+            <span class="ws-gradient">{{ t('heading') }}</span>
+        </h1>
+
+        <p class="ws-sub">{{ t('sub') }}</p>
+        <p class="ws-date">{{ t('dates') }}</p>
+
+        <div class="ws-count">
+            <!-- <label class="ws-count-label">{{ t('countdown') }}</label> -->
+            <span class="ws-count-value">{{ remaining() }}</span>
+        </div>
+        <div class="ws-ctas">
+            <a class="btn primary" [href]="shedulemeetingLink">{{ t('ctaMeet') }}</a>
+            <a class="btn ghost"
+                href="https://websummit.com/appearances/lis25/5463aff8-e0bc-4923-8d04-55880123603f/?code=EVRYKA&utm_source=zapier&utm_campaign=social-cards&utm_medium=email"
+                target="_blank" rel="noopener">{{ t('ctaJoin') }}</a>
+            <a class="btn highlight"
+                href="https://websummit.com/store/lis25/checkout/?items=1xe89b16ca-c9de-4a1b-b42c-4142d649726c&codes=EVRYKA&enableKlarna=true&enableRevolutPay=true&enableGooglePay=true&newPaymentSelect=true"
+                target="_blank" rel="noopener">{{
+                t('ctaTickets') }}</a>
+            <a class="btn link" [href]="calendarLinkTemplate" target="_blank" rel="noopener">Add to calendar</a>
+        </div>
+
+        <a class="ws-logo-card" [href]="appearanceUrl" target="_blank" rel="noopener">
+            <img class="ws-logo" src="/assets/wslogo.png" alt="{{ t('logoAlt') }}" loading="lazy" decoding="async" />
+            <span class="ws-card-caption">{{ t('officialListing') }}</span>
+        </a>
+
+    </div>
+
+
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="grid"></div>
+</section>

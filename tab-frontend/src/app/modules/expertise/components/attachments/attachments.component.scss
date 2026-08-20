@@ -1,0 +1,17 @@
+@use "variables" as *;
+@use "global" as *;
+
+@media (max-width: 768px) {
+  .container__limited-width.gap-wrapper.toggle-switch {
+    padding: 1.5rem 0 0 !important;
+  }
+  .container.container__flex.container__left{
+    padding-inline: 0;
+  }
+.container.container__flex.container__left span {
+        font-size: 1rem;
+    }
+    .container.container__flex.container__left{
+        flex-wrap: nowrap;
+    }
+}

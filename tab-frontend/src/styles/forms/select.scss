@@ -1,0 +1,86 @@
+@use 'variables' as *;
+
+@mixin custom-select($height) {
+  background-color: transparent;
+  color: var(--text);
+  padding-right: 2rem !important;
+  border-radius: 6px;
+  border: none;
+  height: $height;
+  box-shadow: var(--box-shadow-light);
+  padding: 6px 12px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  &::after {
+    content: "▼"; 
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    font-size: 0.7rem;
+    color: var(--text);
+  }
+
+  &:hover {
+    opacity: 0.9;
+    cursor: pointer;
+  }
+
+  option {
+    color: var(--text);
+    background-color: $gradient-color-4;
+
+    &:hover {
+      background-color: $gradient-color-4;
+      opacity: 0.9;
+    }
+  }
+
+  option:checked {
+    color: $pallete-0-color-13;
+    font-weight: bold;
+  }
+}
+
+.custom-select {
+  @include custom-select(3rem);
+}
+
+.custom-select-small {
+  @include custom-select(2rem);
+}
+
+.select-wrapper {
+  position: relative;
+  display: inline-block;
+
+  .custom-select, .custom-select-small {
+    padding-left: 2rem;
+  }
+
+  &.with-view-icon::before {
+    content: "\e417";
+    font-family: "Material Icons"; 
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1rem;
+    color: var(--text);
+    pointer-events: none;
+  }
+
+  &::after {
+    content: "▼"; // arrow
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    font-size: 0.7rem;
+    color: var(--text);
+  }
+}
