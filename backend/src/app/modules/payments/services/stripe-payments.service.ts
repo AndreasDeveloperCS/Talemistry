@@ -20,7 +20,7 @@ export class StripePaymentsService {
     private readonly stripe = new Stripe(
         this.getSecretKey(),
         {
-            apiVersion: '2026-06-24.dahlia',
+            apiVersion: '2026-07-29.dahlia',
         },
     );
 
