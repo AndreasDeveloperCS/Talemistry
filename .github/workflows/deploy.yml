@@ -33,9 +33,24 @@ jobs:
 
       - name: Deploy files
         run: |
-          mkdir -p "${{ vars.APP_PATH }}"
+          APP_PATH="${{ vars.APP_PATH }}"
 
-          rsync -az --delete \
+          if command -v sudo >/dev/null 2>&1 && sudo -n true >/dev/null 2>&1; then
+            echo "Using passwordless sudo to prepare deploy directory"
+            sudo mkdir -p "$APP_PATH"
+            sudo chown -R "$(id -u):$(id -g)" "$APP_PATH"
+          else
+            mkdir -p "$APP_PATH"
+          fi
+
+          if [ ! -w "$APP_PATH" ]; then
+            echo "Deploy path is not writable by runner user: $APP_PATH"
+            ls -ld "$APP_PATH" || true
+            id || true
+            exit 1
+          fi
+
+          rsync -az --delete --no-owner --no-group --no-perms \
             --exclude=".git" \
             --exclude=".github" \
             --exclude="node_modules" \
@@ -49,7 +64,7 @@ jobs:
             --exclude="backend/client_certs" \
             --exclude="backend/ssl" \
             --exclude="backend/cloudfront/private_key.pem" \
-            ./ "${{ vars.APP_PATH }}/"
+            ./ "$APP_PATH/"
 
       - name: Install dependencies
         working-directory: ${{ vars.APP_PATH }}
