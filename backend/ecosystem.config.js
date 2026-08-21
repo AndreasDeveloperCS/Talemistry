@@ -45,7 +45,9 @@ module.exports = {
             env: {
                 ...envConfig,
                 NODE_ENV: "PROD",
-                PORT: 3000,
+                // Backend should not share the same port as the Next.js frontend.
+                // Keep API on 4000 so web can reliably bind to 3000.
+                PORT: 4000,
                 NODE_NO_WARNINGS: "1",
                 NODE_TLS_REJECT_UNAUTHORIZED: "0",
                 NODE_OPTIONS: "--tls-min-v1.2 --tls-max-v1.2 --openssl-legacy-provider",
