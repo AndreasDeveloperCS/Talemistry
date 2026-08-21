@@ -87,7 +87,13 @@ jobs:
 
       - name: Install backend dependencies
         working-directory: ${{ vars.APP_PATH }}/backend
-        run: npm ci
+        run: |
+          if [ -f package-lock.json ] || [ -f npm-shrinkwrap.json ]; then
+            npm ci
+          else
+            echo "No lockfile found in backend; falling back to npm install"
+            npm install --no-audit --no-fund
+          fi
 
       - name: Build NestJS backend
         working-directory: ${{ vars.APP_PATH }}/backend
