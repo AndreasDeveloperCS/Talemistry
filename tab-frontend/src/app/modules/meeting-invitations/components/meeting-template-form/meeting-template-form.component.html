@@ -1,0 +1,85 @@
+<button mat-icon-button class="form-button exit-button" (click)="onCancel()">
+    <mat-icon class="icon-close">
+      <svg class="icon-close" width="1.5rem" height="1.5rem" viewBox="0 0 108 107"
+        fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M27 26.75L54 53.5L81 26.75" stroke="white" stroke-width="10"
+          stroke-linecap="round" />
+        <path d="M27 80.25L54 53.5L81 80.25" stroke="white" stroke-width="10"
+          stroke-linecap="round" />
+      </svg>
+    </mat-icon>
+</button>
+
+<form [formGroup]="templateForm" class="template-form scrollbar-hidden">
+  <h2>Create Meeting Template</h2>
+
+  <div class="form-group">
+    <label class="new-label">Topic</label>
+    <input formControlName="topic" placeholder="Enter meeting title" />
+  </div>
+
+  <div class="form-group">
+    <label class="new-label">Agenda</label>
+    <textarea formControlName="agenda" rows="3" placeholder="Optional description or agenda"></textarea>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+        <label class="new-label">Meeting Platform</label>
+        <select formControlName="platform">
+        <option [ngValue]="null">Select a platform</option>
+        <option *ngFor="let platform of platforms" [ngValue]="platform.value">
+          {{ platform.name }}
+        </option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label class="new-label">Slot Period</label>
+        <select formControlName="selectedSlotPeriod">
+        <option *ngFor="let slot of slotPeriods" [value]="slot">
+            {{ slot }}
+        </option>
+        </select>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label class="new-label">Start Date</label>
+      <input type="datetime-local" formControlName="startDate" />
+    </div>
+
+    <div class="form-group">
+      <label class="new-label">End Date</label>
+      <input type="datetime-local" formControlName="endDate" />
+    </div>
+  </div>
+
+  <div class="form-group checkbox">
+    <input type="checkbox" formControlName="includeRecruiter" id="includeRecruiter">
+    <label class="new-label" for="includeRecruiter">Include me as participant</label>
+  </div>
+
+  <div class="interviewers-section">
+    <div class="interviewers-header">
+      <h4>Additional Interviewers</h4>
+      <button type="button" class="add-interviewer-btn" (click)="addInterviewer()">+</button>
+    </div>
+
+    <div class="participants" formArrayName="participants" *ngFor="let interviewer of participants.controls; let i = index">
+      <div [formGroupName]="i" class="participant-row">
+        <input formControlName="firstname" placeholder="First Name" />
+        <input formControlName="lastname" placeholder="Last Name" />
+        <input formControlName="email" placeholder="Email" />
+      </div>
+      <button type="button" (click)="removeInterviewer(i)">✕</button>
+    </div>
+  </div>
+
+  <button [disabled]="templateForm.invalid" 
+    (click)="onSubmit()" 
+    class="button-primary">
+    Save Template
+  </button>
+</form>

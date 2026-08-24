@@ -1,0 +1,95 @@
+@use 'variables' as *;
+
+.drop-down-list-scroll {
+  max-height: 25rem;
+  overflow-y: scroll;
+}
+
+::ng-deep .custom-panel .mat-select-panel {
+  max-height: 25rem;
+  overflow: auto !important;
+}
+
+::ng-deep .no-hover {
+  pointer-events: none;
+}
+
+::ng-deep .dropdown-filter {
+  border: none;
+  outline: none;
+  padding: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+// ::ng-deep .cdk-overlay-pane {
+//   position: absolute !important;
+//   background: transparent;
+//   scroll-behavior: smooth;
+//   transform-origin: top center !important;
+//   overflow: auto;
+//   // right: 0 !important;
+//   // bottom: 0 !important;
+// }
+
+// ::ng-deep .mat-select-panel {
+//   position: absolute !important;
+//   transform-origin: top center !important;
+//   transition: transform 0ms ease-out, opacity 0ms ease-out;
+// }
+
+// ::ng-deep .cdk-overlay-pane .mat-select-panel {
+//   transform-origin: 50% 0% !important;
+//   animation: scaleIn 150ms ease-out;
+// }
+
+// @keyframes scaleIn {
+//   0% {
+//     opacity: 0;
+//     transform: scale(0.8);
+//   }
+
+//   100% {
+//     opacity: 1;
+//     transform: scale(1);
+//   }
+// }
+
+.dropdown-icon {
+  position: absolute;
+  right: 0.15rem;
+  bottom: 1rem;
+  transform: translateY(-50%) rotate(0deg) !important;
+  cursor: pointer;
+  pointer-events: auto;
+  color: var(--text);
+  transition: transform 0.2s ease;
+
+  @media (max-width: $screen-size-mobile) {
+    bottom: -0.5rem;
+  }
+}
+
+.dropdown-icon.open {
+  transform: translateY(-50%) rotate(180deg) !important;
+}
+
+.dropdown-filter {
+  display: block;
+  // position: sticky;
+  background-color: transparent;
+  padding: $padding-m;
+  align-items: center;
+  width: 100%;
+}
+
+::ng-deep .mat-mdc-autocomplete-panel,
+::ng-deep .mat-mdc-select-panel {
+  border-radius: $borderRadiusMedium $borderRadius !important;
+  border: 1px solid $pallete-0-color-6 !important;
+  background: $pallete-0-color-3 !important;
+}
+
+::ng-deep .mat-mdc-autocomplete-panel {
+  padding: var(--space-sm) !important;
+}

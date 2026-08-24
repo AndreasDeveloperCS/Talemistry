@@ -1,0 +1,165 @@
+<div class="mini-cards-container">
+  <!-- Header Section -->
+  <div class="header">
+    <div class="header__left">
+      <div class="header__icon">
+        <mat-icon>inventory_2</mat-icon>
+      </div>
+      <div class="header__text">
+        <h3 class="header__title">Document Archive</h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cards Grid -->
+  <div class="cards-grid">
+    <!-- CV Mini Card -->
+    <div 
+      class="mini-card mini-card--cv"
+      [class.mini-card--active]="isExpanded('cv')"
+      (click)="toggleSection('cv')"
+    >
+      <!-- Decorative Corner -->
+      <div class="mini-card__corner mini-card__corner--cv"></div>
+      
+      <div class="mini-card__content">
+        <div class="mini-card__top">
+          <div class="mini-card__icon mini-card__icon--cv">
+            <mat-icon>description</mat-icon>
+          </div>
+          <mat-icon 
+            class="mini-card__expand"
+            [class.mini-card__expand--open]="isExpanded('cv')"
+          >keyboard_arrow_down</mat-icon>
+        </div>
+                
+        <div class="mini-card__info">
+          <div class="mini-card__count-label">
+            <div class="mini-card__count mini-card__count--cv">{{ documentHistoryData?.cvCount }}</div>
+            <span class="mini-card__label">CVs</span>
+          </div>
+          <span class="mini-card__meta mini-card__meta--teal">
+            <mat-icon>update</mat-icon>
+            {{ documentHistoryData?.lastCvUpload }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cover Letter Mini Card -->
+    <div 
+      class="mini-card mini-card--cl"
+      [class.mini-card--active]="isExpanded('cl')"
+      (click)="toggleSection('cl')"
+    >
+      <!-- Decorative Corner -->
+      <div class="mini-card__corner mini-card__corner--cl"></div>
+      
+      <div class="mini-card__content">
+        <div class="mini-card__top">
+          <div class="mini-card__icon mini-card__icon--cl">
+            <mat-icon>mail_outline</mat-icon>
+          </div>
+          <mat-icon 
+            class="mini-card__expand"
+            [class.mini-card__expand--open]="isExpanded('cl')"
+          >keyboard_arrow_down</mat-icon>
+        </div>
+                
+        <div class="mini-card__info">
+          <div class="mini-card__count-label">
+            <div class="mini-card__count mini-card__count--cl">{{ documentHistoryData?.clCount }}</div>
+            <span class="mini-card__label">Cover Letters</span>
+          </div>
+          <span class="mini-card__meta mini-card__meta--orange">
+            <mat-icon>update</mat-icon>
+            {{ documentHistoryData?.lastClUpload }}
+          </span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="history-panel" [class.history-panel--open]="expandedSection">
+    @if (loadingDocView) {
+      <div class="spinner-overlay">
+        <app-sun-spinner></app-sun-spinner>
+      </div>
+    } 
+    <div class="expanded-table-wrapper scrollbar-hidden" *ngIf="expandedSection">
+      <!-- Horizontal scroll -->
+      <div class="expanded-table-scroll-x scrollbar-hidden">
+        <div class="expanded-table">
+          <!-- Header -->
+          <div class="expanded-table__header">
+            <span></span>
+            <span></span>
+            <span>Document</span>
+            <span>Size</span>
+            <span>Uploaded</span>
+            <span>Modified</span>
+            <span></span> <!-- sweep delete -->
+          </div>
+
+          <!-- Rows -->
+          <div class="expanded-table__rows scrollbar-hidden">
+            <div class="expanded-table__row"
+                *ngFor="let doc of documentStates[expandedSection!]?.data">
+
+              <div class="expanded-table__action-col">
+                <button class="expanded-table__action"
+                        (click)="showDoc(expandedSection, doc)"
+                        [class.expanded-table__action--cv]="expandedSection === 'cv'"
+                        [class.expanded-table__action--cl]="expandedSection === 'cl'">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+              </div>
+
+              <div class="expanded-table__action-col">
+                <app-toggle-button [isActive]="doc.isMain" (toggle)="isMain(expandedSection, doc)">
+                </app-toggle-button>
+              </div>
+
+              <div class="expanded-table__file">
+                <mat-icon>{{ getIcon() }}</mat-icon>
+                <span class="file-name">{{ doc.originalName || doc.cvFileInfo?.originalName }}</span>
+              </div>
+
+              <div class="expanded-table__size">
+                {{ doc.size | fileSize }}
+              </div>
+
+              <div class="expanded-table__date">
+                {{ doc.createdDate | date:'mediumDate' }}
+              </div>
+
+              <div class="expanded-table__date">
+                {{ doc.fileLastModifiedDate | date:'mediumDate' }}
+              </div>
+
+              <div class="expanded-table__delete">
+                <button class="delete-btn" (click)="deleteDoc(expandedSection, doc)">
+                  <mat-icon>delete_sweep</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Loader -->
+     @if(expandedSection) {
+      <div *ngIf="documentStates[expandedSection!].loading">
+        <app-sun-spinner></app-sun-spinner>
+      </div>
+     }
+    <button
+      *ngIf="expandedSection && documentStates[expandedSection].hasMore"
+      class="show-more-btn"
+      [disabled]="documentStates[expandedSection].loading"
+      (click)="showMore(expandedSection)">
+      Show more
+    </button>
+  </div>
+</div>

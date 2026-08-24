@@ -1,0 +1,152 @@
+<div class="candidate-form">
+@if(isLoading) {
+  <app-loading-spinner></app-loading-spinner>
+}
+@if(!isLoading) {
+  @if(questions.length > 0) {
+    @if(submitted) {
+    <div class="success-container">
+      <div class="success-card">
+        <div class="success-icon-wrapper">
+          <mat-icon class="success-icon">check_circle</mat-icon>
+        </div>
+        <h2 class="success-title">Screening Submitted!</h2>
+        <p class="success-text">
+          Thank you for completing the screening questions. Our team will review your responses and get back to you soon.
+        </p>
+      </div>
+    </div>
+    }
+
+    @if(!submitted) {
+    <div class="form-container">
+      <div class="container">
+        <div class="header-card">
+          <h1 class="form-title">Screening Questions</h1>
+          <p class="form-description">
+            Please answer the following questions to help us understand your background and qualifications. 
+            Fields marked with <span class="required-badge">Required</span> must be completed.
+          </p>
+        </div>
+
+        <form class="questions-form">
+          @for(question of questions; track question; let i = $index) {
+          <div class="question-card">
+            <div class="question-content">
+              <div class="question-header">
+                <span class="question-number">{{ i + 1 }}.</span>
+                <div class="question-label-wrapper">
+                  <label class="question-label">
+                    @if(question.type !== 'videoresponse'){
+                      {{ question.text }}
+                    }
+                    @if(question.type === 'videoresponse'){
+                      {{ videoResponseTxt}}
+                    }
+                    @if(question.required) {
+                    <span class="required-badge">Required</span>
+                    }
+                  </label>
+
+                  @if(question.type === 'videoresponse' && question.durationInSeconds) {
+                    <app-video-interview
+                      [questionText]="question.text"
+                      [interviewId]="formId"
+                      [maxDuration]="question.durationInSeconds"
+                      (videoRecorded)="onVideoRecorded(question._id, question.text, $event)">
+                    </app-video-interview>
+                  }
+
+                  @if(question.type === 'text') {
+                  <input 
+                    type="text"
+                    class="text-input"
+                    [value]="getAnswer(question._id)"
+                    (input)="updateAnswer(question._id, $any($event.target).value)"
+                    placeholder="Type your answer..."
+                    [required]="question.required">
+                  }
+
+                  @if(question.type === 'textarea') {
+                  <textarea 
+                    class="textarea-input"
+                    [value]="getAnswer(question._id)"
+                    (input)="updateAnswer(question._id, $any($event.target).value)"
+                    placeholder="Type your answer..."
+                    rows="5"
+                    [required]="question.required">
+                  </textarea>
+                  }
+
+                  @if(question.type === 'select') {
+                  <select 
+                    class="select-input"
+                    [ngModel]="getAnswer(question._id)"
+                    (ngModelChange)="updateAnswer(question._id, $event)"
+                    [required]="question.required">
+                    
+                    <option [ngValue]="">Select an option...</option>
+                    @for(option of question.options; track option) {
+                    <option [ngValue]="option.text">
+                      {{ option.text }}
+                    </option>
+                    }
+                  </select>
+                  }
+
+                  @if(question.type === 'multiselect') {
+                  <div class="multiselect-options">
+                    @for(option of question.options; track option) {
+                    <label 
+                      class="checkbox-option">
+                      <input 
+                        type="checkbox"
+                        [checked]="isMultiselectChecked(question._id, option)"
+                        (change)="toggleMultiselect(question._id, option)">
+                      <span>{{ option.text }}</span>
+                    </label>
+                    }
+                  </div>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+          }
+
+          @if(!isOwnerViewing) {
+            <div class="submit-card">
+              <p class="submit-text">Please review your answers before submitting</p>
+              <button (click)="onSubmit()" class="button button-primary button-large" [disabled]="!isFormValid">
+                <mat-icon>send</mat-icon>
+                <span>Submit Screening</span>
+              </button>
+            </div>
+          }
+        </form>
+      </div>
+    </div>
+    }
+  }
+  @if((questions.length === 0 || !formId) && !isFormAlreadySend) { 
+    <div class="no-form-label">
+      <mat-icon>hourglass_empty</mat-icon>
+      <p>This screening form is not available yet — it's still in progress.</p>
+    </div>
+  }
+  @if(isFormAlreadySend) {
+  <div class="notification-card">
+    <div class="success-card">
+      <div class="success-icon-wrapper">
+        <mat-icon class="success-icon">check_circle</mat-icon>
+      </div>
+      <h2 class="success-title">You've already submitted this form!</h2>
+      <p class="success-text">
+        Our records show that you've already completed this screening. 
+        Thank you for taking the time — your responses have been saved and are being reviewed.
+      </p>
+    </div>
+  </div>
+  }
+}
+</div>

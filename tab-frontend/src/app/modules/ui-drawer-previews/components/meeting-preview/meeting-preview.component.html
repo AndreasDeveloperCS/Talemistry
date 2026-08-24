@@ -1,0 +1,99 @@
+@if(loading) {
+  <app-sun-spinner></app-sun-spinner>
+}
+@if(!loading && meeting) {
+<div class="meeting-preview">
+  <div class="meeting-preview__hero meeting-section">
+    <div class="meeting-upper-line">
+        <div class="meeting-platform">
+            <mat-icon>videocam</mat-icon>
+            <span>{{ getPlatformLabel(meeting.platform) }}</span>
+        </div>
+        <div class="meeting-status" [ngClass]="getStatusClass(meeting.status)">
+            {{ getStatusLabel(meeting.status) }}
+        </div>
+    </div>
+    <div class="meeting-title">
+      {{ meeting.topic || 'Untitled Meeting' }}
+    </div>
+    <button *ngIf="meeting.positionId" class="meeting-position-link" (click)="openPosition()">
+      <mat-icon>work</mat-icon>
+      <span>View related position</span>
+      <mat-icon class="meeting-position-link__arrow">arrow_forward_ios</mat-icon>
+    </button>
+    <div class="meeting-meta">
+      <div class="meta-item">
+        <mat-icon>calendar_today</mat-icon>
+        <span>{{ formatDate() }}</span>
+      </div>
+      <div class="meta-item">
+        <mat-icon>schedule</mat-icon>
+        <span>{{ formatTime() }}</span>
+      </div>
+      <div class="meta-item">
+        <mat-icon>timer</mat-icon>
+        <span>{{ formatDuration() }}</span>
+      </div>
+    </div>
+  </div>
+  <div class="meeting-section" *ngIf="meeting.positionId">
+    <div class="section-header">
+      <mat-icon>work</mat-icon>
+      <h3>Position</h3>
+    </div>
+    <button class="link-btn" (click)="openPosition()">
+      Open related position
+    </button>
+  </div>
+  <div class="meeting-section" *ngIf="meeting.agenda">
+    <div class="section-header">
+      <mat-icon>notes</mat-icon>
+      <h3>Agenda</h3>
+    </div>
+    <p class="text" [innerHTML]="getFormattedAgenda(meeting.agenda)"></p>
+  </div>
+  <div class="meeting-section">
+    <div class="section-header">
+      <mat-icon>group</mat-icon>
+      <h3>Participants</h3>
+    </div>
+    <div class="participants">
+      <div class="participant" *ngFor="let p of meeting.participants">
+        <div class="avatar">{{ p.firstname?.charAt(0) || '?' }}</div>
+        <div class="info">
+          <div class="name">{{ p.firstname }} {{ p.lastname }}</div>
+          <div class="email">{{ p.email }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="meeting-actions">
+    <button class="btn primary" (click)="joinMeeting()">
+      <mat-icon>login</mat-icon>
+      Join meeting
+    </button>
+    @if(isMeetingUpcoming) {
+      <button class="btn secondary" (click)="reschedule()">
+        <mat-icon>event_repeat</mat-icon>
+        Reschedule
+      </button>
+    }
+    <button class="btn secondary" (click)="copyLink()">
+      <mat-icon>link</mat-icon>
+      Copy meeting link
+    </button>
+    @if(isRecruiter && meeting.createdBy) {
+      <button class="btn secondary" (click)="openChatWithApplicant()">
+        <mat-icon>chat_bubble_outline</mat-icon>
+        Contact applicant
+      </button>
+    }
+    @if(isTalent && meeting?.invitationId !== null) {
+      <button class="btn secondary" (click)="openChatWithRecruiter()">
+        <mat-icon>chat_bubble_outline</mat-icon>
+        Contact recruiter
+      </button>
+    }
+  </div>
+</div>
+}

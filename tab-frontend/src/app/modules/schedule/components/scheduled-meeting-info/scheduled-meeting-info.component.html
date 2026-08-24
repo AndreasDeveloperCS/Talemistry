@@ -1,0 +1,63 @@
+<button mat-icon-button class="form-button exit-button" (click)="onCancel()">
+    <mat-icon>
+        <svg width="1.5rem" height="1.5rem" viewBox="0 0 108 107" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M27 26.75L54 53.5L81 26.75" stroke="white" stroke-width="10" stroke-linecap="round" />
+            <path d="M27 80.25L54 53.5L81 80.25" stroke="white" stroke-width="10" stroke-linecap="round" />
+        </svg>
+    </mat-icon>
+</button>
+
+<div class="meeting-container">
+  <h2 class="meeting-title">{{ data.topic }}</h2>
+
+  <div class="info-row highlight">
+    <div class="label">Date</div>
+    <div class="value">
+      {{ data?.startTime | date: 'fullDate' }},   
+      {{ data?.startTime | date: 'shortTime' }} – {{ data?.endTime | date: 'shortTime' }}
+    </div>
+  </div>
+
+  <div class="info-row agenda" *ngIf="data.agenda">
+      <div class="label">Agenda</div>
+      <div class="value" [innerHTML]="formattedAgenda"></div>
+  </div>
+
+  <div class="info-row link" *ngIf="data.meetingLinkGoogleMeets?.hangoutLink">
+    <div class="label">Google Meet</div>
+    <a class="value" [href]="data.meetingLinkGoogleMeets.hangoutLink" target="_blank">
+      Join Google Meet Meeting
+    </a>
+  </div>
+
+  <div class="info-row link" *ngIf="data.meetingLinkZoom?.join_url">
+    <div class="label">Zoom</div>
+    <a class="value" [href]="data.meetingLinkZoom.join_url" target="_blank">
+      Join Zoom Meeting
+    </a>
+  </div>
+
+  <div class="info-row link" *ngIf="data.meetingLinkTeams?.joinUrl">
+    <div class="label">Microsoft Teams</div>
+    <a class="value" [href]="data.meetingLinkTeams.joinUrl" target="_blank">
+      Join Teams Meeting
+    </a>
+  </div>
+
+  <div class="info-row links" *ngIf="data.meetingLinks">
+    <div class="label">Add to Calendar</div>
+    <div class="calendar-links">
+      <a *ngIf="data.meetingLinks.google" [href]="data.meetingLinks.google" target="_blank">Google</a>
+      <a *ngIf="data.meetingLinks.outlook" [href]="data.meetingLinks.outlook" target="_blank">Outlook</a>
+      <a *ngIf="data.meetingLinks.office365" [href]="data.meetingLinks.office365" target="_blank">Office 365</a>
+      <a *ngIf="data.meetingLinks.yahoo" [href]="data.meetingLinks.yahoo" target="_blank">Yahoo</a>
+    </div>
+  </div>
+
+  <div class="info-row participants" *ngIf="data.participants?.length">
+    <div class="label">Participants</div>
+    <ul class="value">
+      <li *ngFor="let p of data.participants">{{ p.firstname}} {{ p.lastname}} ({{ p.email }})</li>
+    </ul>
+  </div>
+</div>

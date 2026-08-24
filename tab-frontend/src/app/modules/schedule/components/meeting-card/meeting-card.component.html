@@ -1,0 +1,43 @@
+<div class="meeting-container">
+  <div class="value">
+    <mat-icon>access_time</mat-icon>
+    {{ meeting.startTime | date: 'H:mm' }} – {{ meeting.endTime | date: 'H:mm' }}
+  </div>
+
+  <h2 class="meeting-title" (click)="onMeetingClick.emit(meeting)">{{ meeting.topic }}</h2>
+
+  <div class="info-row participants" *ngIf="meeting.participants?.length">
+    <mat-icon>people</mat-icon>
+    <span class="value" *ngFor="let p of meeting.participants">
+      <span>{{ p.firstname}} {{ p.lastname}} ({{ p.email }})</span>
+    </span>
+  </div>
+
+  <div class="info-row">
+    <mat-icon>video_call</mat-icon>
+    <span class="link" *ngIf="meeting.meetingLinkEvryka">
+      <a class="value" [href]="meeting.meetingLinkEvryka" target="_blank">
+        Evryka
+      </a>
+    </span>
+
+    <span class="link" *ngIf="meeting.meetingLinkGoogleMeets?.hangoutLink">
+      <a class="value" [href]="meeting.meetingLinkGoogleMeets.hangoutLink" target="_blank">
+        Google Meets
+      </a>
+    </span>
+
+    <span class="link" *ngIf="meeting.meetingLinkTeams?.joinUrl">
+      <a class="value" [href]="meeting.meetingLinkTeams.joinUrl" target="_blank">
+        Microsoft Teams 
+      </a>
+    </span>
+
+    
+    <span class="link" *ngIf="meeting.meetingLinkZoom?.join_url">
+      <a class="value" [href]="meeting.meetingLinkZoom.join_url" target="_blank">
+        Zoom 
+      </a>
+    </span>
+  </div>
+</div>

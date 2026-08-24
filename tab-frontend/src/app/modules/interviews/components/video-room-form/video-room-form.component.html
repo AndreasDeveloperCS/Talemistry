@@ -1,0 +1,65 @@
+<button mat-icon-button type="button" class="form-button exit-button" (click)="onCancel()">
+  <mat-icon class="icon-close">
+    <svg class="icon-close" width="1.5rem" height="1.5rem" viewBox="0 0 108 107" fill="none"
+      xmlns="http://www.w3.org/2000/svg">
+      <path d="M27 26.75L54 53.5L81 26.75" stroke="white" stroke-width="10" stroke-linecap="round" />
+      <path d="M27 80.25L54 53.5L81 80.25" stroke="white" stroke-width="10" stroke-linecap="round" />
+    </svg>
+  </mat-icon>
+</button>
+
+<form [formGroup]="videoChatRoomForm" class="chat-form">
+  <h2>{{ isEditMode ? 'Edit Video Room' : 'Create Video Room' }}</h2>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label class="new-label">Name</label>
+      <input formControlName="name" placeholder="Video chat name" />
+    </div>
+
+    <div class="form-group">
+      <label class="new-label">Type</label>
+      <select formControlName="type" aria-label="Meeting type" title="Meeting type">
+        <option *ngFor="let type of types" [value]="type">
+          {{ type }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-row" *ngIf="videoChatRoomForm.get('type')?.value === 'group'">
+    <div class="form-group toggle-row">
+      <!-- <mat-slide-toggle formControlName="isOpenMeeting" color="primary">
+        <span class="new-label toggle-label">Public meeting</span>
+      </mat-slide-toggle> -->
+      <app-toggle-button formControlName="isOpenMeeting">
+      </app-toggle-button>
+      <span class="new-label toggle-label">Public meeting</span>
+    </div>
+  </div>
+
+  <div class="participants-section">
+    <div class="participants-header">
+      <h4>Participants</h4>
+      <button type="button" class="add-participant-btn" (click)="addParticipant()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+
+    <div class="participants" formArrayName="participants"
+      *ngFor="let participant of participants.controls; let i = index">
+      <div [formGroupName]="i" class="participant-row">
+        <input formControlName="email" placeholder="Email" />
+      </div>
+      <button type="button" (click)="removeParticipant(i)">✕</button>
+    </div>
+  </div>
+
+  <button type="button" [disabled]="isSubmitDisabled" (click)="onSubmit()" class="button-primary">
+    {{ isEditMode ? 'Save' : 'Create' }}
+  </button>
+
+  <div class="form-info" *ngIf="showInvalidInfo">
+    {{ invalidInfoMessage }}
+  </div>
+</form>

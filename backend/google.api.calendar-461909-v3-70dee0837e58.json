@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "effective-tea-461909-v3",
+  "private_key_id": "70dee0837e58a00ffcaa18dac92b2654b37d9b28",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDUwUjnf7JDdRVP\n6AL1RJtuBCKpPfl8CRehqmODgD71DFDhBy2tsoaMWMlffRpWkptg3NzugBccvgbb\nq0XT34B4ZCwJl9iqMvzPqlPmPAocP6Pl1Mmu0eMV+BVdNaWKEMuU4FSDndZ+0t2s\nUweUpbdft+XuRgTr/Qz5RauYAj18TrrLcNgCYjl/xAXvKpgBw4PU+/qPMOQCyRUd\n1pTIDr964vT4KiQC7MTQKj4zBB+UxGPw9lO76+uLblxbt8iuh/STWfziaElYApdC\noB4I30DakyWxrrt16j6JptQC7nqx12kJcmrpH0C3J0xaK8OsII3eNNN+1lJ/Ijtr\nRgXkKVd1AgMBAAECggEAATtWokFZMYbQnrzsX45sGMN63agBvMnVNkDGsCyjR4iq\nlvk66o6w32zu+4oV3/bxNzD14kOSO6NPHO1oHCB2OoPVStHU1Cb2Za4d0EMXqAkw\nh3C7P8WwP6tlntcRyBChta+n0EbvCZ65kOh7cXTF7b90t4YIbMMd3cqaJtbnbutv\nNZ6EYyBrEkzYM21I4v8ZuAXS4iFii0FQAraXI7p2/N0k9hzTANNXxL51SIhn6+yH\njYZgYh0RmqrlT/0greqO8IgtPOwIA2AYFjN4ijhUiP1aEVf3Hm9usu72dQvrCQQn\ny/PWGMQvmTLzof34/NgWGiXxLLRT3dPGJBtiwhVbaQKBgQD1uS2ZS0LrtncOLPg0\ny2GEJtnZUXK6+28aW6EaKfInzUAoq7Tq9vRK9UFEvzcPDMzK/cKCFVk8PTWULigd\nhtop/RlrAdV27yVqZUv1s6INJ5QuGa1++7ewupxXSimzUSBAMfuQ3g57HUQCI2oF\nPp9SzUoOND0MnfhEI7QGqMv8OQKBgQDdpyIb8diYFiBA7jqwlBlwJdPmA05+9KM8\nVmrQRXc7IU9qpHSIxkcHTVkQn1Oa7DS0HgUURAe3Bn9IfilNIuh/SpoSWEJzU7U5\n5udvpdBqLCUORb6AJhGxfQ4QF6cso8oe2XZ7Loc+s/tSgjOPqUzmMAbdfzz2hDqK\ngPz32vXtHQKBgQDaS+60luYW3f0avNysmlpBuvoiVHdmoeTsN6cBxW356iArgY+y\nhj41MXkQiAdz+V0eoR3hzvF90Kr+v5qn0JuUXePs6q4ngQFuaht3ZmR650R/SBSY\nESv5d29ZJOuzAEl0fnMNGhknSrKWa7vOePm15+b4g3QQ924NquJOYDsIEQKBgHE6\nuwL5hgMTcoCY8mRYE7KlsFzVHZlfUbA2GTSx99m+B3rb7igc2hYR3kjOi4Ad4EKO\n/1s98Y7/A7C9uk2MYqb8Lj7m1XNitLaSjXIMi65hRMDIwitmxy0bTD7ORnlYZp1h\ny9Pbjf1rJh0dJEfkXcNNj4RBRpxMKjes8w2OzojFAoGBAKORZR10LBtszeBoLdAW\nrI1HsQkH4lrq59zFx+B9m0agsadhn+VzAeq/OhcARxi+iW5bAD1ptlJwuxhMTf57\nIVIepP0Pf1mFIx3B+LLMbYO0NEQf8+Vez3cyQlmp6Bemyl0ZjLQEM7lXCq4DLvJo\n2dyK3tXGfj1hGai/mmtmXVrw\n-----END PRIVATE KEY-----\n",
+  "client_email": "evryka@effective-tea-461909-v3.iam.gserviceaccount.com",
+  "client_id": "109482718303832182013",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/evryka%40effective-tea-461909-v3.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

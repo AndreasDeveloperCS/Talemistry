@@ -1,0 +1,258 @@
+<div class="ht-wrapper">
+  <div class="ht-circuit-bg">
+    <svg xmlns="http://www.w3.org/2000/svg">
+      <pattern id="circuit" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+        <path d="M10 10h80M10 10v30M90 10v30M10 40h30M60 40h30M40 40v30M60 40v30M40 70h20M10 70v20M90 70v20M10 90h30M60 90h30"
+          stroke="#037F8C" stroke-width="1" fill="none"/>
+        <circle cx="10" cy="10" r="3" fill="#037F8C"/>
+        <circle cx="90" cy="10" r="3" fill="#037F8C"/>
+        <circle cx="40" cy="40" r="3" fill="#037F8C"/>
+        <circle cx="60" cy="40" r="3" fill="#037F8C"/>
+        <circle cx="10" cy="90" r="3" fill="#037F8C"/>
+        <circle cx="90" cy="90" r="3" fill="#037F8C"/>
+      </pattern>
+      <rect width="100%" height="100%" fill="url(#circuit)"/>
+    </svg>
+  </div>
+
+  <header class="ht-header">
+    <div class="ht-header__content">
+      <div class="ht-header__hex-photo">
+        <svg width="130" height="150" viewBox="0 0 130 150">
+          <defs>
+            <clipPath id="hexClip">
+              <polygon points="65,5 120,40 120,110 65,145 10,110 10,40" />
+            </clipPath>
+          </defs>
+          <polygon
+            points="65,5 120,40 120,110 65,145 10,110 10,40"
+            fill="white"
+            stroke="#f97316"
+            stroke-width="3"
+          />
+          <image
+            [attr.href]="data.user?.photo"
+            x="10" y="5" width="110" height="140"
+            clip-path="url(#hexClip)"
+            preserveAspectRatio="xMidYMid slice"
+          />
+        </svg>
+      </div>
+
+      <div class="ht-header__info">
+        <h1 class="ht-header__name">{{ data.user.firstname }} {{ data.user.lastname }}</h1>
+        <p class="ht-header__title">{{ data.targetPosition }}</p>
+        <div class="ht-header__contacts">
+          <span class="ht-header__contact" *ngIf="data.user.email">
+            <mat-icon>email</mat-icon>
+            {{ data.user.email }}
+          </span>
+          <span class="ht-header__contact" *ngIf="data.user.phone">
+            <mat-icon>phone</mat-icon>
+            {{ data.user.phone }}
+          </span>
+          <span class="ht-header__contact" *ngIf="website">
+            <mat-icon>language</mat-icon>
+            {{ website.url }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="ht-main">
+    <section class="ht-section" *ngIf="data.objective">
+      <div class="ht-section-header">
+        <div class="ht-section-header__icon ht-section-header__icon--teal">
+          <mat-icon>track_changes</mat-icon>
+        </div>
+        <h2>Career Objective</h2>
+        <div class="ht-section-header__line"></div>
+      </div>
+      <p class="ht-objective-text">{{ data.objective }}</p>
+    </section>
+
+    <section class="ht-section" *ngIf="data.summary">
+      <div class="ht-section-header">
+        <div class="ht-section-header__icon ht-section-header__icon--teal">
+          <mat-icon>description</mat-icon>
+        </div>
+        <h2>Professional Summary</h2>
+        <div class="ht-section-header__line"></div>
+      </div>
+      <p class="ht-summary-text">{{ data.summary }}</p>
+    </section>
+
+    <div class="ht-columns">
+      <div class="ht-columns__main">
+        <section class="ht-section" *ngIf="data.operationalExperience?.length">
+          <div class="ht-section-header">
+            <div class="ht-section-header__icon ht-section-header__icon--teal">
+              <mat-icon>work</mat-icon>
+            </div>
+            <h2>Professional Experience</h2>
+            <div class="ht-section-header__line"></div>
+          </div>
+          <div class="ht-exp-list">
+            <div class="ht-exp" *ngFor="let exp of data.operationalExperience">
+              <div class="ht-exp__node"></div>
+              <div class="ht-exp__content">
+                <div class="ht-exp__header">
+                  <div>
+                    <h3 class="ht-exp__title">{{ exp.jobTitle }}</h3>
+                    <p class="ht-exp__company">{{ exp.companyName }}</p>
+                  </div>
+                  <span
+                    class="ht-exp__date"
+                    [class.ht-exp__date--current]="isCurrent(exp)"
+                  >
+                    {{ exp.startWorkDate | monthYearRange: exp.endWorkDate : exp.isCurrent }}
+                  </span>
+                </div>
+                <div *ngIf="exp.resposiblities">
+                  <p class="responsibilities-header">Responsibilities</p>
+                  <ul class="ht-exp__responsibilities">
+                    <li *ngFor="let responsibility of splitTextLines(exp.resposiblities)">
+                      <span class="ht-exp__bullet"></span>
+                      {{ responsibility }}
+                    </li>
+                  </ul>
+                </div>
+                <div *ngIf="exp.achievements">
+                  <p class="achievements-header">Achievements</p>
+                  <ul class="ht-exp__achievements">
+                    <li *ngFor="let achievement of splitTextLines(exp.achievements)">
+                      <span class="ht-exp__bullet"></span>
+                      {{ achievement }}
+                    </li>
+                  </ul>
+                </div>
+                <div class="ht-exp__skills" *ngIf="exp.skills?.length">
+                  <span class="ht-exp__skill-tag" *ngFor="let tech of exp.skills">{{ tech }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="ht-section" *ngIf="data.academicEducation?.length">
+          <div class="ht-section-header">
+            <div class="ht-section-header__icon ht-section-header__icon--teal">
+              <mat-icon>school</mat-icon>
+            </div>
+            <h2>Education</h2>
+            <div class="ht-section-header__line"></div>
+          </div>
+          <div class="ht-edu-list">
+            <div class="ht-edu" *ngFor="let edu of data.academicEducation">
+              <h3>{{ getEducationDegree(edu.academicEducationLevelType) }}</h3>
+              <p class="ht-edu__spec">{{ edu.specialication }}</p>
+              <p class="ht-edu__institution">{{ edu.institutionName }}</p>
+              <p class="ht-edu__date">{{ formatDate(edu.graduationDate) }}</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="ht-section" *ngIf="data.certification?.length">
+          <div class="ht-section-header">
+            <div class="ht-section-header__icon ht-section-header__icon--teal">
+              <mat-icon>verified</mat-icon>
+            </div>
+            <h2>Certifications</h2>
+            <div class="ht-section-header__line"></div>
+          </div>
+          <div class="ht-cert-list">
+            <div class="ht-cert" *ngFor="let cert of data.certification">
+              <h4>{{ cert.skillName }}</h4>
+              <p class="ht-cert__issuer">{{ cert.certificationCenter }}</p>
+              <p class="ht-cert__date">{{ formatDate(cert.certificationDate) }}</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="ht-columns__side">
+        <section class="ht-section" *ngIf="data.hardSkills?.length">
+          <div class="ht-section-header">
+            <div class="ht-section-header__icon ht-section-header__icon--teal">
+              <mat-icon>hexagon</mat-icon>
+            </div>
+            <h2>Technical Expertise</h2>
+            <div class="ht-section-header__line"></div>
+          </div>
+          <div class="ht-skills">
+            <div class="ht-skill" *ngFor="let skill of data.hardSkills">
+              <span class="ht-skill-name">{{ skill.skillName }}</span>
+              <span class="ht-skill__badge">{{ getSkillLabelFromNumeric(skill.proficiencyEstimation) }}</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="ht-section" *ngIf="data.domainSkills?.length">
+          <div class="ht-section-header">
+            <div class="ht-section-header__icon ht-section-header__icon--teal">
+              <mat-icon>hexagon</mat-icon>
+            </div>
+            <h2>Domain Expertise</h2>
+            <div class="ht-section-header__line"></div>
+          </div>
+          <div class="ht-skills">
+            <div class="ht-skill" *ngFor="let skill of data.domainSkills">
+              <span class="ht-skill-name">{{ skill.skillName }}</span>
+              <span class="ht-skill__badge">{{ getSkillLabelFromNumeric(skill.proficiencyEstimation) }}</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="ht-section" *ngIf="data.managerialSkills?.length">
+          <div class="ht-section-header">
+            <div class="ht-section-header__icon ht-section-header__icon--teal">
+              <mat-icon>hexagon</mat-icon>
+            </div>
+            <h2>Managerial Expertise</h2>
+            <div class="ht-section-header__line"></div>
+          </div>
+          <div class="ht-soft-skills">
+            <span class="ht-soft-skill" *ngFor="let skill of data.managerialSkills">{{ skill.skillName }}</span>
+          </div>
+        </section>
+
+        <section class="ht-section" *ngIf="data.softSkills?.length">
+          <div class="ht-section-header">
+            <div class="ht-section-header__icon ht-section-header__icon--teal">
+              <mat-icon>hexagon</mat-icon>
+            </div>
+            <h2>Soft Skills</h2>
+            <div class="ht-section-header__line"></div>
+          </div>
+          <div class="ht-soft-skills">
+            <span class="ht-soft-skill" *ngFor="let skill of data.softSkills">{{ skill.skillName }}</span>
+          </div>
+        </section>
+
+        <section class="ht-section" *ngIf="data.languagesSkills?.length">
+          <div class="ht-section-header">
+            <div class="ht-section-header__icon ht-section-header__icon--teal">
+              <mat-icon>translate</mat-icon>
+            </div>
+            <h2>Languages</h2>
+            <div class="ht-section-header__line"></div>
+          </div>
+          <div class="ht-lang-list">
+            <div class="ht-lang" *ngFor="let lang of data.languagesSkills">
+              <div class="ht-lang__header">
+                <span class="ht-lang__name">{{ lang.skillName }}</span>
+                <span class="ht-lang__level">{{ getLanguageProficiency(lang.proficiencyEstimation) }}</span>
+              </div>
+              <div class="ht-lang__track">
+                <div class="ht-lang__fill" [style.width.%]="getLanguageBarWidth(lang.proficiencyEstimation)"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <div class="ht-bottom-bar"></div>
+</div>

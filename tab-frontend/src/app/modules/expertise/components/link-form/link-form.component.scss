@@ -1,0 +1,28 @@
+@use 'variables' as *; 
+@use 'global' as *;
+
+.priority {
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    } 
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+}
+
+
+.link-form{
+    &__space{
+      flex-wrap: nowrap;
+      @media (max-width: $screen-size-mobile) { 
+        flex-wrap: wrap;   
+      }
+    }
+}
+
+img {
+  width: 30px;
+  height: 30px;
+}

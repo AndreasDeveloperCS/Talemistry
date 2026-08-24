@@ -1,0 +1,55 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.position-container {
+  height: 100%;
+  width: 100%;
+  background: var(--bg);
+  color: var(--text);
+  background-image: url("/assets/registration-background-optimized.png");
+}
+
+.position-details {
+  text-align: center;
+  align-self: center;
+  background: transparent;
+  position: relative;
+  justify-content: space-around;
+  width: 100%;
+  flex-wrap: wrap;
+  line-height: 2rem;
+  display: flex;
+  vertical-align: middle;
+  box-sizing: border-box;
+
+  .position-content {
+    display: block;
+    align-content: center;
+    align-self: center;
+
+    .apply-form {
+      padding: $padding-wide;
+    }
+  }
+}
+
+.already-applied-box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-self: center;
+  width: fit-content;
+  gap: $gap-micro;
+  padding: $padding-narrow;
+  border-radius: $borderRadiusMiddle;
+  box-shadow: 0 0 10px $pallete-0-color-14;
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+
+  mat-icon {
+    height: fit-content;
+    width: fit-content;
+    flex-shrink: 0;
+    color: $pallete-0-color-14;
+  }
+}

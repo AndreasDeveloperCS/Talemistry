@@ -1,0 +1,51 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.meeting-list-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: transparent;
+}
+
+.create-button {
+    background-color: $pallete-0-color-14;
+    color: var(--text);
+    border: none;
+    padding: $padding-m;
+    font-size: $font-size-header-narrow;
+    border-radius: $borderRadiusMiddle;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transform: transition 0.2s ease;
+    justify-self: flex-end;
+
+    &:hover {
+        scale: $scale-110;
+    }
+
+    &:active {
+        scale: $scale-90;
+    }
+
+    mat-icon {
+        margin-right: 0.5rem;
+        flex-shrink: 0;
+    }
+}
+
+h1 {
+    color: $pallete-0-color-14;
+    font-weight: 600;
+}
+
+.no-templates-label {
+    padding: $padding-narrow $padding-middle;
+}

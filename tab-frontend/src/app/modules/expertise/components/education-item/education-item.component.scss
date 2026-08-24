@@ -1,0 +1,30 @@
+@use 'variables' as *; 
+@use 'global' as *;
+
+::ng-deep .mat-select {
+  background-color: transparent !important;
+}
+
+.inline-form-field {
+  display: inline-flex;
+  width: auto;
+}
+
+
+
+.width-narrow {
+  max-width: 12rem;
+
+  @media (max-width: $screen-size-mobile) {
+    max-width: 100%;
+  }
+}
+
+.calendar {
+  max-width: fit-content;;
+}
+
+.input-filter {
+  width: 100%;
+  max-width: 25rem;
+}

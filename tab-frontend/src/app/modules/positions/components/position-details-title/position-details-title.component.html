@@ -1,0 +1,35 @@
+<div *ngIf="!hideMainBlock"  class="container__column container__space-between start-form-info">
+    <div class="initial-slogan">
+        Finding the right talent starts here
+        <mat-icon>travel_explore</mat-icon>
+    </div>
+
+    <div [formGroup]="positionTitleForm">
+        <div class="input-preamble">
+            Please tell us which talent role you are looking to fill 
+            <mat-icon>emoji_people</mat-icon>
+        </div>
+        <mat-form-field appearance="fill">
+          <input matInput
+              class="transparent-input" 
+              formControlName="title"
+              [(ngModel)]="titleInput"
+              placeholder="Position Title"
+              autocomplete="on"/>
+          @if(positionTitleForm.get('title')?.hasError('required')){
+            <mat-error >{{ content.txtFieldRequired }}</mat-error>
+          }
+        </mat-form-field>
+    </div>
+</div>
+
+<app-job-wizard 
+    (aiModeChanged)="onAiModeChanged($event)"
+    (isPositionAiGenerated)="onPositionAiGenerated($event)"
+    (formStatusChange)="onFormChanged($event)">
+</app-job-wizard>
+
+<div *ngIf="!hideMainBlock" class="final-slogan">
+    Let's get closer to your next great hire
+    <mat-icon>rocket_launch</mat-icon>
+</div>

@@ -1,0 +1,124 @@
+<form (ngSubmit)="handleSubmit()" class="meeting-form">
+  @if(timeConflict) {
+    <div class="conflict-alert">
+      <div class="alert-content">
+        <mat-icon class="alert-icon" fontIcon="warning"></mat-icon>
+        <p class="alert-text">{{ timeConflict }}</p>
+      </div>
+    </div>
+  }
+
+  <div class="form-grid">
+    <div class="form-group">
+      <label for="title">{{ content.txtMeetingTitle }} *</label>
+      <input id="title" name="title" [(ngModel)]="formData.title" required />
+    </div>
+    <div class="form-group">
+      <label for="type">{{ content.txtMeetingType }}</label>
+      <select id="type" class="form-control" [value]="defaultType">
+        @for(option of meetingTypes; track option) {
+          <option [value]="option.value">
+            {{ option.label }}
+          </option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="description">{{ content.txtDescription }}</label>
+    <textarea id="description" name="description" rows="3" [(ngModel)]="formData.description"></textarea>
+  </div>
+
+  <div class="form-grid">
+    <div class="form-group">
+      <label for="startTime">{{ content.txtStartTime }} *</label>
+      <input
+        id="startTime"
+        name="startTime"
+        type="datetime-local"
+        [(ngModel)]="formData.startTime"
+        required
+        [ngClass]="{ 'error': timeConflict }"
+        (change)="checkTimeConflicts()"
+      />
+    </div>
+    <div class="form-group">
+      <label for="endTime">{{ content.txtEndTime }} *</label>
+      <input
+        id="endTime"
+        name="endTime"
+        type="datetime-local"
+        [(ngModel)]="formData.endTime"
+        required
+        [ngClass]="{ 'error': timeConflict }"
+        (change)="checkTimeConflicts()"
+      />
+    </div>
+  </div>
+
+  @if(formData.type === 'interview' || formData.type === 'screening') {
+    <ng-container>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="candidate">{{ content.txtCandidateName }}</label>
+          <input id="candidate" name="candidate" [(ngModel)]="formData.candidate" />
+        </div>
+        <div class="form-group">
+          <label for="position">{{ content.txtPosition }}</label>
+          <input id="position" name="position" [(ngModel)]="formData.position" />
+        </div>
+      </div>
+    </ng-container>
+  }
+
+  <div class="form-grid">
+    <div class="form-group">
+      <label for="interviewer">{{ content.txtInterviewer }} *</label>
+      <input id="interviewer" name="interviewer" [(ngModel)]="formData.interviewer" required />
+    </div>
+    <div class="form-group">
+      <label for="attendees">{{ content.txtAttendees }} ({{ content.txtCommaSeparatedEmails }})</label>
+      <input
+        id="attendees"
+        name="attendees"
+        placeholder="john@company.com, jane@company.com"
+        [(ngModel)]="formData.attendees"
+      />
+    </div>
+  </div>
+
+  <!-- <div class="form-checkbox" [hidden]="true">
+    <input id="isVirtual" name="isVirtual" type="checkbox" [(ngModel)]="formData.isVirtual" />
+    <label for="isVirtual">{{ content.txtVirtualMeeting }}</label>
+  </div> -->
+
+  @if(formData.isVirtual) {
+  <ng-container>
+    <div class="form-group">
+      <label for="meetingLink">{{ content.txtMeetingLink }}</label>
+      <input
+        id="meetingLink"
+        name="meetingLink"
+        placeholder="https://meet.google.com/..."
+        [(ngModel)]="formData.meetingLink"
+      />
+    </div>
+  </ng-container>
+  } @else {
+    <div class="form-group">
+      <label for="location">{{ content.txtLocation }}</label>
+      <input
+        id="location"
+        name="location"
+        placeholder="Conference Room A"
+        [(ngModel)]="formData.location"
+      />
+    </div>
+  }
+
+  <div class="form-actions">
+    <button type="button" (click)="onCancel.emit()" class="btn-cancel">{{ content.cancelText }}</button>
+    <button type="submit" [disabled]="!!timeConflict" class="btn-save">{{ content.txtCreateMeeting }}</button>
+  </div>
+</form>

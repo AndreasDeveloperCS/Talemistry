@@ -1,0 +1,100 @@
+<div class="meetings-preview">
+  <div class="meetings-preview__hero">
+    <div>
+      <div class="meetings-preview__subtitle">
+        {{ showPastMeetings ? 'Interview History' : 'Interview Management' }}
+      </div>
+      <h1 class="meetings-preview__title">
+        {{ showPastMeetings ? 'Previous Meetings' : 'Meetings' }}
+      </h1>
+    </div>
+  </div>
+  <div class="meetings-toolbar">
+    <div class="meeting-view-tabs">
+      <button class="view-tab" [class.active]="!showPastMeetings" (click)="toggleMeetingView(false)">
+        Upcoming Meetings
+      </button>
+      <button class="view-tab" [class.active]="showPastMeetings" (click)="toggleMeetingView(true)">
+        Previous Meetings
+      </button>
+    </div>
+    @if(!showPastMeetings) {
+      <div class="meetings-filters">
+        <button class="filter-btn" [class.active]="activeFilter === 'today'" (click)="activeFilter = 'today'; applyFilters()">
+          Today
+        </button>
+        <button class="filter-btn" [class.active]="activeFilter === 'week'" (click)="activeFilter = 'week'; applyFilters()">
+          This Week
+        </button>
+        <button class="filter-btn" [class.active]="activeFilter === 'month'" (click)="activeFilter = 'month'; applyFilters()">
+          This Month
+        </button>
+      </div>
+    }
+    <div class="meetings-search">
+      <mat-icon>search</mat-icon>
+      <input [(ngModel)]="search" (ngModelChange)="onSearchChange($event)" placeholder="Search meetings..." />
+    </div>
+  </div>
+  @if(loading) {
+    <app-sun-spinner></app-sun-spinner>
+  }
+  @if(!loading) {
+    @if(!groupedMeetings.length) {
+      <div class="empty-state">
+        <mat-icon class="empty-state__icon">event_busy</mat-icon>
+        <div class="empty-state__title">No meetings found</div>
+        <div class="empty-state__text">
+          @if(showPastMeetings) {
+            No previous meetings match your filters.
+          } @else {
+            No upcoming meetings match your filters.
+          }
+        </div>
+      </div>
+    }
+    <div *ngFor="let group of groupedMeetings" class="meeting-group">
+      <div class="meeting-group__header">
+        {{ group.label }}
+      </div>
+      <div class="meeting-group__list">
+        <div *ngFor="let meeting of group.meetings; trackBy: trackByMeeting"
+          class="meeting-card clickable" (click)="openMeeting(meeting._id)">
+          <div class="meeting-card__left">
+            <div class="meeting-platform">
+              <mat-icon>{{ getPlatformIcon(meeting.platform) }}</mat-icon>
+            </div>
+            <div class="meeting-card__info">
+              <div class="meeting-card__title">
+                {{ meeting.topic || 'Interview Meeting' }}
+              </div>
+              <button class="meeting-link" (click)="openPosition(meeting.positionId)">
+                {{ meeting.positionName }}
+              </button>
+              <div class="meeting-meta">
+                <div class="meeting-meta__item">
+                  <mat-icon>schedule</mat-icon>
+                  {{ meeting.startTime | date:'HH:mm' }}
+                </div>
+                <div class="meeting-meta__item">
+                  <mat-icon>timer</mat-icon>
+                  {{ formatDuration(meeting) }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="meeting-card__right">
+            <div class="meeting-status" [ngClass]="getStatusClass(meeting.status)">
+              {{ getStatusLabel(meeting.status) }}
+            </div>
+            <div class="meeting-actions">
+              <button class="meeting-action-btn primary" (click)="openMeeting(meeting._id)">
+                Join
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

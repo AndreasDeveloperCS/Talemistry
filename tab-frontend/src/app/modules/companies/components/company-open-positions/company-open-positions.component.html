@@ -1,0 +1,26 @@
+@if(initialLoading) {
+<app-loading-spinner></app-loading-spinner>
+}
+@if(!initialLoading) {
+<div class="dashboard-container" #scrollContainer>
+  <div class="content">
+    <div class="header">
+      <h2>Open Positions</h2>
+    </div>
+
+    @if(dataItems.length > 0) {
+      <div class="positions-wrapper">
+        @for(position of dataItems; track position) {
+          <app-company-open-position-single
+            (positionsListUpdated)="onPositionsListUpdated($event)"
+            [position]="position">
+          </app-company-open-position-single>
+        }
+      </div>
+    }
+    @if(dataItems.length === 0) {
+      <p>There are no positions created</p>
+    }
+  </div>
+</div>
+}

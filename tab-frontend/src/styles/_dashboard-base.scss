@@ -1,0 +1,510 @@
+// ─── Design Tokens ────────────────────────────────────────────────────────────
+$color-bg:         #0d1a1a;
+$color-surface:    #122020;
+$color-surface-2:  #172828;
+$color-border:     #1e4040;
+$color-accent:     #1ab8b8;
+$color-accent-dim: #0e7a7a;
+$color-primary:    #f5a623;
+$color-primary-dim:#a86e00;
+$color-text:       #e8f4f4;
+$color-muted:      #6b9090;
+$color-warn:       #eab308;
+$color-danger:     #ef4444;
+$color-success:    #22c55e;
+
+$radius-sm:  6px;
+$radius-md:  10px;
+$radius-lg:  14px;
+
+$font-sans: 'Inter', 'Segoe UI', system-ui, sans-serif;
+$font-mono: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+
+// ─── Reset / Base ─────────────────────────────────────────────────────────────
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+// ─── Dashboard Shell ──────────────────────────────────────────────────────────
+.dashboard {
+  min-height: 100vh;
+  //background: $color-bg;
+  font-family: $font-sans;
+  color: $color-text;
+  position: relative;
+  overflow: hidden;
+}
+
+.circuit-bg {
+  position: absolute;
+  inset: 0;
+  opacity: 0.18;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.dashboard__inner {
+  position: relative;
+  z-index: 1;
+  padding: 24px;
+  //max-width: 1400px;
+  margin: 0 auto;
+}
+
+// ─── Navigation ───────────────────────────────────────────────────────────────
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.upper-line {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+// ─── Buttons ──────────────────────────────────────────────────────────────────
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: $radius-sm;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: $font-sans;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  transition: opacity 0.15s, background 0.15s;
+
+  .material-icons { font-size: 18px; }
+
+  &--primary  { background: $color-primary;  color: #1a0e00; }
+  &--accent   { background: $color-accent;   color: #001a1a; }
+  &--outline  { background: transparent; border: 1px solid $color-accent; color: $color-accent; }
+  &--sm       { padding: 5px 10px; font-size: 12px; }
+  &--full     { width: 100%; justify-content: center; margin-top: 12px; }
+
+  &:hover { opacity: 0.85; }
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px; height: 32px;
+  border-radius: $radius-sm;
+  border: none;
+  background: transparent;
+  color: $color-muted;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+
+  .material-icons { font-size: 18px; }
+
+  &:hover { background: $color-surface-2; color: $color-accent; }
+  &--danger:hover { color: $color-danger; }
+  &--accent { color: $color-accent; &:hover { background: rgba($color-accent, 0.1); } }
+}
+
+// ─── Page Header ──────────────────────────────────────────────────────────────
+.page-header {
+  margin-bottom: 32px;
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 28px;
+    font-weight: 600;
+    color: $color-primary;
+
+    .material-icons { font-size: 32px; }
+  }
+
+  &__subtitle {
+    color: $color-muted;
+    margin-top: 4px;
+    font-size: 14px;
+  }
+}
+
+// ─── Cards ────────────────────────────────────────────────────────────────────
+.card {
+  background: rgba($color-surface, 0.6);
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  padding: 20px;
+
+  &--accent-border { border-color: $color-accent; }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    color: $color-primary;
+
+    .material-icons { font-size: 20px; }
+  }
+
+  &__meta {
+    font-size: 13px;
+    color: $color-muted;
+  }
+}
+
+// ─── Stats Grid ───────────────────────────────────────────────────────────────
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+
+  &--3 { grid-template-columns: repeat(3, 1fr); }
+
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(2, 1fr);
+    &--3 { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 560px) {
+    grid-template-columns: 1fr;
+    &--3 { grid-template-columns: 1fr; }
+  }
+}
+
+.stat-card {
+  background: rgba($color-surface, 0.6);
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  padding: 20px;
+
+  &__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  &__label { font-size: 13px; color: $color-muted; }
+
+  &__icon {
+    width: 40px; height: 40px;
+    border-radius: $radius-sm;
+    display: flex; align-items: center; justify-content: center;
+
+    .material-icons { font-size: 20px; }
+
+    &--primary { background: rgba($color-primary, 0.15); color: $color-primary; }
+    &--accent  { background: rgba($color-accent, 0.15);  color: $color-accent;  }
+    &--warn    { background: rgba($color-warn, 0.15);    color: $color-warn;    }
+  }
+
+  &__bottom { display: flex; align-items: flex-end; gap: 8px; }
+
+  &__value {
+    display: block;
+    font-size: 32px;
+    font-weight: 700;
+    color: $color-text;
+    line-height: 1;
+  }
+
+  &__trend {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    font-size: 13px;
+    color: $color-accent;
+    margin-bottom: 2px;
+    .material-icons { font-size: 14px; }
+  }
+
+  &__meta { font-size: 13px; color: $color-muted; margin-bottom: 2px; }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    font-size: 13px;
+    color: $color-accent;
+    text-decoration: none;
+    margin-bottom: 2px;
+    .material-icons { font-size: 14px; }
+    &:hover { text-decoration: underline; }
+  }
+}
+
+// ─── Badges ───────────────────────────────────────────────────────────────────
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid transparent;
+
+  .material-icons { font-size: 12px; }
+
+  &--type         { background: rgba($color-primary, 0.12); color: $color-primary; border-color: rgba($color-primary, 0.25); }
+  &--accent-soft  { background: rgba($color-accent, 0.12);  color: $color-accent;  border-color: rgba($color-accent, 0.25); }
+  &--default      { background: rgba($color-muted, 0.15);   color: $color-muted; }
+
+  // Recommendations / Skills
+  &--strong-hire  { background: rgba($color-primary, 0.15); color: $color-primary; border-color: rgba($color-primary, 0.3); }
+  &--hire         { background: rgba($color-accent, 0.15);  color: $color-accent;  border-color: rgba($color-accent, 0.3); }
+  &--maybe        { background: rgba($color-warn, 0.15);    color: $color-warn;    border-color: rgba($color-warn, 0.3); }
+  &--no-hire      { background: rgba($color-danger, 0.15);  color: $color-danger;  border-color: rgba($color-danger, 0.3); }
+
+  // Skill levels
+  &--expert       { background: rgba($color-primary, 0.12); color: $color-primary; border-color: rgba($color-primary, 0.25); }
+  &--advanced     { background: rgba($color-accent, 0.12);  color: $color-accent;  border-color: rgba($color-accent, 0.25); }
+  &--intermediate { background: rgba($color-warn, 0.12);    color: $color-warn;    border-color: rgba($color-warn, 0.25); }
+
+  // Difficulty
+  &--easy         { background: rgba($color-success, 0.12); color: $color-success; border-color: rgba($color-success, 0.25); }
+}
+
+// ─── Funnel Chart ─────────────────────────────────────────────────────────────
+.funnel-section { margin-bottom: 32px; }
+
+.funnel-chart-wrap {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+
+  svg { flex-shrink: 0; max-width: 100%; }
+}
+
+.funnel-label--value {
+  font-size: 15px;
+  font-weight: 700;
+  fill: #fff;
+  font-family: $font-sans;
+}
+
+.funnel-labels {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 140px;
+}
+
+.funnel-label-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.funnel-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.funnel-label-name { font-size: 13px; color: $color-muted; flex: 1; }
+.funnel-label-val  { font-size: 13px; font-weight: 600; color: $color-text; }
+
+// ─── Links ────────────────────────────────────────────────────────────────────
+.link-accent {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 13px;
+  color: $color-accent;
+  text-decoration: none;
+
+  .material-icons { font-size: 16px; }
+  &:hover { text-decoration: underline; }
+
+  &--sm { font-size: 12px; }
+}
+
+// ─── Avatars ──────────────────────────────────────────────────────────────────
+.avatar {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: rgba($color-accent, 0.2);
+  border: 1px solid $color-accent;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: $color-accent;
+  flex-shrink: 0;
+}
+
+// ─── Stars ────────────────────────────────────────────────────────────────────
+.stars { display: flex; gap: 2px; }
+.star {
+  font-size: 16px;
+  color: $color-border;
+  &--filled { color: $color-primary; }
+}
+
+// ─── Interview / Feedback Items ───────────────────────────────────────────────
+.interviews-list,
+.feedback-list { display: flex; flex-direction: column; gap: 12px; }
+
+.interview-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px;
+  background: rgba($color-surface-2, 0.5);
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s;
+
+  &:hover { border-color: $color-accent; }
+
+  &__info { flex: 1; min-width: 0; }
+
+  &__name {
+    font-weight: 600;
+    font-size: 14px;
+    color: $color-text;
+  }
+
+  &__pos {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    color: $color-accent;
+    text-decoration: none;
+    &:hover { text-decoration: underline; }
+    .material-icons { font-size: 13px; }
+  }
+
+  &__company { font-size: 12px; color: $color-muted; margin-top: 2px; }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: $color-muted;
+    margin-top: 6px;
+
+    .material-icons { font-size: 14px; }
+  }
+
+  &__btns {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+}
+
+.feedback-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px;
+  background: rgba($color-surface-2, 0.5);
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+
+  &__info { flex: 1; min-width: 0; }
+
+  &__name {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 600;
+    font-size: 14px;
+    color: $color-text;
+    text-decoration: none;
+
+    .material-icons { font-size: 14px; color: $color-accent; }
+    &:hover { color: $color-accent; }
+  }
+
+  &__pos {
+    display: block;
+    font-size: 13px;
+    color: $color-accent;
+    text-decoration: none;
+    margin: 2px 0 6px;
+    &:hover { text-decoration: underline; }
+  }
+
+  &__summary { font-size: 12px; color: $color-muted; margin-top: 4px; }
+
+  &__right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  &__stars { display: flex; }
+  &__date  { font-size: 12px; color: $color-muted; }
+}
+
+// ─── Form Inputs ──────────────────────────────────────────────────────────────
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  background: $color-surface-2;
+  border: 1px solid $color-border;
+  border-radius: $radius-sm;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-family: $font-sans;
+  color: $color-text;
+  outline: none;
+  transition: border-color 0.15s;
+
+  &::placeholder { color: $color-muted; }
+  &:focus { border-color: $color-accent; }
+}
+
+.form-textarea { font-family: $font-mono; resize: vertical; }
+
+// ─── Responsive helpers ───────────────────────────────────────────────────────
+.two-col-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+
+  @media (max-width: 900px) { grid-template-columns: 1fr; }
+}
+
+.bottom-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+
+  @media (max-width: 1024px) { grid-template-columns: 1fr; }
+}
+
+.right-col { display: flex; flex-direction: column; gap: 24px; }
+
+.main-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+
+  @media (max-width: 1024px) { grid-template-columns: 1fr; }
+
+  &__left, &__right { display: flex; flex-direction: column; gap: 24px; }
+}

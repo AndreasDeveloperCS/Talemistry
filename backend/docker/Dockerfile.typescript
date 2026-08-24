@@ -1,0 +1,7 @@
+FROM node:18-alpine
+
+RUN npm install -g typescript@5.2.2 ts-node @types/node
+
+WORKDIR /app
+
+CMD ["tail", "-f", "/dev/null"]

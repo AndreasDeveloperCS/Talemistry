@@ -1,0 +1,83 @@
+<form class=" certificate" [formGroup]="certificateForm">
+
+  <div>
+
+    <div class="input-item container__justify-self-end transparent-button">
+      <button (click)="removeItem(skill)">
+        <mat-icon>delete_sweep</mat-icon>
+      </button>
+    </div>
+
+    <div class="container__flex container__baseline">
+      <mat-form-field class="skill-full-width">
+        <mat-label
+          class="new-label">{{content.certificatesNameTxt}}</mat-label>
+        <input
+          class="input transparent-input-full-width"
+          type="text"
+          [placeholder]="content.certificatesNameTxt"
+          matInput
+          [(ngModel)]="skill.skillName"
+          name="certificatesName"
+          formControlName="skillName" />
+      </mat-form-field>
+
+      <mat-form-field class="skill-full-width">
+        <mat-label
+          class="new-label">{{content.certificateNumberTxt}}</mat-label>
+        <input
+          class="input transparent-input-full-width"
+          type="text"
+          [placeholder]="content.certificateNumberTxt"
+          matInput
+          [(ngModel)]="skill.certificateNumber"
+          formControlName="certificateNumber"
+          name="certificateNumber" />
+      </mat-form-field>
+
+      <mat-form-field class="certificate__width-small calendar">
+        <mat-label class="new-label">{{content.certificationDateTxt}}</mat-label>
+        <input matInput [matDatepicker]="startDatePicker" class="transparent-input"
+          [(ngModel)]="skill.certificationDate"
+          [placeholder]="content.certificationDateTxt"
+          formControlName="certificationDate" [max]="currentDate" />
+
+        <mat-datepicker-toggle 
+          class="date-picker-shifting"
+          [max]="currentDate" matSuffix
+          [for]="startDatePicker">
+        </mat-datepicker-toggle>
+
+        <mat-datepicker [max]="currentDate" #startDatePicker
+          startView="multi-year"
+          (yearSelected)="chosenYearHandlerStart($event, startDatePicker)"
+          (monthSelected)="chosenMonthHandlerStart($event, startDatePicker)">
+        </mat-datepicker>
+      </mat-form-field>
+
+    </div>
+
+    <mat-form-field class="skill-full-width">
+      <mat-label
+        class="new-label">{{content.certificationCenterTxt}}</mat-label>
+      <input
+        class="input transparent-input-full-width"
+        type="text"
+        [placeholder]="content.certificationCenterTxt"
+        matInput
+        [(ngModel)]="skill.certificationCenter"
+        formControlName="certificationCenter"
+        name="certificationCenter" />
+    </mat-form-field>
+
+    <mat-form-field class="skill-full-width">
+      <mat-label
+        class="new-label">{{content.certificateDescriptionTxt}}</mat-label>
+      <textarea class="skill-text-area transparent-input-full-width" matInput
+        [(ngModel)]="skill.description"
+        [placeholder]="content.certificateDescriptionTxt"
+        formControlName="description"></textarea>
+    </mat-form-field>
+
+  </div>
+</form>

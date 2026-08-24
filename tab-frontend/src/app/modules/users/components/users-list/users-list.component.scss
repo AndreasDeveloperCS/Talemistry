@@ -1,0 +1,15 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+::ng-deep .users-wrapper {
+    //margin-left: 45px;
+
+    .mat-mdc-text-field-wrapper.mdc-text-field {
+        margin: 0 !important;
+        border-bottom: 1px solid $secondary-border-color !important;
+    }
+
+    .mat-elevation-z8 {
+        background-color: transparent;
+    }
+}

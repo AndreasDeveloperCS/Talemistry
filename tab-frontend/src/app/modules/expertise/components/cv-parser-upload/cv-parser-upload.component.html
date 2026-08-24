@@ -1,0 +1,608 @@
+<div class="cv-parser-container">
+  <div class="cv-parser-card">
+    <!-- Header with Left Accent -->
+    <div class="card-header">
+      <!-- <div class="accent-bar"></div> -->
+      <div class="header-content">
+        <div class="header-text">
+          <h2 class="header-title">
+            <mat-icon>cloud_upload</mat-icon>Upload your CV
+          </h2>
+        </div>
+        <div class="header-subtitle">
+          <p class="header-subtitle-text">AI-powered extraction of your professional profile</p>
+          <div class="ai-badge">
+            <mat-icon class="ai-badge-icon">auto_awesome</mat-icon>
+            <span class="ai-badge-text">AI</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <!-- Idle State - Upload Form -->
+      <ng-container *ngIf="state === 'idle'">
+        <div class="upload-form">
+          <!-- Main Upload Area - Split Design -->
+          <div class="upload-grid">
+            <div class="dropzone" [class.dropzone--dragging]="isDragging" [class.dropzone--has-file]="cvFile"
+              (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event)">
+              <input type="file" [accept]="extensions" class="dropzone-input" (change)="onFileSelect($event)" />
+              <button *ngIf="cvFile" class="remove-btn" (click)="removeCvFile($event)">
+                <mat-icon class="remove-icon">close</mat-icon>
+              </button>
+
+              <!-- File Selected State -->
+              <ng-container *ngIf="cvFile; else noFileTemplate">
+                <div class="file-selected">
+                  <div class="file-icon-box file-icon-box--filled">
+                    <mat-icon class="file-icon">description</mat-icon>
+                  </div>
+                  <p class="file-name">{{ cvFile.name }}</p>
+                  <p class="file-size">{{ getFileSize(cvFile) }}</p>
+
+                </div>
+              </ng-container>
+
+              <!-- No File State -->
+              <ng-template #noFileTemplate>
+                <div class="dropzone-content">
+                  <div class="dropzone-icon-box">
+                    <mat-icon class="dropzone-icon">cloud_upload</mat-icon>
+                  </div>
+                  <p class="dropzone-title">Drop your CV here</p>
+                  <p class="dropzone-subtitle">or click to browse</p>
+                </div>
+              </ng-template>
+            </div>
+
+            <!-- Right Side Info -->
+            <div class="format-info">
+              <div class="format-info-top">
+                <h4 class="format-title">Supported formats</h4>
+                <div class="format-list">
+                  <div class="format-item">
+                    <div class="format-badge format-badge--pdf">
+                      <span>PDF</span>
+                    </div>
+                    <span class="format-label">Adobe PDF</span>
+                  </div>
+                  <div class="format-item">
+                    <div class="format-badge format-badge--doc">
+                      <span>DOC</span>
+                    </div>
+                    <span class="format-label">Word Document</span>
+                  </div>
+                  <!-- DOCX -->
+                  <div class="format-item">
+                    <div class="format-badge format-badge--docx">
+                      <span>DOCX</span>
+                    </div>
+                    <span class="format-label">Word Document (New)</span>
+                  </div>
+
+                  <!-- RTF -->
+                  <div class="format-item">
+                    <div class="format-badge format-badge--rtf">
+                      <span>RTF</span>
+                    </div>
+                    <span class="format-label">Rich Text Format</span>
+                  </div>
+                </div>
+              </div>
+              <p class="format-note">Maximum file size: 5MB</p>
+            </div>
+          </div>
+
+          <!-- Cover Letter - Compact -->
+          <div class="cover-letter-wrapper">
+            <input type="file" [accept]="extensions" class="cover-letter-input"
+              (change)="onCoverLetterSelect($event)" />
+            <div class="cover-letter-box" [class.cover-letter-box--has-file]="coverLetter">
+              <div class="cover-letter-left">
+                <div class="cover-letter-icon-box" [class.cover-letter-icon-box--active]="coverLetter">
+                  <mat-icon class="cover-letter-icon"
+                    [class.cover-letter-icon--active]="coverLetter">description</mat-icon>
+                </div>
+                <div class="cover-letter-text">
+                  <p class="cover-letter-name">
+                    {{ coverLetter ? coverLetter.name : 'Add cover letter' }}
+                  </p>
+                  <p class="cover-letter-meta">
+                    {{ coverLetter ? getFileSize(coverLetter) : 'Optional - Improves profile matching' }}
+                  </p>
+                </div>
+              </div>
+              <ng-container *ngIf="coverLetter; else addCoverLetterTemplate">
+                <button class="cover-letter-remove" (click)="removeCoverLetter($event)">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </ng-container>
+              <ng-template #addCoverLetterTemplate>
+                <span class="cover-letter-add">+</span>
+              </ng-template>
+            </div>
+          </div>
+
+          <a (click)="openPrivacyPolicy()" class="privacy-link" routerLinkActive="active" ariaCurrentWhenActive="page">
+            * Privacy Policy Agreement
+          </a>
+
+          <app-confirmation-plate [confirmationText]="gdprContent.confirmationText"
+            [refusionText]="gdprContent.rejectText" [amAgree]="gdprConfirmationStatus"
+            (gdprConfirmationChanged)="onGdprConfirmationChanged($event)">
+          </app-confirmation-plate>
+
+          <!-- Action Buttons -->
+          <div class="action-buttons">
+            <button class="btn btn--primary" [class.btn--disabled]="!cvFile"
+              [disabled]="!cvFile || !gdprConfirmationStatus" (click)="handleUpload()">
+              <mat-icon class="btn-icon">document_scanner</mat-icon>
+              Analyze CV
+            </button>
+            <!-- <button
+              *ngIf="cvFile"
+              class="btn btn--secondary"
+              (click)="simulateError()"
+            >
+              Test Error
+            </button> -->
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- Processing State - Timeline Style -->
+      <ng-container *ngIf="state === 'uploading' || state === 'processing'">
+        <div class="processing-state">
+          <!-- Animated Scan Area -->
+          <div class="scan-area">
+            <div class="scan-line"></div>
+            <div class="scan-content">
+              <mat-icon class="scan-icon">document_scanner</mat-icon>
+              <p class="scan-text">Processing document...</p>
+            </div>
+          </div>
+
+          <!-- Timeline Steps -->
+          <div class="timeline">
+            <div class="timeline-line"></div>
+            <div class="timeline-steps">
+              <div *ngFor="let step of processingSteps; let i = index; let last = last" class="timeline-step">
+                <div class="timeline-dot" [class.timeline-dot--complete]="isStepComplete(i)"
+                  [class.timeline-dot--current]="isStepCurrent(i)">
+                  <ng-container *ngIf="isStepComplete(i)">
+                    <mat-icon class="timeline-check">check_circle</mat-icon>
+                  </ng-container>
+                  <ng-container *ngIf="isStepCurrent(i)">
+                    <div class="timeline-pulse"></div>
+                  </ng-container>
+                  <ng-container *ngIf="!isStepComplete(i) && !isStepCurrent(i)">
+                    <span class="timeline-number">{{ step.id }}</span>
+                  </ng-container>
+                </div>
+                <div class="timeline-content" [class.timeline-content--bordered]="!last">
+                  <p class="timeline-label" [class.timeline-label--active]="isStepComplete(i) || isStepCurrent(i)">
+                    {{ step.label }}
+                  </p>
+                  <p class="timeline-sublabel">{{ step.sublabel }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p class="processing-note">This usually takes 1-2 minutes</p>
+        </div>
+      </ng-container>
+
+      <!-- Success State - Card List Style -->
+      <ng-container *ngIf="state === 'success' && talentProfileData">
+        <div class="success-state">
+          <div class="success-header">
+            <div class="success-icon-box">
+              <mat-icon class="success-icon">check_circle</mat-icon>
+            </div>
+            <div class="success-text">
+              <h3 class="success-title">Analysis Complete</h3>
+              <p class="success-subtitle">We've extracted the following information</p>
+            </div>
+          </div>
+
+          <div class="data-list">
+            <div class="personal-info">
+              <div *ngIf="talentProfileData.user.firstname && talentProfileData.user.lastname" class="data-item">
+                <div class="data-item-left">
+                  <div class="data-icon-box">
+                    <mat-icon class="data-icon">person</mat-icon>
+                  </div>
+                  <div class="data-text">
+                    <p class="data-label">Name</p>
+                    <p class="data-value">{{ talentProfileData.user.firstname }} {{ talentProfileData.user.lastname }}
+                    </p>
+                  </div>
+                </div>
+                <button class="edit-btn">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              </div>
+              <div *ngIf="talentProfileData.user.email" class="data-item">
+                <div class="data-item-left">
+                  <div class="data-icon-box">
+                    <mat-icon class="data-icon">email</mat-icon>
+                  </div>
+                  <div class="data-text">
+                    <p class="data-label">Email</p>
+                    <p class="data-value">{{ talentProfileData.user.email }}</p>
+                  </div>
+                </div>
+                <button class="edit-btn">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              </div>
+            </div>
+
+            <ng-container *ngFor="let section of skillsSections">
+              <div *ngIf="getSkills(section.field).length" class="data-item data-item--skills">
+
+                <!-- HEADER -->
+                <div class="data-item-header">
+                  <div class="data-item-left">
+                    <div class="data-icon-box">
+                      <mat-icon class="data-icon">{{ section.icon }}</mat-icon>
+                    </div>
+                    <p class="data-label">{{ section.label }}</p>
+                  </div>
+
+                  <button class="edit-btn" (click)="toggleEdit(section.field)">
+                    <mat-icon>{{ editingSections[section.field] ? 'close' : 'edit' }}</mat-icon>
+                  </button>
+                </div>
+
+                <!-- VIEW MODE -->
+                <div class="skills-list" *ngIf="!editingSections[section.field]">
+                  <span *ngFor="let skill of getSkills(section.field)" class="skill-tag">
+                    {{ skill.skillName }}
+                  </span>
+                </div>
+
+                <!-- EDIT MODE -->
+                <div class="edit-block" *ngIf="editingSections[section.field]">
+                  <div class="skills-list edit-mode">
+
+                    <div *ngFor="let skill of getSkills(section.field); let i = index" class="skill-edit-item">
+
+                      <input [(ngModel)]="skill.skillName" class="skill-input" />
+
+                      <button class="remove-btn" (click)="removeSkill(section.field, i)">
+                        <mat-icon>close</mat-icon>
+                      </button>
+
+                    </div>
+                  </div>
+                  <div class="edit-mode-actions">
+                    <!-- <button class="add-btn" (click)="addSkill(section.field)">
+                      <mat-icon>add</mat-icon> Add
+                    </button> -->
+
+                    <button class="save-btn" (click)="saveSkills(section.field)">
+                      <mat-icon>save</mat-icon> Save
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="talentProfileData?.operationalExperience?.length">
+              <div class="data-item data-item--summary">
+                <div class="data-item-header">
+                  <div class="data-item-left">
+                    <div class="data-icon-box">
+                      <mat-icon class="data-icon">work</mat-icon>
+                    </div>
+                    <p class="data-label">Experience Summary</p>
+                  </div>
+
+                  <button class="edit-btn" (click)="toggleEdit('operationalExperience')">
+                    <mat-icon>
+                      {{ editingSections['operationalExperience'] ? 'close' : 'edit' }}
+                    </mat-icon>
+                  </button>
+                </div>
+
+                <!-- VIEW MODE -->
+                <div *ngIf="!editingSections['operationalExperience']">
+
+                  <div *ngFor="let job of talentProfileData.operationalExperience" class="job-block">
+                    <p class="summary-text">
+                      <strong>{{ job?.companyName }} - {{ job?.jobTitle }}</strong>
+                      <span class="job-dates">
+                        ({{ job?.startWorkDate | date:'MMM yyyy' }} -
+                        {{ !job?.isCurrent ? (job?.endWorkDate | date:'MMM yyyy') : 'Present' }})
+                      </span>
+                    </p>
+
+                    <div *ngIf="job.resposiblities?.length" class="achievements">
+                      <p>
+                        <mat-icon class="achievement-icon">precision_manufacturing</mat-icon>
+                        Responsibilities:
+                      </p>
+                      <ul>
+                        <li>{{ job.resposiblities }}</li>
+                      </ul>
+                    </div>
+
+                    <div *ngIf="job.achievements?.length" class="achievements">
+                      <p>
+                        <mat-icon class="achievement-icon">emoji_events</mat-icon>
+                        Achievements:
+                      </p>
+                      <ul>
+                        <li>{{ job.achievements }}</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- EDIT MODE -->
+                <div *ngIf="editingSections['operationalExperience']" class="edit-block">
+                  <div *ngFor="let job of talentProfileData.operationalExperience; let i = index"
+                    class="job-edit-block">
+
+                    <div class="form-group-row">
+                      <div class="form-group">
+                        <label>Company</label>
+                        <input [(ngModel)]="job.companyName" class="skill-input" />
+                      </div>
+
+                      <div class="form-group">
+                        <label>Job Title</label>
+                        <input [(ngModel)]="job.jobTitle" class="skill-input" />
+                      </div>
+                    </div>
+
+                    <div class="form-group-row">
+                      <div class="form-group">
+                        <label>Start Date</label>
+                        <input type="date" [ngModel]="formatDateForInput(job.startWorkDate)"
+                          (ngModelChange)="job.startWorkDate = parseDateFromInput($event)" class="skill-input" />
+                      </div>
+
+                      <div class="form-group">
+                        <label>End Date</label>
+                        <input type="date" [ngModel]="formatDateForInput(job.endWorkDate)"
+                          (ngModelChange)="job.endWorkDate = parseDateFromInput($event)" class="skill-input" />
+                      </div>
+
+                      <div class="form-group form-group--inline-checkbox">
+                        <label>
+                          <input type="checkbox" [(ngModel)]="job.isCurrent" class="skill-input" />
+                          Current Position
+                        </label>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label>Responsibilities</label>
+                      <textarea rows="5" [(ngModel)]="job.resposiblities" class="skill-input"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                      <label>Achievements</label>
+                      <textarea rows="5" [(ngModel)]="job.achievements" class="skill-input"></textarea>
+                    </div>
+
+                    <button class="rmv-btn" (click)="removeItem('operationalExperience', i)">Remove</button>
+
+                  </div>
+
+                  <div class="edit-mode-actions">
+                    <!-- <button class="add-btn" (click)="addExperience()">Add Job</button> -->
+                    <button class="save-btn" (click)="saveSection('operationalExperience')">Save</button>
+                  </div>
+
+                </div>
+
+              </div>
+
+            </ng-container>
+
+            <ng-container *ngIf="talentProfileData?.academicEducation?.length">
+              <div class="data-item data-item--summary">
+
+                <!-- HEADER (always visible) -->
+                <div class="data-item-header">
+                  <div class="data-item-left">
+                    <div class="data-icon-box">
+                      <mat-icon class="data-icon">school</mat-icon>
+                    </div>
+                    <p class="data-label">Academic Education</p>
+                  </div>
+
+                  <button class="edit-btn" (click)="toggleEdit('academicEducation')">
+                    <mat-icon>
+                      {{ editingSections['academicEducation'] ? 'close' : 'edit' }}
+                    </mat-icon>
+                  </button>
+                </div>
+
+                <!-- VIEW MODE -->
+                <div *ngIf="!editingSections['academicEducation']">
+
+                  <div *ngFor="let edu of talentProfileData.academicEducation" class="education-block">
+                    <p class="summary-text">
+                      <strong>{{ edu?.institutionName }}</strong> –
+                      {{ edu?.specialication }} {{ edu?.fieldOfStudy }}
+
+                      <span class="edu-dates">
+                        <ng-container *ngIf="edu?.graduationDate">
+                          ({{ edu?.graduationDate | date:'MMM yyyy' }})
+                        </ng-container>
+                      </span>
+                    </p>
+                  </div>
+
+                </div>
+
+                <!-- EDIT MODE -->
+                <div *ngIf="editingSections['academicEducation']" class="edit-block">
+                  <div *ngFor="let edu of talentProfileData.academicEducation; let i = index" class="edu-edit-block">
+                    <div class="form-group-row">
+                      <div class="form-group">
+                        <label>Institution</label>
+                        <input [(ngModel)]="edu.institutionName" class="skill-input" />
+                      </div>
+
+                      <div class="form-group">
+                        <label>Specialization</label>
+                        <input [(ngModel)]="edu.specialication" class="skill-input" />
+                      </div>
+                    </div>
+
+                    <div class="form-group-row">
+                      <div class="form-group">
+                        <label>Field of Study</label>
+                        <input [(ngModel)]="edu.fieldOfStudy" class="skill-input" />
+                      </div>
+
+                      <div class="form-group">
+                        <label>Start Date</label>
+                        <input type="date" [ngModel]="formatDateForInput(edu.startStudyDate)"
+                          (ngModelChange)="edu.startStudyDate = parseDateFromInput($event)" class="skill-input" />
+                      </div>
+
+                      <div class="form-group">
+                        <label>Graduation Date</label>
+                        <input type="date" [ngModel]="formatDateForInput(edu.graduationDate)"
+                          (ngModelChange)="edu.graduationDate = parseDateFromInput($event)" class="skill-input" />
+                      </div>
+                    </div>
+
+                    <button class="rmv-btn" (click)="removeItem('academicEducation', i)">Remove</button>
+                  </div>
+
+                  <div class="edit-mode-actions">
+                    <!-- <button class="add-btn" (click)="addEducation()">Add</button> -->
+                    <button class="save-btn" (click)="saveSection('academicEducation')">Save</button>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="talentProfileData?.certification?.length">
+              <div class="data-item data-item--summary">
+
+                <!-- HEADER -->
+                <div class="data-item-header">
+                  <div class="data-item-left">
+                    <div class="data-icon-box">
+                      <mat-icon class="data-icon">verified</mat-icon>
+                    </div>
+                    <p class="data-label">Certifications</p>
+                  </div>
+
+                  <button class="edit-btn" (click)="toggleEdit('certification')">
+                    <mat-icon>
+                      {{ editingSections['certification'] ? 'close' : 'edit' }}
+                    </mat-icon>
+                  </button>
+                </div>
+
+                <!-- VIEW MODE -->
+                <div *ngIf="!editingSections['certification']">
+
+                  <div *ngFor="let cert of talentProfileData.certification" class="cert-block">
+                    <p class="summary-text">
+                      <strong>{{ cert.skillName }}</strong>
+
+                      <span *ngIf="cert.isVerified" class="verified-badge">
+                        <mat-icon class="verified-icon">check_circle</mat-icon>
+                      </span>
+
+                      <br />
+                      <span>{{ cert.description }}</span>
+                      <br />
+
+                      <em>{{ cert.certificationCenter }}</em> &nbsp;|&nbsp;
+                      <span>{{ cert.certificationDate | date:'MMM yyyy' }}</span>
+                    </p>
+                  </div>
+
+                </div>
+
+                <!-- EDIT MODE -->
+                <div *ngIf="editingSections['certification']" class="edit-block">
+                  <div *ngFor="let cert of talentProfileData.certification; let i = index" class="cert-edu-block">
+                    <div class="form-group-row">
+                      <div class="form-group">
+                        <label>Certification Name</label>
+                        <input [(ngModel)]="cert.skillName" class="skill-input" />
+                      </div>
+
+                      <div class="form-group">
+                        <label>Certification Center</label>
+                        <input [(ngModel)]="cert.certificationCenter" class="skill-input" />
+                      </div>
+
+                      <div class="form-group">
+                        <label>Certification Date</label>
+                        <input type="date" [ngModel]="formatDateForInput(cert.certificationDate)"
+                          (ngModelChange)="cert.certificationDate = parseDateFromInput($event)" class="skill-input" />
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label>Description</label>
+                      <textarea rows="5" [(ngModel)]="cert.description" class="skill-input"></textarea>
+                    </div>
+                    <button class="rmv-btn" (click)="removeItem('certification', i)">Remove</button>
+                  </div>
+
+                  <div class="edit-mode-actions">
+                    <!-- <button class="add-btn" (click)="addCertification()">Add</button> -->
+                    <button class="save-btn" (click)="saveSection('certification')">Save</button>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+
+          <div class="success-actions">
+            <button class="btn btn--primary btn--full" (click)="saveToProfile()">
+              Add to My Profile
+              <mat-icon class="btn-icon-right">chevron_right</mat-icon>
+            </button>
+            <button class="btn btn--ghost btn--full" (click)="resetUpload()">
+              Upload another CV
+            </button>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- Error State -->
+      <ng-container *ngIf="state === 'error'">
+        <div class="error-state">
+          <div class="error-content">
+            <div class="error-icon-box">
+              <mat-icon class="error-icon">error</mat-icon>
+            </div>
+            <h3 class="error-title">Analysis Failed</h3>
+            <p class="error-message">
+              We couldn't process your document. Please ensure it's a valid PDF or DOCX file.
+            </p>
+          </div>
+
+          <div class="error-actions">
+            <button class="btn btn--primary btn--full" (click)="retryUpload()">
+              <mat-icon class="btn-icon">refresh</mat-icon>
+              Try Again
+            </button>
+            <!-- <button class="btn btn--outline btn--full" (click)="resetUpload()">
+              Fill profile manually
+            </button> -->
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

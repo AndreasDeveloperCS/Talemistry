@@ -1,0 +1,57 @@
+@use 'variables' as *;
+
+@mixin noselect {
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Old versions of Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
+                                  supported by Chrome, Opera and Firefox */
+}
+
+img {
+  position: relative;
+}
+
+img:hover {
+  position: relative;
+  z-index: 50;
+  // scale: 1.02;
+  //transition-duration: 1s;
+  //transition-property: scale;
+}
+
+mat-icon {
+  font-family: 'Material Icons' !important;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+ng-star-inserted {
+  background-color: transparent !important;
+}
+
+* {
+  font-family: 'Urbanist', sans-serif;
+}
+
+
+//  new for refactoring
+
+
+::ng-deep .mat-mdc-text-field-wrapper {
+  background-color: rgba(85, 90, 223, 0.4);
+}
+
+::ng-deep .mdc-text-field--no-label .mat-mdc-form-field-infix {
+  --mat-form-field-container-vertical-padding: 0
+}

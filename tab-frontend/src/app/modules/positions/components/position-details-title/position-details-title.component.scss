@@ -1,0 +1,59 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-y: auto;
+    justify-content: space-around;
+}
+
+.input-preamble {
+    margin: $margin-middle 0;
+    align-items: center;
+    display: flex;
+    font-size: 1.5rem;
+    min-width: fit-content;
+    line-height: 1.7rem;
+    min-height: fit-content;
+}
+
+.initial-slogan {
+    justify-self: center;
+    gap: $gap-small;
+    align-items: center;
+    font-size: 2rem;
+    font-weight: 600;
+    display: flex;
+    color: var(--accent-text);
+    min-width: fit-content;
+    line-height: 2.2rem;
+    min-height: fit-content;
+}
+
+.final-slogan {
+    display: flex;
+    gap: $gap-small;
+    font-weight: 500;
+    justify-self: center;
+    color: $pallete-0-color-14;
+    font-size: 1.8rem;
+    align-items: center;
+    min-width: fit-content;
+    line-height: 2.0rem;
+    min-height: fit-content;
+    width: 100%;
+    justify-content: center;
+}
+
+.start-form-info {
+    width: 100%;
+    align-items: center;
+    display: flex;
+}
+
+mat-icon {
+    min-height: fit-content;
+    min-width: fit-content;
+}

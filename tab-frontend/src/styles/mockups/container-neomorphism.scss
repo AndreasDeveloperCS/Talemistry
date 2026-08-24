@@ -1,0 +1,73 @@
+@use 'variables' as *;
+
+.container__glassmorphism-neumorphism__color {
+  border: 5px solud rgba(1, 24, 38, 0.8);
+  background-color: rgba(0, 92, 150, 0.8);
+  box-shadow: var(--box-shadow-light);
+  background: radial-gradient(circle, rgba(0, 150, 255, 0.2) 30%, rgba(0, 183, 255, 0.5) 80%, rgba(0, 217, 255, 0.7) 100%);
+  //filter: drop-shadow(10px 10px 30px rgba(1, 24, 38, 0.5)) drop-shadow(-10px -10px 30px rgba(0, 146, 136, 0.2));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 1px 1px 2px $blue-light-background;
+  background: linear-gradient(45deg, #064066, #1E4E71, #011826);
+  border: 5px solid rgba(6, 64, 102, 1);
+  box-shadow: var(--box-shadow-light);
+
+  &:hover {
+    filter: drop-shadow(10px 10px 30px rgba(0, 150, 255, 0.5)) drop-shadow(10px 10px 30px rgba(36, 221, 253, 0.5)) drop-shadow(-10px -10px 30px rgba(2, 171, 177, 0.5));
+    cursor: pointer;
+  }
+}
+
+.container__glassmorphism-neumorphism a {
+  font-size: 16px;
+  padding: var(--space-xxl);
+  border-radius: 1rem;
+  filter: drop-shadow(10px 10px 30px rgba(1, 24, 38, 0.5)) drop-shadow(-10px -10px 30px rgba(0, 146, 136, 0.2));
+  background: linear-gradient(45deg, #064066, #1E4E71, #011826);
+  border: 2px solid transparent;
+
+  &:hover {
+    border: 2px solid white;
+    transform: scale(1.05);
+  }
+}
+
+.container__glassmorphism-neumorphism {
+  max-width: $screen-size-netbook;
+  width: $screen-size-netbook;
+  padding: var(--space-xxl);
+
+  display: flex;
+  flex-direction: column;
+  border-radius: $borderBlockRadius;
+  // background: linear-gradient(135deg, #064066, #1E4E71, #011826);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 2px 2px 6px 6px rgb(6, 64, 102, 0.5);
+  // box-shadow:
+  //   10px 10px 20px rgba(0, 0, 0, 0.2),
+  //   -10px -10px 20px rgba(255, 255, 255, 0.1);
+  // background: linear-gradient(45deg, #093040, #004554, #011826);
+  background-color: rgba(125, 126, 240, 0.15);
+  border: 2px solid #064066;
+  color: #fff;
+  font-family: 'Arial', sans-serif;
+
+  @media screen and (max-width: $screen-size-netbook) {
+    max-width: $screen-size-netbook;
+    width: $screen-size-netbook;
+    min-width: 0;
+  }
+
+  @media screen and (max-width: $screen-size-tab) {
+    max-width: 95vw;
+    width: $screen-size-tab;
+    min-width: 0;
+  }
+
+  @media screen and (max-width: $screen-size-mobile) {
+    width: 100%;
+    min-width: 0;
+  }
+}

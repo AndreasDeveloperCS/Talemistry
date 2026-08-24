@@ -1,0 +1,86 @@
+@use 'variables' as *;
+@use 'variables-brand' as *;
+@use 'global' as *;
+@use '@angular/material' as mat;
+
+html {
+  @include mat.theme((color: (theme-type: light,
+        primary: mat.$green-palette,
+        tertiary: mat.$cyan-palette,
+      ),
+      typography: Inter,
+      density: 0,
+    ));
+}
+
+/* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  --primary-color: #176b25;
+  --secondary-color: #126f66;
+  --shadow: #0b1b2a1f;
+
+  font-size: 16px;
+  min-height: 100vh;
+
+  scroll-behavior: smooth;
+  font-family: var(--font-brand);
+}
+
+:root {
+  --primary-color: #176b25;
+  --alternative-color-3: #208e2d;
+  --color-secondary: #383c5b;
+  --color-secondary-hover: #12263b;
+  --color-secondary-active: #0b1b2a;
+
+  --secondary-color: #126f66;
+  --color-accent: #24af4f;
+  --color-active: #176b25;
+  --alternative-color-2: #4fd1a8;
+
+  --shadow: #0b1b2a1f;
+  --active-text: white;
+  --blue1: #d9dde2;
+
+  --alternative-color-0: #0b1b2a;
+  --alternative-color-1: #12263b;
+  --text-field-color: #0b1b2a;
+
+  color: var(--text);
+  --mdc-filled-text-field-input-text-color: $active-text;
+  box-sizing: border-box;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  outline: none;
+  box-sizing: border-box;
+  color: var(--text);
+  transition: $transition;
+  max-width: 100%;
+}
+
+input {
+  color: var(--text);
+  height: 3rem;
+}
+
+
+:host {
+  box-sizing: border-box;
+  font-family: var(--font-brand);
+  font-size: 14px;
+  color: var(--foreground);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  --mdc-filled-text-field-input-text-color: $active-color;
+}

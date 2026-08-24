@@ -1,0 +1,546 @@
+@if(isLoading) {
+<app-loading-spinner></app-loading-spinner>
+}
+@if(!isLoading) {
+<div class="chat-shell">
+    <aside class="sidebar-panel" [class.collapsed]="isCollapsed" [class.overlay]="isOverlay"
+        [class.opened]="!isCollapsed && isOverlay">
+        <button *ngIf="isCollapsed" class="toggle-btn" (click)="expandPanel()" aria-label="Open contacts panel">
+            <mat-icon>menu</mat-icon>
+        </button>
+
+        <div class="sidebar-content" *ngIf="!isCollapsed">
+            <!-- Compact header with expander for details -->
+            <div class="sidebar-header-compact">
+                <div class="sidebar-header-main">
+                    <h2>Chats &amp; Calls</h2>
+                    <div class="sidebar-quick-stats">
+                        <span class="quick-stat">{{ filteredConversationItems.length }} chats</span>
+                        <span class="quick-stat accent">{{ videoRooms.length }} rooms</span>
+                    </div>
+                </div>
+                <div class="sidebar-header-actions">
+                    <button type="button" class="expander-btn"
+                        (click)="isSidebarDetailsExpanded = !isSidebarDetailsExpanded"
+                        [class.expanded]="isSidebarDetailsExpanded" [attr.aria-expanded]="isSidebarDetailsExpanded"
+                        [attr.aria-label]="isSidebarDetailsExpanded ? 'Collapse search tools' : 'Expand search tools'"
+                        title="Search and quick start">
+                        <mat-icon>{{ isSidebarDetailsExpanded ? 'expand_less' : 'expand_more' }}</mat-icon>
+                    </button>
+                    @if(isOverlay) {
+                    <button class="toggle-btn inline" (click)="collapsePanel()" aria-label="Close contacts panel">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                    }
+                </div>
+            </div>
+
+            <!-- Collapsible details section -->
+            <!-- <div class="sidebar-details-panel" [class.expanded]="isSidebarDetailsExpanded">
+                <div class="sidebar-brief-card">
+                    <p class="eyebrow">Room-first messaging</p>
+                    <p>
+                        Keep the room ID at the center, preserve one list record for each direct thread or group room,
+                        and switch into audio or video whenever the conversation needs it.
+                    </p>
+                </div>
+            </div> -->
+
+            <div class="sidebar-details-panel search-tools-panel" [class.expanded]="isSidebarDetailsExpanded">
+                <div class="search-tools-card">
+                    <label class="search-field">
+                        <mat-icon>search</mat-icon>
+                        <input type="text" [(ngModel)]="contactSearch"
+                            placeholder="Search by room ID, participant, label, or alias" />
+                    </label>
+
+                    <section class="direct-launcher compact">
+                        <label class="search-field direct-launcher-field">
+                            <mat-icon>alternate_email</mat-icon>
+                            <input type="text" [(ngModel)]="newDirectChatIdentifier"
+                                placeholder="Start new: username, email, or phone"
+                                (keyup.enter)="startConversationByIdentifier('text')" />
+                        </label>
+
+                        <div class="direct-launcher-actions">
+                            <button type="button" class="launcher-action"
+                                (click)="startConversationByIdentifier('text')"
+                                [disabled]="isCreatingDirectChat || !newDirectChatIdentifier.trim()"
+                                title="Send text message">
+                                <mat-icon>{{ isCreatingDirectChat ? 'hourglass_top' : 'chat' }}</mat-icon>
+                            </button>
+
+                            <button type="button" class="launcher-action audio"
+                                (click)="startConversationByIdentifier('audio')"
+                                [disabled]="isCreatingDirectChat || !newDirectChatIdentifier.trim()"
+                                title="Start audio call">
+                                <mat-icon>{{ isCreatingDirectChat ? 'hourglass_top' : 'call' }}</mat-icon>
+                            </button>
+
+                            <button type="button" class="launcher-action video"
+                                (click)="startConversationByIdentifier('video')"
+                                [disabled]="isCreatingDirectChat || !newDirectChatIdentifier.trim()"
+                                title="Start video call">
+                                <mat-icon>{{ isCreatingDirectChat ? 'hourglass_top' : 'video_call' }}</mat-icon>
+                            </button>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <section class="contacts-section" *ngIf="filteredConversationItems.length; else empty">
+                <ul class="contact-list scrollbar-hidden" (scroll)="onRoomsScroll($event)">
+                    <li *ngFor="let item of filteredConversationItems; trackBy: trackByConversationId"
+                        (click)="onSelectConversation(item)" [class.selected]="isConversationSelected(item)"
+                        [class.room-item]="item.kind === 'room' || item.kind === 'group'">
+                        <div class="candidate">
+                            <div class="contact-avatar emphasis">
+                                <img *ngIf="item.avatarUrl; else contactFallback" [src]="item.avatarUrl"
+                                    alt="Photo of {{ item.title }}" />
+                                <ng-template #contactFallback>
+                                    <span>{{ item.initials }}</span>
+                                </ng-template>
+                            </div>
+
+                            <div class="info">
+                                <div class="info-title-row">
+                                    <strong>{{ item.title }}</strong>
+                                    <span class="conversation-kind" [class.room]="item.kind === 'room'"
+                                        [class.group]="item.kind === 'group'">
+                                        {{ getConversationModeLabel(item) }}
+                                    </span>
+                                </div>
+
+                                <div class="conversation-room-line">
+                                    <span class="room-pill emphasis">Room ID {{ getConversationRoomIdShort(item)
+                                        }}</span>
+                                    <span class="room-pill participants">
+                                        <mat-icon>groups</mat-icon>
+                                        {{ getConversationParticipantCount(item) }}
+                                    </span>
+                                </div>
+
+                                <span class="conversation-subtitle">{{ item.subtitle }}</span>
+
+                                <div class="conversation-tags">
+                                    <span class="room-pill soft">{{ getConversationAccessLabel(item) }}</span>
+                                    <span class="room-pill soft">Call-ready</span>
+                                </div>
+                            </div>
+
+                            <div class="contact-state">
+                                <div class="contact-state-head">
+                                    <div class="tick-container"
+                                        *ngIf="item.kind === 'direct' && item.directContact?.lastMessageStatus && item.unreadCount === 0">
+                                        <span class="tick single"
+                                            *ngIf="item.directContact?.lastMessageStatus === 'sent'">&#10003;&#10003;</span>
+                                        <span class="tick double"
+                                            *ngIf="item.directContact?.lastMessageStatus === 'delivered'">&#10003;</span>
+                                        <span class="tick double read"
+                                            *ngIf="item.directContact?.lastMessageStatus === 'read'">&#10003;&#10003;</span>
+                                    </div>
+                                    <span class="date">{{ item.dateLabel }}</span>
+                                </div>
+
+                                <div *ngIf="item.kind === 'direct'" class="conversation-action-group">
+                                    <button type="button" class="conversation-action audio"
+                                        (click)="startAudioCallForContact(item.directContact || null); $event.stopPropagation()"
+                                        title="Start direct audio call">
+                                        <mat-icon>call</mat-icon>
+                                    </button>
+                                    <button type="button" class="conversation-action"
+                                        (click)="startVideoCallForContact(item.directContact || null); $event.stopPropagation()"
+                                        title="Start direct video call">
+                                        <mat-icon>videocam</mat-icon>
+                                    </button>
+                                </div>
+
+                                <button *ngIf="item.kind === 'room'" type="button" class="conversation-action room"
+                                    (click)="joinVideoRoom(item.videoRoom || null); $event.stopPropagation()"
+                                    title="Join video room">
+                                    <mat-icon>arrow_forward</mat-icon>
+                                </button>
+
+                                <span class="unread-badge" *ngIf="item.unreadCount > 0">{{ item.unreadCount }}</span>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li *ngIf="isLoadingRooms || isLoadingVideoRooms" class="loading-older list-loading-item">
+                        <app-sun-spinner></app-sun-spinner>
+                    </li>
+                </ul>
+            </section>
+
+            <ng-template #empty>
+                <div class="empty-sidebar-state">
+                    <mat-icon>forum</mat-icon>
+                    <p>No chats or rooms found yet.</p>
+                </div>
+            </ng-template>
+        </div>
+    </aside>
+
+    <section class="chat-panel">
+        <div class="chat-hero compact" [class.idle]="!hasSelectedConversation">
+            <div class="chat-hero-main">
+                <!-- <button *ngIf="isCollapsed" class="toggle-btn mobile-trigger" (click)="expandPanel()"
+                    aria-label="Open conversations panel">
+                    <mat-icon>menu</mat-icon>
+                </button> -->
+
+                <div class="contact-avatar large selected-avatar" [class.clickable]="isDirectConversationSelected"
+                    (click)="isDirectConversationSelected ? openProfile(selectedContact?.contactId, $event) : null">
+                    <img *ngIf="selectedConversationAvatarUrl; else selectedFallback"
+                        [src]="selectedConversationAvatarUrl" alt="Photo of {{ selectedConversationTitle }}" />
+                    <ng-template #selectedFallback>
+                        <span>{{ selectedConversationInitials }}</span>
+                    </ng-template>
+                </div>
+
+                <div class="chat-meta compact">
+                    <h2 (click)="isDirectConversationSelected ? openProfile(selectedContact?.contactId, $event) : null">
+                        {{ selectedConversationTitle }}</h2>
+                    <p class="chat-subtitle">{{ selectedConversationSubtitle }}</p>
+                </div>
+
+                <!-- Inline quick stats -->
+                <!-- <div class="inline-room-stats" *ngIf="hasSelectedConversation">
+                    <span class="room-pill small">{{ selectedConversationModeLabel }}</span>
+                    <span class="room-pill small">{{ selectedParticipantSummary }}</span>
+                    <button class="room-pill small copyable" (click)="copySelectedConversationRoomId()"
+                        [disabled]="!selectedRoomId" title="Copy Room ID">
+                        <mat-icon>content_copy</mat-icon>
+                        {{ selectedRoomIdShort || 'No ID' }}
+                    </button>
+                </div> -->
+
+                <div class="header-actions" *ngIf="hasSelectedConversation">
+                    <div *ngIf="isDirectConversationSelected" class="call-notification-menu-shell">
+                        <button type="button" class="secondary-header-action call-channel-toggle"
+                            [class.active]="selectedCallNotificationMeans.length > 0"
+                            [class.expanded]="isCallNotificationMenuOpen" (click)="toggleCallNotificationMenu($event)">
+                            <mat-icon>{{ selectedCallNotificationMeans.length ? 'notifications_active' :
+                                'notifications_off' }}</mat-icon>
+                            <span class="hide-mobile">{{ getCallNotificationSummary() }}</span>
+                            <span class="call-channel-count" *ngIf="selectedCallNotificationMeans.length">
+                                {{ selectedCallNotificationMeans.length }}
+                            </span>
+                            <mat-icon class="call-channel-chevron">expand_more</mat-icon>
+                        </button>
+
+                        <div class="call-notification-menu" *ngIf="isCallNotificationMenuOpen"
+                            (click)="$event.stopPropagation()">
+                            <div class="call-notification-menu-header">
+                                <strong>Call alert channels</strong>
+                                <span>Pick how the invite should reach the other participant.</span>
+                            </div>
+
+                            <button *ngFor="let channel of callNotificationMeans; trackBy: trackByIdx" type="button"
+                                class="call-notification-option"
+                                [class.active]="isCallNotificationChannelSelected(channel)"
+                                [class.disabled]="isCallNotificationChannelUnavailable(channel)"
+                                (click)="toggleCallNotificationChannel(channel, $event)"
+                                [attr.aria-pressed]="isCallNotificationChannelSelected(channel)"
+                                [matTooltip]="getCallNotificationChannelHint(channel)">
+                                <span class="call-notification-option-main">
+                                    <img [src]="getIcon(channel)" [alt]="getCommunicationMeanLabel(channel)"
+                                        class="call-notification-icon" />
+                                    <span class="call-notification-copy">
+                                        <strong>{{ getCommunicationMeanLabel(channel) }}</strong>
+                                        <small *ngIf="isCallNotificationChannelUnavailable(channel)">Unavailable
+                                            for this contact</small>
+                                        <small *ngIf="!isCallNotificationChannelUnavailable(channel)">
+                                            {{ isCallNotificationChannelSelected(channel) ? 'Included in call
+                                            invite' : 'Click to include' }}
+                                        </small>
+                                    </span>
+                                </span>
+
+                                <mat-icon>{{ isCallNotificationChannelSelected(channel) ? 'check_circle' :
+                                    'radio_button_unchecked' }}</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button *ngIf="isDirectConversationSelected" type="button" class="primary-header-action"
+                        (click)="startAudioCallForContact()" [disabled]="isStartingCall">
+                        <mat-icon>{{ isStartingCall ? 'hourglass_top' : 'call' }}</mat-icon>
+                        <span class="hide-mobile">{{ isStartingCall ? 'Starting…' : 'Audio' }}</span>
+                    </button>
+
+                    <button *ngIf="isDirectConversationSelected" type="button" class="primary-header-action video"
+                        (click)="startVideoCallForContact()" [disabled]="isStartingCall">
+                        <mat-icon>{{ isStartingCall ? 'hourglass_top' : 'video_call' }}</mat-icon>
+                        <span class="hide-mobile">{{ isStartingCall ? 'Starting…' : 'Video' }}</span>
+                    </button>
+
+                    <button type="button" class="primary-header-action coding"
+                        (click)="startCodingSession()">
+                        <mat-icon>{{ isStartingCall ? 'hourglass_top' : 'code' }}</mat-icon>
+                        <span class="hide-mobile">Live Coding</span>
+                    </button>
+
+                    <button *ngIf="isVideoRoomSelected" type="button" class="primary-header-action"
+                        (click)="startAudioCallForRoom()" [disabled]="isStartingCall">
+                        <mat-icon>{{ isStartingCall ? 'hourglass_top' : 'call' }}</mat-icon>
+                        <span class="hide-mobile">{{ isStartingCall ? 'Starting…' : 'Audio' }}</span>
+                    </button>
+
+                    <button *ngIf="isVideoRoomSelected" type="button" class="primary-header-action video"
+                        (click)="startVideoCallForRoom()" [disabled]="isStartingCall">
+                        <mat-icon>{{ isStartingCall ? 'hourglass_top' : 'video_call' }}</mat-icon>
+                        <span class="hide-mobile">{{ isStartingCall ? 'Starting…' : 'Video' }}</span>
+                    </button>
+
+                    <button *ngIf="isVideoRoomSelected" type="button" class="primary-header-action"
+                        (click)="joinVideoRoom()">
+                        <mat-icon>video_call</mat-icon>
+                        <span>Join room</span>
+                    </button>
+
+                    <!-- Expander for additional details -->
+                    <button class="expander-btn details-toggle"
+                        (click)="isRoomPassportExpanded = !isRoomPassportExpanded"
+                        [class.expanded]="isRoomPassportExpanded" aria-label="Toggle room details">
+                        <mat-icon>{{ isRoomPassportExpanded ? 'expand_less' : 'more_horiz' }}</mat-icon>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Collapsible Room Passport Details -->
+            <div class="room-passport-collapsible" [class.expanded]="isRoomPassportExpanded"
+                *ngIf="hasSelectedConversation">
+                <div class="room-passport-content">
+                    <div class="room-passport-id-block">
+                        <span class="passport-label">Room ID</span>
+                        <strong>{{ selectedRoomId || 'Generated when conversation becomes active' }}</strong>
+                    </div>
+                    <div class="room-passport-grid compact">
+                        <div class="passport-stat-card small">
+                            <span class="passport-stat-label">Mode</span>
+                            <strong>{{ selectedConversationModeLabel }}</strong>
+                        </div>
+                        <div class="passport-stat-card small">
+                            <span class="passport-stat-label">Participants</span>
+                            <strong>{{ selectedParticipantSummary }}</strong>
+                        </div>
+                        <div class="passport-stat-card small">
+                            <span class="passport-stat-label">Access</span>
+                            <strong>{{ selectedConversationAccessLabel }}</strong>
+                        </div>
+                        <div class="passport-stat-card small">
+                            <span class="passport-stat-label">Search lanes</span>
+                            <strong>{{ selectedLabelReadinessLabel }}</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="conversation-banner" *ngIf="conversationBanner">
+            <mat-icon>info</mat-icon>
+            <span>{{ conversationBanner }}</span>
+        </div>
+
+        <div class="participant-preview" *ngIf="isVideoRoomSelected && selectedVideoRoom?.participants?.length">
+            <span class="participant-preview-label">Selected participants</span>
+            <div class="participant-chip-list">
+                <span class="participant-chip" *ngFor="let participant of selectedVideoRoom?.participants | slice:0:6">
+                    <mat-icon>person</mat-icon>
+                    {{ getVideoRoomParticipantLabel(participant) }}
+                </span>
+            </div>
+        </div>
+
+        <div class="message-history-status" *ngIf="selectedContact && !isVideoRoomSelected">
+            <div class="message-history-status-copy">
+                <span class="message-history-status-label">History</span>
+                <strong>{{ messageHistoryStatusLabel }}</strong>
+            </div>
+
+            <span class="message-history-status-pill" *ngIf="loadedMessageCount > 0">
+                {{ loadedMessageCount }} loaded
+            </span>
+        </div>
+
+        <div class="msg-list scrollbar-hidden" *ngIf="!isVideoRoomSelected" #msgList (scroll)="onMessagesScroll()">
+            <div class="loading-older" *ngIf="isLoadingOlder">
+                <app-sun-spinner></app-sun-spinner>
+            </div>
+
+            @if(isChatLoading) {
+            <div class="state-shell">
+                <app-loading-spinner></app-loading-spinner>
+            </div>
+            }
+
+            @if(!isChatLoading) {
+            @if(messages.length > 0) {
+            <div class="msg" *ngFor="let m of messages; trackBy: trackByIdx" #msgElement [attr.data-msg-id]="m._id"
+                [class.me]="m.senderId===userId">
+                <div class="contact-avatar sender-avatar">
+                    <img *ngIf="m.senderPhotoUrl; else messageFallback" [src]="m.senderPhotoUrl"
+                        alt="Photo of {{ m.senderName || 'sender' }}" />
+                    <ng-template #messageFallback>
+                        <span>{{ getContactInitials({ contactName: m.senderId === userId ? 'Me' : m.senderName ||
+                            'Guest', contactId: m.senderId || '' }) }}</span>
+                    </ng-template>
+                </div>
+
+                <div class="bubble">
+                    <div *ngIf="isCallInviteMessage(m); else standardMessageBody" class="call-invite-card">
+                        <div class="call-invite-copy">
+                            <span class="call-invite-kicker">Call</span>
+                            <strong>{{ getCallInviteLabel(m) }}</strong>
+                            <span>{{ getCallInviteDescription(m) }}</span>
+                        </div>
+
+                        <button *ngIf="isJoinableCallMessage(m)" type="button" class="call-invite-action"
+                            (click)="joinCallFromMessage(m)">
+                            <mat-icon>video_call</mat-icon>
+                            <span>Join</span>
+                        </button>
+                    </div>
+
+                    <ng-template #standardMessageBody>
+                        <div class="bubble-head">
+                            <span class="sender">{{ m.senderId === userId ? 'You' : (m.senderName || 'Participant')
+                                }}</span>
+                            <span class="meta">{{ m.createdDate | date:'MMM d, h:mm a' }}</span>
+                        </div>
+                        <div class="text-line">
+                            <div class="text" [innerHTML]="formatMessageContent(m.content)"></div>
+                            <div class="tick-container" *ngIf="m.senderId === userId && !isCallInviteMessage(m)">
+                                <span class="tick single" *ngIf="!m.isDelivered && !m.isReadByOthers">&#10003;</span>
+                                <span class="tick double"
+                                    *ngIf="m.isDelivered && !m.isReadByOthers">&#10003;&#10003;</span>
+                                <span class="tick double read" *ngIf="m.isReadByOthers">&#10003;&#10003;</span>
+                            </div>
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+            } @else if(selectedContact && messages.length === 0){
+            <div class="empty-chat-state">
+                <mat-icon>chat_bubble_outline</mat-icon>
+                <h3>No messages yet</h3>
+                <p>Start the conversation with {{ selectedContact.contactName || 'this contact' }}.</p>
+            </div>
+            } @else if(!selectedContact) {
+            <div class="empty-chat-state">
+                <mat-icon>forum</mat-icon>
+                <h3>Select a conversation</h3>
+                <p>Choose a direct dialog or room from the left panel to open the thread or launch the live call.</p>
+            </div>
+            }
+            }
+        </div>
+
+        <div class="room-preview-state" *ngIf="isVideoRoomSelected && selectedVideoRoom">
+            <div class="room-preview-card">
+                <div class="room-preview-head">
+                    <div>
+                        <p class="room-preview-kicker">Integrated call room</p>
+                        <h3>{{ selectedVideoRoom.name || 'Video room' }}</h3>
+                    </div>
+                    <span class="room-preview-id">{{ selectedRoomIdShort }}</span>
+                </div>
+
+                <p>
+                    This room stays visible as one shared record in the list, so you can preserve context, keep the room
+                    ID shareable, and let selected participants join the live call when needed.
+                </p>
+
+                <div class="room-preview-meta">
+                    <span><mat-icon>groups</mat-icon>{{ selectedParticipantSummary }}</span>
+                    <span><mat-icon>lock</mat-icon>{{ selectedConversationAccessLabel }}</span>
+                    <span><mat-icon>sell</mat-icon>{{ selectedLabelReadinessLabel }}</span>
+                </div>
+
+                <div class="participant-chip-list room-preview-participants">
+                    <span class="participant-chip"
+                        *ngFor="let participant of selectedVideoRoom.participants | slice:0:8">
+                        <mat-icon>person</mat-icon>
+                        {{ getVideoRoomParticipantLabel(participant) }}
+                    </span>
+                </div>
+
+                <div class="room-preview-actions">
+                    <button type="button" class="primary-header-action" (click)="joinVideoRoom()">
+                        <mat-icon>video_call</mat-icon>
+                        <span>Open call</span>
+                    </button>
+
+                    <button type="button" class="secondary-header-action" (click)="copySelectedConversationRoomId()">
+                        <mat-icon>content_copy</mat-icon>
+                        <span>Copy room ID</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="typing" *ngIf="typingIndicator.size">
+            <mat-icon>more_horiz</mat-icon>
+            <span>Someone is typing…</span>
+        </div>
+
+        <footer class="input-row" *ngIf="!isVideoRoomSelected">
+            <div class="composer-shell">
+
+                <textarea matInput class="chat-message" rows="3" [(ngModel)]="input" (input)="onInputChanged()"
+                    placeholder="Type a message…"></textarea>
+
+                <div class="composer-toolbar">
+                    <div class="communication-icons">
+                        @for(communicationMean of communicationMeans; track communicationMean) {
+                        <button type="button" class="icon-wrapper" [ngClass]="{
+                                'selected': selectedCommunicationMeans.includes(communicationMean),
+                                'disabled': isDisabled(communicationMean)
+                            }" (click)="toggleIcon(communicationMean)">
+                            <img [src]="getIcon(communicationMean)" alt="{{communicationMean}}" class="icon"
+                                matTooltip="{{communicationMean}}" />
+                        </button>
+                        }
+                    </div>
+
+                    <button class="send-button" (click)="send()" [disabled]="!selectedContact || input.length === 0">
+                        <mat-icon>send</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </footer>
+    </section>
+</div>
+<div class="message-popup-container">
+    <div *ngFor="let popup of popups" class="message-popup" [class.fade-out]="popup.closing"
+        [class.call-popup]="popup.kind === 'call'" (click)="popup.kind === 'message' ? openChatFromPopup(popup) : null">
+
+        <ng-container *ngIf="popup.avatar; else popupAvatarFallback">
+            <img class="avatar" [src]="popup.avatar" alt="Avatar for {{ popup.name || 'participant' }}">
+        </ng-container>
+
+        <ng-template #popupAvatarFallback>
+            <div class="contact-avatar popup-avatar-fallback">
+                <span>{{ popup.initials }}</span>
+            </div>
+        </ng-template>
+
+        <div class="content">
+            <strong>{{ popup.name }}</strong>
+            <span>{{ popup.text }}</span>
+        </div>
+
+        <div class="popup-actions" *ngIf="popup.kind === 'call'">
+            <button type="button" class="popup-action accept"
+                (click)="acceptIncomingCall(popup); $event.stopPropagation()">
+                Join
+            </button>
+        </div>
+
+        <button class="close-btn" (click)="closePopup(popup.id); $event.stopPropagation()">
+            ✕
+        </button>
+    </div>
+</div>
+}

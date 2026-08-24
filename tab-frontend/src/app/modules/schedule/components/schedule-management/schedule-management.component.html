@@ -1,0 +1,62 @@
+<div class="calendar-container">
+  <div class="calendar-header">
+    <div class="header-left">
+      <div class="title-group">
+        <h1 class="calendar-title">{{ content.txtScheduleManagement }}</h1>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <app-view-switcher
+        [currentView]="currentView"
+        (onViewChange)="setCurrentView($event)">
+      </app-view-switcher>
+    </div>
+  </div>
+
+  <ng-container [ngSwitch]="currentView">
+    <app-time-frames-month-view
+      *ngSwitchCase="'month'">
+    </app-time-frames-month-view>
+    
+    <app-week-view
+      *ngSwitchCase="'week'"
+      [currentDate]="currentDate"
+      (onDateChange)="setCurrentDate($event)"
+      (onCreateMeeting)="handleCreateMeeting()"
+      (onCreateMeetingForDateTime)="handleCreateMeetingForDateTime($event)"
+      (onMeetingClick)="handleMeetingClick($event)"
+    ></app-week-view>
+
+    <app-day-view
+      *ngSwitchCase="'day'"
+      [currentDate]="currentDate"
+      (onDateChange)="setCurrentDate($event)"
+      (onCreateMeeting)="handleCreateMeetingForDate($event)"
+      (onCreateMeetingForDateTime)="handleCreateMeetingForDateTime($event)"
+      (onMeetingClick)="handleMeetingClick($event)"
+    ></app-day-view>
+  </ng-container>
+
+  <!-- @if(isCreateMeetingOpen) {
+    <div
+      class="modal-backdrop"
+      (click)="handleModalBackdropClick($event)">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h2 class="modal-title">{{ getDialogTitle() }}</h2>
+          <button class="modal-close-btn" (click)="handleMeetingCancel()">
+            <i class="fa-solid fa-times"></i>
+          </button>
+        </div>
+
+        <app-meeting-form
+          [selectedDate]="selectedDate"
+          [selectedTime]="selectedTime"
+          (onSubmit)="handleMeetingSubmit($event)"
+          (onCancel)="handleMeetingCancel()"
+        ></app-meeting-form>
+      </div>
+    </div>
+  } -->
+</div>

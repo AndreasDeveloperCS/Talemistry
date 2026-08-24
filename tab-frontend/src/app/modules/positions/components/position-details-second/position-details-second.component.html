@@ -1,0 +1,101 @@
+<div class="universal-input details">
+  <div class="details-wrapper-column">
+    <div class="details-items details__block-style">
+      <div [formGroup]="positionRequirementsForm" class="container__column_gap">
+        <mat-label class="new-label">{{content.txtSeniorityLevel}}</mat-label>
+        <mat-form-field>
+          <mat-select class="transparent-select-full-width"
+            formControlName="proficiencyLevel">
+            <div class="input-group__dropdown">
+              @for (option of proficiencyLevels; track option) {
+              <mat-option [value]="option">
+                <div class="container__middle">
+                  {{option}}
+                </div>
+              </mat-option>
+              }
+            </div>
+          </mat-select>
+        </mat-form-field>
+
+        <app-position-skill-unified
+          [roleProfessioncyLevel]="ProficiencyLevel.Regular">
+        </app-position-skill-unified>
+
+        <div class="container__flex container__full-width" style="padding: 0 0.5rem;">
+          <app-position-details-required-education></app-position-details-required-education>
+          <app-position-details-required-certification></app-position-details-required-certification>
+        </div>
+      </div>
+      <div [formGroup]="additionalInfoForm" style="margin-top: 1rem;">
+        <mat-form-field class="details-items">
+          <mat-label class="new-label">{{content.txtAdditionalInformation}}</mat-label>
+          <textarea matInput class="transparent-input-full-width"
+            formControlName="additionalInfo" rows="3">
+          </textarea>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="universal-input details">
+  <div class="details-wrapper-column">
+    <div class="details-items details__block-style">
+      <app-position-details-skill [placeholderText]="'Hard skills'"
+        [skillType]="SkillType.hard"
+        [roleProfessioncyLevel]="ProficiencyLevel.Regular">
+      </app-position-details-skill>
+      <app-position-details-skill [placeholderText]="'Soft skills'"
+        [skillType]="SkillType.soft"
+        [roleProfessioncyLevel]="ProficiencyLevel.Regular">
+      </app-position-details-skill>
+      <app-position-details-skill
+        [placeholderText]="'Managirial skills'"
+        [skillType]="SkillType.managirial"
+        [roleProfessioncyLevel]="ProficiencyLevel.Regular">
+      </app-position-details-skill>
+      <app-position-details-skill
+        [placeholderText]="'Domain skills'"
+        [skillType]="SkillType.domain"
+        [roleProfessioncyLevel]="ProficiencyLevel.Regular">
+      </app-position-details-skill>
+      <app-position-details-skill [placeholderText]="'Languages'"
+        [skillType]="SkillType.language"
+        [roleProfessioncyLevel]="ProficiencyLevel.Regular">
+      </app-position-details-skill>
+    </div>
+      <div class="details-items details__block-style">
+        <div [formGroup]="positionRequirementsForm" class="container__column_gap">
+          <mat-form-field>
+            <mat-label class="new-label">{{content.txtSeniorityLevel}}</mat-label>
+            <mat-select class="transparent-select-full-width"
+              formControlName="proficiencyLevel">
+              <div class="input-group__dropdown">
+                @for (option of proficiencyLevels; track option) {
+                <mat-option [value]="option">
+                  <div class="container__middle">
+                    {{option}}
+                  </div>
+                </mat-option>
+                }
+              </div>
+            </mat-select>
+          </mat-form-field>
+
+          <app-position-details-required-education></app-position-details-required-education>
+
+          <app-position-details-required-certification></app-position-details-required-certification>
+
+        </div>
+        <div [formGroup]="additionalInfoForm" style="margin-top: 1rem;">
+          <mat-form-field class="details-items ">
+            <mat-label class="new-label">{{content.txtAdditionalInformation}}</mat-label>
+            <textarea matInput class="transparent-input-full-width"
+              formControlName="additionalInfo" rows="4">
+            </textarea>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div> -->

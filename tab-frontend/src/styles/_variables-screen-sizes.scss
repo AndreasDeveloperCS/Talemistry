@@ -1,0 +1,30 @@
+$screen-size-small: 380px;
+$screen-size-mobile: 600px;
+$screen-size-tab: 960px;
+$screen-size-netbook: 1280px;
+$screen-size-extra-middle: 1350px;
+$screen-size-middle: 1600px;
+$screen-size-laptop: 1920px;
+
+$screen-size-blog-post: 960px;
+
+$screen-size-tile-position: 300px;
+$screen-size-tile-position-big: 460px;
+$screen-height-tile-position: 260px;
+
+$max-input-width-middle: 520px;
+
+:root {
+    --screen-size-small: $screen-size-small;
+    --screen-size-mobile: $screen-size-mobile;
+    --screen-size-tab: $screen-size-tab;
+    --screen-size-netbook: $screen-size-netbook;
+    --screen-size-extra-middle: $screen-size-extra-middle;
+    --screen-size-middle: $screen-size-middle;
+    --screen-size-laptop: $screen-size-laptop;
+
+    --screen-size-blog-post: $screen-size-blog-post;
+
+    --screen-size-tile-position: $screen-size-tile-position;
+    --screen-height-tile-position: $screen-height-tile-position;
+}

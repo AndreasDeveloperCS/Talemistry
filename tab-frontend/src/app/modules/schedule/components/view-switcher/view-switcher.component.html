@@ -1,0 +1,12 @@
+<div class="view-switcher">
+  @for(view of views; track view) {
+    <button
+      class="view-button"
+      [class.active]="currentView === view.key"
+      (click)="onViewChange.emit(view.key)"
+    >
+      <mat-icon class="view-icon" [inline]="true">{{ view.icon }}</mat-icon>
+      {{ view.label }}
+    </button>
+  }
+</div>

@@ -1,0 +1,34 @@
+<button title="close" mat-icon-button class="close-button" (click)="onCancel()">
+    <mat-icon>
+        <svg width="1.5rem" height="1.5rem" viewBox="0 0 108 107" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M27 26.75L54 53.5L81 26.75" stroke="white" stroke-width="10" stroke-linecap="round" />
+            <path d="M27 80.25L54 53.5L81 80.25" stroke="white" stroke-width="10" stroke-linecap="round" />
+        </svg>
+    </mat-icon>
+</button>
+
+<h2>{{ content.positionBenefitFormTitle }}</h2>
+
+<div class="container__left">
+    <app-toggle-button 
+        [isActive]="isBenefitVerified()" 
+        (toggle)="toggleBenefitVerified()">
+    </app-toggle-button>
+</div>  
+
+<div class="universal-input">
+
+    <form [formGroup]="benefitForm">
+        <mat-form-field class="input-group universal-input">
+            <mat-label class="form-field">{{ content.txtBenefitName }}</mat-label>
+            <input matInput formControlName="benefit" required [placeholder]="content.txtBenefitName" />
+            <mat-error *ngIf="benefitForm.get('benefit')?.hasError('required')">{{ content.txtFieldRequired }}</mat-error>
+        </mat-form-field>
+    </form>
+
+    <div mat-dialog-actions [align]="'end'" class="container__center">
+        <button (click)="save()" class="button__primary-color button--medium container__center">
+            {{ controlButtonContent }}
+        </button>
+    </div>
+</div>

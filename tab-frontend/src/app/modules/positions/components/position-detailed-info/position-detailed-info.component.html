@@ -1,0 +1,261 @@
+@if(!positionData) {
+  <app-loading-spinner></app-loading-spinner>
+}
+@if(positionData) {
+<div class="position-container">
+    <div class="position-upper-part">
+        <div class="position-company-info">
+            <div class="position-company-header">
+                <div class="company-logo logo-large">
+                    <img 
+                        *ngIf="companyLogo; else placeholder" 
+                        [src]="companyLogo" 
+                        alt="Company Logo"
+                        (click)="onCompanyPage(positionData.companyId)"
+                    />
+                    <ng-template #placeholder>
+                        <div class="logo-placeholder">
+                        <span>No Logo</span>
+                        </div>
+                    </ng-template>
+                </div>
+                <div class="company-header-info">
+                    @if(positionData.companyName) {
+                    <div class="company-name"
+                        (click)="onCompanyPage(positionData.companyId)">
+                        {{ positionData.companyName }}
+                    </div>
+                    }
+                    @if(positionData.companyIndustry) {
+                    <div class="company-industry">
+                        {{ positionData.companyIndustry }}
+                    </div>
+                    }
+                    @if(positionData.companyEmployees) {
+                    <div class="company-employees">
+                        {{positionData.companyEmployees}} employees
+                    </div>
+                    }
+                </div>
+            </div>
+            <div class="position-actions">
+                <button class="btn-primary" (click)="apply()">Apply Now</button>
+                @if(positionData.position._id) {
+                <div class="like-btn">
+                    Like 
+                    <app-like-button 
+                        [positionId]="positionData.position._id">
+                    </app-like-button>
+                </div>
+                }
+            </div>
+        </div>
+        <div class="position-header">
+            @if(positionData.titleCode) {
+            <span class="label-id">
+                {{ positionData.titleCode }}
+            </span>
+            }
+            @if(positionData.positionTitle) {
+            <h1 class="position-title">
+                {{ positionData.positionTitle }}
+            </h1>
+            }
+            <div class="position-meta">
+                <span>
+                    <mat-icon>calendar_today</mat-icon>
+                    {{ positionData.creationDate }}
+                </span>
+            </div>
+            <div class="position-meta">
+                @if(positionData.locations) {
+                <span>
+                    <mat-icon>location_on</mat-icon>
+                    {{ positionData.locations }}
+                </span>
+                }
+                @if(positionData.jobType) {
+                <span>
+                    <mat-icon>schedule</mat-icon>
+                    {{ positionData.jobType }}
+                </span>
+                }
+                @if(positionData.workPlace) {
+                <span>
+                    <mat-icon class="custom-icon">work</mat-icon>
+                    {{ positionData.workPlace }}
+                </span>
+                }
+                @if(positionData.proficiencyLevel) {
+                <span>
+                    <mat-icon class="custom-icon">bar_chart</mat-icon> 
+                    {{ positionData.proficiencyLevel }}
+                </span>
+                }
+                @if(positionData.cooperationType) { 
+                <span>
+                    <mat-icon class="custom-icon">handshake</mat-icon>
+                    {{ positionData.cooperationType }}
+                </span>
+                }
+                @if(positionData.involvementType) { 
+                <span>
+                    <mat-icon class="custom-icon">how_to_reg</mat-icon>
+                    {{ positionData.involvementType }}
+                </span>
+                }
+                @if(positionData.specificRequirements !== '') {
+                <span>
+                    <mat-icon class="custom-icon">assignment_turned_in</mat-icon>
+                    {{ positionData.specificRequirements }}
+                </span>
+                }
+                @if(positionData.requiredEducation !== '') {
+                <span>
+                    <mat-icon class="custom-icon">school</mat-icon> 
+                    {{ positionData.requiredEducation }}
+                </span>
+                }
+                @if(positionData.requiredCertification !== '') {
+                <span>
+                    <mat-icon class="custom-icon">workspace_premium</mat-icon>
+                    {{ positionData.requiredCertification}}
+                </span>
+                }
+                @if(positionData.compensationPackage) {
+                <span>
+                    <mat-icon>attach_money</mat-icon>
+                    {{ positionData.compensationPackage }}
+                </span>
+                }
+            </div>
+        </div>
+
+        @if(positionData.positionSkillsList.length > 0) {
+        <div class="tag-list">
+            <mat-icon class="custom-icon">build</mat-icon>
+            <div class="tags-container">
+                @for (skill of positionData.positionSkillsList; track skill) {
+                    <span class="tag">{{skill}}</span>
+                }
+            </div>
+        </div>
+        }
+
+        @if(positionData.benefitsList.length > 0) {
+        <div class="tag-list">
+            <mat-icon class="custom-icon">card_giftcard</mat-icon>
+            <div class="tags-container">
+                @for (benefit of positionData.benefitsList; track benefit) {
+                    <span class="tag">{{benefit}}</span>
+                }
+            </div>
+        </div>
+        }
+    </div>
+
+    <div class="position-content">
+        <div class="left-part">
+            @if(positionData.shortDescription) {
+                <div class="section">
+                    <h2 class="section-title">Short Description</h2>
+                    <p 
+                        class="section-text" 
+                        [innerHTML]="sanitizeHTML(positionData.shortDescription)">
+                    </p>
+                </div>
+            }
+
+            @if(positionData.jobResponsibilities) {
+                <div class="section">
+                    <h2 class="section-title">Job Responsibilities</h2>
+                    <p 
+                        class="section-text" 
+                        [innerHTML]="sanitizeHTML(positionData.jobResponsibilities)">
+                    </p>
+                </div>
+            }
+
+            @if(positionData.requirements) {
+                <div class="section">
+                    <h2 class="section-title">Requirements</h2>
+                    <div style="text-align: left;" [innerHTML]="sanitizeHTML(positionData.requirements)"></div>
+                </div>
+            }
+
+            @if(positionData.benefits) {
+                <div class="section">
+                    <h2 class="section-title">Benefits & Perks</h2>
+                    <div class="section-text" [innerHTML]="sanitizeHTML(positionData.benefits)"></div>
+                </div>
+            }
+
+        </div>
+
+        <div class="right-part">
+            <div class="company-card">
+                <div class="company-card-body">
+                    <h3>About the Company</h3>
+                    <div class="company-header">
+                        <div class="company-logo logo-small">
+                            <img 
+                                *ngIf="companyLogo; else placeholder" 
+                                [src]="companyLogo" 
+                                alt="Company Logo"
+                                (click)="onCompanyPage(positionData.companyId)"
+                            />
+                            <ng-template #placeholder>
+                                <div class="logo-placeholder">
+                                <span>No Logo</span>
+                                </div>
+                            </ng-template>
+                        </div>
+                        <div class="company-header-info"> 
+                            @if(positionData.companyName) {
+                            <div class="company-name" 
+                                (click)="onCompanyPage(positionData.companyId)">
+                                {{ positionData.companyName }}
+                            </div>
+                            }
+                            @if(positionData.companyIndustry) {
+                            <div class="company-industry">
+                                {{ positionData.companyIndustry }}
+                            </div>
+                            }
+                        </div>
+                        
+                    </div>
+                    <div class="company-extra-info">
+                        @if(positionData.companyEmployees) {
+                        <div class="company-extra-info-line">
+                            <mat-icon>people</mat-icon>
+                            <span>{{positionData.companyEmployees}} employees</span>
+                        </div>
+                        }
+                        @if(positionData.companyAddress) {
+                        <div class="company-extra-info-line">
+                            <mat-icon>business</mat-icon>
+                            <span>{{positionData.companyAddress}}</span>
+                        </div>
+                        }
+                    </div>
+                    <button class="link-button" (click)="onCompanyPage(positionData.companyId)">View Company Profile</button>
+                </div>
+            </div>
+            <div class="apply-card">
+                <div class="apply-card-body">
+                    <h3>Ready to Apply?</h3>
+                    <div class="apply-header">
+                        @if(positionData.companyName) {
+                            <div class="apply-info">
+                                Join {{ positionData.companyName }} and take your career to the next level!
+                            </div>
+                        }
+                    </div>
+                    <button class="btn-primary" (click)="apply()">Apply Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}

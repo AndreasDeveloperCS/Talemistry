@@ -1,0 +1,219 @@
+<div class="positions-list-preview">
+  @if(mode === 'recruiter') {
+    <div class="positions-list-preview__header">
+      <div class="positions-list-preview__title-section">
+        <h2 class="positions-list-preview__title">Positions</h2>
+        <div class="positions-list-preview__count">{{ recruiterPositions.length }} positions</div>
+      </div>
+      <div class="positions-list-preview__controls">
+        <div class="positions-list-preview__search">
+          <mat-icon>search</mat-icon>
+          <input type="text" placeholder="Search positions..."
+            [(ngModel)]="searchValue" (ngModelChange)="searchPositions()"/>
+        </div>
+        <div class="positions-list-preview__filters">
+          <button class="filter-btn" [class.active]="selectedStatus === 'all'"
+            (click)="changeStatusFilter('all')">
+            All
+          </button>
+          <button class="filter-btn" [class.active]="selectedStatus === PositionStatus.ACTIVE"
+            (click)="changeStatusFilter(PositionStatus.ACTIVE)">
+            Active
+          </button>
+          <button class="filter-btn" [class.active]="selectedStatus === PositionStatus.PAUSED"
+            (click)="changeStatusFilter(PositionStatus.PAUSED)">
+            Paused
+          </button>
+          <button class="filter-btn" [class.active]="selectedStatus === PositionStatus.CLOSED"
+            (click)="changeStatusFilter(PositionStatus.CLOSED)">
+            Closed
+          </button>
+          <button class="filter-btn" [class.active]="selectedStatus === PositionStatus.DRAFT"
+            (click)="changeStatusFilter(PositionStatus.DRAFT)">
+            Draft
+          </button>
+        </div>
+      </div>
+    </div>
+    @if(isLoading) {
+      <app-sun-spinner></app-sun-spinner>
+    }
+    @if(!isLoading && recruiterPositions) {
+      <div class="positions-list-preview__body">
+        <div class="position-card" *ngFor="let position of recruiterPositions"
+          (click)="openPositionPreview(position._id)">
+          <div class="position-card__top">
+            <div class="position-card__left">
+              <div class="position-card__title-row">
+                <h3 class="position-card__title">{{ position.title }}</h3>
+                <div class="position-card__status" [ngClass]="position.status">
+                  {{ position.status }}
+                </div>
+              </div>
+              <div class="position-card__company-row">
+                <button class="company-link"
+                  (click)="openCompanyPreview(position.positionDetails?.company?._id, $event)">
+                  {{ position.positionDetails?.company?.data?.companyName }}
+                </button>
+                <span class="dot"></span>
+                <span class="position-card__department">
+                  {{ position?.positionDetails?.company?.data?.mainIndustryDomain?.industryName || 'Unknown Industry' }}
+                </span>
+              </div>
+            </div>
+            <div class="position-card__right">
+              <div class="position-card__date">
+                {{ position.createdDate | date:'MMM d, y' }}
+              </div>
+            </div>
+          </div>
+          <div class="position-card__middle">
+            <div class="position-card__skills">
+              @if (position?.positionDetails?.requirements?.positionSkills; as skills) {
+                <div class="skill" *ngFor="let skill of skills | slice:0:7">{{ skill.skillName }}</div>
+                <div class="skill more" *ngIf="skills.length > 7">+{{ skills.length - 5 }}</div>
+              }
+            </div>
+          </div>
+        </div>
+        <div class="positions-list-preview__empty" *ngIf="recruiterPositions.length === 0">
+          <mat-icon>work_off</mat-icon>
+          <h3>No positions found</h3>
+          <p>Try changing filters or search query</p>
+        </div>
+      </div>
+    }
+  }
+  @if(mode === 'talent') {
+    @if(isLoading) {
+      <app-sun-spinner></app-sun-spinner>
+    }
+    @if(!isLoading) {
+      <div class="talent-positions-preview">
+
+        <div class="positions-list-preview__header">
+
+          <div class="positions-list-preview__title-section">
+
+            <h2 class="positions-list-preview__title">
+              Matching Positions
+            </h2>
+
+            <div class="positions-list-preview__count">
+              {{ talentPositions.length }} matches
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="talent-jobs-list">
+
+          <div
+            *ngFor="let job of talentPositions"
+            class="talent-job-card">
+
+            <div class="talent-job-card__head">
+
+              <div>
+
+                <h3 class="talent-job-card__title">
+                  {{ job.title }}
+                </h3>
+
+                <p class="talent-job-card__company">
+                  {{ job.companyName }}
+                </p>
+
+              </div>
+
+              <span
+                class="match-badge"
+                [ngClass]="getMatchBadgeClass(job.matchPercentage)">
+
+                {{ job.matchPercentage }}%
+
+              </span>
+
+            </div>
+
+            <div class="talent-job-card__meta">
+
+              <span>
+
+                <mat-icon>
+                  verified
+                </mat-icon>
+
+                {{ job.matchedSkillsCount }}
+                /
+                {{ job.totalRequiredSkills }}
+                skills matched
+
+              </span>
+
+            </div>
+
+            <div class="talent-job-card__skills">
+
+              <span
+                *ngFor="let skill of job.matchedSkills"
+                class="skill-tag">
+
+                {{ skill }}
+
+              </span>
+
+            </div>
+
+            <div
+              class="talent-job-card__missing"
+              *ngIf="job.missingSkills?.length">
+
+              Missing:
+              {{ job.missingSkills.join(', ') }}
+
+            </div>
+
+            <div class="talent-job-card__footer">
+
+              <button
+                class="view-position-btn"
+                (click)="openPositionPreview(job.positionId)">
+
+                <mat-icon>
+                  open_in_new
+                </mat-icon>
+
+                View Position
+
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div
+          class="positions-list-preview__empty"
+          *ngIf="talentPositions.length === 0">
+
+          <mat-icon>
+            search_off
+          </mat-icon>
+
+          <h3>
+            No matching positions found
+          </h3>
+
+          <p>
+            Try updating your profile skills or experience
+          </p>
+
+        </div>
+
+      </div>
+    }
+  }
+</div>

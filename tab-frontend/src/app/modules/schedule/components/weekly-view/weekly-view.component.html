@@ -1,0 +1,119 @@
+@if(!loading) {
+<h3 class="day-title">{{ currentWeekLabel }}</h3>
+<div class="container__flex calendar-wrapper">
+
+  <div class="week-view-container">
+    <div class="week-header">
+    <div class="time-header"></div>
+
+    <div class="days-header">
+      <div class="day-column" *ngFor="let day of weekDays">
+        <div class="day-header" 
+             [class.today]="isToday(day.date)" 
+             [class.selected]="isSelectedDate(day.date)"
+             (click)="selectDate(day.date)">
+          <div class="day-name">{{ getDayOfWeek(day.date) }}</div>
+          <div class="day-number">{{ getDayOfMonth(day.date) }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="week-grid" #weekGrid>
+    <div class="time-column">
+      <div class="time-slots">
+        <div class="time-slot" *ngFor="let slot of timeSlots">
+          {{ formatTime(slot) }}
+        </div>
+      </div>
+    </div>
+    <div class="days-grid">
+      <div class="day-column" *ngFor="let day of weekDays; let i = index">
+        <div class="day-slots">
+
+          <div
+            *ngIf="i === currentDayIndex"
+            class="current-time-line"
+            [style.top.px]="currentTimeTop">
+          </div>
+
+          <div
+            *ngFor="let slot of timeSlots"
+            class="slot"
+            [class.past]="isPastDay(day)"
+            [class.free]="weekSlotMeetingsMap.get(day.date)?.get(slot.getTime())?.status === 'free'"
+            [class.booked]="weekSlotMeetingsMap.get(day.date)?.get(slot.getTime())?.status === 'booked'"
+            [class.unavailable]="weekSlotMeetingsMap.get(day.date)?.get(slot.getTime())?.status === 'unavailable'"
+          >
+
+            <ng-container
+              *ngFor="let meeting of weekSlotMeetingsMap.get(day.date)?.get(slot.getTime())?.meetings"
+            >
+              <div
+                class="meeting-block"
+                (click)="onMeetingClick.emit(meeting)"
+                [style.height.px]="getMeetingHeight(meeting)"
+                [style.top.px]="getMeetingTopOffset(meeting, slot)"
+              >
+                <div class="meeting-title">{{ meeting.topic }}</div>
+
+                <div
+                  class="meeting-participants"
+                  *ngIf="meeting.participants?.length"
+                >
+                  <span
+                    class="value"
+                    *ngFor="let p of meeting.participants"
+                  >
+                    {{ p.firstname }} {{ p.lastname }}
+                  </span>
+                </div>
+              </div>
+            </ng-container>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </div>
+  </div>
+
+  <div class="agenda-panel">
+    <div class="agenda-header">
+      <h3 class="agenda-title">
+        <mat-icon class="material-icons">event_note</mat-icon>
+        Meetings
+      </h3>
+      <p class="agenda-date">{{ formatDate(selectedDate) }}</p>
+    </div>
+
+    <div class="agenda-content">
+      <div *ngIf="selectedDayMeetings.length === 0" class="no-meetings">
+        <mat-icon class="material-icons">event_available</mat-icon>
+        <p>No meetings scheduled</p>
+      </div>
+
+      <div *ngFor="let meeting of selectedDayMeetings" class="meeting-card">
+        <div class="meeting-card-time" *ngIf="meeting.startTime && meeting.endTime">
+          {{ formatTime((meeting.startTime)) }} - 
+          {{ formatTime((meeting.endTime)) }}
+        </div>
+        <div class="meeting-card-title" (click)="onMeetingClick.emit(meeting)">{{ meeting.topic }}</div>
+        <div class="meeting-card-participants" *ngIf="meeting.participants?.length">
+            <mat-icon class="material-icons">people</mat-icon>
+            <span class="value" *ngFor="let p of meeting.participants">
+            <span>{{ p.firstname}} {{ p.lastname}}</span>
+            </span>
+        </div>
+        <button class="join-button" (click)="openMeetingLink(meeting)">
+          <mat-icon class="material-icons">videocam</mat-icon>
+          Join Meeting
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+}

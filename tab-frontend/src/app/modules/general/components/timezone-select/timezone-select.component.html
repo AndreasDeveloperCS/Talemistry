@@ -1,0 +1,27 @@
+<div class="timezone-container">
+  <label class="new-label">Timezone</label>
+
+  <input
+    type="text"
+    class="transparent-input-full-width"
+    [(ngModel)]="searchTerm"
+    (focus)="openDropdown()"
+    (input)="filterTimezones()"
+    placeholder="Search timezone..."
+  />
+
+  <div *ngIf="isOpen" class="dropdown scrollbar-hidden">
+    <div
+      *ngFor="let tz of filteredTimezones"
+      [class.selected]="tz === selectedTimezone"
+      class="dropdown-item"
+      (click)="selectTimezone(tz)"
+    >
+      {{ tz }}
+    </div>
+
+    <div *ngIf="!filteredTimezones.length" class="no-results">
+      No results
+    </div>
+  </div>
+</div>

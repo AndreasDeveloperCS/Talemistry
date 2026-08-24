@@ -1,0 +1,85 @@
+@use 'variables' as *;
+$positionAbsolute: absolute;
+$positionRelative: relative;
+
+@mixin mixin-collapsed-button($position) {
+  align-items: center;
+  background-color: rgb(0, 0, 55);
+  display: flex;
+  height: 100%;
+  justify-content: flex-start;
+  position: $position;
+  border: 1px solid $pallete-0-color-11;
+  border-radius: $borderFormRadius;
+  min-height: 72px;
+  max-height: 72px;
+  min-width: 72px;
+  width: 72px;
+  overflow: visible;
+
+  mat-icon {
+    color: $active-text !important;
+    width: max-content;
+    height: max-content;
+    font-size: 40px;
+    margin-left: -0.1rem;
+    flex-shrink: 0;
+
+    @media (max-width: $screen-size-mobile) {
+      margin-left: 0.2rem;
+      font-size: 30px;
+      padding: $padding-m 0;
+    }
+
+    @media (max-width: $screen-size-small) {
+      margin-left: 0.2rem;
+      font-size: 30px;
+      padding: $padding-m 0;
+    }
+  }
+
+  span {
+    font-size: 1.5rem;
+    position: absolute;
+    left: 65px;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 0 8px;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s ease, left 0.3s ease;
+    min-width: fit-content !important;
+  }
+
+  &:hover {
+    background: linear-gradient(45deg, #C78A00, #D77400, #E76A00, #F66411);
+    font-size: $font-size-header-narrow;
+    font-weight: bold;
+    padding-right: calc(8rem + 8px);
+    width: fit-content;
+
+    @media (max-width: $screen-size-mobile) {
+      padding-right: 0;
+    }
+  }
+
+  &:hover span {
+    display: flex;
+    justify-self: flex-start;
+    opacity: 1;
+    right: 25px;
+    width: fit-content;
+
+    @media (max-width: $screen-size-mobile) {
+      display: none;
+    }
+  }
+}
+
+.collapsed-button-absolute {
+  @include mixin-collapsed-button(absolute);
+}
+
+.collapsed-button {
+  @include mixin-collapsed-button(relative);
+}

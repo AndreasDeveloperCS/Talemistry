@@ -1,0 +1,442 @@
+<div class="dashboard-container">
+  <div class="stage-filter-card">
+    <div class="stage-filter-header">
+      <div class="stage-filter-header-upper-part">
+        <h2 class="section-title">Pipeline Stages</h2>
+        <p class="section-subtitle">
+          {{ totalApplications }} applications
+        </p>
+      </div>
+      <button 
+        *ngIf="selectedStage" 
+        class="clear-filter-btn"
+        (click)="clearStageFilter()">
+        Clear Filter
+      </button>
+    </div>
+
+    <div class="stage-chips-container">
+      <button
+        *ngFor="let stage of stageOrder; let i = index"
+        class="stage-chip"
+        [class.selected]="selectedStage === stage"
+        [class.has-positions]="getStageCount(stage) > 0"
+        [class.no-positions]="getStageCount(stage) === 0"
+        [disabled]="getStageCount(stage) === 0"
+        (click)="selectStage(stage)">
+        <div class="stage-icon-circle"
+             [class.selected]="selectedStage === stage"
+             [class.has-positions]="getStageCount(stage) > 0">
+          <mat-icon class="material-icons">{{ stageIcons[stage] }}</mat-icon>
+        </div>
+        <div class="stage-content">
+          <span class="stage-name">{{ stage }}</span>
+          <span class="stage-count"
+              [class.selected]="selectedStage === stage"
+              [class.has-positions]="getStageCount(stage) > 0">
+            {{ getStageCount(stage) }}
+          </span>
+        </div>
+      </button>
+    </div>
+  </div>
+
+  <!-- Three Column Layout -->
+  <div class="three-column-layout">
+    <!-- Left: Positions List -->
+    <div class="positions-card">
+      <!-- Status Filter -->
+      <div class="positions-header">
+        <h2 class="column-title">Positions</h2>
+        <span class="badge">{{ totalApplications }}</span>
+      </div>
+
+      <!-- Filtering  -->
+      <!-- <div class="status-filter-buttons">
+        <button
+          class="filter-btn"
+          [class.active]="statusFilter === 'all'"
+          [class.all]="statusFilter === 'all'"
+          (click)="setStatusFilter('all')">
+          All
+        </button>
+        <button
+          class="filter-btn"
+          [class.active]="statusFilter === 'active'"
+          [class.active-filter]="statusFilter === 'active'"
+          (click)="setStatusFilter('active')">
+          Active
+        </button>
+        <button
+          class="filter-btn"
+          [class.active]="statusFilter === 'paused'"
+          [class.active-filter]="statusFilter === 'paused'"
+          (click)="setStatusFilter('paused')">
+          Paused
+        </button>
+        <button
+          class="filter-btn"
+          [class.active]="statusFilter === 'closed'"
+          [class.active-filter]="statusFilter === 'closed'"
+          (click)="setStatusFilter('closed')">
+          Closed
+        </button>
+      </div> -->
+
+      <div #scrollArea class="positions-scroll-area scrollbar-hidden">
+        <div class="positions-list">
+          <button
+            *ngFor="let app of filteredPositions"
+            class="position-card"
+            [class.selected]="selectedPosition?.positionId === app.positionId"
+            (click)="selectPosition(app)">
+            <div class="position-header">
+              <h4 class="position-link" (click)="onNavigateToPositionPage(app.positionId, $event)">
+                {{ app.positionName }}
+                <mat-icon class="material-icons external-icon">open_in_new</mat-icon>
+              </h4>
+              <div class="header-icons">
+                <button class="chat-btn" title="Send message" (click)="startChat($event)">
+                  <mat-icon>chat</mat-icon>
+                </button>
+                <span *ngIf="app.positionStatus === PositionStatus.ACTIVE" class="active-badge">
+                  Active
+                </span>
+              </div>
+            </div>
+            <div class="company-link" (click)="onNavigateToCompanyPage(app.companyId, $event)">
+              <mat-icon class="material-icons">business</mat-icon>
+              <span>{{ app.companyName }}</span>
+              <mat-icon class="material-icons external-icon">open_in_new</mat-icon>
+            </div>
+            <div class="position-progress">
+              <div class="progress-info">
+                <span class="progress-label">Current Stage</span>
+                <span class="progress-value">{{ app.currentStage }}</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" [style.width.%]="getStageProgress(app.currentStage)"></div>
+              </div>
+            </div>
+            <div class="position-footer">
+              <mat-icon class="material-icons date-icon">event</mat-icon>
+              <span class="date-text">{{ formatDate(app.appliedDate) }}</span>
+            </div>
+          </button>
+        </div>
+        @if(isPositionsLoading) {
+          <app-sun-spinner></app-sun-spinner>
+        }
+      </div>
+    </div>
+
+    <!-- Middle: Pipeline Stages -->
+    <div class="pipeline-card" [class.stage-selected]="selectedPipelineStage">
+      <h2 class="column-title column-title-header">Pipeline Progress</h2>
+
+      @if(isPipelineProgressLoading) {
+        <app-sun-spinner></app-sun-spinner>
+      }
+      
+      <div *ngIf="selectedApp" class="pipeline-scroll-area">
+        <div class="pipeline-stages-list">
+          <div *ngFor="let stage of stageOrder; let i = index" class="pipeline-stage-item">
+            <button
+              class="pipeline-stage-button"
+              [class.selected-pipeline]="selectedPipelineStage === stage"
+              [class.current-stage]="isCurrentStage(stage, selectedApp)"
+              [class.passed-stage]="isPassedStage(stage, selectedApp)"
+              [class.future-stage]="isFutureStage(stage, selectedApp)"
+              [class.clickable]="isStageClickable(stage, selectedApp)"
+              [disabled]="!isStageClickable(stage, selectedApp)"
+              (click)="selectPipelineStage(stage, isStageClickable(stage, selectedApp))">
+              <div class="stage-icon">
+                <mat-icon class="material-icons">
+                  {{ getStatusIcon(getStageStatus(stage, selectedApp)) }}
+                </mat-icon>
+              </div>
+              <div class="stage-content-info">
+                <div class="stage-title-row">
+                  <h4 class="stage-title">{{ stage }}</h4>
+                  <span *ngIf="isCurrentStage(stage, selectedApp)" class="current-badge">
+                    Current
+                  </span>
+                </div>
+                <p class="stage-status">
+                  <ng-container [ngSwitch]="getStageStatus(stage, selectedApp)">
+                    <ng-container *ngSwitchCase="StageStatus.passed">Completed</ng-container>
+                    <ng-container *ngSwitchCase="StageStatus.pending">In Progress</ng-container>
+                    <ng-container *ngSwitchCase="StageStatus.future">Upcoming</ng-container>
+                  </ng-container>
+                </p>
+              </div>
+            </button>
+            <div *ngIf="i < stageOrder.length - 1" 
+                 class="stage-connector"
+                 [class.passed]="isPassedStage(stage, selectedApp)"></div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!selectedApp && !isPipelineProgressLoading" class="empty-state">
+        <p class="empty-text">Select a position from the list to view details</p>
+      </div>
+    </div>
+
+    <!-- Right: Feedback & Details -->
+    <div class="details-card">
+      <h2 class="column-title column-title-header">
+        {{ selectedPipelineStage ? selectedPipelineStage + ' Stage Details' : 'Stage Details' }}
+      </h2>
+
+      @if(isStageDetailsLoading) {
+        <app-sun-spinner></app-sun-spinner>
+      }
+
+      <div *ngIf="selectedApp && selectedStageData && !isStageDetailsLoading" class="details-content">
+        <!-- Stage Header -->
+        <div class="stage-header-info">
+          <div class="info-row">
+            <span class="info-label">
+              <mat-icon>calendar_month</mat-icon>
+              Stage Opened
+            </span>
+            <span class="info-value">
+              {{ formatDate(selectedStageData?.createdDate) }}
+            </span>
+          </div>
+          @if(selectedStageData?.finalDecision) {
+            <div class="info-row">
+              <span class="info-label">
+                <mat-icon>verified</mat-icon>
+                Final Decision
+              </span>
+              <span class="status-badge"
+                    [ngClass]="getStatusClass(selectedStageData?.status)">
+                {{ getStatusLabel(selectedStageData?.finalDecision) }}
+              </span>
+            </div>
+          } @else {
+            <div class="info-row">
+              <span class="info-label">Status</span>
+              <span class="status-badge"
+                    [ngClass]="getStatusClass(selectedStageData?.status)">
+                {{ getStatusLabel(selectedStageData?.status) }}
+              </span>
+            </div>
+          }
+        </div>
+
+        <div class="details-scroll-area">
+          @if(stageFeedbacks && stageFeedbacks.length > 0) {  
+            @for(stageFeedback of stageFeedbacks; track stageFeedback) {
+              <h3 class="section-heading">
+                <mat-icon>person</mat-icon>
+                Feedback from {{ stageFeedback.source | titlecase }}
+              </h3>
+              <div class="stage-header-info">
+                <div class="info-row">
+                  <span class="info-label">
+                    <mat-icon>calendar_month</mat-icon>
+                    Score
+                  </span>
+                  <span class="info-value">
+                    {{ stageFeedback?.payload?.score }}
+                  </span>
+                </div>
+                @if(stageFeedback?.payload?.recommendation) {
+                  <div class="info-row">
+                    <span class="info-label">
+                      <mat-icon>verified</mat-icon>
+                      Decision
+                    </span>
+                    <span class="status-badge"
+                          [ngClass]="getStatusClass(stageFeedback?.payload?.recommendation)">
+                      {{ getStatusLabel(stageFeedback?.payload?.recommendation) }}
+                    </span>
+                  </div>
+                }
+                <div *ngIf="selectedPipelineStage === STAGES_NAMES.APPLIED && isCvReviewPayload(stageFeedback?.payload!) as cvPayload">
+                  <div class="info-column">
+                    <span class="info-label">
+                      <mat-icon>verified</mat-icon>
+                      Comments
+                    </span>
+                    <span class="feedback-comments">
+                      {{ getCvComments(stageFeedback) }}
+                    </span>
+                  </div>
+                </div>
+                <div *ngIf="selectedPipelineStage === STAGES_NAMES.SCREENING && isScreeningReviewPayload(stageFeedback?.payload!) as screeningPayload">
+                  <div class="info-column">
+                    <span class="info-label">
+                      <mat-icon>verified</mat-icon>
+                      Notes
+                    </span>
+                    <span class="feedback-comments">
+                      {{ getScreeningNotes(stageFeedback) }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            }
+          }
+          <div class="details-sections">
+            <!-- Screening Stage - Q&A -->
+            <div *ngIf="selectedPipelineStage === STAGES_NAMES.SCREENING" class="detail-section">
+              @if(screeningResponse) {
+                <h3 class="section-heading">
+                  <mat-icon class="material-icons">quiz</mat-icon>
+                  Screening Questions & Answers
+                </h3>
+                <div class="questions-list">
+                  <div *ngFor="let a of screeningResponse.answers; let idx = index" class="question-item">
+                    <button 
+                      class="question-toggle"
+                      [class.expanded]="isQuestionExpanded(idx)"
+                      (click)="toggleQuestion(idx)">
+                      <span class="question-text">{{ a.questionText }}</span>
+                      <mat-icon class="material-icons chevron" [class.rotated]="isQuestionExpanded(idx)">
+                        chevron_right
+                      </mat-icon>
+                    </button>
+                    <div *ngIf="isQuestionExpanded(idx)" class="answer-text">
+                      {{ a.value }}
+                    </div>
+                  </div>
+                </div>
+              } @else {
+                <div class="detail-section">
+                  <div class="notes-box">
+                    <h3 class="section-heading">
+                      <mat-icon class="material-icons" style="color: red;">info</mat-icon>
+                      Screening Questionnaire Needs Your Attention
+                    </h3>
+                    <p class="info-text">
+                      Please complete the screening questionnaire by following this
+                      <span class="link" (click)="navigateToScreening()">link</span>.
+                    </p>
+                  </div>
+                </div>
+              }
+            </div>
+
+            <!-- Assessment Stage -->
+            <div *ngIf="selectedPipelineStage === STAGES_NAMES.ASSESSMENT" class="detail-section">
+              <h3 class="section-heading">
+                <mat-icon class="material-icons">assignment</mat-icon>
+                Assessment Results
+              </h3>
+              <div class="assessment-box">
+                <div class="score-row">
+                  <span class="score-label">Score</span>
+                  <span class="score-value">{{ (selectedStageData?.assessmentScore) * 10 || 0 }}%</span>
+                </div>
+                <div class="progress-bar large">
+                  <div class="progress-fill" [style.width.%]="selectedStageData?.assessmentScore !== undefined ? (selectedStageData?.assessmentScore) * 10 : 0"></div>
+                </div>
+                <p class="assessment-note">
+                  You have successfully passed the technical assessment. Great work on demonstrating your skills!
+                </p>
+              </div>
+            </div>
+            <div *ngIf="selectedPipelineStage === STAGES_NAMES.INTERVIEW" class="detail-section">
+              @if(isMeetingScheduled) {
+                <div class="interview-block scheduled">
+                  <div class="status">Scheduled</div>
+                  <div class="title">Interview Confirmed</div>
+                  <div class="text">
+                    Your interview is scheduled. Please check your email for details and the calendar invite.
+                  </div>
+                  <span class="action-link" (click)="viewMeetingDetails()">View details</span>
+                </div>
+              } @else {
+                <div class="interview-block invitation">
+                  <div class="status">Pending action</div>
+                  <div class="title">Interview Invitation</div>
+                  <div class="text">
+                    You have been invited to schedule an interview. Please select a convenient time slot.
+                  </div>
+                  <span class="action-link" (click)="scheduleInterview()">Schedule interview</span>
+                </div>
+              }
+            </div>
+
+            <!-- Offer Stage -->
+            <div *ngIf="selectedPipelineStage === STAGES_NAMES.OFFER" class="detail-section">
+              <h3 class="section-heading">
+                <mat-icon class="material-icons">handshake</mat-icon>
+                Offer Details
+              </h3>
+              <div class="offer-box">
+                <h4 class="offer-title">Congratulations!</h4>
+                <p class="offer-text">
+                  We are pleased to extend an offer for this position. Please review the offer details sent to your email.
+                </p>
+                <div class="offer-deadline">
+                  <mat-icon class="material-icons">schedule</mat-icon>
+                  <span class="deadline-text">Response deadline: 7 days from offer date</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hired Stage -->
+            <div *ngIf="selectedPipelineStage === STAGES_NAMES.HIRED" class="detail-section">
+              <h3 class="section-heading">
+                <mat-icon class="material-icons">check_circle</mat-icon>
+                Welcome Aboard!
+              </h3>
+              <div class="hired-box">
+                <h4 class="hired-title">Onboarding Information</h4>
+                <p class="hired-text">
+                  Welcome to the team! You will receive onboarding details shortly.
+                </p>
+                <div class="checklist">
+                  <div class="checklist-item">
+                    <mat-icon class="material-icons check-icon">check_circle</mat-icon>
+                    <span class="check-text">Start date confirmed</span>
+                  </div>
+                  <div class="checklist-item">
+                    <mat-icon class="material-icons check-icon">check_circle</mat-icon>
+                    <span class="check-text">Documentation submitted</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sourced/Applied Stage -->
+            <div *ngIf="selectedPipelineStage === STAGES_NAMES.APPLIED && selectedStageData.status !== StageStatus.passed" class="detail-section">
+              <h3 class="section-heading">
+                <mat-icon class="material-icons">info</mat-icon>
+                Application Received
+              </h3>
+              <div class="info-box">
+                <p class="info-text">
+                  Your application has been received and is under review. We will contact you if your profile matches our requirements.
+                </p>
+              </div>
+            </div>
+
+            @if(selectedStageData?.finalNotes) {
+            <div class="detail-section">
+              <h3 class="section-heading">
+                <mat-icon class="material-icons">comment</mat-icon>
+                Final Notes
+              </h3>
+              <div class="notes-box">
+                <p class="notes-text">
+                  {{ selectedStageData?.finalNotes }}
+                </p>
+              </div>
+            </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="(!selectedApp || !selectedPipelineStage) && !isStageDetailsLoading" class="empty-state">
+        <p class="empty-text">Select a stage from the pipeline to view details</p>
+      </div>
+    </div>
+  </div>
+</div>

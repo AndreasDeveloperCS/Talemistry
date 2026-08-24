@@ -1,0 +1,306 @@
+<div class="dashboard">
+  <!-- <div class="circuit-bg" aria-hidden="true">
+    <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="iCircuit" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+          <path d="M10 10 L10 30 M10 30 L30 30 M30 30 L30 50 M50 10 L50 40 L70 40 M70 40 L70 70 M70 70 L90 70 M20 60 L20 90 M40 80 L80 80"
+            stroke="#1ab8b8" stroke-width="0.5" fill="none"/>
+          <circle cx="10" cy="10" r="2" fill="#1ab8b8"/>
+          <circle cx="30" cy="30" r="2" fill="#1ab8b8"/>
+          <circle cx="70" cy="70" r="2" fill="#1ab8b8"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#iCircuit)"/>
+    </svg>
+  </div> -->
+
+  <div class="dashboard__inner">
+
+    <!-- Header -->
+    <div class="upper-line">
+        <header class="page-header">
+            <h1 class="page-header__title">
+                <span class="material-icons">dashboard</span>
+                Interviewer Dashboard
+            </h1>
+            <p class="page-header__subtitle">Manage your interviews and submit candidate feedback</p>
+        </header>
+        <nav class="nav">
+            <a href="/" class="btn btn--outline">
+                <span class="material-icons">calendar_month</span>Calendar
+            </a>
+        </nav>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="stats-grid stats-grid--3">
+      <div class="stat-card">
+        <div class="stat-card__top">
+          <span class="stat-card__label">Upcoming Interviews</span>
+          <div class="stat-card__icon stat-card__icon--primary">
+            <span class="material-icons">calendar_today</span>
+          </div>
+        </div>
+        <span class="stat-card__value">{{ upcomingInterviews.length }}</span>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-card__top">
+          <span class="stat-card__label">Feedback Submitted</span>
+          <div class="stat-card__icon stat-card__icon--accent">
+            <span class="material-icons">check_circle</span>
+          </div>
+        </div>
+        <span class="stat-card__value">{{ submittedFeedback.length }}</span>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-card__top">
+          <span class="stat-card__label">Pending Feedback</span>
+          <div class="stat-card__icon stat-card__icon--warn">
+            <span class="material-icons">warning</span>
+          </div>
+        </div>
+        <span class="stat-card__value">{{ pendingFeedback.length }}</span>
+      </div>
+    </div>
+
+    <!-- Technical Interview Pipeline Funnel -->
+    <section class="card funnel-section">
+      <div class="card__header">
+        <h2 class="card__title">
+          <span class="material-icons">analytics</span>
+          Technical Interview Pipeline
+        </h2>
+        <span class="card__meta">Pass rate: {{ passRate }}%</span>
+      </div>
+
+      <div class="tech-funnel-layout">
+        <!-- SVG Funnel -->
+        <div class="funnel-chart-wrap">
+          <svg [attr.width]="svgWidth" [attr.height]="svgHeight"
+            [attr.viewBox]="'0 0 ' + svgWidth + ' ' + svgHeight"
+            role="img" aria-label="Technical interview pipeline funnel">
+            <g *ngFor="let seg of getFunnelSegments()">
+              <path [attr.d]="seg.path" [attr.fill]="seg.color" opacity="0.88"/>
+              <text [attr.x]="seg.cx" [attr.y]="seg.cy + 6" text-anchor="middle" class="funnel-label--value">
+                {{ seg.value }}
+              </text>
+            </g>
+          </svg>
+        </div>
+
+        <!-- Pipeline Stats -->
+        <div class="pipeline-stats">
+          <div *ngFor="let stage of technicalFunnel; let i = index" class="pipeline-stat-card">
+            <div class="pipeline-stat-card__head">
+              <div class="pipeline-stat-card__dot-name">
+                <span class="funnel-dot" [style.background]="stage.color"></span>
+                <span class="pipeline-stat-card__name">{{ stage.name }}</span>
+              </div>
+              <span class="pipeline-stat-card__value">{{ stage.value }}</span>
+            </div>
+            <p class="pipeline-stat-card__desc">{{ stage.description }}</p>
+            <div *ngIf="i > 0" class="conversion-bar">
+              <div class="conversion-bar__track">
+                <div class="conversion-bar__fill"
+                  [style.width.%]="getConversionRate(i)"
+                  [style.background]="stage.color">
+                </div>
+              </div>
+              <span class="conversion-bar__pct">{{ getConversionRate(i) }}%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills + Code Snippets -->
+    <div class="two-col-grid">
+
+      <!-- Technical Expertise -->
+      <div class="card">
+        <div class="card__header">
+          <h2 class="card__title">
+            <span class="material-icons">bolt</span>
+            Technical Expertise
+          </h2>
+          <a href="/profile/skills" class="link-accent">
+            Edit skills <span class="material-icons">chevron_right</span>
+          </a>
+        </div>
+
+        <div class="skills-grid">
+          <div *ngFor="let skill of skills" class="skill-card">
+            <div class="skill-card__top">
+              <div class="skill-icon">{{ skill.icon }}</div>
+              <div class="skill-card__info">
+                <p class="skill-card__name">{{ skill.name }}</p>
+                <p class="skill-card__exp">{{ skill.yearsExp }} yrs</p>
+              </div>
+            </div>
+            <span class="badge" [ngClass]="getLevelClass(skill.level)">{{ skill.level }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Code Snippets Library -->
+      <div class="card">
+        <div class="card__header">
+          <h2 class="card__title">
+            <span class="material-icons">code</span>
+            Code Snippets Library
+          </h2>
+          <button class="btn btn--primary" (click)="showAddForm = !showAddForm">
+            <span class="material-icons">add</span>Add Snippet
+          </button>
+        </div>
+
+        <!-- Add Form -->
+        <div *ngIf="showAddForm" class="snippet-form">
+          <div class="snippet-form__header">
+            <h3>New Code Snippet</h3>
+            <button class="icon-btn" (click)="showAddForm = false" aria-label="Close">
+              <span class="material-icons">close</span>
+            </button>
+          </div>
+          <div class="snippet-form__row">
+            <input class="form-input" placeholder="Title" [(ngModel)]="newSnippet.title"/>
+            <input class="form-input" placeholder="Category (e.g. Arrays)" [(ngModel)]="newSnippet.category"/>
+          </div>
+          <div class="snippet-form__row">
+            <select class="form-select" [(ngModel)]="newSnippet.language">
+              <option>JavaScript</option>
+              <option>TypeScript</option>
+              <option>Python</option>
+              <option>Java</option>
+              <option>SQL</option>
+            </select>
+            <select class="form-select" [(ngModel)]="newSnippet.difficulty">
+              <option>Easy</option>
+              <option>Medium</option>
+              <option>Hard</option>
+            </select>
+          </div>
+          <textarea class="form-textarea" placeholder="Paste your code here..." [(ngModel)]="newSnippet.code" rows="5"></textarea>
+          <button class="btn btn--accent btn--full" (click)="addSnippet()">Save Snippet</button>
+        </div>
+
+        <!-- Snippets List -->
+        <div class="snippets-list">
+          <div *ngFor="let snippet of codeSnippets" class="snippet-card">
+            <div class="snippet-card__head">
+              <div class="snippet-card__meta">
+                <span class="snippet-card__title">{{ snippet.title }}</span>
+                <span class="badge badge--accent-soft">{{ snippet.language }}</span>
+                <span class="badge" [ngClass]="getDifficultyClass(snippet.difficulty)">{{ snippet.difficulty }}</span>
+              </div>
+              <div class="snippet-card__actions">
+                <button class="icon-btn" (click)="copySnippet(snippet)" [attr.aria-label]="'Copy ' + snippet.title">
+                  <span class="material-icons">{{ copiedId === snippet.id ? 'check' : 'content_copy' }}</span>
+                </button>
+                <button class="icon-btn icon-btn--danger" (click)="deleteSnippet(snippet.id)" aria-label="Delete snippet">
+                  <span class="material-icons">delete</span>
+                </button>
+              </div>
+            </div>
+            <p class="snippet-card__category">{{ snippet.category }}</p>
+            <pre class="snippet-card__code"><code>{{ snippet.code.length > 160 ? (snippet.code | slice:0:160) + '...' : snippet.code }}</code></pre>
+          </div>
+        </div>
+      </div>
+    </div><!-- /two-col-grid -->
+
+    <!-- Upcoming Interviews + Feedback -->
+    <div class="two-col-grid">
+
+      <!-- Upcoming Interviews -->
+      <div class="card">
+        <div class="card__header">
+          <h2 class="card__title">
+            <span class="material-icons">schedule</span>Upcoming Interviews
+          </h2>
+          <a href="/" class="link-accent">View all</a>
+        </div>
+
+        <div class="interviews-list">
+          <div *ngFor="let iv of upcomingInterviews" class="interview-item">
+            <div class="avatar">{{ getInitials(iv.candidateName) }}</div>
+            <div class="interview-item__info">
+              <div class="interview-item__name">{{ iv.candidateName }}</div>
+              <a [href]="'/position/' + iv.positionId" class="interview-item__pos">
+                {{ iv.position }} <span class="material-icons">open_in_new</span>
+              </a>
+              <div class="interview-item__company">{{ iv.company }}</div>
+              <div class="interview-item__meta">
+                <span class="material-icons">calendar_today</span>{{ iv.date }}
+                <span class="material-icons">schedule</span>{{ iv.time }}
+              </div>
+              <div class="interview-item__btns">
+                <a [href]="iv.meetingLink" class="btn btn--primary btn--sm" target="_blank" rel="noopener">
+                  <span class="material-icons">videocam</span>Join
+                </a>
+                <a [href]="iv.resumeUrl" class="btn btn--outline btn--sm">
+                  <span class="material-icons">description</span>Resume
+                </a>
+                <a [href]="'/candidate/' + iv.id" class="btn btn--outline btn--sm">
+                  <span class="material-icons">person</span>Profile
+                </a>
+              </div>
+            </div>
+            <span class="badge badge--type">{{ iv.type }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submitted Feedback -->
+      <div class="card">
+
+        <!-- Pending Feedback Alert -->
+        <div *ngFor="let pf of pendingFeedback" class="pending-alert">
+          <div class="pending-alert__info">
+            <span class="material-icons">warning</span>
+            <div>
+              <p class="pending-alert__name">{{ pf.candidateName }}</p>
+              <p class="pending-alert__pos">{{ pf.position }} at {{ pf.company }}</p>
+              <p class="pending-alert__due">Due: {{ pf.dueDate }}</p>
+            </div>
+          </div>
+          <button class="btn btn--primary">Submit</button>
+        </div>
+
+        <div class="card__header">
+          <h2 class="card__title">
+            <span class="material-icons">chat</span>Submitted Feedback
+          </h2>
+          <a href="/feedback" class="link-accent">View all</a>
+        </div>
+
+        <div class="feedback-list">
+          <div *ngFor="let fb of submittedFeedback" class="feedback-item">
+            <div class="avatar">{{ getInitials(fb.candidateName) }}</div>
+            <div class="feedback-item__info">
+              <a [href]="fb.candidateProfileUrl" class="feedback-item__name">
+                {{ fb.candidateName }} <span class="material-icons">open_in_new</span>
+              </a>
+              <a [href]="'/position/' + fb.position" class="feedback-item__pos">
+                {{ fb.position }} at {{ fb.company }}
+              </a>
+              <span class="badge" [ngClass]="getRecommendationClass(fb.recommendation)">{{ fb.recommendation }}</span>
+              <p class="feedback-item__summary">{{ fb.summary }}</p>
+            </div>
+            <div class="feedback-item__right">
+              <div class="stars">
+                <span *ngFor="let filled of stars(fb.rating)" class="material-icons star" [class.star--filled]="filled">star</span>
+              </div>
+              <a [href]="'/feedback/' + fb.id" class="link-accent link-accent--sm">
+                View Full <span class="material-icons">chevron_right</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /two-col-grid -->
+
+  </div><!-- /dashboard__inner -->
+</div><!-- /dashboard -->

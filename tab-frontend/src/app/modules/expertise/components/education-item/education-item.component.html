@@ -1,0 +1,129 @@
+<form class="container-secondary border-primary" [formGroup]="educationItemForm">
+  <mat-label class="filter-label">{{ placeholderText }}</mat-label>
+  <div class="full-width-wrapper">
+    <div class="input-item container__justify-self-end transparent-button">
+      <button (click)="removeItem(skill)">
+        <mat-icon>delete_sweep</mat-icon>
+      </button>
+    </div>
+
+    <div class="container__flex container__baseline">
+
+      <mat-form-field class="skill-full-width inline-form-field">
+        <mat-label class="new-label">{{content.txtEducationalInstitution}}</mat-label>
+        <input class="input company-name transparent-input-full-width" 
+          type="text" 
+          [placeholder]="content.txtEducationalInstitution" 
+          matInput
+          [(ngModel)]="rawInputlValue" 
+          [matAutocomplete]="matAutocomplete" 
+          [value]="rawInputlValue" 
+          [formControl]="inputControl" 
+          (blur)="validateBlur(rawInputlValue)" 
+          (input)="filterCollectionItems()"
+          (click)="onAutocompleteOpened()" 
+          (keyup)="applyLocalFilter()"
+          (selectionChange)="onSelectionChange($event)"
+          (focus)="onAutocompleteOpened()" />
+
+        <mat-autocomplete autoActiveFirstOption #matAutocomplete="matAutocomplete" (opened)="onAutocompleteOpened()"
+          (optionSelected)="onSelectionChange($event)">
+          <input class="dropdown-filter" [placeholder]='content.txtFilter' [formControl]="filterControl"
+            (keyup)="applyLocalFilter()" />
+
+          <div (scroll)="onScroll($event)" class="input-group__dropdown" (opened)="onAutocompleteOpened()">
+            @for (option of collection; track option) {
+            <mat-option [value]="option">
+              <div class="container__middle">
+                {{ getValue(option) }}
+              </div>
+            </mat-option>
+            }
+          </div>
+        </mat-autocomplete>
+
+        <mat-icon class="dropdown-icon" [class]="{ open: isOpen }" (click)="toggleDropdown()">
+          arrow_drop_down
+        </mat-icon>
+      </mat-form-field>
+
+      <div class="checkbox-container">
+        <mat-checkbox [(ngModel)]="skill.currentlyStudying" (change)="onIsCurrentChange($event)"
+          formControlName="currentlyStudying">
+        </mat-checkbox>
+        <label class="checkbox-label">
+          {{ content.currentlyStudyingTxt }}
+        </label>
+      </div>
+
+      <mat-form-field class="horizontal-width-middle calendar">
+        <mat-label class="new-label">{{content.academicStartWorkDate}}</mat-label>
+        <input matInput [matDatepicker]="startDatePicker" class="datetime-block-size transparent-input-full-width" [(ngModel)]="skill.startStudyDate"
+          [placeholder]="content.academicStartWorkDate" formControlName="startStudyDate" [max]="currentDate" />
+
+        <mat-datepicker-toggle class="date-picker-shifting"
+          [max]="currentDate" matSuffix [for]="startDatePicker">
+        </mat-datepicker-toggle>
+
+        <mat-datepicker [max]="currentDate" #startDatePicker startView="multi-year"
+          (yearSelected)="chosenYearHandlerStart($event, startDatePicker)"
+          (monthSelected)="chosenMonthHandlerStart($event, startDatePicker)"></mat-datepicker>
+      </mat-form-field>
+
+    </div>
+
+    <div class="container__flex container__baseline">
+      <mat-form-field class="level-education-style">
+        <mat-label class="new-label">{{content.academicEducationLevelTxt}}</mat-label>
+        <mat-select class="transparent-input-full-width" formControlName="academicEducationLevelType" [(ngModel)]="skill.academicEducationLevelType"
+          [placeholder]="content.academicEducationLevelTxt">
+          @for (educationType of educationTypes; track educationType) {
+          <mat-option [value]="educationType">
+            {{ educationType }}
+          </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      @if (!skill.currentlyStudying) {
+      <div class="input-filter">
+        <mat-form-field class="skill-full-width">
+          <mat-label class="new-label">{{content.academicCertificateNumberTxt}}</mat-label>
+          <input class="input transparent-input-full-width" type="text" [placeholder]="content.academicCertificateNumberTxt" matInput
+            [(ngModel)]="skill.certificateNumber" formControlName="certificateNumber" />
+        </mat-form-field>
+      </div>
+      <mat-form-field class="horizontal-width-middle calendar">
+        <mat-label class="new-label">{{ content.academicGraduationDate }}</mat-label>
+        <input matInput [matDatepicker]="endDatePicker" [(ngModel)]="skill.graduationDate" class="datetime-block-size transparent-input-full-width"
+          [placeholder]="content.academicGraduationDate" formControlName="graduationDate" [max]="currentDate" />
+        <mat-datepicker-toggle 
+          class="date-picker-shifting" 
+          matSuffix [for]="endDatePicker" 
+          [max]="currentDate">
+        </mat-datepicker-toggle>
+        <mat-datepicker [max]="currentDate" #endDatePicker startView="multi-year"
+          (yearSelected)="chosenYearHandlerEnd($event, endDatePicker)"
+          (monthSelected)="chosenMonthHandlerEnd($event, endDatePicker)"></mat-datepicker>
+      </mat-form-field>
+      }
+    </div>
+
+    <div class="container__flex container__baseline">
+      <mat-form-field>
+        <mat-label class="new-label">{{content.academicInstituteNameTxt}}</mat-label>
+        <input class="input transparent-input-full-width" type="text" formControlName="faculty" [placeholder]="content.academicInstituteNameTxt"
+          matInput [(ngModel)]="skill.faculty" />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label class="new-label">{{content.academicFieldOfStudyName}}</mat-label>
+        <input class="input transparent-input-full-width" type="text" formControlName="fieldOfStudy" [placeholder]="content.academicFieldOfStudyName"
+          matInput [(ngModel)]="skill.fieldOfStudy" />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label class="new-label">{{content.academicSpecialization}}</mat-label>
+        <input class="input transparent-input-full-width" type="text" [placeholder]="content.academicSpecialization" formControlName="specialication"
+          matInput [(ngModel)]="skill.specialication" />
+      </mat-form-field>
+    </div>
+  </div>
+</form>

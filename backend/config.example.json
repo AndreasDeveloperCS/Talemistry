@@ -1,0 +1,49 @@
+{
+  "corsClientShortHostHttp": "localhost:4200",
+  "corsClientHostHttp": "http://localhost:4200",
+  "corsClientHostHttps": "https://localhost:4200",
+  "corsHostHttp": "http://localhost:3000",
+  "corsHostHttps": "https://localhost:3000",
+  "serviceConfig": {
+    "port": 3000,
+    "httpPort": 5000,
+    "name": "talemistry",
+    "appUIUrl": "http://localhost:4200"
+  },
+  "mongoConnection": "mongodb://127.0.0.1:27017/evryka?authSource=admin",
+  "mongoCloudConnection": "mongodb+srv://__MONGO_USER__:__MONGO_PASSWORD__@__MONGO_HOST__/evryka?retryWrites=true&w=majority&tls=true&appName=evryka",
+  "cloudDBName": "evryka",
+  "httpMode": false,
+  "certConfig": {
+    "path": "/client_certs/",
+    "key": "evryka-key.pem",
+    "cert": "evryka-cert.pem",
+    "ca": [ ],
+    "requestCert": true,
+    "rejectUnauthorized": false
+  },
+  "secure": true,
+  "certFile": "client_certs\\evryka-cert.crt",
+  "caFile": "client_certs\\evryka-CA.crt",
+  "keyFile": "client_certs\\evryka-key.key",
+  "secret": "__JWT_SECRET__",
+  "refreshSecret": "__JWT_REFRESH_SECRET__",
+  "expiresIn": 7200,
+  "loggerConfig": {
+    "DATA_INPUT": {
+      "enabled": false
+    },
+    "DATA_OUTPUT": {
+      "enabled": false
+    },
+    "SYSTEM_INFO": {
+      "enabled": true
+    },
+    "WARNING": {
+      "enabled": true
+    },
+    "ERROR": {
+      "enabled": true
+    }
+  }
+}

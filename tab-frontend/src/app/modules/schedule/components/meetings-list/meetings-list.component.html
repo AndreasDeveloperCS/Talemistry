@@ -1,0 +1,21 @@
+<div class="meetings-list">
+  <div class="meetings-header">
+    <h3 class="meetings-title">{{ selectedDate | date: 'EEEE, d MMMM, yyyy' }}</h3>
+  </div>
+  
+  @if(meetings.length > 0) {
+    <ng-container>
+      <div class="meetings-items">
+        @for(meeting of meetings; track meeting) {
+          <app-meeting-card 
+            [meeting]="meeting"
+            (onMeetingClick)="onMeetingClick.emit($event)">
+          </app-meeting-card>
+        }
+      </div>
+    </ng-container>
+  }
+  @else {
+    <p class="empty-message">{{ emptyMessage }}</p>
+  }
+</div>

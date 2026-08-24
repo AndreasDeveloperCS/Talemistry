@@ -1,0 +1,129 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.wizard-container {
+  margin: 0 auto;
+  padding: 0 $padding-narrow $padding-narrow;
+  position: relative;
+}
+
+.intro-screen {
+  text-align: center;
+  padding: 40px 20px;
+
+  h2 {
+    font-weight: 600;
+    margin-bottom: 15px;
+  }
+
+  p {
+    margin-bottom: 25px;
+    color: #555;
+    font-size: 16px;
+  }
+
+  button {
+    padding: 12px 20px;
+    font-size: 16px;
+  }
+}
+
+.wizard-form {
+  background: transparent;
+  border-radius: $borderRadiusMiddle;
+  padding: $padding-middle $padding-extra-wide $padding-middle $padding-middle;
+  box-shadow: var(--box-shadow-light);
+
+  .form-group {
+    margin-bottom: 18px;
+  }
+}
+
+.result-block {
+  margin-top: $margin-wide;
+  padding: $padding-middle;
+  background: transparent;
+  border-radius: $borderRadiusSemiMiddle;
+  box-sizing: 0 0 10px $pallete-0-color-14;
+  color: var(--text);
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-self: center;
+
+  h2 {
+    margin-bottom: $margin-narrow;
+  }
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-4px);
+}
+
+.btn-success {
+  display: flex;
+  justify-self: center;
+  align-items: center;
+  padding: $padding-narrow; 
+  background-color: $pallete-0-color-14;
+  color: var(--text);
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 4px;
+}
+
+.btn-primary {
+  background: $pallete-0-color-14;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+.btn-secondary {
+  display: flex;
+  justify-self: center;
+  align-items: center;
+  padding: $padding-narrow; 
+  background-color: transparent;
+  border: $border solid $pallete-0-color-12;
+  color: var(--text);
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 4px;
+  margin-bottom: $margin-middle;
+
+  &:hover:not(:disabled) {
+    transform: translateY(0px);
+    transform: translateX(-3px);
+  }
+}
+
+select {
+  appearance: none;
+  -webkit-appearance: none; 
+  -moz-appearance: none; 
+}
+
+select option {
+  color: var(--text);
+  background-color: $gradient-color-4;
+}
+
+select option:checked {
+  color: $pallete-0-color-13;
+  font-weight: bold;
+}
+
+app-loading-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+
+.add-btn {
+  height: fit-content;
+  right: 1rem;
+  bottom: 1rem;
+  position: absolute;
+}

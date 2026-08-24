@@ -1,0 +1,25 @@
+<div class="sql-result">
+    <ng-container *ngIf="rows.length; else empty">
+        <table>
+            <thead>
+                <tr>
+                    <th *ngFor="let column of columns">
+                        {{ column }}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let row of rows">
+                    <td *ngFor="let column of columns">
+                        {{ row[column] }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </ng-container>
+    <ng-template #empty>
+        <div class="empty">
+            Query returned no rows.
+        </div>
+    </ng-template>
+</div>

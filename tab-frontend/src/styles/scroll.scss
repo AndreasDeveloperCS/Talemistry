@@ -1,0 +1,44 @@
+@use 'variables' as *;
+
+::-webkit-scrollbar {
+    height: 50%;
+    width: 50%;
+    //background: transparent;
+    // padding-top: 0.5rem;
+    // padding-bottom: 0.5rem;
+}
+
+::-webkit-scrollbar-track {
+    height: 50%;
+    width: 50%;
+    // padding: 0.5rem;
+    //background: transparent;
+    border-radius: $borderRadius;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    height: 50%;
+    width: 50%;
+    // padding: 0.5rem;
+    background: $primary-half;
+    border-radius: $borderRadius;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    height: 50%;
+    width: 50%;
+    // padding: 0.5rem;
+    background: $primary-half;
+    border-radius: $borderRadius;
+}
+
+.scrollbar-hidden {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

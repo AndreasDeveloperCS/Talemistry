@@ -1,0 +1,131 @@
+<div class="opened-position-form modal hover-container toggle-switch" data-toggle="modal" data-backdrop="static"
+  data-keyboard="false">
+  <div class="container__space-between">
+    @if (canEditItem) {
+    <app-toggle-button [isActive]="position.isVerified" (toggle)="valueChanged($event)">
+    </app-toggle-button>
+    }
+    <app-like-button [positionId]="position._id">
+    </app-like-button>
+  </div>
+
+  <div id="cvDiscription ">
+
+    <div class="position-header">
+      <div class="position-title" (click)="navigateToPosition()">
+        <p class="vacancy-id">Vacancy ID:
+          {{' ('}}{{position && position.titleCode ? position.titleCode :
+          position._id ?
+          'HRP-'+ position._id.slice(-6).toUpperCase()
+          : '120256'
+          }}{{') '}}
+        </p>
+        <div class="title">
+          {{position.title}}
+        </div>
+      </div>
+      <div class="container__flex container__middle">
+        <button class="button__primary-color button-style collapsed-button" (click)="navigateToPosition()">
+          <mat-icon>how_to_reg</mat-icon>
+          <span>{{content.txtapply}}</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="position-requirements">
+      <div class="position-content-section">
+        <div class="position-content-section-content">
+          @if(positionData.creationDate) {
+          <p>
+            <span class="detail-date">
+              <mat-icon class="custom-icon">event</mat-icon>
+              {{ positionData.creationDate }}
+            </span>
+          </p>
+          }
+
+          @if(positionData.companyName) {
+          <p>
+            <span class="details" style="margin: 0.5rem 0;">
+              <mat-icon class="custom-icon">business</mat-icon>
+              <strong>{{ positionData.companyName }}</strong>
+            </span>
+          </p>
+          }
+          <div class="job-info-wrapper">
+            @if(positionData.locations) {
+            <span><mat-icon class="custom-icon">location_on</mat-icon> {{ positionData.locations }}</span>
+            }
+            @if(positionData.jobType) {
+            <span><mat-icon class="custom-icon">schedule</mat-icon> {{ positionData.jobType }}</span>
+            }
+            @if(positionData.workPlace) {
+            <span><mat-icon class="custom-icon">work</mat-icon> {{ positionData.workPlace }}</span>
+            }
+            @if(positionData.proficiencyLevel) {
+            <span><mat-icon class="custom-icon">bar_chart</mat-icon> {{ positionData.proficiencyLevel }}</span>
+            }
+            @if(positionData.cooperationType) {
+            <span><mat-icon class="custom-icon">handshake</mat-icon> {{ positionData.cooperationType }}</span>
+            }
+            @if(positionData.involvementType) {
+            <span><mat-icon class="custom-icon">how_to_reg</mat-icon> {{ positionData.involvementType }}</span>
+            }
+            @if(positionData.specificRequirements !== '') {
+            <span><mat-icon class="custom-icon">assignment_turned_in</mat-icon> {{ positionData.specificRequirements
+              }}</span>
+            }
+            @if(positionData.requiredEducation !== '') {
+            <span><mat-icon class="custom-icon">school</mat-icon> {{ positionData.requiredEducation }}</span>
+            }
+            @if(positionData.requiredCertification !== '') {
+            <span><mat-icon class="custom-icon">workspace_premium</mat-icon>{{ positionData.requiredCertification
+              }}</span>
+            }
+          </div>
+          @if(positionData.positionSkillsList.length) {
+          <div class="details">
+            <mat-icon class="custom-icon">build</mat-icon>
+            <div class="details-container">
+              <span *ngFor="let skill of positionData.positionSkillsList" class="single-detail">{{ skill }}</span>
+            </div>
+          </div>
+          }
+          @if(positionData.benefitsList.length) {
+          <div class="details">
+            <mat-icon class="custom-icon">card_giftcard</mat-icon>
+            <div class="details-container">
+              <span *ngFor="let benefit of positionData.benefitsList" class="single-detail">{{ benefit }}</span>
+              @if(positionData.compensationPackage) {
+              <span class="single-detail"><mat-icon class="custom-icon">attach_money</mat-icon>
+                {{ positionData.compensationPackage }}</span>
+              }
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="container__flex container__center">
+
+      <button class="button__primary-color button--medium collapsed-button" (click)="navigateToPosition()">
+        <mat-icon>description</mat-icon>
+        <span>{{content.txtDetails}}</span>
+      </button>
+      @if (canEditItem) {
+      <button class="button__primary-color button--medium collapsed-button" (click)="editOpenedPosition(position._id)">
+        <mat-icon>edit</mat-icon>
+        <span>{{content.txtEdit}}</span>
+      </button>
+      }
+      @if (canEditItem) {
+      <button class="button__primary-color button--medium collapsed-button"
+        (click)="deleteOpenedPosition(position._id)">
+        <mat-icon>delete</mat-icon>
+        <span>{{content.txtDelete}}</span>
+      </button>
+      }
+
+    </div>
+  </div>

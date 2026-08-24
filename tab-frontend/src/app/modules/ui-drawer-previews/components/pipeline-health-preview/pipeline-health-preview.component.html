@@ -1,0 +1,95 @@
+@if(loading) {
+  <app-sun-spinner></app-sun-spinner>
+}
+@if(!loading) {
+<div class="pipeline-health-preview">
+  <div class="pipeline-health-preview__hero">
+    <div>
+      <div class="preview-subtitle">Recruitment Intelligence</div>
+      <h1 class="preview-title">Pipeline Health</h1>
+      <div class="preview-description">
+        Conversion performance, bottlenecks, hiring velocity and recruitment insights.
+      </div>
+    </div>
+    <div class="hero-badge">
+      <mat-icon>hub</mat-icon>
+      Healthy Pipeline
+    </div>
+  </div>
+  <div class="kpi-grid">
+    @for(kpi of kpis; track kpi.label) {
+      <div class="kpi-card">
+        <div class="kpi-card__top">
+          <div class="kpi-card__icon">
+            <mat-icon>{{ kpi.icon }}</mat-icon>
+          </div>
+          <div class="kpi-card__value">{{ kpi.value }}</div>
+        </div>
+        <div class="kpi-card__label">{{ kpi.label }}</div>
+      </div>
+    }
+  </div>
+  <div class="analytics-card">
+    <div class="section-title">Funnel Conversion</div>
+    <div class="funnel-list">
+      @for(stage of funnel; track stage.stage) {
+        <div class="funnel-item clickable" (click)="openApplicantsByStage(stage.stageType, $event)">
+          <div class="funnel-item__top">
+            <div class="funnel-item__title">{{ stage.stage }}</div>
+            <div class="funnel-item__meta">{{ stage.count }} candidates · {{ stage.conversion }}%</div>
+          </div>
+          <div class="funnel-progress">
+            <div class="funnel-progress__fill" [style.width.%]="getWidth(stage.count)"
+              [style.background]="stage.color">
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+  <div class="analytics-grid">
+    <div class="analytics-card">
+      <div class="section-title">Bottlenecks</div>
+      <div class="bottleneck-list">
+        @for(item of bottlenecks; track item.stage) {
+          <div class="bottleneck-card">
+            <div class="bottleneck-card__left">
+              <div class="bottleneck-card__stage">{{ item.stage }}</div>
+              <div class="bottleneck-card__days">Avg {{ item.avgDays }} days</div>
+            </div>
+            <div class="bottleneck-card__loss">-{{ item.loss }}</div>
+          </div>
+        }
+      </div>
+    </div>
+    <div class="analytics-card">
+      <div class="section-title">AI Insights</div>
+      <div class="insight-list">
+        @for(insight of insights; track insight) {
+          <div class="insight-card">
+            <mat-icon>auto_awesome</mat-icon>
+            <span>{{ insight }}</span>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+  <div class="analytics-card">
+    <div class="section-title">Top Performing Positions</div>
+    <div class="positions-list">
+      @for(position of topPositions; track position.title) {
+        <div class="position-card clickable" (click)="openPosition(position.id)">
+          <div>
+            <div class="position-card__title">{{ position.title }}</div>
+            <div class="position-card__meta">{{ position.hires }} hires</div>
+          </div>
+          <div class="position-status"
+            [class.position-status--warning]="position.status === 'Slow Pipeline'">
+            {{ position.status }}
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>
+}

@@ -22,3 +22,18 @@ lerna-debug.log*
 # temp directory
 .temp
 .tmp
+
+# deploy credentials (kept locally / in GitHub Actions secrets only)
+github-actions-deploy
+github-actions-deploy.pub
+SERVER_KNOWN_HOSTS
+
+# backend runtime config and secrets (see *.example.json for the template)
+
+
+# TLS certs/keys and service account credentials - never commit real ones
+
+**/node_modules/
+dist/
+build/
+.next/

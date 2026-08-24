@@ -1,0 +1,27 @@
+<div class="primary-digit-container">
+    <mat-label class="new-label"><mat-icon>{{labelIcon}}</mat-icon>{{ labelText }}</mat-label>
+    <div class="container__flex container__nowrap container__full-width container__center">
+            <mat-button class="decrement" (mousedown)="startDecrement()" 
+                (mouseup)="stop()" 
+                (mouseleave)="stop()">
+                <mat-icon inline="true">remove_circle</mat-icon>
+            </mat-button>
+        
+            <input type="number"  
+                class="transparent-input"
+                [placeholder]="labelText" 
+                matInput
+                (input)="onValueChanged($event)" 
+                [min]="minValue" 
+                [max]="maxValue" 
+                [(ngModel)]="defaultValue" 
+                [formControl]="digitControl" >
+        
+        <mat-button class="increment" (mousedown)="startIncrement()" 
+        (mouseup)="stop()" 
+        (mouseleave)="stop()">
+            <mat-icon inline="true">add_circle</mat-icon>
+        </mat-button>
+
+    </div>
+</div>

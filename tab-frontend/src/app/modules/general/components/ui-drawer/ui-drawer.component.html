@@ -1,0 +1,14 @@
+<div class="drawer-backdrop" *ngIf="isOpen$ | async" (click)="close()"></div>
+<div class="drawer-panel" *ngIf="isOpen$ | async">
+  <div class="drawer-panel__header">
+    <button *ngIf="hasHistory$ | async" mat-icon-button (click)="back()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <button class="drawer-close-btn" (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div class="drawer-panel__content scrollbar-hidden">
+    <ng-template #drawerContent></ng-template>
+  </div>
+</div>

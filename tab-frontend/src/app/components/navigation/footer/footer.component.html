@@ -1,0 +1,21 @@
+@if(showFooter$ | async) {
+<div class="footer">
+    <div class="footer-logo">TALEMISTRY - Talent Acquisition Platform</div>
+    <p>Revolutionizing talent acquisition with artificial intelligence</p>
+    <p>
+        <span class="card" (click)="navigateToPrivacyPolicy()" routerLinkActive="active" ariaCurrentWhenActive="page">
+            Privacy Policy
+        </span>
+    </p>
+    <p>
+        <span class="card" (click)="navigateToPositions()" routerLinkActive="active" ariaCurrentWhenActive="page">
+            Positions
+        </span>
+    </p>
+    <p>
+        <span class="card" (click)="navigateToPricingPlans()" routerLinkActive="active" ariaCurrentWhenActive="page">
+            Pricing Plans
+        </span>
+    </p>
+</div>
+}

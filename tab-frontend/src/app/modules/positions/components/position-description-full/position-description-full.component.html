@@ -1,0 +1,25 @@
+@if(isLoading) {
+<app-loading-spinner></app-loading-spinner>
+} @else {
+<div class="position-container">
+  <div class="position-details container__limited-width bg-right">
+    <div class="position-content">
+      <app-position-detailed-info [isAuthorised]="isAuthorised" [positionData]="positionData"
+        (scrollToApply)="scrollToApplyForm()">
+      </app-position-detailed-info>
+      @if(hasAlreadyApplied) {
+        <div class="already-applied-box" #applyForm>
+          <mat-icon>info</mat-icon>
+          You have already applied for this position.
+        </div>
+      } @else {
+        <app-position-apply-form #applyForm 
+            [position]="positionData.position" 
+            [positionData]="positionData"
+            (applicationSubmitted)="onApplicationSubmitted()">
+        </app-position-apply-form>
+      }
+    </div>
+  </div>
+</div>
+}

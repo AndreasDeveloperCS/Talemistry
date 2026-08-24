@@ -1,0 +1,180 @@
+<!-- <div class="container__cv-dialog toggle-switch"> -->
+<button mat-icon-button class="form-button exit-button" (click)="onCancel()">
+  <mat-icon>
+    <svg width="1.5rem" height="1.5rem" viewBox="0 0 108 107" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M27 26.75L54 53.5L81 26.75" stroke="white" stroke-width="10" stroke-linecap="round" />
+      <path d="M27 80.25L54 53.5L81 80.25" stroke="white" stroke-width="10" stroke-linecap="round" />
+    </svg>
+  </mat-icon>
+</button>
+<div class="universal-input dialog-padding">
+  <h3 class="dialog-header container__center" style="margin-bottom: 1rem;">CV Form</h3>
+  <form [formGroup]="candidateInfoForm">
+    <div class="form__flex container__flex container__wrap container__row">
+      <div class="container__column container__info">
+        <mat-form-field>
+          <mat-label class="new-label">{{ content.txtName }}</mat-label>
+          <input class="transparent-input" autofocus
+            [class]="candidateInfoForm.controls.firstname?.invalid ? 'invalid' : 'valid'" matInput
+            [placeholder]="content.txtName" name="firstname" formControlName="firstname"
+            [value]="data.info.candidateInfo.firstname" [(ngModel)]="data.info.candidateInfo.firstname" required />
+          @if (candidateInfoForm.controls.firstname?.invalid) {
+          <mat-error>
+            <div class="errors">
+              @if (candidateInfoForm.controls.firstname?.errors) {
+              <p>{{content.txtFieldRequired}}</p>
+              }
+            </div>
+          </mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label class="new-label">{{ content.txtSurname }}</mat-label>
+          <input autofocus class="transparent-input" autocomplete="on" name="lastname" formControlName="lastname"
+            [class]="candidateInfoForm.controls.lastname?.invalid ? 'invalid' : 'valid'" matInput
+            [placeholder]="content.txtSurname" [value]="data.info.candidateInfo.lastname"
+            [(ngModel)]="data.info.candidateInfo.lastname" required />
+          @if (candidateInfoForm.controls.lastname?.invalid) {
+          <mat-error>
+            <div class="errors">
+              @if (candidateInfoForm.controls.lastname?.errors) {
+              <p>{{content.txtFieldRequired}}</p>
+              }
+            </div>
+          </mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label class="new-label">{{ content.txtPhoneNumber }}</mat-label>
+          <input autofocus class="transparent-input" autocomplete="om" name="phone" formControlName="phone"
+            [class]="candidateInfoForm.controls.phone?.invalid ? 'invalid' : 'valid'" matInput
+            [placeholder]="content.txtPhone" [value]="data.info.candidateInfo.phone"
+            [(ngModel)]="data.info.candidateInfo.phone" required />
+          @if (candidateInfoForm.controls.phone?.invalid) {
+          <mat-error>
+            <div class="errors">
+              @if (candidateInfoForm.controls.phone?.errors) {
+              <p>{{content.txtFieldRequired}}</p>
+              }
+              @if (candidateInfoForm.controls.phone?.errors) {
+              <p>&nbsp;{{content.txtValidationPhoneNumber}}</p>
+              }
+            </div>
+          </mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label class="new-label">{{ content.txtEmail }}</mat-label>
+          <input autofocus class="transparent-input" type="email" name="email" formControlName="email"
+            [class]="candidateInfoForm.controls.email?.invalid ? 'invalid' : 'valid'" autocomplete="on" matInput
+            [value]="data.info.candidateInfo.email" [placeholder]="content.txtEmail"
+            [(ngModel)]="data.info.candidateInfo.email" required />
+          @if (candidateInfoForm.controls.email?.invalid) {
+          <mat-error>
+            <div class="errors">
+              @if (candidateInfoForm.controls.email?.errors) {
+              <p>{{content.txtFieldRequired}}</p>
+              }
+              @if (candidateInfoForm.controls.email?.errors) {
+              <p>&nbsp;{{content.txtValidationEmailError}}</p>
+              }
+            </div>
+          </mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="container__item-fluid">
+        <mat-form-field #parent>
+          <label class="new-label">{{ content.txtCoverLetter }}</label>
+          <textarea class="transparent-input" matInput rows="15" formControlName="coverLetterText" cdkTextareaAutosize
+            [placeholder]="content.txtCoverLetter" cdkAutosizeMinRows="3" cdkAutosizeMaxRows="25" name="coverLetterText"
+            [(ngModel)]="data.info.coverLetterText"></textarea>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+
+  <div class="btn-container container__column">
+    <div class="import-btn-container container__flex container__row">
+      <div class="import-btn-container-items container__left">
+        <!-- <span>CV File:</span> -->
+        <button class="button__primary-color button--medium btn-text-icon" (click)="cvFileInput.click()"
+          style="width: 16rem;">
+          <mat-icon>attach_file</mat-icon>{{ content.addCvText }}
+        </button>
+      </div>
+
+      <div class="import-title container__row">
+        <input mat-dialog-title [readonly]="true" class="transparent-input"
+          [class.empty-animation]="cvFileName == '' || cvFileName == undefined"
+          [class.file-selected]="!(cvFileName == '' || cvFileName == undefined)"
+          [value]="cvFileName == '' || cvFileName == undefined ? content.txtSelectCVPlaceholder: cvFileName">
+      </div>
+
+      <input hidden (change)="onCVFileSelected($event)" [accept]="extensions" #cvFileInput type="file"
+        class="import-btn-input">
+    </div>
+    <br />
+    <div class="import-btn-container container__flex container__row">
+      <div class="import-btn-container-items container__left">
+        <!-- <span>Cover Letter Attachment:</span> -->
+        <button class="button__primary-color button--medium btn-text-icon" (click)="coverLetterFileInput.click()"
+          style="width: 16rem;">
+          <mat-icon>edit_note</mat-icon>{{ content.txtCoverLetter }}
+        </button>
+      </div>
+      <div class="import-title container__row">
+        <input mat-dialog-title [readonly]="true" class="transparent-input"
+          [value]="coverLetterFileName == '' || coverLetterFileName == undefined ? content.txtSelectCoverLetterPlaceholder : coverLetterFileName"
+          [class]="coverLetterFileName == '' || coverLetterFileName == undefined ? 'empty-animation' : 'file-selected' ">
+      </div>
+      <input hidden (change)="onCoverLetterFileSelected($event)" [accept]="extensions" #coverLetterFileInput type="file"
+        class="import-btn-input">
+    </div>
+  </div>
+
+  <div mat-dialog-actions [align]="'center'">
+
+    <div class="container__baseline container__column container__center">
+      <!-- <div class="recaptcha button-centralized">
+          <re-captcha id="recaptcha" name="recaptcha" [(ngModel)]="data.info.candidateInfo.recaptcha" [siteKey]="capchaKey"
+            formControlName="recaptcha" required class="button-centralized" [class.is-invalid]="candidateInfoForm.controls.recaptcha?.invalid
+            && (candidateInfoForm.controls.recaptcha?.dirty
+            || candidateInfoForm.controls.recaptcha?.touched)">
+          </re-captcha>
+        </div> -->
+      <!-- <div class="recaptcha">
+          <re-captcha id="recaptcha" name="recaptcha" [(ngModel)]="data.info.candidateInfo.recaptcha"
+            [siteKey]="capchaKey" formControlName="recaptcha" required [class.is-invalid]="candidateInfoForm.controls.recaptcha?.invalid
+              && (candidateInfoForm.controls.recaptcha?.dirty
+              || candidateInfoForm.controls.recaptcha?.touched)">
+          </re-captcha>
+        </div> -->
+      <a (click)="openPrivacyPolicy()" class="privacy-link btn-scale" routerLinkActive="active"
+        ariaCurrentWhenActive="page">
+        * Privacy Policy Agreement
+      </a>
+      
+      <app-confirmation-plate [confirmationText]="gdprContent.confirmationText" [refusionText]="gdprContent.rejectText"
+        [amAgree]="gdprConfirmationStatus" (gdprConfirmationChanged)="onGdprConfirmationChanged($event)">
+      </app-confirmation-plate>
+
+      <div class="container__flex container__wrap container__row container__centralized">
+        <button class="button__primary-color button--small" type="submit" (click)="onApply()"
+          [disabled]="!candidateInfoForm.valid || !gdprConfirmationStatus || !isSelectedCv" mat-button
+          [mat-dialog-close]="data">
+          {{ content.uploadText }}
+        </button>
+        <button class="button__primary-color button--small" (click)="onCancel()" mat-button mat-dialog-close>
+          {{ content.cancelText }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- </div> -->

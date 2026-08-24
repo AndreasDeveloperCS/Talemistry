@@ -1,0 +1,48 @@
+<div class="container__flex" style="justify-content: center;">
+  <div class="big-calendar">
+    <div class="calendar-header">
+      <div class="calendar-header-left">
+        <div class="month-nav">
+          <button class="nav-btn" (click)="navigateMonth('prev')">
+            <mat-icon>navigate_before</mat-icon>
+          </button>
+          <h2 class="calendar-title">{{ currentDate | date:'MMMM yyyy' }}</h2>
+          <button class="nav-btn" (click)="navigateMonth('next')">
+            <mat-icon>navigate_next</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="calendar-grid">
+      <div class="weekdays-row">
+        @for(day of weekDays; track day) {
+        <div class="weekday">{{ day }}</div>
+        }
+      </div>
+      <!-- 'past-day': isPastDate(day.date), -->
+      <div class="days-grid">
+        @for(day of calendarDays; track day) {
+        <div [ngClass]="{
+            'day-cell': true,
+            'not-current-month': !day.isCurrentMonth,
+            'today': day.isToday,
+            'selected': selectedDay?.date?.toDateString() === day.date.toDateString(),
+            'current-month': day.isCurrentMonth && !day.isToday
+          }" (click)="onDayClick(day)">
+          <div class="day-header">
+            <span class="day-number">{{ day.date | date:'d' }}</span>
+          </div>
+          <div class="meeting-dot" *ngIf="day.meetings && day.meetings.length > 0"></div>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="container__column meetings-block">
+    <app-meetings-list *ngIf="selectedDay" [meetings]="selectedDay.meetings" [selectedDate]="selectedDay.date"
+      (onMeetingClick)="onMeetingClick.emit($event)">
+    </app-meetings-list>
+  </div>
+</div>

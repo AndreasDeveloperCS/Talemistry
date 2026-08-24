@@ -1,0 +1,123 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.video-interview-container {
+  //max-width: 560px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 24px;
+  font-family: Arial, sans-serif;
+  height: 100%;
+  width: 100%;
+}
+
+.title {
+  margin-bottom: 12px;
+}
+
+.question-box {
+  margin-bottom: 20px;
+  padding: $padding-middle;
+  background: transparent;
+  border: 3px solid $pallete-0-color-14;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0 auto 1rem auto;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: $gap-micro;
+}
+
+.video-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 90%;
+  height: 83%;
+  margin: 0 auto $margin-middle auto;
+}
+
+video {
+  height: 100%;
+  width: 100%;
+  aspect-ratio: 2 / 1;
+  border-radius: 12px;
+  background: #000;
+  border: 1px solid $pallete-0-color-11;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.start-btn,
+.stop-btn {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: $gap-micro;
+}
+
+.start-btn {
+  background: #4CAF50;
+  color: var(--text);
+}
+
+.start-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.stop-btn {
+  background: #E53935;
+  color: var(--text);
+}
+
+.stop-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.recording-timer {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  color: var(--text);
+  font-size: 20px;
+  font-weight: bold;
+  text-shadow: 0 0 6px rgba(0,0,0,0.7);
+  pointer-events: none;
+}
+
+.countdown {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--text);
+  font-size: 72px;
+  font-weight: bold;
+  text-shadow: 0 0 8px rgba(0,0,0,0.7); 
+  pointer-events: none; 
+  animation: fade 1s linear;
+}
+
+.hint {
+  font-size: 1.1rem;
+  color: $pallete-0-color-14;
+  text-decoration: underline;
+}
+
+@keyframes fade {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}

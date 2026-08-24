@@ -1,0 +1,487 @@
+<div class="panel">
+  <div class="panel-header">
+    <div class="panel-title">
+      <mat-icon class="material-icons icon-sm text-primary">analytics</mat-icon>
+      <span>Feedback & Content</span>
+    </div>
+    @if(selectedInterview) {
+    <span class="badge" [ngClass]="getStageStatusClass(finalDecisionForm.finalDecision)">
+      {{ finalDecisionForm.finalDecision ? (finalDecisionForm.finalDecision | titlecase) : 'Future' }}
+    </span>
+    }
+  </div>
+
+  <!-- Draft -->
+  @if(isLoading) {
+  <app-sun-spinner></app-sun-spinner>
+  }
+  @if(!isLoading) {
+  <div class="panel-content scrollbar-hidden">
+
+    <ng-container *ngIf="selectedInterview; else noFeedback">
+      <div class="content-section" *ngIf="selectedInterview?.name === 'Screening'">
+        <div class="section-body">
+          <div class="qa-section"
+            *ngIf="screeningResponse?.answers &&screeningResponse.answers.length > 0; else emptyScreening">
+            <h4 class="list-title">
+              <mat-icon class="material-icons icon-sm icon-orange">quiz</mat-icon>
+              Screening Questions & Answers
+            </h4>
+            <div class="qa-list">
+              <div *ngFor="let qa of screeningResponse.answers; let i = index" class="qa-item"
+                [class.expanded]="isQuestionExpanded(i)">
+                <button class="qa-header" (click)="toggleQuestion(i)">
+                  <mat-icon class="material-icons icon-sm text-primary">quiz</mat-icon>
+                  <span class="qa-question">{{ qa.questionText }}</span>
+                  <mat-icon class="material-icons expand-icon">
+                    {{ isQuestionExpanded(i) ? 'expand_less' : 'expand_more' }}
+                  </mat-icon>
+                </button>
+                <div *ngIf="isQuestionExpanded(i)" class="qa-answer">
+                  <ng-container *ngIf="isArray(qa.value); else singleValue">
+                    {{ formatArray(qa.value) }}
+                  </ng-container>
+                  <ng-template #singleValue>
+                    {{ qa.value.text || qa.value }}
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ng-template #emptyScreening>
+            <div class="empty-state">
+              Screening form not completed yet
+            </div>
+          </ng-template>
+        </div>
+      </div>
+
+      <div class="content-section" *ngIf="selectedInterview?.name === 'Interview'">
+        @if(!isMeetingScheduled) {
+          <div class="interview-block invitation">
+            <div class="status">Invitation sent</div>
+            <div class="title">Interview Invitation</div>
+            <div class="text">
+              You have invited the applicant to schedule an interview. They can now choose an available time slot.
+            </div>
+            <!-- <a href="#" class="action-link">View scheduling page</a> -->
+          </div>
+        }
+        @else {
+          <div class="interview-block scheduled">
+            <div class="status">Scheduled</div>
+            <div class="title">Interview Booked ({{invitation?.meetingId}})</div>
+            <div class="text">
+              The applicant has scheduled an interview for 
+              <span class="date">{{ scheduledMeeting?.startTime | date: 'fullDate' }},   
+                {{ scheduledMeeting?.startTime | date: 'shortTime' }} – {{ scheduledMeeting?.endTime | date: 'shortTime' }}
+              </span>
+            </div>
+            <span class="action-link" (click)="viewMeetingDetails()">View details</span>
+          </div>
+        }
+      </div>
+
+      <div class="content-section">
+        <!-- Stage Status -->
+        <div class="section-header">
+          <mat-icon class="material-icons icon-sm text-accent">verified</mat-icon>
+          <h3>{{ stageFeedbacks[0]!.source | titlecase }} Feedback</h3>
+          <span class="badge" [ngClass]="getStageStatusClass(mapFeedbackToStageStatus(stageFeedbacks[0].status))">
+            {{ stageFeedbacks[0].status | titlecase }}
+          </span>
+        </div>
+
+        <div class="feedback-form">
+          <!-- CV Review -->
+          <ng-container *ngIf="stageFeedbacks[0].stageType === 'cv_review'">
+
+            <!-- Feedback Status -->
+            <div class="form-group">
+              <label class="custom-label" for="cv-feedback-status">Feedback Status</label>
+              <select id="cv-feedback-status" [(ngModel)]="stageFeedbacks[0]!.status" class="custom-select-small">
+                <option *ngFor="let status of getEnumValues(FeedbackStatus)" [value]="status">
+                  {{ status | titlecase }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Score -->
+            <div class="form-group">
+              <label class="custom-label" for="cv-score">Score</label>
+              <input id="cv-score" type="number" [(ngModel)]="editCv!.score" placeholder="Enter score"
+                class="custom-input" min="1" max="10" />
+            </div>
+
+            <!-- Recommendation -->
+            <div class="form-group">
+              <label class="custom-label" for="cv-recommendation">Recommendation</label>
+              <select id="cv-recommendation" [(ngModel)]="editCv!.recommendation" class="custom-select-small">
+                <option *ngFor="let status of getEnumValues(StageStatus)" [value]="status">
+                  {{ status | titlecase }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Rejection Reason -->
+            <div class="form-group" *ngIf="editCv!.recommendation === StageStatus.failed">
+              <label class="custom-label" for="cv-rejection">Rejection Reason</label>
+              <select id="cv-rejection" [(ngModel)]="editCv!.rejectionReason" class="custom-select-small">
+                <option *ngFor="let reason of getEnumValues(RejectionReasons)" [value]="reason">
+                  {{ getEnumLabel(reason) }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Comments -->
+            <div class="form-group">
+              <label class="custom-label" for="cv-comments">Comments</label>
+              <textarea id="cv-comments" [(ngModel)]="editCv!.comments" placeholder="Enter comments"
+                class="custom-input">
+                </textarea>
+            </div>
+
+          </ng-container>
+
+          <!-- Screening -->
+          <ng-container *ngIf="stageFeedbacks[0].stageType === 'screening'">
+            <!-- Feedback Status -->
+            <div class="form-group">
+              <label class="custom-label" for="screening-feedback-status">Feedback Status</label>
+              <select id="screening-feedback-status" [(ngModel)]="stageFeedbacks[0]!.status" class="custom-select-small">
+                <option *ngFor="let status of getEnumValues(FeedbackStatus)" [value]="status">
+                  {{ status | titlecase }}
+                </option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="custom-label" for="screening-score">Score</label>
+              <input id="screening-score" min="1" max="10" type="number" [(ngModel)]="editScreening!.score"
+                class="custom-input" />
+            </div>
+
+            <!-- <div class="form-group">
+              <label class="custom-label" for="screening-recommendation">Recommendation</label>
+              <select id="screening-recommendation" [(ngModel)]="editScreening!.recommendation"
+                class="custom-select-small">
+                <option *ngFor="let status of getEnumValues(StageStatus)" [value]="status">{{ status | titlecase }}
+                </option>
+              </select>
+            </div> -->
+
+            <div class="form-group">
+              <label class="custom-label" for="screening-notes">Notes</label>
+              <textarea id="screening-notes" [(ngModel)]="editScreening!.notes" class="custom-input"></textarea>
+            </div>
+
+            <!-- Recommendation -->
+            <div class="form-group">
+              <label class="custom-label" for="screening-recommendation">Recommendation</label>
+              <select id="screening-recommendation" [(ngModel)]="editScreening!.recommendation"
+                class="custom-select-small">
+                <option *ngFor="let status of getEnumValues(StageStatus)" [value]="status">
+                  {{ status | titlecase }}
+                </option>
+              </select>
+            </div>
+          </ng-container>
+
+          <!-- Interview -->
+          <ng-container *ngIf="stageFeedbacks[0].stageType === 'interview'">
+            <!-- Feedback Status -->
+            <div class="form-group">
+              <label class="custom-label" for="interview-feedback-status">Feedback Status</label>
+              <select id="interview-feedback-status" [(ngModel)]="stageFeedbacks[0]!.status" class="custom-select-small">
+                <option *ngFor="let status of getEnumValues(FeedbackStatus)" [value]="status">
+                  {{ status | titlecase }}
+                </option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="custom-label" for="interview-score">Score</label>
+              <input id="interview-score" min="1" max="10" type="number" [(ngModel)]="editInterview!.score"
+                class="custom-input" />
+            </div>
+
+            <div class="form-group">
+              <label class="custom-label" for="interview-strengths">Strengths</label>
+              <textarea id="interview-strengths" [(ngModel)]="editInterview!.strengths" class="custom-input"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="custom-label" for="interview-weaknesses">Weaknesses</label>
+              <textarea id="interview-weaknesses" [(ngModel)]="editInterview!.weaknesses"
+                class="custom-input"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="custom-label" for="interview-recommendation">Recommendation</label>
+              <select id="interview-recommendation" [(ngModel)]="editInterview!.recommendation"
+                class="custom-select-small">
+                <option *ngFor="let status of getEnumValues(StageStatus)" [value]="status">{{ status | titlecase }}
+                </option>
+              </select>
+            </div>
+          </ng-container>
+
+          <!-- Assessment -->
+          <ng-container *ngIf="stageFeedbacks[0].stageType === 'assessment'">
+            <!-- Feedback Status -->
+            <div class="form-group">
+              <label class="custom-label" for="assessment-feedback-status">Feedback Status</label>
+              <select id="assessment-feedback-status" [(ngModel)]="stageFeedbacks[0]!.status" class="custom-select-small">
+                <option *ngFor="let status of getEnumValues(FeedbackStatus)" [value]="status">
+                  {{ status | titlecase }}
+                </option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="custom-label" for="assessment-score">Score</label>
+              <input id="assessment-score" min="1" max="10" type="number" [(ngModel)]="editAssessment!.score"
+                class="custom-input" />
+            </div>
+
+            <div class="form-group">
+              <label class="custom-label" for="assessment-maxScore">Max Score</label>
+              <input id="assessment-maxScore" min="1" max="10" type="number" [(ngModel)]="editAssessment!.maxScore"
+                class="custom-input" />
+            </div>
+
+            <div class="form-group">
+              <label class="custom-label" for="assessment-notes">Notes</label>
+              <textarea id="assessment-notes" [(ngModel)]="editAssessment!.notes" class="custom-input"></textarea>
+            </div>
+
+            <!-- Recommendation -->
+            <div class="form-group">
+              <label class="custom-label" for="assessment-recommendation">Recommendation</label>
+              <select id="assessment-recommendation" [(ngModel)]="editAssessment!.recommendation"
+                class="custom-select-small">
+                <option *ngFor="let status of getEnumValues(StageStatus)" [value]="status">
+                  {{ status | titlecase }}
+                </option>
+              </select>
+            </div>
+          </ng-container>
+
+          <!-- Save button -->
+          <button class="save-button" (click)="saveFeedback($event)">Save</button>
+        </div>
+      </div>
+
+      <div class="content-section">
+        <div class="section-header">
+          <mat-icon class="material-icons icon-sm text-accent">verified</mat-icon>
+          <h3>Final Stage Decision</h3>
+          <span class="badge" [ngClass]="getStageStatusClass(finalDecisionForm.finalDecision)">
+            {{ finalDecisionForm.finalDecision ? (finalDecisionForm.finalDecision | titlecase) : 'Future' }}
+          </span>
+        </div>
+
+        <div class="feedback-form">
+          <div class="form-group">
+            <label class="custom-label">Status</label>
+            <select class="custom-select-small" [(ngModel)]="finalDecisionForm.finalDecision">
+              <option *ngFor="let status of getEnumValues(StageStatus)" [value]="status">
+                {{ status | titlecase }}
+              </option>
+            </select>
+          </div>
+
+          <ng-container *ngIf="finalDecisionForm.finalDecision === StageStatus.failed">
+            <div class="form-group">
+              <label class="custom-label">Rejection reason</label>
+              <select class="custom-select-small" [(ngModel)]="finalDecisionForm.finalRejectionReason">
+                <option *ngFor="let reason of getEnumValues(RejectionReasons)" [ngValue]="reason">
+                  {{ reason }}
+                </option>
+              </select>
+            </div>
+          </ng-container>
+
+          <div class="form-group">
+            <label class="custom-label">Notes</label>
+            <textarea class="custom-input" [(ngModel)]="finalDecisionForm.finalNotes"></textarea>
+          </div>
+
+          <button class="save-button" (click)="saveFinalDecision()">Save decision</button>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #noFeedback>
+      <div class="empty-state">
+        <mat-icon class="material-icons icon-lg">analytics</mat-icon>
+        <p>Select an interview to view feedback</p>
+      </div>
+    </ng-template>
+  </div>
+  }
+  <!-- Draft -->
+
+  <div class="panel-content scrollbar-hidden" style="display: none;">
+    <ng-container *ngIf="feedback && selectedInterview; else noFeedback">
+      <!-- AI Analysis -->
+      <div *ngIf="feedback.aiAnalysis" class="content-section">
+        <div class="section-header">
+          <mat-icon class="material-icons icon-sm text-primary">psychology</mat-icon>
+          <h3>AI Analysis</h3>
+          <div class="score-badge" *ngIf="feedback.aiAnalysis.overallScore > 0">
+            {{ feedback.aiAnalysis.overallScore }}/100
+          </div>
+        </div>
+
+        <div class="section-body">
+          <p class="summary-text">{{ feedback.aiAnalysis.summary }}</p>
+
+          <div *ngIf="feedback.aiAnalysis.strengths.length > 0" class="list-section">
+            <h4 class="list-title">
+              <mat-icon class="material-icons icon-sm text-success">thumb_up</mat-icon>
+              Strengths
+            </h4>
+            <ul class="check-list">
+              <li *ngFor="let strength of feedback.aiAnalysis.strengths">
+                <mat-icon class="material-icons icon-sm">check</mat-icon>
+                {{ strength }}
+              </li>
+            </ul>
+          </div>
+
+          <div *ngIf="feedback.aiAnalysis.improvements.length > 0" class="list-section">
+            <h4 class="list-title">
+              <mat-icon class="material-icons icon-sm text-warning">lightbulb</mat-icon>
+              Areas for Improvement
+            </h4>
+            <ul class="check-list improvements">
+              <li *ngFor="let improvement of feedback.aiAnalysis.improvements">
+                <mat-icon class="material-icons icon-sm">arrow_forward</mat-icon>
+                {{ improvement }}
+              </li>
+            </ul>
+          </div>
+
+          <!-- Q&A Section -->
+          <div *ngIf="feedback.aiAnalysis.questionsAnswers.length > 0" class="qa-section">
+            <h4 class="list-title">
+              <mat-icon class="material-icons icon-sm text-primary">quiz</mat-icon>
+              Questions & Answers
+            </h4>
+            <div class="qa-list">
+              <div *ngFor="let qa of feedback.aiAnalysis.questionsAnswers; let i = index" class="qa-item"
+                [class.expanded]="isQuestionExpanded(i)">
+                <button class="qa-header" (click)="toggleQuestion(i)">
+                  <span class="qa-question">{{ qa.question }}</span>
+                  <div class="qa-rating">
+                    <mat-icon *ngFor="let filled of getRatingStars1(qa.rating)" class="material-icons star"
+                      [class.filled]="filled">star</mat-icon>
+                  </div>
+                  <mat-icon class="material-icons expand-icon">
+                    {{ isQuestionExpanded(i) ? 'expand_less' : 'expand_more' }}
+                  </mat-icon>
+                </button>
+                <div *ngIf="isQuestionExpanded(i)" class="qa-answer">
+                  {{ qa.answer }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Expert Review -->
+      <div *ngIf="feedback.expertReview" class="content-section">
+        <div class="section-header">
+          <mat-icon class="material-icons icon-sm text-accent">verified</mat-icon>
+          <h3>Expert Review</h3>
+          <span class="badge" [ngClass]="getRecommendationClass(feedback.expertReview.recommendation)">
+            {{ getRecommendationLabel(feedback.expertReview.recommendation) }}
+          </span>
+        </div>
+
+        <div class="section-body">
+          <div class="reviewer-info">
+            <mat-icon class="material-icons icon-sm">person</mat-icon>
+            <span>{{ feedback.expertReview.reviewer }}</span>
+            <div class="star-rating">
+              <mat-icon *ngFor="let filled of getRatingStars1(feedback.expertReview.rating)" class="material-icons star"
+                [class.filled]="filled">star</mat-icon>
+            </div>
+          </div>
+          <p class="comment-text">{{ feedback.expertReview.comments }}</p>
+        </div>
+      </div>
+
+      <!-- Interviewer Feedback -->
+      <div *ngIf="feedback.interviewerFeedback" class="content-section">
+        <div class="section-header">
+          <mat-icon class="material-icons icon-sm text-primary">rate_review</mat-icon>
+          <h3>Interviewer Feedback</h3>
+        </div>
+
+        <div class="section-body">
+          <div class="reviewer-info">
+            <mat-icon class="material-icons icon-sm">person</mat-icon>
+            <span>{{ feedback.interviewerFeedback.interviewer }}</span>
+            <div class="star-rating">
+              <mat-icon *ngFor="let filled of getRatingStars1(feedback.interviewerFeedback.rating)"
+                class="material-icons star" [class.filled]="filled">star</mat-icon>
+            </div>
+          </div>
+          <p class="comment-text">{{ feedback.interviewerFeedback.notes }}</p>
+
+          <div *ngIf="feedback.interviewerFeedback.technicalScore !== undefined" class="score-grid">
+            <div class="score-item">
+              <span class="score-label">Technical</span>
+              <div class="score-bar">
+                <div class="score-fill" [style.width.%]="feedback.interviewerFeedback.technicalScore * 20"></div>
+              </div>
+              <span class="score-value">{{ feedback.interviewerFeedback.technicalScore }}/5</span>
+            </div>
+            <div *ngIf="feedback.interviewerFeedback.communicationScore !== undefined" class="score-item">
+              <span class="score-label">Communication</span>
+              <div class="score-bar">
+                <div class="score-fill" [style.width.%]="feedback.interviewerFeedback.communicationScore * 20"></div>
+              </div>
+              <span class="score-value">{{ feedback.interviewerFeedback.communicationScore }}/5</span>
+            </div>
+            <div *ngIf="feedback.interviewerFeedback.cultureFitScore !== undefined" class="score-item">
+              <span class="score-label">Culture Fit</span>
+              <div class="score-bar">
+                <div class="score-fill" [style.width.%]="feedback.interviewerFeedback.cultureFitScore * 20"></div>
+              </div>
+              <span class="score-value">{{ feedback.interviewerFeedback.cultureFitScore }}/5</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resources -->
+      <div *ngIf="feedback.recordingUrl || feedback.liveCodingUrl" class="content-section">
+        <div class="section-header">
+          <mat-icon class="material-icons icon-sm text-primary">folder</mat-icon>
+          <h3>Resources</h3>
+        </div>
+
+        <div class="section-body resources-grid">
+          <button *ngIf="feedback.recordingUrl" class="resource-btn" (click)="openLink(feedback.recordingUrl)">
+            <mat-icon class="material-icons">play_circle</mat-icon>
+            <span>View Recording</span>
+          </button>
+          <button *ngIf="feedback.liveCodingUrl" class="resource-btn" (click)="openLink(feedback.liveCodingUrl)">
+            <mat-icon class="material-icons">code</mat-icon>
+            <span>Live Coding Session</span>
+          </button>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-template #noFeedback>
+      <div class="empty-state">
+        <mat-icon class="material-icons icon-lg">analytics</mat-icon>
+        <p>Select an interview to view feedback</p>
+      </div>
+    </ng-template>
+  </div>
+</div>

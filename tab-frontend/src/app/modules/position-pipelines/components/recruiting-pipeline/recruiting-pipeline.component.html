@@ -1,0 +1,87 @@
+<div class="pipeline-block">
+    <!-- <h2><mat-icon>miscellaneous_services</mat-icon>{{ content.txtPipelinesSettings }}</h2> -->
+    <div class="general-container">
+        <div class="pipeline-header">
+            <h3>{{ content.txtRecruitingPipeline }}</h3>
+            <button class="edit-button" [class.disabled]="isEditMode" [disabled]="isEditMode" (click)="openEditMode()">
+                <mat-icon>edit</mat-icon>
+            </button>
+        </div>
+        @if(isEditMode) {
+        <div class="edit-header">
+            <h5>Edit recruiting pipeline</h5>
+            <button class="close-edit-button" (click)="closeEditMode()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+        }
+        <div cdkDropList class="tile-container" [class.edit-mode]="isEditMode" (cdkDropListDropped)="drop($event)"
+            (cdkDragStarted)="onDragStart()" (cdkDragEnded)="onDragEnd()">
+            @for (stage of pipeline; track stage) {
+            <div class="tile" cdkDrag [class.edit-mode]="isEditMode" [cdkDragDisabled]="isFixed(stage)">
+                <div class="tile-main-info" [class.edit-mode]="isEditMode">
+                    @if(!isFixed(stage) && isEditMode) {
+                    <mat-icon cdkDragHandle [class.edit-mode]="isEditMode" class="drag-handle">
+                        drag_indicator
+                    </mat-icon>
+                    }
+                    <mat-icon>{{ stage.icon }}</mat-icon>
+                    <span>{{ stage.name }}</span>
+                </div>
+                @if(!isFixed(stage) && isEditMode) {
+                <div class="edit-delete-buttons" [class.edit-mode]="isEditMode">
+                    <button class="close-edit-button" [class.disabled-mode]="isEditFormVisible"
+                        (click)="openEditStageForm(stage)">
+                        <mat-icon>edit</mat-icon><span class="btn-lbl">Edit</span>
+                    </button>
+                    <button class="close-edit-button" [class.disabled-mode]="isEditFormVisible">
+                        <mat-icon>delete</mat-icon><span class="btn-lbl">Delete</span>
+                    </button>
+                </div>
+                }
+            </div>
+            @if(isEditFormVisible && selectedStage !=undefined && selectedStage === stage && isEditMode) {
+            <form [formGroup]="editStageForm" class=" edit-stage-form" [class.visible]="isEditFormVisible">
+                <div class="container__flex container__space-between">
+                    <div class="editStageField">
+                        <mat-form-field class="">
+                            <mat-label>Stage Name</mat-label>
+                            <input matInput formControlName="stageName" required>
+                            @if(editStageForm.get('stageName')?.hasError('required')) {
+                            <mat-error>Stage Name is <strong>required</strong></mat-error>
+                            }
+                        </mat-form-field>
+                    </div>
+                    <div class="editStageField">
+                        <mat-select class="container__full-width">
+                            <mat-label>Stage Type</mat-label>
+                            <mat-select-trigger>
+                                <div class="container__middle container__end">
+                                    <span>{{ selectedStage.name }}</span>
+                                </div>
+                            </mat-select-trigger>
+                            <input class="dropdown-filter container__full-width" placeholder="Stage Type"
+                                formControlName="stageType" />
+                            <div class="input-group__dropdown">
+                                @for (option of pipelineStages; track option) {
+                                <mat-option [value]="option" class="container__middle">
+                                    {{option}}
+                                </mat-option>
+                                }
+                            </div>
+                        </mat-select>
+                    </div>
+                </div>
+                <div class="edit-form-buttons">
+                    <button class="button__primary-color button--small">Save</button>
+                    <button class="button__primary-color button--small" (click)="closeEditStageForm()">Cancel</button>
+                </div>
+            </form>
+            }
+            }
+            @if (isDragging) {
+            <div class="extra-space"></div>
+            }
+        </div>
+    </div>
+</div>

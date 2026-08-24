@@ -1,0 +1,291 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.right-panel {
+  border-radius: $borderRadiusMiddle;
+  height: fit-content;
+  padding-bottom: $padding-narrow;
+  overflow-y: auto;
+  min-height: fit-content;
+}
+
+.panel-header {
+  display: flex;
+  font-weight: bold;
+  font-size: $font-size-header-narrow;
+  color: var(--text);
+  background: linear-gradient(to right, $pallete-0-color-13, #f27916);
+  padding: $padding-middle;
+  border-radius: $borderRadiusMiddle $borderRadiusMiddle 0 0;
+}
+
+.duration-options {
+  display: flex;
+  flex-direction: column;
+  gap: $gap-narrow;
+  margin: $margin-middle;
+  min-width: fit-content;
+  max-width: 380px;
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: $margin-middle;
+
+  .duration-option {
+    background-color: transparent;
+    border: $border solid $pallete-0-color-11;
+    border-radius: $borderRadiusMiddle $borderRadius;
+    padding: $padding-middle $padding-semi-middle;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: 0.3s;
+
+    &.selected {
+      border: $border solid $pallete-0-color-13;
+      box-shadow: 0 0 6px 2px rgba(255, 98, 0, 0.874);
+    }
+
+    .duration-header {
+      display: flex;
+      gap: $gap-micro;
+      align-items: center;
+      margin: 0;
+      justify-content: space-between;
+      padding-right: 0.5rem;
+    }
+
+    .icon-label {
+      display: flex;
+      align-items: center;
+      gap: $gap-small;
+
+      .icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: $borderRadiusMiddle;
+        padding: $padding-little;
+        font-size: $font-size-header-middle;
+        color: var(--text);
+        border: $border solid $pallete-0-color-11;
+        background: transparent;
+
+        mat-icon {
+          flex-shrink: 0;
+          color: $pallete-0-color-14;
+        }
+      }
+
+      .desc {
+        font-size: $font-size-description-small;
+        color: var(--text);
+        text-align: left;
+      }
+
+      .duration-label {
+        color: var(--accent-text);
+        min-width: fit-content;
+      }
+
+      .minutes-label {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .minutes {
+        color: $pallete-0-color-13;
+        font-size: $font-size-header-narrow;
+        font-weight: bold;
+      }
+
+      .popular {
+        background: #10b981;
+        color: var(--text);
+        font-size: $font-size-description;
+        padding: 2px;
+        border-radius: $borderRadiusMiddle;
+        margin-left: auto;
+      }
+    }
+  }
+}
+
+.slots-header,
+.duration-header {
+  margin-top: $margin-middle;
+  font-size: $font-size-header-small;
+  color: var(--accent-text);
+}
+
+.slots-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $gap-narrow;
+  margin-bottom: $margin-extra-wide;
+  padding: $padding-middle;
+  min-height: fit-content;
+  //max-height: 620px;
+  overflow-y: auto;
+
+  @media(max-width: $screen-size-mobile) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .slot {
+    padding: $padding-narrow-two;
+    background-color: transparent;
+    border: $border solid $pallete-0-color-11;
+    border-radius: $borderRadiusMiddle $borderRadius;
+    cursor: pointer;
+    transition: transform 0.5s ease;
+    min-height: fit-content;
+    min-width: fit-content;
+    font-size: $font-size-paragraph;
+
+    &.active {
+      background: $pallete-0-color-13;
+      color: var(--text);
+      border-color: var(--text);
+      font-weight: bold;
+    }
+
+    &:hover {
+      scale: 1.1;
+    }
+
+    &.selected {
+      background: $pallete-0-color-13;
+      color: var(--text);
+      border-color: var(--text);
+      font-weight: bold;
+    }
+  }
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: $gap-narrow;
+  justify-content: space-between;
+  margin: $margin-middle;
+
+  .btn {
+    flex: 1;
+    padding: $padding-semi-middle;
+    border: none;
+    border-radius: $borderRadiusMiddle $borderRadius;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: $font-size-header-narrow;
+    min-height: fit-content;
+    max-width: fit-content;
+
+    &.primary {
+      background: $pallete-0-color-13;
+      color: var(--text);
+
+      &:disabled {
+        opacity: 0.4;
+        pointer-events: none;
+        cursor: default;
+      }
+    }
+  }
+
+  .btn-back {
+    border: 1px solid $pallete-0-color-11;
+  }
+}
+
+.continue {
+  display: flex;
+  justify-self: flex-end;
+  margin-left: auto;
+  margin-right: auto;
+  //margin-right: $margin-middle;
+
+  padding: $padding-middle;
+  border: none;
+  border-radius: $borderRadiusMiddle $borderRadius;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: $font-size-header-narrow;
+  background: $pallete-0-color-13;
+  color: var(--text);
+  min-height: fit-content;
+  max-width: fit-content;
+
+  &:disabled {
+    opacity: 0.4;
+    pointer-events: none;
+    cursor: default;
+  }
+}
+
+.custom-radio {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: $border-narrow solid $active-text;
+  border-radius: 50%;
+  outline: none;
+  cursor: pointer;
+  transition: border 0.3s, box-shadow 0.3s;
+  position: relative;
+}
+
+.custom-radio:checked {
+  border-color: $pallete-0-color-13;
+  box-shadow: 0 0 6px 2px rgba(255, 98, 0, 0.874);
+}
+
+.custom-radio:checked::after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  background-color: $pallete-0-color-13;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+button {
+  transition: transform 0.5s ease;
+
+  &:hover {
+    scale: 1.1;
+  }
+
+  &:active {
+    transform: scale(0.9);
+  }
+}
+
+.duration-option.disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.duration-info {
+  display: flex;
+  align-items: center;
+  gap: $gap-micro;
+  font-size: 1rem;
+  color: var(--text);
+
+  mat-icon {
+    height: fit-content;
+    width: fit-content;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    color: $pallete-0-color-14;
+  }
+}
+
+.timezone-block {
+  padding: 0.5rem 1.5rem 0.5rem 0.5rem;
+}

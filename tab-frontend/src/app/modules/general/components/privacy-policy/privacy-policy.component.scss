@@ -1,0 +1,79 @@
+@use 'variables' as *; 
+@use 'global' as *;
+
+.privacy-policy {
+  width: 100%;
+  background-color: var(--bg);
+  color: var(--text);
+  background-image: url("/assets/registration-background-optimized.png");
+  padding: $padding-l;
+
+  @media (max-width: $screen-size-mobile) {
+    padding: $padding-s;
+  }
+
+  mat-icon {
+    color: $pallete-0-color-14;
+    font-size: 1.5rem;
+    height: 100%;
+    width: fit-content;
+    flex-shrink: 0;
+  }
+
+  .gdpr-title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    height: auto;
+    width: fit-content;
+    height: fit-content;
+    font-weight: 800;
+    font-size: $font-size-header-middle;
+    margin: $margin-wide $margin-narrow;
+    color: $pallete-0-color-14;
+  }
+
+  .gdpr-agreement {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    height: 75%;
+    flex-shrink: 0;
+    flex-grow: 1;
+    padding: $padding-s;
+    scroll-behavior: smooth;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+
+    align-self: stretch;
+    text-align: left;
+    justify-content: left;
+
+    border-style: solid;
+    border-width: 0.4px;
+    border-color: $primary;
+    border: none;
+
+    .gdpr-statement {
+
+      .gdpr-statement-title {
+        font-weight: 700;
+        font-size: 1.2rem;
+        margin-bottom: $margin-narrow;
+        display: flex;
+        gap: 5px;
+        align-items: center;
+        width: fit-content;
+        color: $pallete-0-color-14;
+      }
+
+      .gdpr-statement-content {
+        align-content: flex-start;
+      }
+    }
+  }
+}

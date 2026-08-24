@@ -1,0 +1,101 @@
+@use 'variables' as *;
+
+::ng-deep .mat-mdc-dialog-container {
+  background-color: transparent !important;
+  --mdc-dialog-container-color: transparent !important;
+}
+
+::ng-deep .mdc-dialog__surface {
+  background-color: transparent !important;
+}
+
+@mixin modal-style($width: clamp(320px, 90vw, 700px), $height: auto) {
+  background: var(--bg);
+  color: var(--text);
+  background-image: url("/assets/registration-background-optimized.png");
+  border-radius: $borderRadiusMedium;
+  width: $width;
+  height: $height;
+  box-shadow: var(--box-shadow-light);
+
+  @media (max-width: $screen-size-mobile) {
+    border-radius: 0;
+    margin: 0;
+    width: 95vw;
+    max-width: none;
+  }
+}
+
+.general-panel-class-dialog {
+  @include modal-style(1200px, 95vh);
+}
+
+.small-panel-class-dialog {
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+}
+
+.panel-class-dialog {
+  @include modal-style(40rem, fit-content);
+  max-width: 40rem;
+  min-width: 20rem;
+}
+
+.signin-fullscreen-dialog {
+  width: 40rem;
+  height: auto;
+  display: inline-block;
+
+  @media screen and (max-width: $screen-size-mobile) {
+    max-width: 100% !important;
+    max-height: 100% !important;
+    width: 100%;
+    height: 100%;
+    border-style: none;
+    border-radius: 0;
+  }
+
+  h2 {
+    padding: $padding-middle;
+  }
+}
+
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  height: 99%;
+  flex-shrink: 0;
+  max-height: 99%;
+}
+
+.dialog-header {
+  color: $pallete-0-color-14;
+  font-size: 2rem;
+  font-weight: 600;;
+}
+
+::ng-deep .mat-mdc-dialog-surface {
+  background-color: transparent !important;
+  padding: var(--space-4xl) var(--space-xl) var(--space-xxl);
+  min-height: auto;
+}
+
+::ng-deep .mat-mdc-dialog-actions.mat-mdc-dialog-actions-align-end:has(.privacy-policy-confirmation-block) {
+  justify-content: flex-start;
+}
+
+::ng-deep mat-dialog-container {
+  background-color: transparent !important;
+  border: none !important;
+}
+
+.dialog-padding {
+  padding: $padding-wide;
+}
+
+.dialog-padding-middle {
+  padding: $padding-middle;
+}

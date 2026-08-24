@@ -1,0 +1,37 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.footer {
+    background-color: var(--sidebar);
+    text-align: center;
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    // border: $border solid $pallete-0-color-11; 
+}
+
+.footer-logo {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: var(--color-mint-400);
+}
+
+p {
+    font-size: 1rem;
+    color: white;
+}
+
+.card {
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #fff;
+
+    &:hover {
+        text-decoration: underline;
+        color: var(--color-mint-400);
+    }
+}

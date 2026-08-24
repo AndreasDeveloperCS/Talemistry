@@ -1,0 +1,35 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.like-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  display: inline-flex;
+  width: fit-content;
+}
+
+.heart-icon {
+  width: 30px;
+  height: 30px;
+  fill: transparent;
+  stroke: white;
+  stroke-width: 2;
+  transition: fill 0.3s ease, stroke 0.3s ease;
+}
+
+.heart-icon.liked {
+  fill: $pallete-1-color-3;
+  stroke: $pallete-1-color-3;
+}
+
+.like-button:hover .heart-icon:not(.liked) {
+  fill: $pallete-1-color-3;
+  stroke: $pallete-1-color-3;
+  opacity: 0.5;
+}
+
+.like-button.clicked .heart-icon {
+  transform: scale(1.2);
+}

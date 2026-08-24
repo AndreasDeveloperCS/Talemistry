@@ -1,0 +1,184 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(20, 20, 30, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.dialog-intro {
+  background: transparent;
+  border-radius: 10px;
+  box-shadow: var(--box-shadow-light);
+  padding: 10px 12px;
+  border-radius: 10px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: #ddd;
+}
+
+.screening-actions, .meeting-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+  justify-content: space-between;
+}
+
+.dialog {
+  width: 480px;
+  background: $gradient-color-4;
+  border-radius: 16px;
+  padding: 20px;
+  color: var(--text);
+}
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+
+  h2 {
+    font-size: 1.5rem;
+    margin: 0;
+    color: $pallete-0-color-14;
+    font-weight: 600;
+  }
+
+  .close-btn {
+    background: transparent;
+    border: none;
+    color: #aaa;
+    font-size: 18px;
+    cursor: pointer;
+  }
+}
+
+.dialog-body {
+  margin-bottom: 20px;
+}
+
+.section {
+  margin-bottom: 16px;
+}
+
+.existing-screening {
+  .link {
+    color: $pallete-0-color-14;
+    cursor: pointer;
+    text-decoration: underline;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}
+
+.label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #bbb;
+}
+
+.input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text);
+  box-shadow: var(--box-shadow-light);
+}
+
+select option {
+  color: var(--text);
+  background-color: $gradient-color-4;
+
+  &:hover {
+    background-color: $gradient-color-4;
+    opacity: 0.9;
+  }
+}
+
+select {
+  -webkit-appearance: none;
+  /* Safari & Chrome */
+  -moz-appearance: none;
+  /* Firefox */
+  appearance: none;
+}
+
+select option:checked {
+  color: $pallete-0-color-13;
+  font-weight: bold;
+}
+
+option {
+  background-color: #001524;
+  color: var(--text);
+}
+
+option:hover,
+option:checked {
+  background-color: #001524;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.radio {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn.primary {
+  background: $pallete-0-color-14;
+  color: var(--text);
+}
+
+.btn.secondary {
+  background: transparent;
+  color: #aaa;
+}
+
+.link-btn {
+  margin-top: 10px;
+  background: $pallete-0-color-14 !important;
+  border: none;
+  color: var(--text);
+  cursor: pointer;
+  padding: 0;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+
+  &:disabled {
+    background-color: $pallete-0-color-14 !important;
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}

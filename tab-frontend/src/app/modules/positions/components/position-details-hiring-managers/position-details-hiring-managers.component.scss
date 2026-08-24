@@ -1,0 +1,12 @@
+@use 'variables' as *; 
+@use 'global' as *;
+
+  .selected-item {
+    font-weight: 600;
+    word-wrap: break-word !important;
+    flex-wrap: wrap !important;
+  }
+  
+  .input-group__items {
+    margin-top: -$margin-middle;
+  }

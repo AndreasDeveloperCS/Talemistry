@@ -1,0 +1,51 @@
+<button button-name="close-dialog" mat-icon-button class="form-button exit-button" (click)="closeDialog()">
+  <mat-icon class="icon-close">
+    <svg width="24px" height="24px" viewBox="0 0 108 107" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M27 26.75L54 53.5L81 26.75" stroke="white" stroke-width="10" stroke-linecap="round" />
+      <path d="M27 80.25L54 53.5L81 80.25" stroke="white" stroke-width="10" stroke-linecap="round" />
+    </svg>
+  </mat-icon>
+</button>
+@if(isByInvitation && data?.invitation?.meetingId) {
+  <div class="scheduled-info-header">
+    <h4>This meeting invitation has already been used</h4>
+  </div>
+} @else {
+<div class="schedule-container">
+  <h2>Schedule a Meeting</h2>
+
+  @if(isLoading) {
+    <app-loading-spinner></app-loading-spinner>
+  }
+
+  @if(!isLoading) {
+  <div class="schedule-box">
+    <div class="left-panel">
+      <div class="panel-header">📅 Select Date & Time</div>
+      <app-datepicker 
+        [userId]="userId"
+        [selectedDate]="selectedDate"
+        [timezone]="selectedTimezone"
+        (dateSelected)="setDate($event)">
+      </app-datepicker>
+      <app-meeting-time-slots 
+        [userId]="userId" 
+        [selectedTime]="selectedTime" 
+        [selectedDate]="selectedDate" 
+        [selectedTimezone]="selectedTimezone"
+        [selectedSlotPeriod]="selectedSlotPeriod"
+        [isScheduleInfoDefault]="isScheduleInfoDefault"
+        (timezoneChanged)="onTimezoneChange($event)"
+        (timeSelected)="setTime($event)">
+      </app-meeting-time-slots>
+      </div>
+      <app-meeting-request-form [invitation]="data?.invitation"></app-meeting-request-form>
+  </div>
+  <button [disabled]="!isMeetingFormValid" class="button__primary-color button--medium fixed-button"
+      (click)="sendRequest()">
+      <mat-icon>forward_to_inbox</mat-icon>
+      <span>{{ content.txtRequest }} </span>
+  </button>
+}
+</div>
+}

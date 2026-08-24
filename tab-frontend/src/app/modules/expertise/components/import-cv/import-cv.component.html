@@ -1,0 +1,17 @@
+<div class="container-import-cv">
+
+       <div class="container-wrapper-horizontal">
+              <button class="button__primary-color button--medium btn-text-icon" (click)="fileInput.click()">
+                     <mat-icon>attach_file</mat-icon>{{ buttonCaption }}
+              </button>
+              <input [readonly]="true" class="import-title transparent-input-full-width"
+                     *ngIf="!(fileName == '' || fileName == undefined)"
+                     [value]="fileName == '' || fileName == undefined ? placeholderInputSelectAttachments : fileName"
+                     [class.empty-animation]="fileName == '' || fileName == undefined"
+                     [class.file-selected]="!(fileName == '' || fileName == undefined)">
+              <input hidden (change)="onFileSelected($event)" [accept]="extensions" #fileInput type="file"
+                     class="import-btn-input">
+       </div>
+       <br>
+       <app-cv-collection-history></app-cv-collection-history>
+</div>

@@ -1,0 +1,74 @@
+<div class="applied-positions-preview">
+  <div class="applied-positions-preview__header">
+    <div>
+      <div class="applied-positions-preview__subtitle">
+        Candidate Pipeline
+      </div>
+      <h2 class="applied-positions-preview__title">
+        {{ currentTitle }}
+      </h2>
+    </div>
+    <div class="applied-positions-preview__count">
+      {{ appliedPositions.length }} applications
+    </div>
+  </div>
+  <div class="stage-filter-chips">
+    <button *ngFor="let stage of stageFilters" class="stage-chip"
+      [class.active]="selectedStageType === stage.value" (click)="selectStage(stage.value)">
+      {{ stage.label }}
+    </button>
+  </div>
+  @if(isLoading) {
+    <app-sun-spinner></app-sun-spinner>
+  }
+  @if(!isLoading && appliedPositions.length) {
+    <div class="applied-positions-list">
+      <div *ngFor="let app of appliedPositions" class="applied-position-card">
+        <div class="applied-position-card__top">
+          <div class="applied-position-card__left">
+            <div class="applied-position-card__title">
+              {{ app.positionName }}
+            </div>
+            <div class="applied-position-card__company">
+              {{ app.companyName }}
+            </div>
+          </div>
+          <div class="stage-badge" [ngClass]="getStageClass(app.currentStageStatus)">
+            {{ app.currentStage }}
+          </div>
+        </div>
+        <div class="applied-position-card__meta">
+          <div class="meta-item">
+            <mat-icon>calendar_today</mat-icon>
+            Applied {{ app.appliedDate | date:'MMM d, y' }}
+          </div>
+          <div class="meta-item">
+            <mat-icon>timeline</mat-icon>
+            {{ app.currentStage }}
+          </div>
+        </div>
+        <div class="applied-position-card__actions">
+          <button class="preview-btn outline" (click)="openPosition(app.positionId, $event)">
+            <mat-icon>work</mat-icon>
+            Position
+          </button>
+          <button class="preview-btn primary" (click)="openDetails(app, $event)">
+            <mat-icon>account_tree</mat-icon>
+            Details
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+  @if(!isLoading && !appliedPositions.length) {
+    <div class="empty-state">
+      <mat-icon class="empty-state__icon">work_off</mat-icon>
+      <div class="empty-state__title">
+        No positions found
+      </div>
+      <div class="empty-state__text">
+        Your job applications will appear here.
+      </div>
+    </div>
+  }
+</div>

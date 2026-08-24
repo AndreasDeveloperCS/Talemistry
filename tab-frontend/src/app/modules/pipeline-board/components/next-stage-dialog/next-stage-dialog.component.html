@@ -1,0 +1,165 @@
+<div class="dialog-overlay">
+  <div class="dialog">
+    <!-- HEADER -->
+    <div class="dialog-header">
+      <h2>
+        {{ data.stage === StagesNames.INTERVIEW ? 'Interview Setup' :
+            data.stage === StagesNames.SCREENING ? 'Screening Setup' :
+            'Assessment Setup' }}
+      </h2>
+      <button class="close-btn" (click)="cancel()">✕</button>
+    </div>
+    
+    <div class="dialog-intro">
+        <p>
+            You're about to move 
+            <strong>{{ data.candidate?.talentName || 'this applicant' }}</strong>
+            to the 
+            <strong>{{ data.stage }}</strong> stage.
+        </p>
+    </div>
+    <div class="dialog-body">
+      <div *ngIf="data.stage === StagesNames.INTERVIEW" class="section">
+        <label class="label">Select meeting template</label>
+
+        <select [(ngModel)]="selectedMeetingTemplate" class="input">
+          <option 
+            *ngFor="let template of meetingTemplates" 
+            [ngValue]="template"
+          >
+            {{ template.topic }}
+          </option>
+        </select>
+
+        <div class="meeting-actions">
+
+          <button 
+            class="link-btn"
+            [disabled]="!selectedMeetingTemplate"
+            (click)="openMeetingTemplatePreview()"
+          >
+            👁 View meeting template
+          </button>
+
+          <button 
+            class="link-btn"
+            (click)="openCreateMeetingTemplate()"
+          >
+            + Create new
+          </button>
+
+        </div>
+      </div>
+
+      <!-- SCREENING -->
+      <div *ngIf="data.stage === StagesNames.SCREENING" class="section">
+
+        <div *ngIf="hasCurrentScreening">
+
+          <label class="label">Screening questionnaire</label>
+
+          <div class="existing-screening">
+            <span>
+              This position already has a 
+              <a class="link" (click)="openScreeningPreview()">
+                screening form
+              </a>.
+              You can review it or choose a different one.
+            </span>
+          </div>
+
+          <div class="screening-actions">
+
+            <button 
+              class="link-btn"
+              (click)="openScreeningPreview()"
+            >
+              👁 View questionnaire
+            </button>
+
+          </div>
+        </div>
+
+        <!-- 🟢 CASE 2: Select screening -->
+        <div *ngIf="showScreeningSelector">
+
+          <label class="label">Select screening questionnaire</label>
+
+          <select 
+            [(ngModel)]="selectedScreeningPositionId" 
+            class="input"
+          >
+            <option value="" disabled selected>Select screening</option>
+
+            <option 
+              *ngFor="let screening of screenings" 
+              [value]="screening.positionId"
+            >
+              {{ screening.positionTitle }}
+            </option>
+          </select>
+
+          <div class="screening-actions">
+
+            <button 
+              class="link-btn"
+              [disabled]="!selectedScreeningPositionId"
+              (click)="openScreeningPreview()"
+            >
+              👁 View questionnaire
+            </button>
+
+            <button 
+              class="link-btn"
+              (click)="openCreateScreening()"
+            >
+              + Create new
+            </button>
+
+            <!-- Optional: go back if user changed mind -->
+            <button 
+              *ngIf="hasCurrentScreening"
+              class="link-btn secondary"
+              (click)="showScreeningSelector = false"
+            >
+              ← Back
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- ASSESSMENT -->
+      <div *ngIf="data.stage === StagesNames.ASSESSMENT" class="section">
+        <label class="label">Select assessment type</label>
+
+        <div class="radio-group">
+          <label class="radio">
+            <input type="radio" [(ngModel)]="assessmentType" value="test" />
+            <span>Test Task</span>
+          </label>
+
+          <label class="radio">
+            <input type="radio" [(ngModel)]="assessmentType" value="interview" />
+            <span>Assessment Interview</span>
+          </label>
+
+          <label class="radio">
+            <input type="radio" [(ngModel)]="assessmentType" value="live-coding" />
+            <span>Live Coding Session</span>
+          </label>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="dialog-footer">
+      <button class="btn secondary" (click)="cancel()">Cancel</button>
+      <button class="btn primary" (click)="confirm()">Continue</button>
+    </div>
+
+  </div>
+</div>

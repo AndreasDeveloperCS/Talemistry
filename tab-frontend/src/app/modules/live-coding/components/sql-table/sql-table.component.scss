@@ -1,0 +1,177 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.sql-table {
+  background: #1e1e1e;
+  border: 1px solid #2a2a2a;
+  //border-radius: 10px;
+  padding: 16px;
+  //margin-bottom: 20px;
+  color: #d4d4d4;
+  font-family: Consolas, Monaco, 'Courier New', monospace;
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+
+  input {
+    background: transparent;
+    font-size: 16px;
+    height: 2rem;
+    border: 1px solid #ff9800;
+    border-radius: 10px;
+    padding-left: 5px;
+  }
+}
+
+.table-title {
+  margin: 0 0 18px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.collapse-button {
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background: #333;
+  color: white;
+
+  &:hover{
+    background:#555;
+  }
+}
+
+.columns-panel,
+.rows-panel {
+  margin-top: 16px;
+}
+
+.columns-panel h5,
+.rows-panel h5 {
+  color: #9cdcfe;
+  font-size: 14px;
+}
+
+.header-block {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.column-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.column-name {
+  flex: 1;
+}
+
+.column-type {
+  width: 130px;
+}
+
+.column-row input,
+.column-row select {
+  background: #2d2d2d;
+  color: #d4d4d4;
+  border: 1px solid #444;
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 13px;
+  height: 2rem;
+}
+
+.column-row input:focus,
+.column-row select:focus {
+  outline: none;
+  border-color: #007acc;
+}
+
+.grid-container {
+  max-height: 320px;
+  overflow: auto;
+  border: 1px solid #333;
+  border-radius: 8px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #252526;
+  color: #c586c0;
+  text-align: left;
+  padding: 8px 10px;
+}
+
+tbody td {
+  border-bottom: 1px solid #2a2a2a;
+  padding: 6px 8px;
+}
+
+tbody tr:nth-child(even) {
+  background: rgba(255,255,255,.02);
+}
+
+tbody tr:hover {
+  background: rgba(255,255,255,.05);
+}
+
+tbody input {
+  width: 100%;
+  background: #2d2d2d;
+  color: #d4d4d4;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  padding: 5px 7px;
+  height: 2rem;
+}
+
+tbody input:focus {
+  outline: none;
+  border-color: #007acc;
+}
+
+.action-button,
+.delete-button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: .2s;
+}
+
+.action-button {
+  background: #0e639c;
+  color: white;
+}
+
+.action-button:hover {
+  background: #1177bb;
+}
+
+.delete-button {
+  background: #3c3c3c;
+  color: white;
+}
+
+.delete-button:hover {
+  background: #a1260d;
+}

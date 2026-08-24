@@ -1,0 +1,9 @@
+<div class="sun-spinner">
+  @for (ray of rays; track $index; let i = $index) {
+    <div
+      class="sun-ray"
+      [style.animation-delay]="i * 0.15 + 's'"
+      [style.transform]="'rotate(' + (i * 45) + 'deg)'"
+    ></div>
+  }
+</div>

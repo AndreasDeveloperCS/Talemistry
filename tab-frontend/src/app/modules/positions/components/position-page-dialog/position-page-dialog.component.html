@@ -1,0 +1,200 @@
+  <button  class="form-button exit-button" (click)="onCancel()">
+    <mat-icon>
+      <svg width="1.5rem" height="1.5rem" viewBox="0 0 108 107" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M27 26.75L54 53.5L81 26.75" stroke="white" stroke-width="10" stroke-linecap="round" />
+        <path d="M27 80.25L54 53.5L81 80.25" stroke="white" stroke-width="10" stroke-linecap="round" />
+      </svg>
+    </mat-icon>
+  </button>
+
+  <div class="dialog-form universal-input dialog-padding-middle">
+
+    <div class="step-indicator">
+      Step {{ currentStep + 1 }} / {{ totalSteps }}
+    </div>
+
+    <div class="step-track-container">
+      <div class="step-track-line">
+        <div
+          class="step-track-progress"
+          [style.width.%]="getTrackLineWidth()"
+        ></div>
+      </div>
+    
+      <div class="step-icons">
+        @for(step of steps; track step; let i = $index) {
+        <div
+          class="step-icon"
+          [class.active]="i <= currentStep"
+          [class.current-step]="i === currentStep"
+          [class.disabled-step]="!isStepClickable(i)"
+          (click)="goToStep(i)"
+          [matTooltip]="steps[i].label"
+          matTooltipPosition="above"
+        >
+          <mat-icon [class.active-icon]="i <= currentStep">
+            {{ step.icon }}
+          </mat-icon> 
+        </div>
+        }
+      </div>
+    </div>
+
+    <!-- <div class="description-item step-content">
+        @if(currentStep === 0) {
+          <app-position-details-title 
+            (formStatusChange)="onStepTitleStatusChange($event)"
+            (positionAiGenerated)="onPositionAiGenerated($event)"
+            (aiModeActive)="onAiModeActive($event)">
+          </app-position-details-title>
+        }
+        @if (currentStep === 1) {
+          <app-position-details-first 
+            (formStatusChange)="onStepGeneralStatusChange($event)"
+            [positionDetails]="positionsService.model.positionDetails">
+          </app-position-details-first>
+        }
+        @if (currentStep === 2) {
+          <app-position-details-second 
+            (formStatusChange)="onStepSkillsStatusChange($event)"
+            [positionDetails]="positionsService.model.positionDetails">
+          </app-position-details-second>
+        }
+        @if(currentStep === 3) {
+          <app-position-description-generic
+            (formStatusChange)="onStepDescriptionStatusChange($event)"
+            [descriptionItem]="content.txtProjectDescription">
+          </app-position-description-generic>
+        }
+        @if(currentStep === 4) {
+          <app-position-description-generic
+            (formStatusChange)="onStepResponsibilitiesStatusChange($event)"
+            [descriptionItem]="content.txtResponsibilities">
+          </app-position-description-generic>
+        }
+        @if (currentStep === 5) {
+          <app-position-description-reqirements 
+            (formStatusChange)="onStepRequirementsStatusChange($event)">
+          </app-position-description-reqirements>
+        }
+        @if (currentStep === 6) {
+          <app-position-description-benefits 
+            (formStatusChange)="onStepBenefitsStatusChange($event)">
+          </app-position-description-benefits>
+        }
+        @if (currentStep === 7) {
+          <app-position-description-summary 
+            (formStatusChange)="onStepSummaryStatusChange($event)">
+          </app-position-description-summary>
+        }
+        @if(currentStep === 8) {
+          <app-position-creation-success (triggerClose)="closeTheDialog()"></app-position-creation-success>
+        }
+    </div> -->
+
+    <div class="description-item step-content">
+
+      @if (currentStep === 0) {
+        <app-position-details-title 
+          (formStatusChange)="onStepTitleStatusChange($event)"
+          (positionAiGenerated)="onPositionAiGenerated($event)"
+          (aiModeActive)="onAiModeActive($event)">
+        </app-position-details-title>
+      }
+
+      @if (!isShortFormat) {
+        @if (currentStep === 1) {
+          <app-position-details-first
+            (formStatusChange)="onStepGeneralStatusChange($event)"
+            [positionDetails]="positionsService.model.positionDetails">
+          </app-position-details-first>
+        }
+        @if (currentStep === 2) {
+          <app-position-details-second
+            (formStatusChange)="onStepSkillsStatusChange($event)"
+            [positionDetails]="positionsService.model.positionDetails">
+          </app-position-details-second>
+        }
+        @if (currentStep === 3) {
+          <app-position-description-generic
+            (formStatusChange)="onStepDescriptionStatusChange($event)"
+            [descriptionItem]="content.txtProjectDescription">
+          </app-position-description-generic>
+        }
+        @if (currentStep === 4) {
+          <app-position-description-generic
+            (formStatusChange)="onStepResponsibilitiesStatusChange($event)"
+            [descriptionItem]="content.txtResponsibilities">
+          </app-position-description-generic>
+        }
+        @if (currentStep === 5) {
+          <app-position-description-reqirements 
+            (formStatusChange)="onStepRequirementsStatusChange($event)">
+          </app-position-description-reqirements>
+        }
+        @if (currentStep === 6) {
+          <app-position-description-benefits
+            (formStatusChange)="onStepBenefitsStatusChange($event)">
+          </app-position-description-benefits>
+        }
+        @if (currentStep === 7) {
+          <app-position-description-summary
+            (formStatusChange)="onStepSummaryStatusChange($event)">
+          </app-position-description-summary>
+        }
+      }
+
+      @if (isShortFormat) {
+        @if (currentStep === 1) {
+          <app-position-description-summary
+            (formStatusChange)="onStepSummaryStatusChange($event)">
+          </app-position-description-summary>
+        }
+        @if (currentStep === 2) {
+          <app-position-details-first
+            (formStatusChange)="onStepGeneralStatusChange($event)"
+            [positionDetails]="positionsService.model.positionDetails">
+          </app-position-details-first>
+        }
+        @if (currentStep === 3) {
+          <app-position-details-second
+            (formStatusChange)="onStepSkillsStatusChange($event)"
+            [positionDetails]="positionsService.model.positionDetails">
+          </app-position-details-second>
+        }
+      }
+
+      @if (currentStep === totalSteps - 1) {
+        <app-position-creation-success
+          (triggerClose)="closeTheDialog()">
+        </app-position-creation-success>
+      }
+    </div>
+
+    <div class="step-navigation">
+      @if(currentStep > 0 && currentStep < totalSteps - 1) {
+        <button  
+          (click)="goToPreviousStep()" 
+          class="form-button previous-step-button">
+          <mat-icon>arrow_back</mat-icon> {{ content.previousStep }}
+        </button>
+      }
+      @if (currentStep < totalSteps - 1 && (!isAiMode || isPositionAiGenerated)) {
+        <button  
+          (click)="goToNextStep()" 
+          class="form-button next-step-button"
+          [disabled]="!isStepValid(currentStep)">
+          {{ content.nextStep }} <mat-icon>arrow_forward</mat-icon>
+        </button>
+      } 
+      @if(currentStep === totalSteps - 2) {
+        <button  
+          (click)="onSave()" 
+          class="form-button next-step-button"
+          [disabled]="!isStepValid(currentStep)">
+          {{ controlButtonContent }} 
+          <mat-icon>archive</mat-icon>          
+        </button>
+      }
+    </div>
+  </div>

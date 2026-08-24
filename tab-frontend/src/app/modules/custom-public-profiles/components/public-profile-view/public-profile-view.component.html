@@ -1,0 +1,313 @@
+@if(isLoading) {
+<app-loading-spinner></app-loading-spinner>
+}
+@if(!isLoading) {
+<div class="public-profile-modern">
+  @if(errorMessage !== "") {
+  <div class="error-message">
+    <lucide-icon name="lock" [size]="18"></lucide-icon> {{ errorMessage }}
+  </div>
+  }
+  @else {
+  <div class="container">
+
+    <!-- Header -->
+    <tm-card class="header-card">
+      <div class="header-content">
+        <tm-avatar [name]="profile.pseudonym || profile.user.firstname" [size]="88" tone="#383c5b"></tm-avatar>
+        <div class="header-text">
+          <div class="header-main">
+            <h1 class="header-name">{{ profile.pseudonym !== '' ? profile.pseudonym : profile.user.firstname }}</h1>
+            <tm-badge tone="green">
+              <lucide-icon name="sparkles" [size]="12"></lucide-icon>
+              Open to opportunities
+            </tm-badge>
+          </div>
+          <p class="header-title">{{ profile.targetPosition }}</p>
+        </div>
+        <tm-button variant="primary" (click)="contactCandidate()">
+          <lucide-icon name="mail" [size]="16"></lucide-icon>
+          Contact
+        </tm-button>
+      </div>
+    </tm-card>
+
+    <!-- Talemistry insight -->
+    <tm-card class="insight-card">
+      <div class="insight-head">
+        <lucide-icon name="sparkles" [size]="16"></lucide-icon>
+        <h2 class="section-title">Talemistry Insight</h2>
+      </div>
+      <p class="insight-empty">AI-generated candidate insight isn't connected for this profile yet.</p>
+    </tm-card>
+
+    <!-- Candidate Formula / Verified Skills / Team Chemistry -->
+    <div class="three-col-grid">
+      <tm-card class="panel">
+        <h2 class="section-title">Candidate Formula</h2>
+        @if (getFormulaAxes().length && getVerifiedSkills().length) {
+          <svg class="radar" viewBox="0 0 200 200">
+            <polygon class="radar-grid" points="100,20 180,100 100,180 20,100" />
+            <polygon class="radar-grid radar-grid--inner" points="100,50 150,100 100,150 50,100" />
+            <polygon class="radar-shape" [attr.points]="getRadarPoints(getFormulaAxes())" />
+            @for (axis of getFormulaAxes(); track axis.label; let i = $index) {
+              <text
+                class="radar-label"
+                [attr.x]="getRadarLabelPos(getFormulaAxes(), i).x"
+                [attr.y]="getRadarLabelPos(getFormulaAxes(), i).y"
+                text-anchor="middle"
+              >{{ axis.label }}</text>
+            }
+          </svg>
+        } @else {
+          <p class="panel-empty">No skills recorded yet to compute a Candidate Formula.</p>
+        }
+      </tm-card>
+
+      <tm-card class="panel">
+        <h2 class="section-title">Verified Skills</h2>
+        @if (getVerifiedSkills().length) {
+          <div class="skill-rows">
+            @for (skill of getVerifiedSkills(); track skill.name) {
+              <div class="skill-row">
+                <div class="skill-row__top">
+                  <span class="skill-row__name">
+                    @if (skill.verified) {
+                      <lucide-icon name="shield-check" [size]="13" class="verified-icon"></lucide-icon>
+                    }
+                    {{ skill.name }}
+                  </span>
+                  <span class="skill-row__percent">{{ skill.percent }}%</span>
+                </div>
+                <tm-progress [value]="skill.percent"></tm-progress>
+              </div>
+            }
+          </div>
+        } @else {
+          <p class="panel-empty">No skills recorded yet.</p>
+        }
+      </tm-card>
+
+      <tm-card class="panel">
+        <h2 class="section-title">Team Chemistry</h2>
+        <p class="panel-empty">Work-style assessment isn't connected for this candidate yet.</p>
+      </tm-card>
+    </div>
+
+    <!-- Potential Spectrum -->
+    <tm-card class="panel">
+      <h2 class="section-title">Potential Spectrum</h2>
+      <div class="three-col-grid three-col-grid--flush">
+        <div class="spectrum-col">
+          <p class="spectrum-col__label spectrum-col__label--strength">
+            <lucide-icon name="trending-up" [size]="14"></lucide-icon> Demonstrated strengths
+          </p>
+          @if (getTopStrengths().length) {
+            <ul class="spectrum-list">
+              @for (item of getTopStrengths(); track item) { <li>{{ item }}</li> }
+            </ul>
+          } @else {
+            <p class="panel-empty">No expert-level skills recorded yet.</p>
+          }
+        </div>
+        <div class="spectrum-col">
+          <p class="spectrum-col__label">
+            <lucide-icon name="shuffle" [size]="14"></lucide-icon> Transferable potential
+          </p>
+          <p class="panel-empty">Not yet assessed.</p>
+        </div>
+        <div class="spectrum-col">
+          <p class="spectrum-col__label spectrum-col__label--development">
+            <lucide-icon name="target" [size]="14"></lucide-icon> Development areas
+          </p>
+          @if (getDevelopmentAreas().length) {
+            <ul class="spectrum-list">
+              @for (item of getDevelopmentAreas(); track item) { <li>{{ item }}</li> }
+            </ul>
+          } @else {
+            <p class="panel-empty">No early-stage skills recorded.</p>
+          }
+        </div>
+      </div>
+    </tm-card>
+
+    <!-- Areas to validate -->
+    <tm-card class="panel">
+      <h2 class="section-title">
+        <lucide-icon name="triangle-alert" [size]="15"></lucide-icon>
+        Areas to Validate
+      </h2>
+      <p class="panel-empty">No flags raised — nothing pending validation.</p>
+    </tm-card>
+
+    <!-- Traditional CV content -->
+    <tm-card class="card">
+      <div class="card-header">
+        <div class="card-icon"><lucide-icon name="star" [size]="20"></lucide-icon></div>
+        <h2 class="card-title">Professional Objective</h2>
+      </div>
+      <div class="card-content">
+        <p class="objective-text">{{ profile.objective }}</p>
+      </div>
+    </tm-card>
+
+    <tm-card class="card">
+      <div class="card-header">
+        <div class="card-icon"><lucide-icon name="globe" [size]="20"></lucide-icon></div>
+        <h2 class="card-title">Summary</h2>
+      </div>
+      <div class="card-content">
+        <p class="objective-text">{{ profile.summary }}</p>
+      </div>
+    </tm-card>
+
+    <tm-card class="card">
+      <div class="card-header">
+        <div class="card-icon"><lucide-icon name="trending-up" [size]="20"></lucide-icon></div>
+        <h2 class="card-title">Core Competencies</h2>
+      </div>
+      <div class="card-content">
+        <div class="skills-grid">
+          <div class="skill-section">
+            <h3 class="skill-section-title">Hard Skills</h3>
+            <div class="skill-badges">
+              <tm-badge tone="green" *ngFor="let skill of profile.hardSkills">{{ skill.skillName }}</tm-badge>
+            </div>
+          </div>
+          <div class="skill-section">
+            <h3 class="skill-section-title">Domain Skills</h3>
+            <div class="skill-badges">
+              <tm-badge tone="teal" *ngFor="let skill of profile.domainSkills">{{ skill.skillName }}</tm-badge>
+            </div>
+          </div>
+        </div>
+        <div class="skills-grid">
+          <div class="skill-section">
+            <h3 class="skill-section-title">Soft Skills</h3>
+            <div class="skill-badges">
+              <tm-badge tone="violet" *ngFor="let skill of profile.softSkills">{{ skill.skillName }}</tm-badge>
+            </div>
+          </div>
+          <div class="skill-section">
+            <h3 class="skill-section-title">Managerial Skills</h3>
+            <div class="skill-badges">
+              <tm-badge tone="navy" *ngFor="let skill of profile.managerialSkills">{{ skill.skillName }}</tm-badge>
+            </div>
+          </div>
+        </div>
+      </div>
+    </tm-card>
+
+    <tm-card class="card">
+      <div class="card-header">
+        <div class="card-icon"><lucide-icon name="languages" [size]="20"></lucide-icon></div>
+        <h2 class="card-title">Languages</h2>
+      </div>
+      <div class="card-content">
+        <div class="languages-grid">
+          <div *ngFor="let lang of profile.languagesSkills" class="language-item">
+            <p class="language-name">{{ lang.skillName }}</p>
+            <p class="language-level">{{ getLanguageLevel(lang.proficiencyEstimation) }}</p>
+          </div>
+        </div>
+      </div>
+    </tm-card>
+
+    <tm-card class="card">
+      <div class="card-header">
+        <div class="card-icon"><lucide-icon name="briefcase" [size]="20"></lucide-icon></div>
+        <h2 class="card-title">Professional Experience</h2>
+      </div>
+      <div class="card-content">
+        <div class="timeline">
+          <div *ngFor="let exp of profile.operationalExperience" class="timeline-item">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="timeline-header">
+                <h3 class="timeline-job-title">{{ exp.jobTitle }}</h3>
+                <p class="timeline-date">{{ formatDateRange(exp.startWorkDate, exp.endWorkDate, exp.isCurrent) }}</p>
+              </div>
+              @if(exp.resposiblities.length > 0) {
+              <div>
+                <p class="timeline-description">
+                  <lucide-icon name="list-checks" [size]="15"></lucide-icon>
+                  Responsibilities:
+                </p>
+                <p class="multiline">{{ exp.resposiblities }}</p>
+              </div>
+              }
+              @if(exp.achievements.length > 0) {
+              <div class="timeline-achievements">
+                <p class="timeline-description">
+                  <lucide-icon name="award" [size]="15"></lucide-icon>
+                  Key Achievements:
+                </p>
+                <p class="multiline">{{ exp.achievements }}</p>
+              </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </tm-card>
+
+    <div class="two-column-grid">
+      <tm-card class="card">
+        <div class="card-header">
+          <div class="card-icon"><lucide-icon name="graduation-cap" [size]="20"></lucide-icon></div>
+          <h2 class="card-title">Education</h2>
+        </div>
+        <div class="card-content">
+          <div class="education-list">
+            <div *ngFor="let edu of profile.academicEducation" class="education-item">
+              <h3 class="education-degree">{{ edu.academicEducationLevelType }} - {{ edu.specialication }}</h3>
+              <p class="education-institution">{{ edu.institution.internationalName }}</p>
+              <p class="education-date">{{ formatDateRange(edu.startStudyDate, edu.graduationDate, edu.currentlyStudying) }}</p>
+              <p class="education-field">{{ edu.fieldOfStudy }}</p>
+            </div>
+          </div>
+        </div>
+      </tm-card>
+
+      <tm-card class="card">
+        <div class="card-header">
+          <div class="card-icon"><lucide-icon name="award" [size]="20"></lucide-icon></div>
+          <h2 class="card-title">Certifications</h2>
+        </div>
+        <div class="card-content">
+          <div class="certification-list">
+            <div *ngFor="let cert of profile.certification" class="certification-item">
+              <lucide-icon name="award" [size]="18" class="certification-icon"></lucide-icon>
+              <div class="certification-details">
+                <h3 class="certification-name">{{ cert.skillName }}</h3>
+                <p class="certification-org">{{ cert.certificationCenter }} • {{ formatDate(cert.certificationDate) }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </tm-card>
+    </div>
+
+    <tm-card class="card">
+      <div class="card-header">
+        <div class="card-icon"><lucide-icon name="flame" [size]="20"></lucide-icon></div>
+        <h2 class="card-title">What Drives Me</h2>
+      </div>
+      <div class="card-content">
+        <div class="motivations-list">
+          <tm-badge tone="amber" *ngFor="let factor of profile.preferences.motivationalFactors">
+            {{ factor.factor }}
+          </tm-badge>
+        </div>
+      </div>
+    </tm-card>
+  </div>
+  <div class="contact-section">
+    <tm-button variant="primary" size="lg" (click)="contactCandidate()">
+      <lucide-icon name="mail" [size]="16"></lucide-icon>
+      Get in Touch
+    </tm-button>
+  </div>
+  }
+</div>
+}

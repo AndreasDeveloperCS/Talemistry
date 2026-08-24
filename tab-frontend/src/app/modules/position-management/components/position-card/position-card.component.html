@@ -1,0 +1,214 @@
+<div class="position-card">
+  <div class="card-header">
+    @if(position.isVerified) {
+      <div class="verified-badge">
+        <mat-icon>check_circle_outline</mat-icon>
+        Verified
+      </div>
+    }
+    @if(!position.isVerified) {
+      <div class="unverified-badge">
+        <mat-icon>query_builder</mat-icon>
+        Verification in progress
+      </div>
+    }
+    <div class="actions">
+      @if(positionData.status) {
+        <span class="badge" [ngClass]="getStatusClass(position.status)">
+          {{ positionData.status }}
+        </span>
+      }
+      @if(positionData.proficiencyLevel) {
+        <span class="single-tag">
+            <mat-icon class="custom-icon">bar_chart</mat-icon> 
+            {{ positionData.proficiencyLevel }}
+        </span>
+      }
+      <div class="container__flex" style="gap: 5px;">
+        @if (canEditItem) {
+          <button (click)="editOpenedPosition()" class="edit">
+            <mat-icon>edit</mat-icon>
+          </button>
+        }
+        @if (canEditItem) {
+        <button (click)="deleteOpenedPosition()" class="delete">
+          <mat-icon>delete</mat-icon>
+        </button>
+        }
+    </div>
+    </div>
+  </div>
+  <div class="card-header">
+    <h3 (click)="onNavigateToPosition()">{{ positionData.positionTitle }}</h3>
+  </div>
+
+  <div class="card-body">
+    @if(positionData.companyName) {
+      <p class="company" (click)="onNavigateToCompanyPage(positionData.companyId)">
+        <mat-icon>business</mat-icon>
+        {{ positionData.companyName }}
+      </p>
+    }
+    @if(positionData.companyIndustry) {
+      <p class="department">
+        <mat-icon>miscellaneous_services</mat-icon>
+        {{ positionData.companyIndustry }}
+      </p>
+    }
+    @if(positionData.companyHeadquarter) {
+      <p>
+        <mat-icon>location_on</mat-icon> 
+        {{ positionData.companyHeadquarter }}
+      </p>
+    }
+    @if(positionData.companyEmployees) {
+      <p><mat-icon>people</mat-icon>{{ positionData.companyEmployees }} applicants</p>
+    }
+    @if(positionData.creationDate) {
+    <p>
+      <mat-icon>event</mat-icon>
+      {{ positionData.creationDate }}
+    </p>
+    }
+  </div>
+
+  <div class="tags">
+    @if(positionData.cooperationType) {
+      <span class="tag">
+        <mat-icon class="custom-icon">handshake</mat-icon>
+        {{ positionData.cooperationType }}
+      </span> 
+    }
+    @if(positionData.involvementType) {
+      <span class="tag">
+        <mat-icon class="custom-icon">how_to_reg</mat-icon>
+        {{ positionData.involvementType }}
+      </span>
+    }
+    @if(positionData.workPlace) {
+      <span class="tag">
+        <mat-icon class="custom-icon">work</mat-icon>
+        {{ positionData.workPlace }}
+      </span>
+    }
+    @if(positionData.jobType) {
+      <span class="tag">
+        <mat-icon class="custom-icon">schedule</mat-icon>
+        {{ positionData.jobType }}
+      </span>
+    }
+    @if(positionData.requiredEducation) {
+      <span class="tag">
+        <mat-icon class="custom-icon">school</mat-icon>
+        {{ positionData.requiredEducation }}
+      </span>
+    }
+    @if(positionData.requiredCertification) {
+      <span class="tag">
+        <mat-icon class="custom-icon">workspace_premium</mat-icon>
+        {{ positionData.requiredCertification }}
+      </span>
+    }
+    @if(positionData.specificRequirements) {
+      <span class="tag">
+        <mat-icon class="custom-icon">assignment_turned_in</mat-icon>
+        {{ positionData.specificRequirements }}
+      </span>
+    }
+    @if(positionData.compensationPackage) {
+      <span class="tag">
+        <mat-icon class="custom-icon">attach_money</mat-icon>
+        {{ positionData.compensationPackage }}
+      </span>
+    }
+  </div>
+
+  @if(positionData.positionSkillsList.length > 0) {
+    <div class="tag-list">
+        <mat-icon class="custom-icon">build</mat-icon>
+        <div class="tags-container">
+            @for (skill of positionData.positionSkillsList; track skill) {
+                <span class="single-tag">{{skill}}</span>
+            }
+        </div>
+    </div>
+    }
+
+    @if(positionData.benefitsList.length > 0) {
+    <div class="tag-list">
+        <mat-icon class="custom-icon">card_giftcard</mat-icon>
+        <div class="tags-container">
+            @for (benefit of positionData.benefitsList; track benefit) {
+                <span class="single-tag">{{benefit}}</span>
+            }
+        </div>
+    </div>
+  }
+
+  <div class="action-btns">
+    <!-- <button class="action-btn" (click)="viewCandidates()"
+      [ngClass]="{ 'active': isCandidatesViewVisible }">
+      <mat-icon>visibility</mat-icon> 
+      <span class="action-btn-lbl">Applicants</span>
+    </button> -->
+    <button class="action-btn" (click)="showDetails()"
+      [ngClass]="{ 'active': isFullDetailsVisible }">
+      <mat-icon>more_horiz</mat-icon> 
+      <span class="action-btn-lbl">Details</span>
+    </button>
+    <button class="action-btn" (click)="showPipeline()"
+      [ngClass]="{ 'active': isPipelineVisible }">
+      <mat-icon>alt_route</mat-icon> 
+      <span class="action-btn-lbl">Pipeline</span>
+    </button>
+    <button class="action-btn" (click)="showScreeningBuilder()"
+      [ngClass]="{ 'active': isScreeningBuilderVisible }">
+      <mat-icon>tune</mat-icon> 
+      <span class="action-btn-lbl">Screening</span>
+    </button>
+    <!-- <button class="action-btn" (click)="showMeetingInvitations()"
+      [ngClass]="{ 'active': isMeetingInvitationVisible }">
+      <mat-icon>event_available</mat-icon> 
+      <span class="action-btn-lbl">Invitations</span>
+    </button> -->
+  </div>
+
+  @if(isFullDetailsVisible) {
+    @if (hasValidSummary()) {
+      <div class="position-content-section">
+        <div class="position-content-section-content" [innerHTML]="getSummaryContent()"></div>
+      </div>
+    } @else {
+      No details available.
+    }
+  }
+  @if(isMeetingInvitationVisible) {
+    @if(positionData.positionId) {
+      <app-meeting-invitation-management 
+        [positionId]="positionData.positionId">
+      </app-meeting-invitation-management>
+    }
+  }
+  @if(isScreeningBuilderVisible) {
+    @if(positionData.positionId) {
+      <app-screening-builder 
+        [positionId]="positionData.positionId" 
+        [positionTitle]="positionData.positionTitle">
+      </app-screening-builder>
+    }
+  }
+  @if(isPipelineVisible) {
+    @if(positionData.positionId) {
+      <app-position-pipeline 
+        [positionId]="positionData.positionId">
+      </app-position-pipeline>
+    }
+  }
+  @if(isCandidatesViewVisible) {
+    @if(positionData.positionId) {
+      <app-talents 
+        [positionId]="positionData.positionId">
+      </app-talents>
+    }
+  }
+</div>

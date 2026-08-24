@@ -1,0 +1,26 @@
+@use 'variables' as *; 
+@use 'global' as *;
+
+:host {
+  width: 100%;
+}
+
+.pt-xs {
+    padding-top: 0 !important;
+}
+
+.disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+.input-group__item-text {
+  line-height: normal;
+  font-weight: 600;
+  word-wrap: break-word !important;
+  flex-wrap: wrap !important;
+}
+
+.input-group__items {
+  margin-bottom: $margin-middle;
+}

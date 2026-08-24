@@ -1,0 +1,190 @@
+@use 'variables' as *;
+
+
+.editor {
+  :host ::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-line-ripple::after {
+    padding: 0;
+    margin: 0;
+  }
+
+  .mdc-text-field--no-label:not(.mdc-text-field--outlined):not(.mdc-text-field--textarea)::ng-deep .mat-mdc-form-field-subscript-wrapper {
+    padding: 0;
+    display: none;
+  }
+
+  // :host ::ng-deep .mat-mdc-text-field-wrapper.mdc-text-field,
+  // :host ::ng-deep .mdc-text-field--no-label:not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .mat-mdc-form-field-infix,
+  :host ::ng-deep .mdc-text-field--no-label:not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .blog-input:hover,
+  mat-form-field:hover,
+  :host ::ng-deep .mat-mdc-input-element.blog-input:hover,
+  :focus,
+  :host ::ng-deep .mat-mdc-input-element.blog-input:focus {
+    background-color: $secondary-dark-background;
+  }
+
+  ::ng-deep .NgxEditor__MenuBar {
+    fill: transparent !important;
+    background-color: transparent !important;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+
+    // &:hover {
+    //     background-color: $teal-17-4914-TCX !important;
+    // }
+    .NgxEditor__MenuItem {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+
+      &:hover {
+        background-color: $teal-17-4914-TCX !important;
+      }
+    }
+
+    .NgxEditor__Dropdown {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+
+      &:hover {
+        background-color: $teal-17-4914-TCX !important;
+      }
+    }
+
+    .NgxEditor__Popup--Label {
+      color: $primary-dark;
+    }
+
+    .NgxEditor__Popup--Col {
+      color: $primary-dark;
+    }
+
+    .NgxEditor__Dropdown--Item {
+      &:hover {
+        background-color: $teal-17-5024-TCX !important;
+      }
+
+      color: $primary-dark !important;
+    }
+  }
+
+  ::ng-deep .NgxEditor__Placeholder {
+    opacity: 1;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    letter-spacing: 0.06em;
+    text-align: left;
+
+    @media (max-width: $screen-size-mobile) {
+      font-size: 0.7rem;
+      line-height: 0.7rem;
+    }
+  }
+
+  ::ng-deep .NgxEditor__Placeholder::before {
+    color: $text-input-color !important;
+  }
+
+  ::ng-deep .ProseMirror {
+    // max-height: 75vh;
+    overflow-y: hidden;
+  }
+
+  ::ng-deep .NgxEditor {
+    display: flex;
+    position: relative;
+    /* Ensure positioning respects flex rules */
+    flex-grow: 1;
+    /* Take remaining space */
+    overflow: hidden;
+    /* Prevent overflow */
+    height: auto;
+    /* Ensure height adjusts dynamically */
+    background-color: transparent !important;
+    margin: $margin-narrow;
+    box-shadow: var(--box-shadow-light);
+  }
+
+  ::ng-deep .NgxEditor__Content {
+    display: flex;
+    position: relative;
+    flex-grow: 1;
+    flex-direction: column;
+    overflow-y: hidden;
+    padding: $margin-middle;
+    border-radius: $borderRadius;
+    border: none;
+    font-size: 1.2rem;
+    line-height: 1.5rem;
+    width: 100%;
+    // max-width: $screen-size-netbook;
+    background-color: transparent;
+    height: 100%;
+    letter-spacing: 0.03em;
+    overflow: scroll;
+
+    @media (max-width: $screen-size-mobile) {
+      //height: 30vh;
+      padding: $margin-middle;
+      font-size: 0.8rem;
+      line-height: 0.8rem;
+    }
+
+    img {
+      max-width: 20rem !important;
+
+      @media (max-width: $screen-size-mobile) {
+        max-width: 30rem !important;
+      }
+    }
+  }
+}
+
+.toolbar-button {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.container-editor-menu {
+  background-color: transparent;
+  border: none;
+  border-radius: $borderRadius;
+  display: flex;
+  flex-direction: row;
+  padding: $padding-narrow;
+  justify-content: left;
+  align-items: center;
+  box-shadow: var(--box-shadow-light);
+  margin: $margin-narrow;
+}
+
+.container-tool__menu {
+  background-color: none;
+  border: none;
+  display: flex;
+  flex-direction: row;
+  align-self: center;
+}
+
+ngx-editor {
+  flex-grow: 1;
+  min-height: 13rem;
+  max-height: 100%;
+  overflow: auto;
+  background-color: transparent;
+}
+
+.NgxEditor {
+  background-color: transparent !important;
+  margin: $margin-narrow;
+  box-shadow: var(--box-shadow-light);
+}
+
+.editor__scroll-hidden {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  flex-grow: 1;
+  overflow: hidden;
+  height: auto;
+  gap: $gap-small;
+}

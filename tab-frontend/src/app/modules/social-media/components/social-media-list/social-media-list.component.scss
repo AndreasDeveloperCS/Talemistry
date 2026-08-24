@@ -1,0 +1,22 @@
+@use 'variables' as *; 
+@use 'global' as *;
+
+.social-icon {
+    background-color: var(--text);
+    padding: 0.1rem;
+    border: 1px solid $pallete-0-color-11;
+    border-radius: 50%;
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  
+    img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+  }
+  

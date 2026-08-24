@@ -1,0 +1,21 @@
+<div class="meeting-card">
+    <div class="header">
+        <h3 class="topic">{{ template.topic }}</h3>
+        <mat-icon (click)="onDeleteClick()">delete_sweep</mat-icon>
+    </div>
+    <p class="agenda"><strong>Agenda:</strong> {{ template.agenda }}</p>
+
+    <div class="details">
+        <p><strong>Platform:</strong> {{ getPlatformName(template.platform) }}</p>
+        <p><strong>Duration:</strong> {{ template.selectedSlotPeriod }}</p>
+        <p><strong>Start:</strong> {{ template.startDate | date:'MMMM d, y, HH:mm' }}</p>
+        <p><strong>End:</strong> {{ template.endDate | date:'MMMM d, y, HH:mm' }}</p>
+    </div>
+
+    <div class="participants">
+        <strong>Participants:</strong><br>
+        <span *ngFor="let participant of template.participants" class="participant-name">
+            {{ participant.firstname }} {{ participant.lastname }} {{ participant.email }}
+        </span>
+    </div>
+</div>

@@ -1,0 +1,217 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.chat-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1rem auto;
+  background: transparent;
+  padding: 1.5rem;
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: 80vh;
+
+  h2,
+  h3 {
+    font-weight: 600;
+    color: $pallete-0-color-14;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+
+    label {
+      font-weight: 500;
+      margin-bottom: 0.3rem;
+    }
+
+    input,
+    textarea,
+    select {
+      background: transparent;
+      border: none;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      font-size: 0.95rem;
+      box-shadow: var(--box-shadow-light);
+      height: 3rem;
+    }
+
+    &.checkbox {
+      flex-direction: row;
+      align-items: center;
+      gap: 0.5rem;
+      border: none;
+
+      input {
+        box-shadow: none;
+      }
+    }
+
+    &.toggle-row {
+      flex-direction: row;
+      align-items: center;
+      gap: 0.5rem;
+      border: none;
+
+      .toggle-label {
+        font-weight: 500;
+        color: $pallete-0-color-14;
+      }
+    }
+  }
+
+  .form-row {
+    display: flex;
+    gap: 1rem;
+
+    @media(max-width: $screen-size-mobile) {
+      flex-direction: column;
+    }
+
+    .form-group {
+      flex: 1;
+    }
+  }
+
+  .participants-section {
+    background: transparent;
+    border-radius: 0.5rem;
+  }
+
+  .participants-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    gap: $gap-small;
+
+    h4 {
+      color: $pallete-0-color-14;
+      font-weight: 600;
+    }
+  }
+
+  .add-participant-btn {
+    align-items: center;
+    background-color: $pallete-0-color-14;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:hover {
+      transform: translateY(-3px);
+    }
+  }
+
+  .participants {
+    display: flex;
+    flex-direction: row;
+    gap: $gap-small;
+
+    button {
+      border: none;
+      background: transparent;
+      color: $pallete-0-color-14;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+  }
+
+  .participant-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-top: 0.5rem;
+    width: 100%;
+
+    input {
+      flex: 1;
+      box-shadow: var(--box-shadow-light);
+      background: transparent;
+      border: none;
+      border-radius: 0.5rem;
+      padding: $padding-narrow;
+      width: 100%;
+    }
+
+    @media(max-width: $screen-size-mobile) {
+      flex-direction: column;
+      flex: 1;
+
+      input {
+        max-width: 100% !important;
+        width: 100%;
+      }
+    }
+  }
+
+  .button-primary {
+    background-color: $pallete-0-color-14;
+    color: var(--text);
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.2rem;
+    align-self: flex-start;
+    transition: 0.2s;
+    margin: 0 auto;
+
+    &:hover {
+      transform: translateY(-4px);
+    }
+
+    &:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+      transform: none;
+    }
+  }
+
+  .form-info {
+    color: $pallete-0-color-14;
+    font-size: 0.9rem;
+    text-align: center;
+    margin-top: -0.25rem;
+  }
+}
+
+select option {
+  color: var(--text);
+  background-color: $gradient-color-4;
+
+  &:hover {
+    background-color: $gradient-color-4;
+    opacity: 0.9;
+  }
+}
+
+select {
+  -webkit-appearance: none;
+  /* Safari & Chrome */
+  -moz-appearance: none;
+  /* Firefox */
+  appearance: none;
+}
+
+select option:checked {
+  color: $pallete-0-color-13;
+  font-weight: bold;
+}
+
+option {
+  background-color: #001524;
+  color: var(--text);
+}
+
+option:hover,
+option:checked {
+  background-color: #001524;
+}
+
+.mdc-switch__handle::before, .mdc-switch__handle::after {
+  width: 1.5rem !important;
+}

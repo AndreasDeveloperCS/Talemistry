@@ -1,0 +1,9 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.cover-letter__textarea{
+    height: 40vh !important;
+    @media (max-width: $screen-size-mobile) {
+        height: 20vh !important;
+      }
+}

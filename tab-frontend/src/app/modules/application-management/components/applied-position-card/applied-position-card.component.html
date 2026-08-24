@@ -1,0 +1,81 @@
+<div class="position-card">
+  <div class="card-header">
+    @if(positionRequirements.proficiencyLevel) {
+    <span class="single-tag">
+      <mat-icon class="custom-icon">bar_chart</mat-icon>
+      {{ positionRequirements.proficiencyLevel }}
+    </span>
+    }
+    @if(position.appliedDate) {
+    <span class="single-tag">
+      <mat-icon class="custom-icon">calendar_today</mat-icon>
+      Applied: {{ position.appliedDate | date: 'shortDate' }}
+    </span>
+    }
+  </div>
+  <div class="card-header">
+    <h3 (click)="navigateToPosition()">{{ position.positionTitle }}</h3>
+  </div>
+
+  <div class="card-body">
+    @if(company.data.companyName) {
+    <p class="company" (click)="openCompanyPage(company._id)">
+      <mat-icon>business</mat-icon>
+      {{ company.data.companyName }}
+    </p>
+    }
+    @if(company.data.mainIndustryDomain.industryName) {
+    <p class="department">
+      <mat-icon>miscellaneous_services</mat-icon>
+      {{ company.data.mainIndustryDomain.industryName }}
+    </p>
+    }
+    @if(company.data.country?.name) {
+    <p>
+      <mat-icon>location_on</mat-icon>
+      {{ company.data.country?.name }}
+    </p>
+    }
+  </div>
+
+  <div class="tags">
+    @if(positionConditions.cooperationType) {
+    <span class="tag">
+      <mat-icon class="custom-icon">handshake</mat-icon>
+      {{ positionConditions.cooperationType }}
+    </span>
+    }
+    @if(positionConditions.involevementType) {
+    <span class="tag">
+      <mat-icon class="custom-icon">how_to_reg</mat-icon>
+      {{ positionConditions.involevementType }}
+    </span>
+    }
+    @if(positionGeneral.workPlace) {
+    <span class="tag">
+      <mat-icon class="custom-icon">work</mat-icon>
+      {{ positionGeneral.workPlace }}
+    </span>
+    }
+    @if(positionConditions.jobType) {
+    <span class="tag">
+      <mat-icon class="custom-icon">schedule</mat-icon>
+      {{ positionConditions.jobType }}
+    </span>
+    }
+  </div>
+  <div class="card-header">
+    @if(position.currentStage) {
+    <span class="single-tag">
+      <mat-icon class="custom-icon">trending_up</mat-icon>
+      Stage: {{ position.currentStage }}
+    </span>
+    }
+    @if(position.currentStageStatus) {
+    <span class="single-tag">
+      <mat-icon> my_location</mat-icon>
+      Status: {{ position.currentStageStatus }}
+    </span>
+    }
+  </div>
+</div>

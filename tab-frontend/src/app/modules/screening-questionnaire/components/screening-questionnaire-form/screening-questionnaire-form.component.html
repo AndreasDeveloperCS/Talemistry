@@ -1,0 +1,92 @@
+<button title="close" mat-icon-button class="close-button" (click)="onCancel()">
+    <mat-icon>
+        <svg width="1.5rem" height="1.5rem" viewBox="0 0 108 107" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M27 26.75L54 53.5L81 26.75" stroke="white" stroke-width="10" stroke-linecap="round" />
+            <path d="M27 80.25L54 53.5L81 80.25" stroke="white" stroke-width="10" stroke-linecap="round" />
+        </svg>
+    </mat-icon>
+</button>
+
+<h2>{{ content.txtQuestionTemplateForm }}</h2>
+
+<div class="container__left">
+    <app-toggle-button 
+        [isActive]="isQuestionTemplateVerified()" 
+        (toggle)="toggleQuestionTemplateVerified()">
+    </app-toggle-button>
+</div>  
+
+<div class="universal-input">
+
+    <form [formGroup]="templateQuestionForm">
+        <mat-form-field class="input-group universal-input">
+            <mat-label>{{ content.txtText }}</mat-label>
+            <input class="transparent-input-full-width" matInput formControlName="text" required [placeholder]="content.txtText" />
+            <mat-error *ngIf="templateQuestionForm.get('text')?.hasError('required')">
+            {{ content.txtFieldRequired }}
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="input-group universal-input">
+            <mat-label>{{ content.txtType }}</mat-label>
+            <mat-select formControlName="type">
+            <mat-option *ngFor="let type of questionTypes" [value]="type">{{ type }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="input-group universal-input">
+            <mat-label>{{ content.txtCategory }}</mat-label>
+            <mat-select formControlName="category">
+                <mat-option *ngFor="let cat of questionCategories" [value]="cat">
+                    {{ cat }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="input-group universal-input">
+            <mat-label>{{ content.txtPositionTags }}</mat-label>
+            <mat-select formControlName="positionTags" multiple>
+            <mat-option *ngFor="let tag of allPositionTags" [value]="tag">{{ tag }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <div class="chips-container" *ngIf="templateQuestionForm.value.positionTags.length">
+            <mat-chip-list class="mat-chip-list">
+            <mat-chip *ngFor="let tag of templateQuestionForm.value.positionTags" 
+                class="mat-chip-item" (click)="removePositionTag(tag)">
+                {{ tag }}
+                <mat-icon matChipRemove>delete</mat-icon>
+            </mat-chip>
+            </mat-chip-list>
+        </div>
+
+        <mat-form-field class="input-group universal-input">
+            <mat-label>{{ content.txtSeniorityLevels }}</mat-label>
+            <mat-select formControlName="seniorityLevels" multiple>
+            <mat-option *ngFor="let level of allSeniorityLevels" [value]="level">{{ level }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <div class="chips-container" *ngIf="templateQuestionForm.value.seniorityLevels.length">
+            <mat-chip-list class="mat-chip-list">
+            <mat-chip *ngFor="let level of templateQuestionForm.value.seniorityLevels" 
+                class="mat-chip-item" (click)="removeSeniorityLevel(level)">
+                {{ level }}
+                <mat-icon matChipRemove>delete</mat-icon>
+            </mat-chip>
+            </mat-chip-list>
+        </div>
+
+        <mat-form-field *ngIf="isVideoResponse()" class="input-group universal-input">
+            <mat-label>{{ content.txtDuration }}</mat-label>
+            <input matInput type="number" formControlName="durationInSeconds" min="10" />
+            <mat-error *ngIf="templateQuestionForm.get('durationInSeconds')?.hasError('min')">
+                {{ content.txtDuration }}
+            </mat-error>
+        </mat-form-field>
+    </form>
+
+    <div mat-dialog-actions [align]="'end'" class="container__center">
+        <button (click)="save()" class="button__primary-color button--medium container__center">
+            {{ controlButtonContent }}
+        </button>
+    </div>
+</div>

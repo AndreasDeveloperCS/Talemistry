@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>CV - {{FIRSTNAME}} {{LASTNAME}}</title>
+  <link rel="stylesheet" href="../styles/timeline-professional.css" />
+</head>
+<body>
+<div class="cv-container">
+  <div class="cv-wrapper">
+    <header class="header">
+      <div class="header-left">
+        {{#if PHOTO}}
+          <img src="{{PHOTO}}" alt="{{FIRSTNAME}} {{LASTNAME}}" 
+            class="profile-photo">
+        {{/if}}
+        <div class="header-info">
+          <h1 class="name">{{FIRSTNAME}} {{LASTNAME}}</h1>
+          {{#if TITLE}}
+            <p class="title">{{TITLE}}</p>
+          {{/if}}
+        </div>
+      </div>
+      <div class="header-right">
+        {{#if EMAIL}}
+          <div class="contact-item">
+            <span class="contact-label">Email</span>
+            <span class="contact-value">{{EMAIL}}</span>
+          </div>
+        {{/if}}
+        {{#if PHONE}}
+          <div class="contact-item">
+            <span class="contact-label">Phone</span>
+            <span class="contact-value">{{PHONE}}</span>
+          </div>
+        </div>
+      {{/if}}
+    </header>
+
+    <div class="main-content">
+      <aside class="sidebar">
+        {{#if OBJECTIVE}}
+          <section class="sidebar-section">
+            <h2 class="sidebar-title">Objective</h2>
+            <p class="sidebar-text">{{OBJECTIVE}}</p>
+          </section>
+        {{/if}}
+
+        {{#if SUMMARY}}
+          <section class="sidebar-section">
+            <h2 class="sidebar-title">Summary</h2>
+            <p class="sidebar-text">{{SUMMARY}}</p>
+          </section>
+        {{/if}}
+
+        {{#if HARD_SKILLS.length}}
+          <section class="sidebar-section">
+            <h2 class="sidebar-title">Hard Skills</h2>
+            <div class="skills-list">
+              {{#each HARD_SKILLS}}
+                {{#if name}}
+                  <span class="skill-tag skill-tag-colorful">{{name}}</span>
+                {{/if}}
+              {{/each}}
+            </div>
+          </section>
+        {{/if}}
+
+        {{#if DOMAIN_SKILLS.length}}
+          <section class="sidebar-section">
+            <h2 class="sidebar-title">Domain Skills</h2>
+            <div class="skills-list">
+              {{#each DOMAIN_SKILLS}}
+                {{#if name}}
+                  <span class="skill-tag skill-tag-transparent">{{name}}</span>
+                {{/if}}
+              {{/each}}
+            </div>
+          </section>
+        {{/if}}
+        
+        {{#if MANAGERIAL_SKILLS.length}}
+          <section class="sidebar-section">
+            <h2 class="sidebar-title">Managerial Skills</h2>
+            <ul class="simple-list">
+              {{#each MANAGERIAL_SKILLS}}
+              <li>{{#if name}}{{name}}{{/if}}</li>
+              {{/each}}
+            </ul>
+          </section>
+        {{/if}}
+
+        {{#if SOFT_SKILLS.length}}
+          <section class="sidebar-section">
+            <h2 class="sidebar-title">Soft Skills</h2>
+            <div class="skills-list">
+              {{#each SOFT_SKILLS}}
+                {{#if name}}
+                  <span class="skill-tag skill-tag-transparent">{{name}}</span>
+                {{/if}}
+              {{/each}}
+            </div>
+          </section>
+        {{/if}}
+
+        {{#if LANGUAGES.length}}
+          <section class="sidebar-section">
+            <h2 class="sidebar-title">Languages</h2>
+            <div class="languages-list">
+              {{#each LANGUAGES}}
+              <div class="language-item">
+                {{#if name}}
+                  <span class="language-name">{{name}}</span>
+                {{/if}}
+                {{#if level}}
+                  <span class="language-level">{{level}}</span>
+                {{/if}}
+              </div>
+              {{/each}}
+            </div>
+          </section>
+        {{/if}}
+
+        {{#if MOTIVATIONAL_FACTORS}}
+          <section class="sidebar-section">
+            <h2 class="sidebar-title">Motivational Factors</h2>
+            <ul class="simple-list">
+              {{#each MOTIVATIONAL_FACTORS}}
+              <li>{{this}}</li>
+              {{/each}}
+            </ul>
+          </section>
+        {{/if}}
+      </aside>
+
+      <main class="content">
+        {{#if EXPERIENCE.length}}
+          <section class="content-section">
+            <h2 class="content-title">Professional Experience</h2>
+            <div class="timeline">
+              {{#each EXPERIENCE}}
+              <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                  <div class="timeline-header">
+                    <div>
+                      {{#if title}}
+                        <h3 class="timeline-title">{{title}}</h3>
+                      {{/if}}
+                      {{#if company}}
+                        <p class="timeline-subtitle">{{company}}</p>
+                      {{/if}}
+                    </div>
+                    {{#if period}}
+                      <span class="timeline-period">{{period}}</span>
+                    {{/if}}
+                  </div>
+                  {{#if responsibilities}}
+                  <div>
+                    <p class="responsibilities-header">Responsibilities</p>
+                    <ul class="responsibilities-list">
+                      {{#each responsibilities}}
+                      <li>{{this}}</li>
+                      {{/each}}
+                    </ul>
+                  </div>
+                  {{/if}}
+                  {{#if achievements}}
+                  <div>
+                    <p class="achievements-header">Achievements</p>
+                    <ul class="achievements-list">
+                      {{#each achievements}}
+                      <li>{{this}}</li>
+                      {{/each}}
+                    </ul>
+                  </div>
+                  {{/if}}
+                </div>
+              </div>
+              {{/each}}
+            </div>
+          </section>
+        {{/if}}
+
+        {{#if EDUCATION.length}}
+          <section class="content-section">
+            <h2 class="content-title">Education</h2>
+            <div class="timeline">
+              {{#each EDUCATION}}
+              <div class="timeline-item">
+                <div class="timeline-marker timeline-marker-education"></div>
+                <div class="timeline-content">
+                  <div class="timeline-header">
+                    <div>
+                      {{#if degree}}
+                        <h3 class="timeline-title">{{degree}}</h3>
+                      {{/if}}
+                      {{#if institution}}
+                        <p class="timeline-subtitle">{{institution}}</p>
+                      {{/if}}
+                    </div>
+                    {{#if year}}
+                      <span class="timeline-period">{{year}}</span>
+                    {{/if}}
+                  </div>
+                  {{#if fieldOfStudy}}
+                  <p class="timeline-description">{{fieldOfStudy}}</p>
+                  {{/if}}
+                </div>
+              </div>
+              {{/each}}
+            </div>
+          </section>
+        {{/if}}
+
+        {{#if CERTIFICATIONS.length}}
+          <section class="content-section">
+            <h2 class="content-title">Certifications</h2>
+            <div class="certifications-grid">
+              {{#each CERTIFICATIONS}}
+              <div class="certification-card">
+                {{#if name}}
+                  <h3 class="certification-name">{{name}}</h3>
+                {{/if}}
+                {{#if issuer}}
+                  <p class="certification-issuer">{{issuer}}</p>
+                {{/if}}
+                {{#if year}}
+                  <span class="certification-year">{{year}}</span>
+                {{/if}}
+              </div>
+              {{/each}}
+            </div>
+          </section>
+        {{/if}}
+      </main>
+    </div>
+  </div>
+</div>
+</body>
+</html>

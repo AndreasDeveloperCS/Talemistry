@@ -1,0 +1,99 @@
+<div class="universal-input">
+
+  <button mat-icon-button class="close-button" (click)="onCancel()">
+    <mat-icon class>
+      <svg class="icon-close" width="24px" height="24px" viewBox="0 0 108 107" fill="none"
+        xmlns="http://www.w3.org/2000/svg">
+        <path d="M27 26.75L54 53.5L81 26.75" stroke="white" stroke-width="10" stroke-linecap="round" />
+        <path d="M27 80.25L54 53.5L81 80.25" stroke="white" stroke-width="10" stroke-linecap="round" />
+      </svg>
+    </mat-icon>
+  </button>
+
+  <div class="recruitment">
+
+    <h2 class="padding-vertical-wide padding-horizontal-middle text-center">{{ content.recruitmentPlatformFormTitle }}
+    </h2>
+
+    <form [formGroup]="recruitmentPlatformForm">
+
+      <div class="secondary-form-fields">
+        <mat-form-field class>
+          <mat-label>{{content.txtName}}</mat-label>
+          <input matInput name="name" formControlName="name" [(ngModel)]="recruitmentPlatform.name"
+            placeholder="Recruitment Platform Name: " />
+        </mat-form-field>
+
+        <mat-form-field class>
+          <div class="container-horizontal-social-media">
+            <input matInput [readonly]="true" name="icon" formControlName="icon" [(ngModel)]="recruitmentPlatform.icon"
+              [value]="fileName == '' || fileName == undefined ? content.txtSelectRecruitmentPlatformIconPlaceholder: fileName" />
+
+            <div class="import-profile-image">
+
+              <a class="import-profile-image-link" (click)="fileInput.click()" target="_blank">
+              </a>
+
+              <input hidden (change)="onFileSelected($event)" [accept]="extensions" #fileInput type="file"
+                class="import-btn-input" />
+
+              <button class="button-colors button-border icon-size" (click)="fileInput.click()">
+                {{ content.btnSelect }}
+              </button>
+
+            </div>
+          </div>
+
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>{{content.txtApiUrl}}</mat-label>
+          <input matInput name="apiUrl" formControlName="apiUrl" [placeholder]="content.txtApiUrl"
+            [(ngModel)]="recruitmentPlatform.apiUrl">
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>{{content.txtClientId}}</mat-label>
+          <input matInput name="clientId" formControlName="clientId" [placeholder]="content.txtClientId"
+            [(ngModel)]="recruitmentPlatform.clientId">
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>{{content.txtClientSecret}}</mat-label>
+          <input matInput name="clientSecret" formControlName="clientSecret" [placeholder]="content.txtClientSecret"
+            [(ngModel)]="recruitmentPlatform.clientSecret">
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>{{content.txtAccessToken}}</mat-label>
+          <input matInput name="accessToken" formControlName="accessToken" [placeholder]="content.txtAccessToken"
+            [(ngModel)]="recruitmentPlatform.accessToken">
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>{{content.txtPriority}}</mat-label>
+          <input type="number" matInput min="1" formControlName="priority"
+            [placeholder]="content.txtPriorityPlaceholder" [(ngModel)]="recruitmentPlatform.priority">
+        </mat-form-field>
+
+      </div>
+
+    </form>
+
+    <div mat-dialog-actions [align]="'end'" class="container__center">
+      <button (click)="onApply()" class="button__primary-color button--medium container__center">
+        {{ controlButtonContent }}
+      </button>
+    </div>
+
+    <button class="button__secondary-color button--medium container__center" (click)="getLinkedInCode()">
+      Refresh (LinkedIn)
+    </button>
+
+    @for (notification of notificationMessages; track notification) {
+    <div class="notification">
+      {{notification}}
+    </div>
+    }
+  </div>
+</div>

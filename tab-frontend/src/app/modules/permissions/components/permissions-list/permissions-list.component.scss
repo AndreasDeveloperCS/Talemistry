@@ -1,0 +1,42 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+ .permissions-layout {
+    display: grid;
+    grid-template-columns: 15% 85%;
+    gap: $gap-small;
+  }
+  
+  .role-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .role-list li {
+    border-bottom: 1px solid $pallete-0-color-11;
+    cursor: pointer;
+    font-size: $font-size-header-narrow;
+    padding: $padding-middle;
+  }
+  
+  .role-list li.active {
+    background: linear-gradient(45deg, #C78A00, #D77400, #E76A00, #F66411);
+    font-size: $font-size-header-middle;
+    font-weight: bold;
+  }
+  
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.table-name  {
+  align-items: center;
+  padding: $padding-middle $padding-wide $padding-wide;
+}
+
+h3 {
+  margin-bottom: 0 !important;
+}

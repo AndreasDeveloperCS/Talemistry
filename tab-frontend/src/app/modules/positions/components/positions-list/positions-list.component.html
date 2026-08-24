@@ -1,0 +1,113 @@
+@if(initialLoading) {
+<app-loading-spinner></app-loading-spinner>
+}
+@if(!initialLoading) {
+<br>
+<div class="career-container">
+<div class="career custom-toggle container background-form-image">
+  <br>
+  <h2 class="hidden">
+    {{content.txtOpenedPositions}}
+  </h2>
+
+  <div class="container__center infographic-block">
+    <div class="infographic">
+      <img src='/assets/infographic/PositionInfographicHorizontalImage.svg' alt="Job Position" class='jobPosition' />
+      <div class="infographic-actions">
+        <input type="text" [placeholder]="displayedPlaceholder" class="discover-input" (focus)="onFocus()"
+          (blur)="onBlur()" (input)="onSearchInput($event)"/>
+        @if(canCreateItems) {
+        <div class="button-block">
+          <button (click)="openNewPosition()" class="button__primary-color button--medium collapsed-button-absolute">
+            <mat-icon>connect_without_contact</mat-icon>
+            <span>{{ content.lblAddNew }}</span>
+          </button>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+
+
+  @if(hasFullAccess) {
+  <app-filters style="display: none;" class="filters fixed"></app-filters>
+  }
+
+  <div class="toggle-group">
+    <div class="custom-toggle-group">
+      @for (type of layoutTypes; track $index) {
+      <button type="button" class="toggle-btn" [class.active-toggle]="selectedLayoutType === type"
+        (click)="selectedLayoutType = type" [hoverDescription]="getRoleDescription(type)">
+        <mat-icon>{{ layoutTypesIcons[$index] }}</mat-icon>
+      </button>
+      }
+    </div>
+  </div>
+
+  <div class="toggle-group" style="display: none;" [hidden]="true">
+    <mat-button-toggle-group matInput [(ngModel)]="selectedLayoutType" class="toggle-margin">
+
+      <!-- <mat-button-toggle [class]="{'active-toggle': selectedLayoutType === type }" *ngFor="let type of layoutTypes"
+            [value]="type">
+            <span>{{type}}</span>
+          </mat-button-toggle> -->
+      @for (type of layoutTypes; track $index) {
+      <mat-button-toggle [class]="{'active-toggle': selectedLayoutType === type }" [value]="type"
+        [hoverDescription]="getRoleDescription(type)">
+
+        <mat-icon>{{ layoutTypesIcons[$index] }}</mat-icon>
+        <!-- <span>{{ type }}</span> -->
+
+      </mat-button-toggle>
+      }
+
+    </mat-button-toggle-group>
+  </div>
+
+  <div class="positions-list" #scrollContainer [ngSwitch]="selectedLayoutType">
+    @for (position of dataItems; track position; let i = $index) {
+    <div class="positions-gallery">
+      <app-opened-position-full (positionsListUpdated)="onPositionsListUpdated($event)"
+        *ngSwitchCase="layoutType.fullView" [isAuthorised]="true" [positionTitle]="position?.title"
+        [position]="position">
+      </app-opened-position-full>
+      <app-opened-position-short-item (positionsListUpdated)="onPositionsListUpdated($event)"
+        *ngSwitchCase="layoutType.shortView" class="position-item" [isAuthorised]="true"
+        [positionTitle]="position?.title" [position]="position">
+      </app-opened-position-short-item>
+      <app-opened-position-matching-skills (positionsListUpdated)="onPositionsListUpdated($event)"
+        *ngSwitchCase="layoutType.tableView" [isAuthorised]="hasFullAccess">
+      </app-opened-position-matching-skills>
+      <span *ngSwitchDefault> {{"3"}} </span>
+    </div>
+    }
+    <div class="wrap-tiles" *ngSwitchCase="layoutType.tileView">
+      <div class="job-list" #jobList (scroll)="onJobListScroll()">
+        @for(position of dataItems; track $index) {
+        <app-opened-position-tiles class="position-item single-tile" [isAuthorised]="true"
+          [positionTitle]="position?.title" [position]="position" (click)="selectPosition(position)"
+          (positionsListUpdated)="onPositionsListUpdated($event)"
+          [class]="{'selected': (selectedPosition ? selectedPosition.title === position.title : $first)}">
+        </app-opened-position-tiles>
+        }
+      </div>
+
+      <div class="job-details" #scrollContainer>
+        @for(position of dataItems; let first = $first; track $index) {
+        <app-opened-position-full *ngIf="selectedPosition ? (selectedPosition.title === position.title) : first"
+          [isAuthorised]="true" [positionTitle]="selectedPosition ? selectedPosition.title : position.title"
+          [position]="selectedPosition ? selectedPosition : position">
+        </app-opened-position-full>
+        }
+      </div>
+    </div>
+  </div>
+  @if(loadingMore) {
+  <app-loading-spinner></app-loading-spinner>
+  }
+  @if(dataItems.length == 0) {
+  <app-positions></app-positions>
+  }
+</div>
+</div>
+}

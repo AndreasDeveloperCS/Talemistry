@@ -1,0 +1,21 @@
+<form [formGroup]="form" >
+  <mat-form-field class="form-field-input">
+    <mat-label class="new-label"><mat-icon>my_location</mat-icon>{{content.txtLabelObjective}}</mat-label>
+    <textarea class="input-field transparent-input-full-width" matInput type="text" (blur)="onInputBlur()" cdkTextareaAutosize cdkAutosizeMinRows="4"
+      cdkAutosizeMaxRows="7" name="objective" [(ngModel)]="service.model.objective" formControlName="objective"
+      [class]="form.controls['objective'].invalid && form.controls['objective'].touched ? 'invalid' : 'valid'"
+      [placeholder]="content.txtPlaceholderObjective" required>
+    </textarea>
+    @if (validator.fieldIsValid(form, 'objective')) {
+    <mat-error>
+      <div class="errors">
+        @if (validator.getErrors(form, 'objective')['required']) {
+        <p>
+          Objective is required
+        </p>
+        }
+      </div>
+    </mat-error>
+    }
+  </mat-form-field>
+</form>

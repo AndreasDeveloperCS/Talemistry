@@ -1,0 +1,264 @@
+<div class="activity-access-container">
+
+    <mat-card class="section-card">
+
+        <div class="section-header">
+            <mat-icon>security</mat-icon>
+            <h2>Team Supervision</h2>
+        </div>
+
+        <p class="subtitle">
+            Create supervision relationships between recruiters and supervisors. Requests can be initiated by either side and require approval before activity becomes visible.
+        </p>
+
+        <div class="search-row">
+
+            <mat-form-field appearance="outline">
+
+                <mat-label>Work email</mat-label>
+
+                <input
+                    matInput
+                    [(ngModel)]="searchEmail">
+
+            </mat-form-field>
+
+            <button
+                mat-flat-button
+                color="primary"
+                (click)="searchRecruiter()">
+
+                <mat-icon>search</mat-icon>
+
+                Search
+
+            </button>
+
+        </div>
+
+        @if (loading) {
+
+            <div class="loading">
+
+                <mat-spinner diameter="35"></mat-spinner>
+
+            </div>
+
+        }
+
+        @if (foundRecruiter) {
+            <div class="found-user">
+                <div class="user-info">
+                    <div class="name">
+                        {{ foundRecruiter.fullName }}
+                    </div>
+                    <div class="email">
+                        {{ foundRecruiter.email }}
+                    </div>
+                </div>
+
+                <div class="relationship-description">
+                    <div class="title">
+                        Choose how you'd like to establish the supervision relationship.
+                    </div>
+                    <div class="subtitle">
+                        Both requests require approval before supervision becomes active.
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <div class="action-block">
+                        <button
+                            mat-flat-button
+                            color="primary"
+                            (click)="requestSupervision()">
+                            <mat-icon>visibility</mat-icon>
+                            Request Supervision
+                        </button>
+
+                        <div class="action-description">
+                            Ask this person to supervise your recruiting activity.
+                        </div>
+                    </div>
+
+                    <div class="action-block">
+                        <button
+                            mat-flat-button
+                            color="primary"
+                            (click)="grantSupervision()">
+                            <mat-icon>share</mat-icon>
+                            Grant Supervision
+                        </button>
+
+                        <div class="action-description">
+                            Invite this person to supervise your recruiting activity.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (recruiterNotFound) {
+
+            <div class="not-found">
+
+                <mat-icon color="warn">person_off</mat-icon>
+
+                <div>
+
+                    <div class="title">
+                        Recruiter not found
+                    </div>
+
+                    <div class="description">
+                        We couldn't find a recruiter with this email address.
+                    </div>
+
+                </div>
+
+            </div>
+
+        }
+
+    </mat-card>
+
+    <mat-card class="section-card">
+
+        <h3>Pending Requests Sent</h3>
+        @if(pendingRequestsSent.length) {
+            @for (item of pendingRequestsSent; track item) {
+                <div class="request-row">
+
+                    <div>
+
+                        <div class="name">{{ getUserName(item) }}</div>
+
+                        <mat-chip>Pending</mat-chip>
+
+                    </div>
+
+                    <button
+                        mat-button
+                        color="warn"
+                        (click)="cancelRequest(item)">
+
+                        Cancel
+
+                    </button>
+
+                </div>
+            }
+        } @else {
+            <div class="empty-state">
+                <mat-icon>hourglass_empty</mat-icon>
+                <p>You haven't sent any supervisor requests yet.</p>
+            </div>
+        }
+
+    </mat-card>
+
+    <mat-card class="section-card">
+
+        <h3>Pending Requests Received</h3>
+        @if(pendingRequestsReceived.length) {
+            @for (item of pendingRequestsReceived; track item) {
+                <div class="request-row">
+
+                    <div class="name">
+
+                        {{ getUserName(item) }}
+
+                    </div>
+
+                    <div class="actions">
+
+                        <button
+                            mat-flat-button
+                            color="primary"
+                            (click)="acceptRequest(item)">
+
+                            Accept
+
+                        </button>
+
+                        <button
+                            mat-button
+                            color="warn"
+                            (click)="rejectRequest(item)">
+
+                            Reject
+
+                        </button>
+
+                    </div>
+
+                </div>
+            }
+        } @else {
+            <div class="empty-state">
+                <mat-icon>mail_outline</mat-icon>
+                <p>No one has requested to supervise your activity.</p>
+            </div>
+        }
+
+    </mat-card>
+
+    <mat-card class="section-card">
+
+        <h3>Recruiters I Supervise</h3>
+        @if(supervisedRecruiters.length) {
+            @for (item of supervisedRecruiters; track item) {
+                <div class="request-row">
+
+                    <span>{{ getUserName(item) }}</span>
+
+                    <button
+                        mat-button
+                        color="warn"
+                        (click)="removeAccess(item, supervisedRecruiters)">
+
+                        Remove
+
+                    </button>
+
+                </div>
+            }
+        } @else {
+            <div class="empty-state">
+                <mat-icon>groups</mat-icon>
+                <p>You aren't supervising any recruiters yet. Send a request to get started.</p>
+            </div>
+        }
+
+    </mat-card>
+
+    <mat-card class="section-card">
+
+        <h3>My Supervisors</h3>
+        @if(mySupervisors.length) {
+            @for (item of mySupervisors; track item) {
+                <div class="request-row">
+
+                    <span>{{ getUserName(item) }}</span>
+
+                    <button
+                        mat-button
+                        color="warn"
+                        (click)="removeAccess(item, mySupervisors)">
+
+                        Remove
+
+                    </button>
+
+                </div>
+            }
+        } @else {
+            <div class="empty-state">
+                <mat-icon>supervisor_account</mat-icon>
+                <p>Your activity isn't currently shared with any supervisors.</p>
+            </div>
+        }
+
+    </mat-card>
+
+</div>

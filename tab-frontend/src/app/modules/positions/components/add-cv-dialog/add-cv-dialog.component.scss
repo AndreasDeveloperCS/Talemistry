@@ -1,0 +1,85 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.container__cv-dialog {
+
+  .mdc-dialog__title {
+    background-color: transparent !important;
+    color: $primaryThree ;
+
+    @media (max-width: $screen-size-tab) {
+      width: 100%;
+      text-align: right;
+    }
+  }
+}
+
+.import-items {
+  padding-top: $padding-middle;
+}
+
+.select-cv-button-layout {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 30px;
+  gap: 10px;
+  border: 2px solid #3BD3D5;
+  border-radius: 4px;
+  font-family: 'Urbanist';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  background: transparent;
+  line-height: 19px;
+}
+
+.btn-container {
+  display: flex;
+  justify-content: space-between;
+  gap: $gap-small;
+  padding: $padding-wide;
+
+  @media (max-width: $screen-size-tab) {
+    flex-wrap: wrap !important;
+    width: 100%;
+    justify-content: left;
+    padding: $padding-middle;
+    align-items: flex-end;
+  }
+
+}
+
+.import-btn-container-items {
+  display: flex;
+  gap: $gap-small;
+  align-items: center;
+
+  @media (max-width: $screen-size-tab) {
+    justify-content: space-between;
+    width: 100%;
+    text-align: left;
+  }
+}
+
+.import-btn-container {
+  width: 100%;
+  text-align: right;
+}
+
+.import-btn-input {
+  width: 100%;
+}
+
+.privacy-link {
+  cursor: pointer;
+  font-size: 1.2rem;
+  display: flex;
+  align-self: center;
+
+  &:hover {
+    color: $pallete-0-color-14;
+    font-weight: 500;
+  }
+}

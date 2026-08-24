@@ -1,0 +1,53 @@
+<div class="import-cv-container">
+  <div class="container">
+    <h3 class="label-icon-orange"><mat-icon>edit_note</mat-icon>{{title}}</h3>
+    <mat-form-field class="container-textarea__color">
+      <textarea matInput rows="5" [formControl]="coverLetterTextControl" cdkTextareaAutosize
+        [placeholder]="content.txtCoverLetter" cdkAutosizeMinRows="5" cdkAutosizeMaxRows="15"
+        class="transparent-input-full-width" style="height: 240px; max-height: 720px;"
+        name="coverLetterTextControl" [(ngModel)]="coverLetterService.coverLetterModel.coverLetterText">
+      </textarea>
+    </mat-form-field>
+    <div class="button-container__cover-letter mb-lg">
+      <button (click)="new()" class="textarea-button 
+                        container__middle
+                        button__primary-color" type="submit" color="primary">
+        <mat-icon>save</mat-icon>
+        Add CL
+      </button>
+      <button (click)="update()" class="textarea-button
+                          container__middle
+                          button__primary-color" type="submit" color="primary">
+        <mat-icon>update</mat-icon>
+        Update CL
+      </button>
+    </div>
+  </div>
+  <div class="container container__flex container__left">
+      <app-toggle-button 
+        [isActive]="includeAttachment" 
+        (toggle)="includeAttachment = !includeAttachment">
+    </app-toggle-button>
+    <span class="center">With Attachment</span>
+  </div>
+
+  <br>
+
+  @if (includeAttachment) {
+  <div class="container-wrapper-horizontal">
+    <button class="button__primary-color button--medium btn-text-icon" (click)="fileInput.click()">
+      <mat-icon>attach_file</mat-icon>{{ buttonCaption }}
+    </button>
+    <input mat-dialog-title [readonly]="true" class="import-title transparent-input"
+      [class.empty-animation]="fileName == '' || fileName == undefined"
+      [class.file-selected]="!(fileName == '' || fileName == undefined)"
+      [value]="fileName == '' || fileName == undefined ? placeholderInputSelectAttachments : fileName">
+
+    <input hidden (change)="onFileSelected($event)" [accept]="extensions" #fileInput type="file"
+      class="import-btn-input">
+  </div>
+  }
+  <br>
+  <app-cover-letter-collection-history></app-cover-letter-collection-history>
+
+</div>

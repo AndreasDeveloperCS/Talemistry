@@ -1,0 +1,114 @@
+// Title
+$font-header-5xl: clamp(2.1rem, 4.5vw, 3.3rem); // 40px - 64px (main title)
+$font-header-4xl: clamp(2rem, 4vw, 3rem); // 32px - 48px (secondary title)
+$font-header-3xl: clamp(1.75rem, 3.5vw, 2.5rem); // 28px - 40px
+$font-header-2xl: clamp(1.5rem, 3vw, 2.3rem); // 24px - 32px
+$font-header-xl: clamp(1.3rem, 2.5vw, 1.8rem); // 21px - 28px
+$font-header-lg: clamp(1.2rem, 2vw, 1.5rem); // 19px - 24px
+$font-header-md: clamp(1rem, 1.8vw, 1.2rem); // 16px - 19px
+$font-header-sm: clamp(0.875rem, 1.5vw, 1rem); // 14px - 16px
+
+// Buttons
+$font-button-lg: clamp(1.2rem, 2.5vw, 1.5rem); // 19px - 24px
+$font-button-md: clamp(1rem, 2vw, 1.4rem); // 16px - 19px
+// $font-button-sm: clamp(0.875rem, 1.5vw, 1rem); // 14px - 16px
+
+// Text
+$font-text-lg: clamp(1rem, 1.8vw, 1.2rem); // 16px - 19px
+$font-text-md: clamp(0.875rem, 1.5vw, 1rem); // 14px - 16px
+// $font-text-sm: clamp(0.75rem, 1.3vw, 0.875rem); // 12px - 14px
+// $font-text-xs: clamp(0.7rem, 1vw, 0.8rem); // 11px - 12px
+
+// Adding Text
+// $font-caption: clamp(0.65rem, 1vw, 0.75rem); // 10px - 12px
+// $font-label: clamp(0.6rem, 0.9vw, 0.7rem); // 9px - 11px
+
+// Text for input (input, textarea)
+// $font-input: clamp(0.9rem, 1.5vw, 1rem);
+// $font-textarea: clamp(0.875rem, 1.3vw, 0.95rem);
+
+h1 {
+  font-size: $font-header-5xl;
+  line-height: 1.2;
+}
+
+h2 {
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: $font-header-3xl;
+  line-height: 1.1;
+}
+
+// header for form
+h3 {
+  font-weight: 500;
+  font-size: $font-header-xl;
+}
+
+
+h4 {
+  font-weight: 400;
+  font-size: $font-header-lg;
+}
+
+h5 {
+  font-weight: 500;
+  font-size: $font-header-md;
+  // line-height: 22px;
+}
+
+.text-highlight {
+  color: #3bd3d5;
+}
+
+p {
+  font-size: $font-text-md;
+  line-height: 1.14;
+  letter-spacing: 0.02em;
+}
+
+.heading-lg {
+  font-weight: 400;
+  font-size: $font-header-2xl;
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+}
+
+.font__link {
+  font-family: 'Inter', sans-serif;
+  font-weight: 550;
+  font-size: $font-header-md;
+  line-height: 1.1;
+  color: #3bd3d4;
+
+  :hover {
+    color: #04D9D9;
+  }
+
+  :active {
+    color: #037F8C;
+  }
+}
+
+$font-path: "../assets/fonts/";
+// @debug '$font-path';
+// @debug $font-path;
+
+@font-face {
+  font-family: "Urbanist-SemiBold";
+  src: local("☺"),
+  url("#{$font-path}Urbanist-SemiBold.otf") format("opentype"),
+  url("#{$font-path}Urbanist-SemiBold.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Urbanist-Medium";
+  src: local("☺"),
+  url("#{$font-path}Urbanist-Medium.otf") format("opentype"),
+  url("#{$font-path}Urbanist-Medium.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}

@@ -1,0 +1,24 @@
+  @if(isLoading) {
+    <app-loading-spinner></app-loading-spinner>
+  }
+
+  @if(!isLoading) {
+  <div class="main-container">
+    <div class="header">
+      <h2>Applied Positions Management</h2>
+    </div>
+
+    @if(appliedPositions.length > 0) {
+      <div class="position-grid">
+        @for(position of appliedPositions; track position; let i = $index) {
+        <app-applied-position-card 
+          [position]="position">
+        </app-applied-position-card>
+        }
+      </div>
+    }
+    @if(appliedPositions.length === 0) {
+      <p>There are no applied positions</p>
+    }
+  </div>
+}

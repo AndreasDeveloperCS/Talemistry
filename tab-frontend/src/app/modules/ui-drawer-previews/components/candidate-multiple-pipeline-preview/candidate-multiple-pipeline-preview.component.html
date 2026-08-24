@@ -1,0 +1,57 @@
+@if(isLoading) {
+  <app-sun-spinner></app-sun-spinner>
+}
+
+@if(!isLoading && pipelineGroup) {
+<div class="multiple-pipeline">
+  <div class="multiple-pipeline__hero">
+    <div>
+      <div class="multiple-pipeline__eyebrow">
+        Candidate Pipelines
+      </div>
+      <div class="multiple-pipeline__title">
+        {{ pipelineGroup?.[0]?.records?.[0]?.talentName }}
+      </div>
+      <div class="multiple-pipeline__subtitle">
+        {{ getUniquePositions().length }} Active Applications
+      </div>
+    </div>
+    <button class="action-btn" (click)="openCandidate()">
+      <mat-icon>person</mat-icon>
+      Candidate
+    </button>
+  </div>
+  <div class="positions-grid">
+    <div *ngFor="let progress of getUniquePositions()" class="position-card">
+      <div class="position-card__top">
+        <div>
+          <div class="position-name">{{ progress.positionName }}</div>
+          <div class="company-name">{{ progress.companyName }}</div>
+        </div>
+        <div class="status-badge" [ngClass]="getStatusClass(progress.status)">
+          {{ progress.status }}
+        </div>
+      </div>
+      <div class="position-stage">
+        <mat-icon>timeline</mat-icon>
+        {{ progress.stageName }}
+      </div>
+      <div class="position-score">
+        <mat-icon>analytics</mat-icon>
+        {{ progress.assessmentScore || 0 }}/10
+      </div>
+      <div class="position-footer">
+        <button class="secondary-btn" (click)="openPosition(progress.positionId)">
+          <mat-icon>work</mat-icon>
+          Position
+        </button>
+
+        <button class="action-btn" (click)="openSinglePipeline(progress)">
+          <mat-icon>visibility</mat-icon>
+          Pipeline
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+}

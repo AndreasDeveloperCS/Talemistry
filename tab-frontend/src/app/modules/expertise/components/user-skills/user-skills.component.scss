@@ -1,0 +1,21 @@
+@use 'variables' as *; 
+@use 'global' as *;
+
+:host {
+  display: block;
+  max-width: 100%;
+}
+
+.label-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  mat-icon {
+    font-size: 2rem;
+    color: $pallete-0-color-14;
+    height: fit-content;
+    width: fit-content;
+    flex-shrink: 0;
+  }
+}

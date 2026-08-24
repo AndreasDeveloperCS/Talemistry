@@ -1,0 +1,172 @@
+<div class="universal-input booking-request ">
+
+  <div class="booking-request__height">
+    <form action="submit" [formGroup]="form" class="booking-request__item" section="contactForm"
+      (ngSubmit)="onSubmit()">
+
+      <div class="meeting-topic">
+        <div class="meeting-topic__header">
+          <mat-icon>calendar_today</mat-icon>Details
+        </div>
+        <div class="meeting-topic__fields">
+          <mat-form-field>
+            <mat-label class="new-label">{{content.txtTopic}}</mat-label>
+            <input class="transparent-input" autofocus formControlName="topic" [class]="{
+                    'invalid' : form.controls.topic?.invalid && form.controls.topic?.touched,
+                    'valid' : form.controls.topic?.valid
+                  }" (input)="onInputChange()" autocomplete="on" matInput [placeholder]="content.txtTopic"
+              [(ngModel)]="service.model.topic" />
+            @if (form.controls.topic?.invalid) {
+            <mat-error>
+              <div class="errors">
+                <p>{{content.txtFieldRequired}}</p>
+              </div>
+            </mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label class="new-label">{{content.txtAgenda}}</mat-label>
+            <textarea class="transparent-input" autofocus formControlName="agenda" [class]="{
+                    'invalid' : form.controls.agenda?.invalid && form.controls.agenda?.touched,
+                    'valid' : form.controls.agenda?.valid
+                  }" (input)="onInputChange()" autocomplete="on" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+              cdkAutosizeMinRows="4" cdkAutosizeMaxRows="4" matInput [placeholder]="content.txtAgenda"
+              [(ngModel)]="service.model.agenda"></textarea>
+            @if (form.controls.agenda?.invalid) {
+            <mat-error>
+              <div class="errors">
+                <p>{{content.txtFieldRequired}}</p>
+              </div>
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="booking-request__wrapper-logo container__middle platform-select">
+        <div class="booking-request__header">
+          <mat-icon>videocam</mat-icon>{{ content.txtPlatform }}
+        </div>
+        <div class="booking-request__platforms">
+          <div class="container__flex container__center">
+
+            <button role="button" class="icon-button" [hoverDescription]="evrykaLabel"
+              [ngClass]="{ 'icon-button': true, 'icon-button--active': selectedPlatform === MeetingPlatfrom.EVRYKA }"
+              (click)="selectPlatform(MeetingPlatfrom.EVRYKA)">
+              <img src="/assets/video-meeting-logo/Evryka-video-meeting-logo.png" class="booking-request__logo"
+                width="65" height="65" alt="EVRYKA" toolTip="EVRYKA" />
+            </button>
+
+            <button role="button" class="icon-button" [hoverDescription]="googleMeetLabel"
+              [ngClass]="{ 'icon-button': true, 'icon-button--active': selectedPlatform === MeetingPlatfrom.GOOGLE_MEET }"
+              (click)="selectPlatform(MeetingPlatfrom.GOOGLE_MEET)">
+              <img src="/assets/video-meeting-logo/icons8-google-meet-144.svg" class="booking-request__logo" width="65"
+                height="65" alt="Google Meet" toolTip="Google" />
+            </button>
+
+            <button role="button" class="icon-button" [hoverDescription]="teamsLabel"
+              [ngClass]="{ 'icon-button': true, 'icon-button--active': selectedPlatform === MeetingPlatfrom.TEAMS }"
+              (click)="selectPlatform(MeetingPlatfrom.TEAMS)">
+              <img src="/assets/video-meeting-logo/icons8-teams-144.svg" class="booking-request__logo" width="65"
+                height="65" alt="Teams" toolTip="Teams" />
+            </button>
+
+            <button role="button" class="icon-button" [hoverDescription]="zoomLabel"
+              [ngClass]="{ 'icon-button': true, 'icon-button--active': selectedPlatform === MeetingPlatfrom.ZOOM }"
+              (click)="selectPlatform(MeetingPlatfrom.ZOOM)">
+              <img src="/assets/video-meeting-logo/icons8-zoom-144.svg" class="booking-request__logo" width="72"
+                height="72" alt="Zoom" toolTip="Zoom" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div class="container__middle booking-request__items">
+      <mat-expansion-panel class="md-xs expansion-panel" [expanded]="isPanelParticipantsOpen"
+        (expandedChange)="onPanelToggle($event)" [class]="{'closed-border': !isPanelParticipantsOpen}">
+
+        <mat-expansion-panel-header>
+          <mat-panel-title class="panel-title">
+            <div class="custom-border-pseudo">
+              <mat-icon>groups</mat-icon>
+              {{ content.txtParticipants }} ({{
+              service.model.participants.length }})
+            </div>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        @for (participant of service.model.participants; track participant; let i = $index) {
+        <form [formGroup]="formMeetingParticipants[i]"
+          class="container__flex booking-request__panel-content booking-request__panel-scroll" section="contactForm">
+          <div class="container__baseline booking-request__form">
+            <div class="booking-request__fields">
+              <mat-form-field>
+                <mat-label class="new-label">{{content.txtName}}</mat-label>
+                <input class="transparent-input" autofocus formControlName="firstname" [class]="{
+                          'invalid' : formMeetingParticipants[i].controls.firstname?.invalid && formMeetingParticipants[i].controls.firstname?.touched,
+                          'valid' : formMeetingParticipants[i].controls.firstname?.valid
+                        }" (input)="onInputChange()" autocomplete="given-name" matInput [placeholder]="content.txtName"
+                  [(ngModel)]="participant.firstname" />
+                @if (formMeetingParticipants[i].controls.firstname?.invalid) {
+                <mat-error class="errors">
+                  <p>{{content.txtFieldRequired}}</p>
+                </mat-error>
+                }
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label class="new-label">{{content.txtSurname}}</mat-label>
+                <input class="transparent-input" autofocus formControlName="lastname" [class]="{
+                          'invalid' : formMeetingParticipants[i].controls.lastname?.invalid && formMeetingParticipants[i].controls.lastname?.touched,
+                          'valid' : formMeetingParticipants[i].controls.lastname?.valid
+                        }" (input)="onInputChange()" autocomplete="family-name" matInput
+                  [placeholder]="content.txtSurname" [(ngModel)]="participant.lastname" />
+                @if (formMeetingParticipants[i].controls.lastname?.invalid) {
+                <mat-error class="errors">
+                  <p>{{content.txtFieldRequired}}</p>
+                </mat-error>
+                }
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label class="new-label">{{content.txtEmail}}</mat-label>
+                <input class="transparent-input" autofocus type="email" formControlName="email" [class]="{
+                          'invalid' : formMeetingParticipants[i].controls.email?.invalid && formMeetingParticipants[i].controls.email?.touched,
+                          'valid' : formMeetingParticipants[i].controls.email?.valid 
+                        }" (input)="onInputChange()" autocomplete="email" matInput [placeholder]="content.txtEmail"
+                  [(ngModel)]="participant.email" />
+                @if (formMeetingParticipants[i].controls.email?.invalid) {
+                <mat-error>
+                  <div class="errors">
+                    <p>{{content.txtFieldRequired}}</p>
+                  </div>
+                </mat-error>
+                }
+              </mat-form-field>
+            </div>
+            @if (service.model.participants.length > 1) {
+            <button class="remove-btn" title="remove-participant" (click)="removeParticipant(participant, i)" inline="true">
+              <mat-icon>delete_sweep</mat-icon>
+            </button>
+            }
+          </div>
+        </form>
+        }
+        <div class="button--absolute container__center container__middle">
+          <button class="button__primary-color button--medium collapsed-button" (click)="addParticipant()">
+            <mat-icon>group_add</mat-icon>
+            <span>{{ content.btnAddMore }}</span>
+          </button>
+        </div>
+
+      </mat-expansion-panel>
+
+      <div class="container__flex container__space-between booking-request__time-info">
+        <div class="booking-request__time-item">
+          <mat-icon>schedule</mat-icon>{{ formattedDate }}
+        </div>
+        <div class="booking-request__time-item">
+          <mat-icon>timelapse</mat-icon>{{ meetingDuration }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

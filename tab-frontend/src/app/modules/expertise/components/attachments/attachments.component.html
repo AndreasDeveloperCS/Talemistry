@@ -1,0 +1,20 @@
+<div class="container__limited-width gap-wrapper toggle-switch" style="padding: 1rem;">
+
+  <app-import-cv [buttonCaption]="content.addCvText"
+    [placeholderInputSelectAttachments]="content.txtSelectCVPlaceholder">
+  </app-import-cv>
+  <br>
+  <div class="container container__flex container__left">
+    <app-toggle-button 
+      [isActive]="!confirmWithoutAttachment" 
+      (toggle)="confirmWithoutAttachment = !confirmWithoutAttachment">
+    </app-toggle-button>
+    <span class="center">{{content.txtCoverLetterToogle}}</span>
+  </div>
+  @if (!confirmWithoutAttachment) {
+  <app-import-cover-letter [buttonCaption]="content.txtCoverLetter"
+    [placeholderInputSelectAttachments]="content.txtSelectCoverLetterPlaceholder">
+  </app-import-cover-letter>
+  }
+
+</div>

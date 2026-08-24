@@ -1,0 +1,15 @@
+@use 'variables' as *; 
+@use 'global' as *;
+.certificate {
+  &__width-small {
+    //max-width: 10rem !important;
+    @media (max-width: $screen-size-tab) {
+      max-width: 100% !important;
+      align-items: baseline;
+    }
+  }
+}
+
+.calendar {
+  max-width: fit-content;
+}

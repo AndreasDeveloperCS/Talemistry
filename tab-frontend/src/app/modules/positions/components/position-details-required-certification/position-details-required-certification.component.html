@@ -1,0 +1,49 @@
+<mat-label class="new-label">{{content.txtRequiredCertification}}</mat-label>
+  <div class="container__flex container__center container__baseline">
+    <div style="padding-top: 0.8rem;"> 
+    <mat-button-toggle-group class="toggle-group toggle-group-align" [(ngModel)]="isCertificateRequired"
+      (change)="toggle(isCertificateRequired)">
+      <mat-button-toggle [value]="false" aria-pressed="false" [class.active]="isCertificateRequired === false">
+        {{content.txtNo}}
+      </mat-button-toggle>
+      <mat-button-toggle [value]="true" aria-pressed="true" [class.active]="isCertificateRequired === true">
+        {{content.txtYes}}
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div> 
+
+    <div class="container__column container__full-width" [class.disabled]="!isCertificateRequired">
+      <mat-form-field>
+        <div class="input-group__field">
+          <input type="text" class="transparent-input-full-width" [placeholder]="content.txtRequiredCertification" matInput [(ngModel)]="rawInputlValue"
+            [formControl]="inputControl" [matAutocomplete]="autoCompleteInput" (keyup)="applyLocalFilter()">
+          <mat-autocomplete class="" autoActiveFirstOption #autoCompleteInput="matAutocomplete"
+            (scroll)="onScroll($event)">
+            <input [placeholder]='content.txtFilter' class="transparent-input-full-width" [formControl]="filterControl" (keyup)="applyLocalFilter()"
+              (selectionChange)="applyLocalFilter()" />
+            @for (option of populatedCollection; track option) {
+            <mat-option [value]="getValue(option)">
+              <div class="container__middle">
+                {{ option.certification }}
+              </div>
+            </mat-option>
+            }
+          </mat-autocomplete>
+          <div class="round-add-button container__center" (click)="add(rawInputlValue)">
+            <mat-icon>add</mat-icon>
+          </div>
+        </div>
+      </mat-form-field>
+
+      <div class="tag-items">
+        @for (item of certificationList; track item) {
+        <div class="tag-item">
+          <div class="input-group__item-text">{{getValue(item)}}</div>
+          <button (click)="remove(item)" inline="true" class="remove-btn">
+              <mat-icon>close</mat-icon>
+          </button>          
+        </div>
+        }
+      </div>
+    </div>
+  </div>

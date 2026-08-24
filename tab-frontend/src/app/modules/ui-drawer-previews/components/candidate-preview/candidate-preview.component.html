@@ -1,0 +1,220 @@
+@if(isLoading) {
+    <app-sun-spinner></app-sun-spinner>
+}
+@if(!isLoading) {
+<div class="candidate-preview">
+  <div class="candidate-preview__hero">
+    <div class="candidate-preview__profile">
+      <img *ngIf="candidateData?.photoUrl"
+        [src]="candidateData.photoUrl"
+        class="candidate-preview__avatar">
+      <div>
+      <div *ngIf="profile?.targetPosition" class="candidate-preview__headline">
+        <mat-icon>work</mat-icon>
+        {{ profile.targetPosition }}
+        </div>
+        <button (click)="openApplicantChat()" class="message-btn">
+            <mat-icon>chat_bubble_outline</mat-icon>
+            Contact
+        </button>
+      </div>
+    </div>
+    <div class="preview-actions">
+      <button class="preview-action-btn" (click)="openInNewTab()">
+        <mat-icon>open_in_new</mat-icon>
+        Open Tab
+      </button>
+      <button class="preview-action-btn" (click)="copyLink()">
+        <mat-icon>content_copy</mat-icon>
+        Copy Profile Link
+      </button>
+    </div>
+  </div>
+  <div *ngIf="profile?.objective" class="candidate-preview__section">
+    <div class="section-header">
+      <div class="section-header__left">
+        <mat-icon>flag</mat-icon>
+        <h2>Professional Objective</h2>
+      </div>
+    </div>
+    <div class="candidate-text-block">{{ profile.objective }}</div>
+  </div>
+  <div *ngIf="profile?.summary" class="candidate-preview__section">
+    <div class="section-header">
+      <div class="section-header__left">
+        <mat-icon>description</mat-icon>
+        <h2>Professional Summary</h2>
+      </div>
+    </div>
+    <div class="candidate-text-block">{{ profile.summary }}</div>
+  </div>
+  <div *ngIf="profile?.operationalExperience?.length" class="candidate-preview__section">
+    <div class="section-header">
+      <div class="section-header__left">
+        <mat-icon>work_history</mat-icon>
+        <h2>Professional Experience</h2>
+      </div>
+    </div>
+    <div class="experience-timeline">
+      <div *ngFor="let exp of profile.operationalExperience" class="experience-item">
+        <div class="experience-item__left">
+          <div class="experience-dot"></div>
+          <div class="experience-line"></div>
+        </div>
+        <div class="experience-content">
+          <div class="experience-header">
+            <div>
+              <div class="experience-title">{{ exp.jobTitle }}</div>
+              <div class="experience-company">{{ exp.companyName }}</div>
+            </div>
+          </div>
+          <div class="experience-description">{{ exp.resposiblities }}</div>
+          <div *ngIf="exp.achievements" class="experience-achievements">
+            <mat-icon>auto_awesome</mat-icon>
+            {{ exp.achievements }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="candidate-preview__section">
+    <div class="section-header">
+      <div class="section-header__left">
+        <mat-icon>psychology</mat-icon>
+        <h2>Hard Skills</h2>
+      </div>
+    </div>
+    <div class="skills-list">
+      <div *ngFor="let skill of hardSkills" class="skill-chip">
+        {{ skill.skillName }}
+      </div>
+    </div>
+  </div>
+  <div *ngIf="domainSkills?.length" class="candidate-preview__section">
+    <div class="section-header">
+      <div class="section-header__left">
+        <mat-icon>domain</mat-icon>
+        <h2>Domain Experience</h2>
+      </div>
+    </div>
+    <div class="skills-list">
+      <div *ngFor="let skill of domainSkills" class="skill-chip domain">
+        {{ skill.skillName }}
+      </div>
+    </div>
+  </div>
+  <div *ngIf="managerialSkills?.length" class="candidate-preview__section">
+    <div class="section-header">
+      <div class="section-header__left">
+        <mat-icon>groups</mat-icon>
+        <h2>Leadership Skills</h2>
+      </div>
+    </div>
+    <div class="skills-list">
+      <div *ngFor="let skill of managerialSkills" class="skill-chip leadership">
+        {{ skill.skillName }}
+        </div>
+    </div>
+  </div>
+  <div class="candidate-preview__section">
+    <div class="section-header">
+      <div class="section-header__left">
+        <mat-icon>groups</mat-icon>
+        <h2>Soft Skills</h2>
+      </div>
+    </div>
+    <div class="skills-list">
+      <div *ngFor="let skill of softSkills" class="skill-chip secondary">
+        {{ skill.skillName }}
+      </div>
+    </div>
+  </div>
+  <div class="candidate-preview__section">
+    <div class="section-header">
+      <div class="section-header__left">
+        <mat-icon>language</mat-icon>
+        <h2>Languages</h2>
+      </div>
+    </div>
+    <div class="skills-list">
+      <div *ngFor="let skill of languageSkills" class="skill-chip language">
+        {{ skill.skillName }}
+      </div>
+    </div>
+  </div>
+  <div *ngIf="profile?.academicEducation?.length" class="candidate-preview__section">
+    <div class="section-header">
+      <div class="section-header__left">
+        <mat-icon>school</mat-icon>
+        <h2>Education</h2>
+      </div>
+    </div>
+    <div class="education-list">
+      <div *ngFor="let edu of profile.academicEducation" class="education-item">
+        <div class="education-degree">{{ edu.academicEducationLevelType }}</div>
+        <div class="education-speciality">{{ edu.specialication }}</div>
+        <div class="education-university">{{ edu.institution?.internationalName }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="profile?.certification?.length" class="candidate-preview__section">
+    <div class="section-header">
+      <div class="section-header__left">
+        <mat-icon>workspace_premium</mat-icon>
+        <h2>Certifications</h2>
+      </div>
+    </div>
+    <div class="certification-list">
+      <div *ngFor="let cert of profile.certification" class="certification-item">
+        <mat-icon>verified</mat-icon>
+        <div>
+          <div class="certification-name">{{ cert.skillName }}</div>
+          <div class="certification-center">{{ cert.certificationCenter }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="lastRecord?.finalNotes" class="candidate-preview__section">
+    <div class="section-header">
+      <div class="section-header__left">
+        <mat-icon>note_alt</mat-icon>
+        <h2>Recruiter Notes</h2>
+      </div>
+    </div>
+    <div class="candidate-note">{{ lastRecord?.finalNotes }}</div>
+  </div>
+  <div class="candidate-preview__section" *ngIf="candidateData?.records?.length">
+    <div class="section-header">
+      <div class="section-header__left">
+        <mat-icon>timeline</mat-icon>
+        <h2>Pipeline History</h2>
+      </div>
+    </div>
+    <div class="timeline">
+      <div *ngFor="let record of candidateData?.records" class="timeline-item">
+        <div class="timeline-item__left">
+          <div class="timeline-dot"></div>
+          <div class="timeline-line"></div>
+        </div>
+        <div class="timeline-content">
+          <div class="timeline-content__top">
+            <div class="timeline-stage">{{ record.stageName }}</div>
+            <div class="timeline-status" [ngClass]="getStatusClass(record.status)">
+              {{ record.status }}
+            </div>
+          </div>
+          <div class="timeline-meta">{{ record.positionName }}</div>
+          <div *ngIf="record.assessmentScore" class="timeline-score">
+            <mat-icon>analytics</mat-icon>
+            {{ record.assessmentScore }}/10
+          </div>
+          <div *ngIf="record.finalNotes" class="timeline-notes">
+            {{ record.finalNotes }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+}

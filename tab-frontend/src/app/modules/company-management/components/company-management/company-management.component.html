@@ -1,0 +1,32 @@
+  @if(initialLoading) {
+    <app-loading-spinner></app-loading-spinner>
+  }
+
+  @if(!initialLoading) {
+  <div class="main-container">
+    <div class="header">
+      <h2>Company Management</h2>
+      <button class="add-btn" (click)="addCompany()">
+        <mat-icon>add</mat-icon>
+        Add Company
+      </button>
+    </div>
+
+    @if(dataItems.length > 0) {
+      <div class="company-grid">
+        @for(company of dataItems; track company; let i = $index) {
+        <app-company-card 
+          [company]="company" 
+          [isCurrent]="company._id === currentCompanyId"
+          (setCurrent)="setCurrent(company._id)"
+          (edit)="editCompany(company)" 
+          (delete)="deleteCompany(company)">
+        </app-company-card>
+        }
+      </div>
+    }
+    @if(dataItems.length === 0) {
+      <p>There are no companies created</p>
+    }
+  </div>
+}

@@ -1,0 +1,55 @@
+@use 'variables' as *; 
+@use 'global' as *;
+
+.link-name{
+  flex-grow: 1;
+  @media (max-width: $screen-size-mobile) {
+    max-width: 12rem;
+  }
+}
+
+.social-media-list{
+    @media (max-width: $screen-size-tab) {
+      width: 100%;
+      max-width: 100%;
+    }
+}
+
+.social-network{
+  h3{
+    margin: 0;
+  }
+}
+
+.social-media-items{
+  gap: $gap-middle;
+}
+
+.link-name{
+  font-weight: 500;
+
+  a {
+    word-break: break-all;
+    font-size: 1.2rem;
+    color: var(--accent-text);
+
+    @media(max-width: $screen-size-mobile) {
+      font-size: 1rem;
+    }
+  }
+}
+
+img {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+}
+
+.platform-icon {
+  height: fit-content;
+  width: fit-content;
+  display: flex;
+  padding: 0.3rem;
+  border-radius: 50%;
+  background-color: var(--text);
+}

@@ -1,0 +1,18 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.register-value-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    button {
+        background: linear-gradient(45deg, #C78A00, #D77400, #E76A00, #F66411);
+    }
+}
+
+mat-label {
+    display: block;
+    font-size: 1rem;
+    color: $active-text !important;
+}

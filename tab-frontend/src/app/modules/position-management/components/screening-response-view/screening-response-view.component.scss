@@ -1,0 +1,53 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.response-container {
+  background: transparent;
+  padding: $padding-narrow;
+  margin: 0 auto;
+}
+
+.response-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: $pallete-0-color-14;
+}
+
+.response-meta {
+  font-size: 0.9rem;
+  color: var(--text);
+  opacity: 0.9;
+  margin-bottom: 20px;
+}
+
+.answers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.answer-item {
+  border-top: 1px solid #eee;
+  padding-top: 12px;
+}
+
+.question-text {
+  font-weight: 500;
+  color: $pallete-0-color-14;
+  margin-bottom: 6px;
+}
+
+.answer-value {
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+.answer-list {
+  margin: 0;
+  padding-left: 18px;
+
+  li {
+    list-style-type: disc;
+  }
+}

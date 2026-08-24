@@ -1,0 +1,135 @@
+<form class="border-primary container-secondary" [formGroup]="workExpirienceForm">
+
+  <div class="skill-wrappers">
+    <div class="input-item container__justify-self-end transparent-button">
+      <button (click)="removeItem(skill)">
+        <mat-icon>delete_sweep</mat-icon>
+      </button>
+    </div>
+
+    <div class="container__flex container__nowrap ">
+
+      <mat-form-field class="skill-full-width company">
+        <mat-label class="new-label">{{content.txtExperienceCompanyName}}</mat-label>
+        <input class="input company-name transparent-input-full-width" 
+          type="text" 
+          [placeholder]="content.txtExperienceCompanyName"
+          matInput 
+          [value]="rawInputlValue" 
+          [(ngModel)]="rawInputlValue" 
+          [matAutocomplete]="auto" 
+          (ngModelChange)="onInputChange($event)"
+          (input)="filterCollection($event)" 
+          [formControl]="filterControl" 
+          (keyup)="applyLocalFilter()"
+          (selectionChange)="applyLocalFilter()"  />
+
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event)" [displayWith]="displayFn">
+          <div (scroll)="onScroll($event)" class="input-group__dropdown" (opened)="onAutocompleteOpened()">
+          @for (option of collection; track option?._id) {
+          <mat-option [value]="option">
+            <div class="container__middle">
+              {{ getValue(option) }}
+            </div>
+          </mat-option>
+          }
+          </div>
+        </mat-autocomplete>
+
+        <mat-icon class="dropdown-icon" [class]="{ open: isOpen }" (click)="toggleDropdown()">
+          arrow_drop_down
+        </mat-icon>
+      </mat-form-field>
+      <!-- <div class="input-item">
+        <button (click)="removeItem(skill)">
+          <mat-icon>delete_sweep</mat-icon>
+        </button>
+      </div> -->
+    </div>
+
+    <div>
+      <div class="loop">
+
+        <!-- <div class="container__flex">
+          <div class="filter-control-button container__flex" (click)="addExperience()">
+            <mat-icon class="mat-icon add-button" inline="true">add_circle</mat-icon>
+            <mat-label class="new-label">{{content.txtNewPositionLabel}}</mat-label>
+          </div>
+        </div> -->
+        <div class="form-container" formArrayName="experiences">
+          @for (experience of experiences.controls; track experience; let i =
+          $index) {
+          <div class="form-container-items" [formGroupName]="i">
+            <div class="container__flex container__baseline">
+              <mat-form-field class="container__flex container__center max-input-width-middle">
+                <mat-label class="new-label">{{content.jobTitleTxt}}</mat-label>
+                <input class="input transparent-input-full-width" [(ngModel)]="skill.jobTitle" type="text"
+                  [placeholder]="content.jobTitleTxt" matInput formControlName="jobTitle" />
+              </mat-form-field>
+
+              <div class="checkbox-container">
+                <mat-checkbox [(ngModel)]="skill.isCurrent" (change)="onIsCurrentChange($event, i)"
+                  formControlName="isCurrent">
+                </mat-checkbox>
+                <label class="checkbox-label">
+                  {{content.isCurrentTxt}}
+                </label>
+              </div>
+              <mat-form-field class="width-narrow calendar">
+                <mat-label class="new-label">{{content.startWorkDateTxt}}</mat-label>
+                <input matInput [matDatepicker]="startDatePicker" class="datetime-block-size transparent-input-full-width"
+                  [(ngModel)]="skill.startWorkDate" [placeholder]="content.startWorkDateTxt"
+                  formControlName="startWorkDate" [max]="currentDate" [min]="experience.get('startWorkDate')" />
+
+                <mat-datepicker-toggle class="date-picker-shifting" [max]="currentDate"
+                  [min]="experience.get('startWorkDate')" matSuffix [for]="startDatePicker">
+                </mat-datepicker-toggle>
+
+                <mat-datepicker [max]="currentDate" [min]="experience.get('startWorkDate')" #startDatePicker
+                  startView="multi-year" (yearSelected)="chosenYearHandlerStart($event, startDatePicker)"
+                  (monthSelected)="chosenMonthHandlerStart($event, startDatePicker)">
+                </mat-datepicker>
+              </mat-form-field>
+              @if (!skill.isCurrent) {
+              <mat-form-field class="width-narrow calendar">
+                <mat-label class="new-label">{{content.endWorkDateTxt}}</mat-label>
+                <input matInput [matDatepicker]="endDatePicker" class="datetime-block-size transparent-input-full-width"
+                  [(ngModel)]="skill.endWorkDate" [placeholder]="content.endWorkDateTxt" formControlName="endWorkDate"
+                  [max]="currentDate" [min]="skill.startWorkDate" />
+                <mat-datepicker-toggle class="date-picker-shifting" matSuffix [for]="endDatePicker" [max]="currentDate"
+                  [min]="skill.startWorkDate">
+                </mat-datepicker-toggle>
+                <mat-datepicker [max]="currentDate" #endDatePicker [min]="skill.startWorkDate" startView="multi-year"
+                  (yearSelected)="chosenYearHandlerEnd($event, endDatePicker)"
+                  (monthSelected)="chosenMonthHandlerEnd($event, endDatePicker)">
+                </mat-datepicker>
+              </mat-form-field>
+              }
+
+              <!-- <div class="input-item container__justify-self-end transparent-button">
+                <button (click)="experiences.length > 1 ? removeExperience(i) : null">
+                  <mat-icon>delete_sweep</mat-icon>
+                </button>
+              </div> -->
+            </div>
+            <mat-form-field class="skill-full-width">
+              <mat-label class="new-label">{{content.resposiblitiesTxt}}</mat-label>
+              <textarea class="skill-text-area transparent-input-full-width" matInput cdkAutosizeMinRows="2" cdkAutosizeMaxRows="8"
+                [(ngModel)]="skill.resposiblities" [placeholder]="content.txtPlaceholderResposiblities"
+                formControlName="resposiblities"></textarea>
+            </mat-form-field>
+            <mat-form-field class="skill-full-width">
+              <mat-label class="new-label">{{content.txtLabelAchievements}}</mat-label>
+              <textarea class="skill-text-area  transparent-input-full-width" matInput cdkAutosizeMinRows="2"
+                cdkAutosizeMaxRows="8" [(ngModel)]="skill.achievements"
+                [placeholder]="content.txtPlaceholderAchievements" formControlName="achievements">
+                </textarea>
+            </mat-form-field>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+</form>

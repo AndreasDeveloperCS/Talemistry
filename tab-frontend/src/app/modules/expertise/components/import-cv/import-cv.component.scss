@@ -1,0 +1,50 @@
+@use "variables" as *;
+@use "global" as *;
+
+.container-import-cv {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+
+  .add-cv-button {
+    background-color: $primaryThree !important;
+  }
+
+  .import-file-title {
+    color: var(--text);
+    font-size: small;
+    background-color: red !important;
+  }
+
+  .import-btn-input {
+    align-items: center;
+    align-content: center;
+    text-align: center;
+  }
+}
+:host ::ng-deep .paginator {
+  margin-block: 2px;
+}
+@media (max-width: $screen-size-mobile) {
+  .container-import-cv .container-wrapper-horizontal {
+    align-items: flex-start;
+    gap: 1.3rem;
+    margin-bottom: 0;
+  }
+  input.import-title.transparent-input.file-selected {
+    margin-inline: 0 !important;
+  }
+
+  :host ::ng-deep .mat-mdc-paginator-page-size {
+    display: none;
+  }
+  :host ::ng-deep .mat-mdc-icon-button {
+    margin-left: 5px;
+  }
+  :host ::ng-deep .mat-mdc-paginator-range-label {
+    margin-left: 0;
+  }
+  :host ::ng-deep .mat-mdc-paginator-range-actions {
+    justify-content: space-between;
+  }
+}

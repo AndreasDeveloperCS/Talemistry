@@ -1,0 +1,293 @@
+<section class="pricing-section">
+  <div class="container">
+    <!-- Header -->
+    <div class="pricing-header">
+      <h2 class="pricing-title">Choose Your Plan</h2>
+      <p class="pricing-subtitle">
+        Find the perfect plan for your talent acquisition needs.
+        Scale your recruiting efforts with our comprehensive platform.
+      </p>
+      <div class="billing-switch" aria-label="Billing cycle selector">
+        <button type="button" [class.active]="billingCycle === 'monthly'" (click)="setBillingCycle('monthly')">
+          Monthly
+        </button>
+        <button type="button" [class.active]="billingCycle === 'yearly'" (click)="setBillingCycle('yearly')">
+          Yearly
+          <span class="billing-switch__badge">Save {{ yearlyDiscountPercent }}%</span>
+        </button>
+      </div>
+      <p class="billing-caption">
+        Annual billing applies a {{ yearlyDiscountPercent }}% discount, roughly equal to two months free.
+      </p>
+    </div>
+
+    <!-- Pricing Cards -->
+    <div class="pricing-grid">
+      <div *ngFor="let planCard of visiblePricingPlanCards; trackBy: trackByPlanId" class="pricing-card"
+        [class.popular]="planCard.plan.isPopular" [class.selected]="selectedPlan?.id === planCard.plan.id">
+        <!-- Popular Badge -->
+        <div *ngIf="planCard.plan.isPopular" class="popular-badge">
+          Most Popular
+        </div>
+
+        <!-- Card Header -->
+        <div class="card-header">
+          <h3 class="plan-name">
+            <mat-icon>{{ planCard.plan.icon }}</mat-icon>
+            {{ planCard.plan.name }}
+          </h3>
+          <div class="price-container">
+            @if(planCard.hasFixedPrice && planCard.amount !== 0) {
+            <span class="currency">$</span>
+            <span class="price">{{ planCard.amount }}</span>
+            <span class="period">/ {{ planCard.periodLabel }}</span>
+            }
+            @else if(planCard.hasFixedPrice && planCard.amount == 0) {
+            <span class="price">Free</span>
+            }
+            @else {
+            <span class="price price--custom">{{ planCard.plan.enterpriseLabel || 'Custom' }}</span>
+            }
+          </div>
+          @if(planCard.showYearlyMeta) {
+          <div class="price-meta-row">
+            <span class="price-note">Equivalent to ${{ planCard.annualEquivalent }}/month</span>
+            <span class="price-chip">Save ${{ planCard.yearlySavings }}/year</span>
+          </div>
+          }
+          @else if(planCard.showYearlyUpsell) {
+          <div class="price-meta-row">
+            <span class="price-note">Switch to yearly for 16.7% off</span>
+          </div>
+          }
+          @if(planCard.plan.priceCaption) {
+          <p class="price-caption">{{ planCard.plan.priceCaption }}</p>
+          }
+          <p class="plan-description">{{ planCard.plan.description }}</p>
+        </div>
+
+        <!-- Features List -->
+        <div class="features-container">
+          <ul class="features-list">
+            <li *ngFor="let feature of planCard.plan.features" class="feature-item" [class.included]="feature.included"
+              [class.not-included]="!feature.included">
+              <span class="feature-icon">
+                <mat-icon *ngIf="feature.included">verified</mat-icon>
+                <mat-icon *ngIf="!feature.included">highlight_off</mat-icon>
+              </span>
+              <span class="feature-text">{{ feature.name }}</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Card Footer -->
+        <div class="card-footer">
+          <div class="plan-details">
+            <div *ngIf="planCard.plan.maxUsers" class="detail-item">
+              <strong>{{ planCard.plan.maxUsers }}</strong> users included
+            </div>
+            <div class="detail-item-support">
+              {{ planCard.plan.support }}
+            </div>
+          </div>
+
+          <button class="cta-button" [class.primary]="planCard.plan.isPopular"
+            [class.secondary]="!planCard.plan.isPopular" (click)="onSelectPlan(planCard.plan)">
+            {{ planCard.plan.buttonText }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom CTA -->
+    <div class="bottom-cta">
+      <p class="cta-text">
+        Need a custom solution?
+        <span class="cta-link" (click)="onContactSales()">Contact our sales team</span>
+        for enterprise pricing and features.
+      </p>
+    </div>
+
+    @if(isAdmin) {
+    <section *ngIf="canViewSubscriptionSandbox" class="subscription-panel">
+      <div class="subscription-panel__intro">
+        <p class="subscription-panel__eyebrow">Subscription management</p>
+        <h3>Track billing status and customer charging details</h3>
+        <p>
+          This panel is wired to the backend payments module. Selected plans, billing cycle, provider references,
+          and billing contact details are restored here when they exist for the signed-in customer.
+        </p>
+      </div>
+
+      <div *ngIf="currentSubscription" class="current-subscription provider-meta">
+        <div>
+          <span class="label">Stored plan</span>
+          <strong>{{ getCurrentSubscriptionPlanLabel() }}</strong>
+        </div>
+        <div>
+          <span class="label">Stored billing cycle</span>
+          <strong>{{ getCurrentSubscriptionCycleLabel() }}</strong>
+        </div>
+        <div>
+          <span class="label">Stored status</span>
+          <strong>{{ getCurrentSubscriptionStatusLabel() }}</strong>
+        </div>
+      </div>
+
+      <div *ngIf="hasStoredBillingContact()" class="current-subscription provider-meta">
+        <div>
+          <span class="label">Stored billing contact</span>
+          <strong>{{ getStoredBillingContactLabel() }}</strong>
+        </div>
+        <div *ngIf="currentSubscription?.billingContact?.email">
+          <span class="label">Billing email</span>
+          <strong>{{ currentSubscription?.billingContact?.email }}</strong>
+        </div>
+        <div *ngIf="currentSubscription?.billingContact?.phone">
+          <span class="label">Billing phone</span>
+          <strong>{{ currentSubscription?.billingContact?.phone }}</strong>
+        </div>
+        <div *ngIf="currentSubscription?.billingContact?.companyName">
+          <span class="label">Billing company</span>
+          <strong>{{ currentSubscription?.billingContact?.companyName }}</strong>
+        </div>
+      </div>
+
+      <div class="subscription-status" [class.success]="statusTone === 'success'"
+        [class.error]="statusTone === 'error'">
+        <strong>{{ busy ? busyAction : 'Status' }}</strong>
+        <span>{{ statusMessage }}</span>
+      </div>
+
+      <div class="provider-switcher provider-switcher--cards">
+        <button type="button" class="provider-switcher__option" [class.active]="selectedProvider === 'stripe'"
+          [attr.aria-pressed]="selectedProvider === 'stripe'" (click)="selectedProvider = 'stripe'">
+          <span class="provider-switcher__badge">{{ getProviderBadge('stripe') }}</span>
+          <span class="provider-switcher__title-row">
+            <span class="provider-switcher__title">Stripe</span>
+            <span class="provider-switcher__state" [class.ready]="getProviderStateLabel('stripe') === 'Ready'">
+              {{ getProviderStateLabel('stripe') }}
+            </span>
+          </span>
+          <span class="provider-switcher__copy">Hosted Stripe Checkout for secure recurring card billing.</span>
+          <span class="provider-switcher__support">{{ getProviderSupportCopy('stripe') }}</span>
+        </button>
+        <button type="button" class="provider-switcher__option" [class.active]="selectedProvider === 'gocardless'"
+          [attr.aria-pressed]="selectedProvider === 'gocardless'" (click)="selectedProvider = 'gocardless'">
+          <span class="provider-switcher__badge">{{ getProviderBadge('gocardless') }}</span>
+          <span class="provider-switcher__title-row">
+            <span class="provider-switcher__title">GoCardless</span>
+            <span class="provider-switcher__state" [class.ready]="getProviderStateLabel('gocardless') === 'Ready'">
+              {{ getProviderStateLabel('gocardless') }}
+            </span>
+          </span>
+          <span class="provider-switcher__copy">Direct debit mandate flow for recurring bank account billing.</span>
+          <span class="provider-switcher__support">{{ getProviderSupportCopy('gocardless') }}</span>
+        </button>
+      </div>
+
+      <div class="provider-meta">
+        <div>
+          <span class="label">Selected plan</span>
+          <strong>{{ selectedPlan?.name || 'No paid plan selected yet' }}</strong>
+        </div>
+        <div>
+          <span class="label">Selected provider</span>
+          <strong>{{ selectedProviderLabel }}</strong>
+        </div>
+        <div *ngIf="selectedProvider === 'stripe'">
+          <span class="label">Stripe checkout readiness</span>
+          <strong>{{ hasStripePublishableKeyFallback() ? 'Fallback publishable key active' : 'Configured for hosted
+            checkout' }}</strong>
+        </div>
+        <div *ngIf="goCardlessConfig">
+          <span class="label">GoCardless environment</span>
+          <strong>{{ goCardlessConfig.environment }}</strong>
+        </div>
+        <div *ngIf="selectedProvider === 'stripe' && selectedPlan && !isEnterprise(selectedPlan)">
+          <span class="label">Configured Stripe price</span>
+          <strong>{{ getResolvedStripePriceId() || 'Missing in backend env' }}</strong>
+        </div>
+      </div>
+
+      <div *ngIf="selectedProvider === 'stripe'" class="provider-form-grid">
+        <label>
+          <span>Customer email</span>
+          <input [(ngModel)]="stripeForm.email" type="email" placeholder="billing@company.com" />
+        </label>
+        <label>
+          <span>Customer name</span>
+          <input [(ngModel)]="stripeForm.name" type="text" placeholder="Hiring Team" />
+        </label>
+        <label>
+          <span>Stripe customer id</span>
+          <input [(ngModel)]="stripeForm.customerId" type="text" placeholder="cus_..." />
+        </label>
+        <label>
+          <span>Stripe subscription id</span>
+          <input [(ngModel)]="stripeForm.subscriptionId" type="text" placeholder="sub_..." />
+        </label>
+      </div>
+
+      <div *ngIf="selectedProvider === 'stripe'" class="provider-actions">
+        <button type="button" (click)="createStripeCustomer()" [disabled]="busy">Create customer</button>
+        <button type="button" (click)="startStripeCheckout()" [disabled]="busy || !!getStripeCheckoutDisabledReason()"
+          [attr.title]="getStripeCheckoutDisabledReason() || null">Start checkout</button>
+        <button type="button" (click)="openStripeBillingPortal()" [disabled]="busy">Open billing portal</button>
+        <button type="button" (click)="fetchStripeSubscription()" [disabled]="busy">Get subscription</button>
+        <button type="button" class="danger" (click)="cancelStripeSubscription()" [disabled]="busy">Cancel
+          subscription</button>
+      </div>
+
+      <div *ngIf="selectedProvider === 'stripe' && getStripeCheckoutDisabledReason()" class="provider-disabled-reason">
+        {{ getStripeCheckoutDisabledReason() }}
+      </div>
+
+      <div *ngIf="selectedProvider === 'gocardless'" class="provider-form-grid">
+        <label>
+          <span>Billing email</span>
+          <input [(ngModel)]="goCardlessForm.email" type="email" placeholder="finance@company.com" />
+        </label>
+        <label>
+          <span>First name</span>
+          <input [(ngModel)]="goCardlessForm.givenName" type="text" placeholder="Alex" />
+        </label>
+        <label>
+          <span>Last name</span>
+          <input [(ngModel)]="goCardlessForm.familyName" type="text" placeholder="Taylor" />
+        </label>
+        <label>
+          <span>Redirect flow id</span>
+          <input [(ngModel)]="goCardlessForm.redirectFlowId" type="text" placeholder="RE123..." />
+        </label>
+        <label>
+          <span>Session token</span>
+          <input [(ngModel)]="goCardlessForm.sessionToken" type="text" placeholder="session token" />
+        </label>
+        <label>
+          <span>Mandate id</span>
+          <input [(ngModel)]="goCardlessForm.mandateId" type="text" placeholder="MD123..." />
+        </label>
+        <label>
+          <span>Subscription id</span>
+          <input [(ngModel)]="goCardlessForm.subscriptionId" type="text" placeholder="SB123..." />
+        </label>
+        <label>
+          <span>Currency</span>
+          <input [(ngModel)]="goCardlessForm.currency" type="text" placeholder="EUR" />
+        </label>
+      </div>
+
+      <div *ngIf="selectedProvider === 'gocardless'" class="provider-actions">
+        <button type="button" (click)="startGoCardlessRedirectFlow()" [disabled]="busy">Start mandate flow</button>
+        <button type="button" (click)="completeGoCardlessRedirectFlow()" [disabled]="busy">Complete mandate
+          flow</button>
+        <button type="button" (click)="createGoCardlessSubscription()" [disabled]="busy">Create subscription</button>
+        <button type="button" (click)="fetchGoCardlessSubscription()" [disabled]="busy">Get subscription</button>
+        <button type="button" class="danger" (click)="cancelGoCardlessSubscription()" [disabled]="busy">Cancel
+          subscription</button>
+      </div>
+    </section>
+    }
+  </div>
+</section>

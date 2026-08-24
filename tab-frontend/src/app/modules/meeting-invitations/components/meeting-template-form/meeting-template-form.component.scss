@@ -1,0 +1,180 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.template-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1rem auto;
+  background: transparent;
+  padding: 1.5rem;
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: 80vh;
+
+  h2, h3 {
+    font-weight: 600;
+    color: $pallete-0-color-14;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+
+    label {
+      font-weight: 500;
+      margin-bottom: 0.3rem;
+    }
+
+    input, textarea, select {
+      background: transparent;
+      border: none;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      font-size: 0.95rem;
+      box-shadow: var(--box-shadow-light);
+    }
+
+    &.checkbox {
+      flex-direction: row;
+      align-items: center;
+      gap: 0.5rem;
+      border: none;
+
+      input {
+        box-shadow: none;
+      }
+    }
+  }
+
+  .form-row {
+    display: flex;
+    gap: 1rem;
+
+    @media(max-width: $screen-size-mobile) {
+      flex-direction: column;
+    }
+
+    .form-group {
+      flex: 1;
+    }
+  }
+
+  .interviewers-section {
+    background: transparent;
+    border-radius: 0.5rem;
+  }
+
+  .participants {
+    display: flex;
+    flex-direction: row;
+    gap: $gap-small;
+
+    button {
+      border: none;
+      background: transparent;
+      color: $pallete-0-color-14;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+  }
+
+  .participant-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-top: 0.5rem;
+
+    input {
+      flex: 1;
+      box-shadow: var(--box-shadow-light);
+      background: transparent;
+      border: none;
+      border-radius: 0.5rem;
+      padding: $padding-narrow;
+      max-width: 140px !important;
+    }
+
+    @media(max-width: $screen-size-mobile) {
+      flex-direction: column;
+      flex: 1;
+
+      input {
+        max-width: 100% !important;
+        width: 100%;
+      }
+    }
+  }
+
+  .button-primary {
+    background-color: $pallete-0-color-14;
+    color: var(--text);
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.2rem;
+    align-self: flex-start;
+    transition: 0.2s;
+    margin: 0 auto;
+
+    &:hover {
+      transform: translateY(-4px);
+    }
+  }
+}
+
+select {
+  appearance: none;
+  -webkit-appearance: none; /* Safari & Chrome */
+  -moz-appearance: none; /* Firefox */
+}
+
+select option {
+    color: var(--text);
+    background-color: $gradient-color-4;
+
+    &:hover {
+      background-color: $gradient-color-4;
+      opacity: 0.9;
+    }
+}
+
+select {
+  appearance: none;
+  -webkit-appearance: none; /* Safari & Chrome */
+  -moz-appearance: none; /* Firefox */
+}
+
+select option:checked {
+    color: $pallete-0-color-13;
+    font-weight: bold;
+}
+
+option {
+  background-color: #001524;
+  color: var(--text);
+}
+
+option:hover,
+option:checked {
+  background-color: #001524; 
+}
+
+.interviewers-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.add-interviewer-btn {
+  background-color: $pallete-0-color-14;
+  color: var(--text);
+  border: none;
+  padding: 0.5rem;
+  font-size: 1.2rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}

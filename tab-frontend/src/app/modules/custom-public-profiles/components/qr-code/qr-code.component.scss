@@ -1,0 +1,24 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.qr-wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+    width: fit-content;
+}
+
+.qr-wrapper canvas {
+  width: 100px;
+  height: 100px;
+  flex-shrink: 0;
+  max-width: none;
+  max-height: none;
+}
+
+.caption{
+    font: 500 14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, sans-serif; 
+    opacity: .8;
+}

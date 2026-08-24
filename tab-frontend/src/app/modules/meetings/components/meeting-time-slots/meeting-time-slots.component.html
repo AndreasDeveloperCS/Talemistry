@@ -1,0 +1,70 @@
+<div class="right-panel">
+
+  <div class="duration-options">
+    @if (!isScheduleInfoDefault) {
+    <div class="duration-info">
+      <mat-icon>schedule</mat-icon>
+      Duration: {{ selectedSlotPeriod }}
+    </div>
+    }
+    @else if(isScheduleInfoDefault) {
+    <div class="duration-info">
+      <mat-icon>schedule</mat-icon>
+      Select the duration
+    </div>
+    @for (d of durations; track d) {
+    @if (isScheduleInfoDefault || selectedSlotPeriod === d.time) {
+    <div (click)="onSlotPeriodChangeDiv(d.time)" class="duration-option"
+      [class.selected]="selectedSlotPeriod === d.time">
+      <div class="icon-label">
+        <span class="icon">
+          <mat-icon>{{ d.icon }}</mat-icon>
+        </span>
+        <div>
+          <div class="duration-header">
+            <span class="duration-label">{{ d.label }}</span>
+            <div class="minutes-label">
+              <span class="minutes">{{ d.time }}</span>
+              @if (d.popular) {
+              <span class="popular">Most Popular</span>
+              }
+            </div>
+          </div>
+          <div class="desc">{{ d.description }}</div>
+        </div>
+      </div>
+      <input type="radio" name="duration" class="custom-radio" [value]="d.time"
+        (ngModelChange)="onSlotPeriodChange($event)" [(ngModel)]="selectedSlotPeriod" />
+    </div>
+    }
+    }
+    }
+  </div>
+  <div class="timezone-block">
+    <app-timezone-select [selectedTimezone]="currentUserTimezone" (timezoneChange)="onTimezoneChange($event)">
+    </app-timezone-select>
+  </div>
+
+  <div class="slots-header">
+    Available slots for {{ selectedDate | date: 'MMMM dd, yyyy' }}
+  </div>
+
+  @if(isFilteringTimeFrames) {
+    <p>Loading...</p>
+  }
+
+  @if(!isFilteringTimeFrames) {
+  <div class="slots-grid">
+    @if(timeSlots?.length) {
+      @for(slot of timeSlots; track slot) {
+      <button class="slot" [class.active]="selectedTime === slot" (click)="onTimeSelect(slot)">
+        {{ (slot?.startTime | date: 'H:mm') }}
+      </button>
+      }
+    }
+    @else {
+    <p>There are no available time clots for this date.</p>
+    }
+  </div>
+  }
+</div>

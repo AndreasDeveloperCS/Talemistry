@@ -1,0 +1,70 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.meeting-container {
+  width: 100%;
+  background: transparent;
+  border-radius: $borderRadiusMiddle;
+  padding: 24px;
+  box-shadow: var(--box-shadow-light);
+  font-family: 'Segoe UI', sans-serif;
+  color: #333;
+}
+
+.meeting-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: $pallete-0-color-14;
+  margin: $margin-narrow 0;
+  padding-bottom: 8px;
+
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+
+.info-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: $gap-small;
+  margin-bottom: $margin-narrow;
+  flex-wrap: wrap;
+}
+
+
+.value {
+  font-size: 1rem;
+  display: flex;
+  flex-direction: row;
+  gap: $gap-small;
+  align-items: center;
+}
+
+.link .value,
+.links a {
+  color: var(--accent-text);
+  text-decoration: none;
+  font-weight: 500;
+
+  &:hover {
+    text-decoration: underline;
+    transform: translateY(-3px);
+  }
+}
+
+.participants {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: $gap-small;
+}
+
+mat-icon {
+  font-size: 1.5rem;
+  height: fit-content;
+  width: fit-content;
+  flex-shrink: 0;
+  color: $pallete-0-color-14;
+}

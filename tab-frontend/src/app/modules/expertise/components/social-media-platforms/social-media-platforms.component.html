@@ -1,0 +1,77 @@
+<div class="container container-reverse">
+<div class="container__nowrap container__flex container__middle" style="justify-content: center;">
+    <div class="square-add-button text-btn" (click)="add()">
+        <mat-icon>add</mat-icon>
+        New Social Media
+    </div>
+</div>
+
+<div class="card-grid">
+    @for (media of userSocialMediaList; track media; let i = $index) {
+    <div class="platform-card">
+        <div class="reorder-buttons">
+            <button 
+                (click)="moveUp(i)" 
+                [alt]="numberToString(media?.priority)"
+                [matTooltip]="numberToString(media?.priority)"
+                [disabled]="i === 0"
+                class="btn-mat-icon btn-icon"
+                [attr.aria-label]="'Move ' + media?.type?.name + ' up'">
+                <mat-icon class="material-icons">arrow_upward</mat-icon>
+            </button>
+                
+            <button 
+                (click)="moveDown(i)" 
+                [disabled]="i === userSocialMediaList.length - 1"
+                [alt]="numberToString(media?.priority)"
+                [matTooltip]="numberToString(media?.priority)"
+                class="btn-mat-icon btn-icon"
+                [attr.aria-label]="'Move ' + media?.type?.name + ' down'">
+                <mat-icon class="material-icons">arrow_downward</mat-icon>
+            </button>
+        </div>
+        <div class="card-header">
+            <div class="icon-wrapper">
+                <a [href]="media?.type?.mainUrl ?? ''"
+                    target="_blank"
+                    class="platform-icon">
+                    <img class="img-small primary-icon__large"
+                        [src]="media?.type?.imagePath ?? ''"
+                        [matTooltip]="media?.type?.name ?? ''"
+                        [alt]="media?.type?.name ?? ''" />
+                </a>
+            </div>
+        </div>
+    
+    <a [href]="media?.profileLink ?? ''"
+        [matTooltip]="media?.profileLink ?? ''"
+        [alt]="media?.profileLink ?? ''" 
+        target="_blank" rel="noopener noreferrer" 
+        class="platform-link">
+        {{ media?.profileLink }}
+        <mat-icon class="material-icons external-icon">open_in_new</mat-icon>
+    </a>
+    
+    <div class="actions">
+        
+        <div class="action-buttons">
+        <button 
+            (click)="edit(media)"
+            [matTooltip]="'edit'"
+            class="btn-mat-icon btn-icon btn-edit"
+            [attr.aria-label]="'Edit ' + media?.type?.name">
+            <mat-icon class="material-icons">edit</mat-icon>
+        </button>
+        <button 
+            (click)="delete(media)"
+            [matTooltip]="'delete'"
+            class="btn-mat-icon btn-icon btn-delete"
+            [attr.aria-label]="'Delete ' + media?.type?.name">
+            <mat-icon class="material-icons">delete</mat-icon>
+        </button>
+        </div>
+    </div>
+    </div>
+    }
+</div>
+</div>

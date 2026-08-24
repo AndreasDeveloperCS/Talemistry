@@ -1,0 +1,213 @@
+@if(isLoading) {
+<app-loading-spinner></app-loading-spinner>
+}
+@if(!isLoading && company.data.companyName != '') {
+<div class="company-container">
+    <div class="company-header">
+        <div class="container__flex">
+            <!-- <img [src]='company.data?.companyLogo?.imagePath' alt="CompanyLogo" style="width: 80px; height: 80px;"/> -->
+            <div class="company-logo">
+                <img *ngIf="company.data.companyLogo?.imagePath; else placeholder"
+                    [src]="company.data.companyLogo?.imagePath" alt="Company Logo" />
+                <ng-template #placeholder>
+                    <div class="logo-placeholder">
+                        <span>No Logo</span>
+                    </div>
+                </ng-template>
+            </div>
+            <div class="company-header-info">
+                @if(company.data.companyName) {
+                <h1 class="company-title">{{ company.data.companyName }}</h1>
+                }
+                @if(company.data.mainIndustryDomain.industryName) {
+                <span class="company-industry">
+                    {{ company.data.mainIndustryDomain.industryName }}
+                </span>
+                }
+            </div>
+        </div>
+        @if(canEditItems) {
+        <button class="primary-button" (click)="editCompany()">
+            <mat-icon>edit</mat-icon>Edit
+        </button>
+        }
+    </div>
+
+    <div class="company-grid">
+        <div class="tab-group">
+            <div class="tab-header">
+                @for(tab of tabs; track tab; let i = $index) {
+                <div class="tab" [class.active]="i === selectedTabIndex" (click)="selectTab(i)">
+                    <mat-icon>{{ tab.icon }}</mat-icon>
+                    <span class="tab-label">{{ tab.label }}</span>
+                </div>
+                }
+            </div>
+
+            <div class="tab-content">
+                <ng-container [ngSwitch]="selectedTabIndex">
+                    <div *ngSwitchCase="0">
+                        <div class="company-section">
+                            <div class="about-company">
+                                <h3 class="section-title">
+                                    <mat-icon>corporate_fare</mat-icon>
+                                    About {{ company.data.companyName }}
+                                </h3>
+                                <p class="section-text">
+                                    {{ company.data.shortDescription }}
+                                </p>
+                            </div>
+
+                            <div class="values-benefits">
+                                @if(company.data.companyValues) {
+                                <div class="values-box">
+                                    <h3><mat-icon>diversity_3</mat-icon>Our Values</h3>
+                                    <div class="values-list">
+                                        @for(value of company.data.companyValues; track value) {
+                                        <div class="value-item">
+                                            <mat-icon>volunteer_activism</mat-icon>
+                                            {{ value.value }}
+                                        </div>
+                                        }
+                                    </div>
+                                </div>
+                                }
+
+                                @if(company.data.companyBenefits) {
+                                <div class="benefits-box">
+                                    <h3><mat-icon>card_giftcard</mat-icon>Benefits & Perks</h3>
+                                    <div class="benefits-list">
+                                        @for(benefit of company.data.companyBenefits; track benefit) {
+                                        <div class="benefit-item">
+                                            <mat-icon>workspace_premium</mat-icon>
+                                            {{ benefit.benefit }}
+                                        </div>
+                                        }
+                                    </div>
+                                </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngSwitchCase="1">
+                        @if(companyId) {
+                        <app-company-open-positions [companyId]="companyId">
+                        </app-company-open-positions>
+                        }
+                    </div>
+                    <div *ngSwitchCase="2">
+                        <div class="photo-gallery">
+                            <div class="gallery-header">
+                                <h3 class="section-title">
+                                    <mat-icon>photo_library</mat-icon>
+                                    Gallery
+                                </h3>
+
+                                <input #photoFileInput type="file"
+                                    accept=".png,.jpg,.jpeg,.gif,.webp,image/png,image/jpeg,image/gif,image/webp"
+                                    multiple hidden (change)="onPhotoFilesSelected($event)" />
+
+                                @if(canEditItems || canEditPhotoGallery) {
+                                <button class="primary-button" type="button" (click)="photoFileInput.click()"
+                                    [disabled]="isPhotoUploading">
+                                    <mat-icon>add_a_photo</mat-icon>
+                                    Add photos
+                                </button>
+                                }
+                            </div>
+
+                            @if(isPhotoGalleryLoading || isPhotoUploading) {
+                            <app-loading-spinner></app-loading-spinner>
+                            }
+
+                            @if(!isPhotoGalleryLoading && !isPhotoUploading) {
+                            @if(photoGalleryError) {
+                            <div class="gallery-error">{{ photoGalleryError }}</div>
+                            }
+
+                            @if(photoGalleryItems.length === 0) {
+                            <p class="section-text">No gallery items yet.</p>
+                            @if(canEditPhotoGallery) {
+                            <p class="section-text">Use the upload button to add images to this company’s gallery.</p>
+                            }
+                            }
+
+                            @if(photoGalleryItems.length > 0) {
+                            <div class="gallery-grid">
+                                @for(item of photoGalleryItems; track item.id) {
+                                <div class="gallery-item">
+                                    <a class="gallery-link" [href]="item.url" target="_blank" rel="noopener noreferrer">
+                                        <img class="gallery-img" [src]="item.url"
+                                            [alt]="item.caption || item.originalName || 'Company photo'" />
+                                    </a>
+
+                                    @if(canEditItems || canEditPhotoGallery) {
+                                    <button mat-icon-button type="button" class="gallery-delete"
+                                        aria-label="Delete photo" (click)="deletePhoto(item.id)">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                    }
+
+                                    @if(item.caption) {
+                                    <div class="gallery-caption">{{ item.caption }}</div>
+                                    }
+                                </div>
+                                }
+                            </div>
+                            }
+                            }
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+
+        <div class="company-side">
+            <div class="stats-box">
+                <h3 class="section-title">General Info</h3>
+                <p>
+                    <span><mat-icon>people</mat-icon>Total Employees:</span>
+                    <span class="company-stats-info">{{ company.data.companySizeRange || '-' }}</span>
+                </p>
+                <p>
+                    <span><mat-icon>miscellaneous_services</mat-icon>Industry:</span>
+                    <span class="company-stats-info">{{ company.data.mainIndustryDomain.industryName || '-' }}</span>
+                </p>
+                <p>
+                    <span><mat-icon>attach_money</mat-icon>Revenue:</span>
+                    <span class="company-stats-info">{{ company.data.companyRevenue || '-' }}</span>
+                </p>
+            </div>
+            <div class="contact-box">
+                <h3 class="section-title">Contact Information</h3>
+                <p>
+                    <span><mat-icon>business</mat-icon>Headquarters:</span>
+                    {{ company.data.city?.name && company.data.country?.name ? company.data.city?.name + ', ' +
+                    company.data.country?.name : '-' }}
+                </p>
+                <p>
+                    <span><mat-icon>public</mat-icon>Website:</span>
+                    <a *ngIf="company.data.companySite; else noWebsite" [href]="company.data.companySite | absoluteUrl"
+                        target="_blank" rel="noopener noreferrer" class="link">
+                        {{ company.data.companySite }}
+                    </a>
+                    <ng-template #noWebsite>-</ng-template>
+                </p>
+                <p>
+                    <span><mat-icon>email</mat-icon>Email:</span>
+                    {{ company.data.companyEmail || '-' }}
+                </p>
+                <p>
+                    <span><mat-icon>call</mat-icon>Phone:</span>
+                    {{ company.data.companyPhone || '-' }}
+                </p>
+            </div>
+            <div class="cta-box">
+                <h3>Interested in Working Here?</h3>
+                <p>Explore our open positions and join our team!</p>
+                <button class="btn-primary" (click)="onJobsList()">View All Jobs</button>
+            </div>
+        </div>
+    </div>
+</div>
+}

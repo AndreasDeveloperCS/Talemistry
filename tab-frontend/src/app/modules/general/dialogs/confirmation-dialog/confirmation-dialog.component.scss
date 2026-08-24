@@ -1,0 +1,32 @@
+@use 'variables' as *; 
+@use 'global' as *;
+  
+.custom-dialog-content {
+  color: var(--text);
+  width: 100%;
+}
+
+button {
+  padding: 0.5rem;
+  border-radius: 20px;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.button-danger {
+  background: var(--destructive);
+  color: var(--destructive-foreground);
+}
+
+.button-danger:hover {
+  background: #870201;
+}
+
+.button-cancel {
+  background: var(--secondary);
+  color: var(--secondary-foreground);
+}
+
+.button-cancel:hover {
+  background: #e6e8ea;
+}

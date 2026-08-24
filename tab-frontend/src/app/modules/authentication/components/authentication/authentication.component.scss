@@ -1,0 +1,43 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.authentication {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    background: var(--bg);
+    color: var(--text);
+}
+
+.authentication-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    //background-image: url("/assets/registration-background-optimized.png");
+    //background-color: #011826; // #011826
+
+    @media(max-width: $screen-size-tab) {
+        display: none;
+    }
+    
+    img {
+        height: fit-content;
+        width: fit-content;
+        flex-shrink: 0;
+        min-height: 450px;
+        min-width: 450px;
+    }
+}
+
+main {
+    width: 100%;
+}
+
+router-outlet {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

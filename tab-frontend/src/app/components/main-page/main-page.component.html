@@ -1,0 +1,162 @@
+<section class="video-background-section">
+  <div class="video-background">
+    <app-video-player [src]="videoSrc"></app-video-player>
+  </div>
+
+  <!-- Overlay -->
+  <div class="video-overlay"></div>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1>
+      <span class="hero-eyebrow">AI-Powered</span>
+      <span class="hero-title">Talent Acquisition Platform</span>
+    </h1>
+    <p>
+      Connect top talent with leading companies through intelligent matching,
+      streamlined recruitment processes, and personalized career development.
+    </p>
+
+    @if (!isLoggedIn) {
+    <div class="hero-buttons">
+      <button class="primary" (click)="onRegistration()">
+        <mat-icon>person_add</mat-icon>
+        Join as Talent
+      </button>
+      <button class="secondary" (click)="onRegistration()">
+        <mat-icon>badge</mat-icon>
+        Hire Talent
+      </button>
+    </div>
+    }
+  </section>
+</section>
+
+<section class="hero is-hidden">
+  <h1>
+    <span class="hero-eyebrow">AI-Powered</span>
+    <span class="hero-title">Talent Acquisition Platform</span>
+  </h1>
+  <p>
+    Connect top talent with leading companies through intelligent matching,
+    streamlined recruitment processes, and personalized career development.
+  </p>
+  @if(!isLoggedIn) {
+  <div class="hero-buttons">
+    <button class="primary" (click)="onRegistration()">
+      <mat-icon>person_add</mat-icon>
+      Join as Talent
+    </button>
+    <button class="secondary" (click)="onRegistration()">
+      <mat-icon>badge</mat-icon>
+      Hire Talent
+    </button>
+  </div>
+  }
+</section>
+<div class="container__flex container__column main-container">
+
+
+  <section class="container-decorator is-hidden">
+    <div class="header-section">
+      <!-- <h1 class="main-title">
+                Powerful Features for Modern Recruitment
+            </h1> -->
+      <h3 class="subtitle">
+        Transform your hiring process with AI-powered tools designed for today's recruitment challenges
+      </h3>
+      <div class="header-image">
+        <img src="assets/images/hr-recruitment-collaboration.png" alt="Modern HR Recruitment" />
+      </div>
+    </div>
+  </section>
+  <!-- 
+  <section class="container-decorator">
+    <app-web-summit-promo></app-web-summit-promo>
+  </section> -->
+
+  <section class="container-decorator">
+    <app-pillars></app-pillars>
+  </section>
+
+  <section class="container-decorator pillars is-hidden">
+    <article class="pillar-card" *ngFor="let item of pillars">
+      <h3 class="pillar-title">
+        <mat-icon>{{ item.icon }}</mat-icon>
+        {{ item.title }}
+      </h3>
+      <p class="pillar-text" *ngFor="let line of item.text">{{ line }}</p>
+    </article>
+  </section>
+
+  <section class="features is-hidden">
+    <h2>Powerful Features for Modern Recruitment</h2>
+    <div class="feature-grid">
+      @for(feature of features; track feature) {
+      <div class="feature-box">
+        <div class="subheader">
+          <mat-icon>{{ feature.icon }}</mat-icon>
+          {{ feature.title }}
+        </div>
+        <p>{{ feature.description }}</p>
+      </div>
+      }
+    </div>
+  </section>
+
+  <section class="container__center">
+    <app-computer-logo class="notebook"></app-computer-logo>
+  </section>
+
+  <section class="values container__center ">
+    <div class=" values-block">
+      <h2 class="container__center values-header">
+        Our Values
+      </h2>
+      <div class="p-md container__gap-middle values-container">
+        @for (item of valueItems; track item) {
+        <div [style.max-width]="item.width" class="value-card">
+          <h3 class='value-title'>
+            <mat-icon>{{item.icon}}</mat-icon>
+            <span class="gradient-text">{{item.title}}</span>
+          </h3>
+          <p class="value-text">{{item.text}}</p>
+        </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <h2>Powerful Features for Modern Recruitment</h2>
+    <app-hr-recruitment-cards></app-hr-recruitment-cards>
+  </section>
+
+
+
+  <section>
+    <app-contact-us></app-contact-us>
+  </section>
+
+  <section class="build-version-section">
+    <div class="build-version-panel">
+      <p class="build-version-eyebrow">Live build</p>
+      <div class="build-version-grid">
+        <div class="build-version-item">
+          <span class="build-version-name">Tap frontend</span>
+          <strong class="build-version-value">{{ frontendBuild.version }}</strong>
+          <span class="build-version-meta">
+            <span class="build-version-meta-part" *ngFor="let part of getBuildMeta(frontendBuild)">{{ part }}</span>
+          </span>
+        </div>
+        <div class="build-version-item">
+          <span class="build-version-name">Shared backend</span>
+          <strong class="build-version-value">{{ backendBuild.version }}</strong>
+          <span class="build-version-meta">
+            <span class="build-version-meta-part" *ngFor="let part of getBuildMeta(backendBuild)">{{ part }}</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

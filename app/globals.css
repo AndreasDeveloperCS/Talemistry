@@ -1,0 +1,284 @@
+@import "tailwindcss";
+
+/* Drive the `dark:` variant from the `.dark` class (set by next-themes)
+   instead of the OS media query. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ============================================================
+   TALEMISTRY DESIGN SYSTEM
+   Normalized from the Talemistry Brand Book v1.0
+   "Reveal the chemistry of human potential."
+   ============================================================ */
+
+@theme inline {
+  /* Fonts */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  /* Semantic tokens (light / product surfaces) */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Brand raw tokens */
+  --color-navy-950: #0b1b2a;
+  --color-navy-900: #12263b;
+  --color-indigo-700: #383c5b;
+  --color-violet-600: #5b5585;
+  --color-green-700: #176b25;
+  --color-green-600: #208e2d;
+  --color-green-400: #24af4f;
+  --color-graphite: #545454;
+  --color-red-700: #870201;
+  --color-red-600: #ae0301;
+  --color-teal-700: #126f66;
+  --color-mint-400: #4fd1a8;
+  --color-copper-400: #d1a18f;
+  --color-canvas: #fafafa;
+  --color-mist: #f2f3f4;
+  --color-brand-border: #d9dde2;
+  --color-slate: #8e8a99;
+
+  /* Sidebar */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Chart colors — brand analytics palette */
+  --color-chart-1: #208e2d;
+  --color-chart-2: #126f66;
+  --color-chart-3: #383c5b;
+  --color-chart-4: #5b5585;
+  --color-chart-5: #d1a18f;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --radius: 0.75rem;
+
+  --background: #fafafa;
+  --foreground: #0b1b2a;
+
+  --card: #ffffff;
+  --card-foreground: #0b1b2a;
+
+  --popover: #ffffff;
+  --popover-foreground: #0b1b2a;
+
+  /* Accessible Green for interactive with white text */
+  --primary: #176b25;
+  --primary-foreground: #ffffff;
+
+  --secondary: #f2f3f4;
+  --secondary-foreground: #383c5b;
+
+  --muted: #f2f3f4;
+  --muted-foreground: #64708a;
+
+  --accent: #e8f3ea;
+  --accent-foreground: #176b25;
+
+  --destructive: #ae0301;
+  --destructive-foreground: #ffffff;
+
+  --border: #d9dde2;
+  --input: #d9dde2;
+  --ring: #208e2d;
+
+  --sidebar: #0b1b2a;
+  --sidebar-foreground: #c7d0dc;
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-accent: rgba(255, 255, 255, 0.06);
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-ring: #24af4f;
+}
+
+.dark {
+  --background: #081521;
+  --foreground: #e7edf3;
+
+  --card: #0f2333;
+  --card-foreground: #e7edf3;
+
+  --popover: #12283a;
+  --popover-foreground: #e7edf3;
+
+  /* Brighter green for contrast on dark surfaces */
+  --primary: #34c759;
+  --primary-foreground: #06140b;
+
+  --secondary: #1a2f44;
+  --secondary-foreground: #c7d0dc;
+
+  --muted: #16293c;
+  --muted-foreground: #93a4b8;
+
+  --accent: #133025;
+  --accent-foreground: #6fe0a0;
+
+  --destructive: #ef4b49;
+  --destructive-foreground: #ffffff;
+
+  --border: #22384e;
+  --input: #26405a;
+  --ring: #34c759;
+
+  /* Sidebar stays deep-navy in both themes but darkens slightly for depth */
+  --sidebar: #061019;
+  --sidebar-foreground: #c7d0dc;
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-accent: rgba(255, 255, 255, 0.06);
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-ring: #34c759;
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background-color: #24af4f;
+    color: #0b1b2a;
+  }
+
+  /* Show a pointer cursor on all interactive/clickable elements.
+     Tailwind v4 resets buttons to the default cursor, so restore it here. */
+  button,
+  a[href],
+  label[for],
+  summary,
+  select,
+  [role="button"],
+  [role="tab"],
+  [role="menuitem"],
+  [role="switch"],
+  [role="option"],
+  [type="button"],
+  [type="submit"],
+  [type="reset"],
+  [type="checkbox"],
+  [type="radio"] {
+    cursor: pointer;
+  }
+
+  /* Disabled controls should never appear clickable. */
+  button:disabled,
+  [role="button"][aria-disabled="true"],
+  [disabled],
+  .cursor-not-allowed {
+    cursor: not-allowed;
+  }
+}
+
+/* ============================================================
+   Brand gradients (from Brand Book Appendix A)
+   ============================================================ */
+/* Bold brand accent band — green-forward, intentional (used for final CTA).
+   High-contrast with white text in both themes. */
+.gradient-discovery {
+  background: linear-gradient(135deg, #176b25 0%, #208e2d 45%, #126f66 100%);
+}
+.dark .gradient-discovery {
+  background: linear-gradient(135deg, #0b1b2a 0%, #12594a 55%, #176b25 100%);
+}
+.gradient-human {
+  background: linear-gradient(135deg, #545454 0%, #208e2d 55%, #4fd1a8 100%);
+}
+.gradient-insight {
+  background: linear-gradient(135deg, #383c5b 0%, #5b5585 52%, #126f66 100%);
+}
+.gradient-spark {
+  background: linear-gradient(135deg, #ae0301 0%, #d1a18f 55%, #fafafa 100%);
+}
+/* Hero mesh — subtle, light brand tint by default; deep navy in dark mode. */
+.gradient-mesh {
+  background:
+    radial-gradient(60% 60% at 15% 20%, rgba(36, 175, 79, 0.12) 0%, transparent 60%),
+    radial-gradient(55% 55% at 85% 15%, rgba(18, 111, 102, 0.10) 0%, transparent 55%),
+    radial-gradient(70% 70% at 75% 85%, rgba(91, 85, 133, 0.08) 0%, transparent 60%),
+    #f4f7f5;
+}
+.dark .gradient-mesh {
+  background:
+    radial-gradient(60% 60% at 15% 20%, rgba(36, 175, 79, 0.22) 0%, transparent 60%),
+    radial-gradient(55% 55% at 85% 15%, rgba(18, 111, 102, 0.28) 0%, transparent 55%),
+    radial-gradient(70% 70% at 75% 85%, rgba(91, 85, 133, 0.30) 0%, transparent 60%),
+    #0b1b2a;
+}
+
+.text-gradient-growth {
+  background: linear-gradient(120deg, #4fd1a8 0%, #24af4f 55%, #208e2d 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Grid pattern — subtle dark lines on light surfaces, white lines in dark mode */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, rgba(11, 27, 42, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(11, 27, 42, 0.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+.dark .bg-grid {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+}
+/* On the bold green CTA band, keep grid lines light in both themes */
+.gradient-discovery .bg-grid {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+.animate-float-slow {
+  animation: float-slow 7s ease-in-out infinite;
+}
+
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(36, 175, 79, 0.35); }
+  70% { box-shadow: 0 0 0 12px rgba(36, 175, 79, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(36, 175, 79, 0); }
+}
+.animate-pulse-ring {
+  animation: pulse-ring 2.4s infinite;
+}
+
+.scrollbar-thin::-webkit-scrollbar { height: 8px; width: 8px; }
+.scrollbar-thin::-webkit-scrollbar-thumb { background: #d9dde2; border-radius: 9999px; }
+.scrollbar-thin::-webkit-scrollbar-track { background: transparent; }

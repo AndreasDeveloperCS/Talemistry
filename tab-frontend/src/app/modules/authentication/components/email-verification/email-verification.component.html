@@ -1,0 +1,97 @@
+<div class="form-container">
+  <div class="form-box">
+    <h2>Email Verification</h2>
+    <p class="subtext">Enter the code sent to your email and set a new password</p>
+
+    <div class="notification" [style]="{ 'visibility': notificationMsg != undefined ? 'visible' : 'hidden' }">
+      <p [class]=" isSuccessful == true ? 'success' : 'correction' ">{{ notificationMsg }}
+        {{ decreasingCounter }}</p>
+    </div>
+
+    <form [formGroup]="verificationForm">
+      <div class="form-item">
+        <label for="email">{{content.txtEmail}}</label>
+        <input id="email" autofocus type="email" name="email" formControlName="email" 
+          [class]="verificationForm.controls.email?.invalid && verificationForm.controls.email?.touched ? 'invalid' : 'valid'"
+          autocomplete="on" [placeholder]="content.txtEmail" [(ngModel)]="verificationData.email"
+          required />
+        @if (verificationForm.controls.email?.invalid 
+          && (verificationForm.controls.email?.touched 
+          || verificationForm.controls.email?.dirty)) {
+        <div class="errors">
+          @if (verificationForm.controls.email?.errors) {
+          <p>{{ content.txtFieldRequired }}&nbsp;{{content.txtValidationEmailError}}</p>
+          }
+        </div>
+        }
+      </div>
+
+      <div class="form-item">
+        <label for="code">{{content.txtVerificationCode}}</label>
+        <input id="code" autofocus type="verificationCode" name="verificationCode" formControlName="verificationCode"
+          [class]="verificationForm.controls.verificationCode?.invalid && verificationForm.controls.verificationCode?.touched ? 'invalid' : 'valid'"
+          [placeholder]="content.txtVerificationCode" [(ngModel)]="verificationData.verificationCode"
+          required />
+        @if (verificationForm.controls.verificationCode?.invalid 
+          && (verificationForm.controls.verificationCode?.touched 
+          || verificationForm.controls.verificationCode?.dirty)) {
+        <div class="errors">
+          @if (verificationForm.controls.verificationCode?.errors) {
+          <p>{{content.txtFieldRequired}}</p>
+          }
+          @if (verificationForm.controls.verificationCode?.errors) {
+          <p>&nbsp;{{content.txtVerificationCodeError}}</p>
+          }
+        </div>
+        }
+      </div>
+
+      <div class="form-item">
+        <label for="password">{{content.txtPassword}}</label>
+        <input id="password" autofocus type="password" name="password" formControlName="password"
+          [class]="verificationForm.controls.password?.invalid && verificationForm.controls.password?.touched? 'invalid' : 'valid'"
+          autocomplete="on" [placeholder]="content.txtPassword" [(ngModel)]="verificationData.password"
+          required />
+        @if (verificationForm.controls.password?.invalid 
+          && (verificationForm.controls.password?.touched 
+          || verificationForm.controls.password?.dirty)) {
+        <div class="errors">
+          @if (verificationForm.controls.password?.errors) {
+          <p>{{content.txtFieldRequired}}</p>
+          }
+        </div>
+        }
+        @if (verificationForm.controls.password?.hasError('matching')) {
+          {{content.txtPasswordsMatchingHint}}.
+        }
+      </div>
+
+      <div class="form-item">
+        <label for="confirmPassword">{{content.txtConfirmPassword}}</label>
+        <input id="confirmPassword" autofocus type="password" name="confirmPassword" formControlName="confirmPassword"
+          [class]="verificationForm.controls.confirmPassword?.invalid && verificationForm.controls.confirmPassword?.touched ? 'invalid' : 'valid'"
+          autocomplete="on" matInput [placeholder]="content.txtConfirmPassword"
+          [(ngModel)]="verificationData.confirmPassword" required />
+        @if (verificationForm.controls.confirmPassword?.invalid 
+          && (verificationForm.controls.confirmPassword?.touched 
+          || verificationForm.controls.confirmPassword?.dirty)) {
+        <div class="errors">
+          @if (verificationForm.controls.confirmPassword?.errors) {
+          <p>{{content.txtFieldRequired}}</p>
+          }
+        </div>
+        }
+      </div>
+
+      <div class="recaptcha">
+        <re-captcha id="recaptcha" name="recaptcha" [(ngModel)]="verificationData.recaptcha" [siteKey]="capchaKey"
+          formControlName="recaptcha" required [class.is-invalid]="verificationForm.controls.recaptcha?.invalid
+              && (verificationForm.controls.recaptcha?.dirty
+              || verificationForm.controls.recaptcha?.touched)">
+        </re-captcha>
+      </div>
+
+      <button (click)="onVerify()" [disabled]="isValid()">{{ content.verifyEmailText }}</button>
+    </form>
+  </div>
+</div>

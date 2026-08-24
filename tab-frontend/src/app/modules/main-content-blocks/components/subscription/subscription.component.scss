@@ -1,0 +1,1184 @@
+@use "sass:color";
+
+// Color variables matching the existing design
+$bg-dark: #0d1a2a;
+$bg-card: #132234;
+$bg-card-hover: #1a2d42;
+$accent-orange: #f59e0b;
+$accent-orange-light: #fbbf24;
+$text-primary: #ffffff;
+$text-secondary: #94a3b8;
+$text-muted: #64748b;
+$border-color: #1e3a52;
+$success-color: #10b981;
+$error-color: #ef4444;
+$info-color: #3b82f6;
+
+.subscription-page {
+    min-height: 100vh;
+    //background: linear-gradient(180deg, $bg-dark 0%, darken($bg-dark, 3%) 100%);
+    padding: 2rem 1rem 4rem;
+    color: $text-primary;
+
+    &__container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    &__header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    &__back {
+        display: flex;
+        align-items: center;
+        justify-self: flex-start;
+        gap: 0.5rem;
+        background: transparent;
+        border: 1px solid $border-color;
+        color: $text-secondary;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.875rem;
+        transition: all 0.2s ease;
+        margin-bottom: 1.5rem;
+
+        &:hover {
+            background: $bg-card;
+            color: $text-primary;
+            border-color: $accent-orange;
+        }
+
+        mat-icon {
+            font-size: 18px;
+            width: 18px;
+            height: 18px;
+        }
+    }
+
+    &__title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+        background: linear-gradient(135deg, $text-primary, $accent-orange-light);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    &__subtitle {
+        font-size: 1.125rem;
+        color: $text-secondary;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+}
+
+// Progress Steps
+.subscription-steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+
+    &__item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        opacity: 0.5;
+        transition: opacity 0.3s ease;
+
+        &.active {
+            opacity: 1;
+        }
+
+        &.completed {
+            opacity: 1;
+
+            .subscription-steps__number {
+                background: $success-color;
+                border-color: $success-color;
+            }
+        }
+
+        span {
+            font-size: 0.75rem;
+            color: $text-secondary;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+    }
+
+    &__number {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 2px solid $border-color;
+        background: $bg-card;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 0.875rem;
+        transition: all 0.3s ease;
+    }
+
+    &__connector {
+        width: 60px;
+        height: 2px;
+        background: $border-color;
+        margin: 0 0.5rem;
+        margin-bottom: 1.5rem;
+        transition: background 0.3s ease;
+
+        &.completed {
+            background: $success-color;
+        }
+
+        @media (max-width: 480px) {
+            width: 30px;
+        }
+    }
+}
+
+// Status Message
+.subscription-status {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    background: $bg-card;
+    border: 1px solid $border-color;
+
+    mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+    }
+
+    &.success {
+        background: rgba($success-color, 0.1);
+        border-color: $success-color;
+        color: $success-color;
+    }
+
+    &.error {
+        background: rgba($error-color, 0.1);
+        border-color: $error-color;
+        color: $error-color;
+    }
+
+    &.info {
+        background: rgba($info-color, 0.1);
+        border-color: $info-color;
+        color: $info-color;
+    }
+}
+
+// Subscription Section
+.subscription-section {
+    &__title {
+        text-align: center;
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+}
+
+// Billing Switch
+.billing-switch {
+    display: inline-flex;
+    background: $bg-card;
+    border-radius: 30px;
+    padding: 4px;
+    margin-bottom: 1rem;
+
+    button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.625rem 1.25rem;
+        border: none;
+        border-radius: 25px;
+        background: transparent;
+        color: $text-secondary;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover:not(.active) {
+            color: $text-primary;
+        }
+
+        &.active {
+            background: $accent-orange;
+            color: $bg-dark;
+        }
+    }
+
+    &__badge {
+        font-size: 0.625rem;
+        font-weight: 600;
+        background: rgba($bg-dark, 0.3);
+        padding: 2px 6px;
+        border-radius: 10px;
+    }
+
+    &--small {
+        margin-bottom: 0.5rem;
+
+        button {
+            padding: 0.375rem 0.875rem;
+            font-size: 0.75rem;
+        }
+    }
+}
+
+.billing-caption {
+    text-align: center;
+    font-size: 0.875rem;
+    color: $text-muted;
+    margin-bottom: 2rem;
+}
+
+// Pricing Grid
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.pricing-card {
+    background: $bg-card;
+    border: 1px solid $border-color;
+    border-radius: 16px;
+    padding: 1.5rem;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+
+    &:hover {
+        border-color: $accent-orange;
+        transform: translateY(-4px);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    &.selected {
+        border-color: $accent-orange;
+        background: $bg-card-hover;
+        box-shadow: 0 0 0 2px rgba($accent-orange, 0.3);
+    }
+
+    &.popular {
+        border-color: $accent-orange;
+
+        .cta-button {
+            background: $accent-orange;
+            color: $bg-dark;
+
+            &:hover {
+                background: $accent-orange-light;
+            }
+        }
+    }
+}
+
+.popular-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: $accent-orange;
+    color: $bg-dark;
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.card-header {
+    text-align: center;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid $border-color;
+    margin-bottom: 1rem;
+}
+
+.plan-name {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: $accent-orange;
+
+    mat-icon {
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+    }
+}
+
+.price-container {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 2px;
+    margin-bottom: 0.5rem;
+}
+
+.currency {
+    font-size: 1.25rem;
+    color: $text-secondary;
+}
+
+.price {
+    font-size: 2.5rem;
+    font-weight: 700;
+
+    &--custom {
+        font-size: 1.25rem;
+        color: $accent-orange;
+    }
+}
+
+.period {
+    font-size: 0.875rem;
+    color: $text-muted;
+}
+
+.price-caption {
+    font-size: 0.75rem;
+    color: $accent-orange;
+    margin: 0.25rem 0;
+}
+
+.plan-description {
+    font-size: 0.875rem;
+    color: $text-secondary;
+    margin-top: 0.5rem;
+}
+
+// Features List
+.features-container {
+    flex: 1;
+    margin-bottom: 1rem;
+}
+
+.features-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0;
+    font-size: 0.875rem;
+
+    &.included {
+        color: $text-primary;
+
+        .feature-icon mat-icon {
+            color: $accent-orange;
+        }
+    }
+
+    &.not-included {
+        color: $text-muted;
+
+        .feature-icon mat-icon {
+            color: $text-muted;
+        }
+    }
+}
+
+.feature-icon {
+    display: flex;
+    align-items: center;
+
+    mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+    }
+}
+
+// Card Footer
+.card-footer {
+    padding-top: 1rem;
+    border-top: 1px solid $border-color;
+}
+
+.plan-details {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 0.75rem;
+    color: $text-secondary;
+}
+
+.detail-item {
+    margin-bottom: 0.25rem;
+
+    strong {
+        color: $text-primary;
+    }
+}
+
+.detail-item-support {
+    color: $accent-orange;
+}
+
+// CTA Button
+.cta-button {
+    width: fit-content;
+    display: flex;
+    margin: 0 auto;
+    padding: 0.875rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+    }
+
+    &.primary {
+        background: $accent-orange;
+        color: $bg-dark;
+
+        &:hover:not(:disabled) {
+            background: $accent-orange-light;
+        }
+    }
+
+    &.secondary {
+        background: transparent;
+        border: 1px solid $border-color;
+        color: $text-primary;
+
+        &:hover:not(:disabled) {
+            border-color: $accent-orange;
+            color: $accent-orange;
+        }
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+}
+
+// Authentication Section
+.auth-section {
+    max-width: 600px;
+    margin: 0 auto;
+    background: $bg-card;
+    border: 1px solid $border-color;
+    border-radius: 16px;
+    overflow: hidden;
+
+    &__summary {
+        background: $bg-card-hover;
+        padding: 1.5rem;
+        text-align: center;
+        border-bottom: 1px solid $border-color;
+
+        h3 {
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+        }
+
+        p {
+            color: $text-secondary;
+            margin: 0;
+
+            strong {
+                color: $accent-orange;
+                font-size: 1.25rem;
+            }
+        }
+    }
+
+    &__change-plan {
+        background: transparent;
+        border: none;
+        color: $accent-orange;
+        font-size: 0.875rem;
+        cursor: pointer;
+        margin-top: 0.75rem;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    &__form {
+        padding: 2rem;
+        text-align: center;
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        p {
+            color: $text-secondary;
+            margin-bottom: 1.5rem;
+        }
+    }
+
+    &__actions {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    &__divider {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        color: $text-muted;
+        font-size: 0.875rem;
+
+        &::before,
+        &::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: $border-color;
+        }
+    }
+}
+
+.auth-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.5rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+    }
+
+    &--primary {
+        background: $accent-orange;
+        border: none;
+        color: $bg-dark;
+
+        &:hover {
+            background: $accent-orange-light;
+        }
+    }
+
+    &--secondary {
+        background: transparent;
+        border: 1px solid $border-color;
+        color: $text-primary;
+
+        &:hover {
+            border-color: $accent-orange;
+            color: $accent-orange;
+        }
+    }
+}
+
+// Confirmation Section
+.confirmation-section {
+    max-width: 500px;
+    margin: 0 auto;
+    text-align: center;
+    background: $bg-card;
+    border: 1px solid $border-color;
+    border-radius: 16px;
+    padding: 2rem;
+
+    &__icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, $accent-orange, $accent-orange-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+
+        mat-icon {
+            font-size: 40px;
+            width: 40px;
+            height: 40px;
+            color: $bg-dark;
+        }
+    }
+
+    h2 {
+        font-size: 1.75rem;
+        margin-bottom: 0.75rem;
+    }
+
+    p {
+        color: $text-secondary;
+        margin-bottom: 1.5rem;
+    }
+
+    &__actions {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+
+.confirmation-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem;
+    text-align: left;
+
+    li {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.5rem 0;
+        font-size: 0.875rem;
+
+        mat-icon {
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
+
+            &.included {
+                color: $success-color;
+            }
+
+            &.not-included {
+                color: $text-muted;
+            }
+        }
+
+        span.not-included {
+            color: $text-muted;
+        }
+    }
+}
+
+// Checkout Layout
+.checkout-layout {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.checkout-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    &__card {
+        background: $bg-card;
+        border: 1px solid $border-color;
+        border-radius: 12px;
+        padding: 1.25rem;
+
+        strong {
+            display: block;
+            font-size: 1.125rem;
+            margin-bottom: 0.25rem;
+        }
+
+        p {
+            font-size: 0.875rem;
+            color: $text-secondary;
+            margin: 0;
+        }
+    }
+
+    &__label {
+        display: block;
+        font-size: 0.75rem;
+        color: $text-muted;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.5rem;
+    }
+
+    &__price {
+        color: $accent-orange;
+        margin-top: 0.5rem;
+    }
+
+    &__change {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        width: 100%;
+        padding: 0.75rem;
+        background: transparent;
+        border: 1px dashed $border-color;
+        border-radius: 8px;
+        color: $text-secondary;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+            border-color: $accent-orange;
+            color: $accent-orange;
+        }
+
+        mat-icon {
+            font-size: 18px;
+            width: 18px;
+            height: 18px;
+        }
+    }
+}
+
+.checkout-panel {
+    background: $bg-card;
+    border: 1px solid $border-color;
+    border-radius: 16px;
+    padding: 2rem;
+
+    h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    &__actions {
+        margin-top: 0.1rem;
+    }
+
+    &__security {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        font-size: 0.75rem;
+        color: $text-muted;
+
+        mat-icon {
+            font-size: 16px;
+            width: 16px;
+            height: 16px;
+            color: $success-color;
+        }
+    }
+}
+
+.provider-switcher {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+
+    button {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 1rem;
+        background: transparent;
+        border: 1px solid $border-color;
+        border-radius: 8px;
+        color: $text-secondary;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover:not(.active) {
+            border-color: $text-muted;
+            color: $text-primary;
+        }
+
+        &.active {
+            background: rgba($accent-orange, 0.1);
+            border-color: $accent-orange;
+            color: $accent-orange;
+        }
+
+        mat-icon {
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
+        }
+    }
+}
+
+.checkout-form {
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    &__field {
+        display: flex;
+        flex-direction: column;
+        gap: 0.375rem;
+
+        span {
+            font-size: 0.75rem;
+            color: $text-muted;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        input {
+            padding: 0.75rem 1rem;
+            background: $bg-dark;
+            border: 1px solid $border-color;
+            border-radius: 8px;
+            color: $text-primary;
+            font-size: 0.875rem;
+            transition: border-color 0.2s ease;
+
+            &::placeholder {
+                color: $text-muted;
+            }
+
+            &:focus {
+                outline: none;
+                border-color: $accent-orange;
+            }
+
+            &:-webkit-autofill,
+            &:-webkit-autofill:hover,
+            &:-webkit-autofill:focus {
+                -webkit-text-fill-color: $text-primary;
+                -webkit-box-shadow: 0 0 0 1000px $bg-dark inset;
+                box-shadow: 0 0 0 1000px $bg-dark inset;
+                border-color: $border-color;
+                caret-color: $text-primary;
+            }
+        }
+    }
+
+    &__note {
+        font-size: 0.875rem;
+        color: $text-secondary;
+        text-align: center;
+        padding: 1rem;
+        background: rgba($info-color, 0.05);
+        border-radius: 8px;
+        border: 1px dashed rgba($info-color, 0.3);
+    }
+}
+
+.checkout-panel--enhanced {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    height: fit-content;
+}
+
+.checkout-panel__header {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: flex-start;
+
+    p {
+        margin: 0;
+        color: $text-secondary;
+    }
+
+    @media (max-width: 720px) {
+        flex-direction: column;
+    }
+}
+
+.checkout-panel__security-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    margin-top: 0.875rem;
+    border-radius: 999px;
+    background: rgba($success-color, 0.12);
+    border: 1px solid rgba($success-color, 0.24);
+    color: lighten($success-color, 22%);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    white-space: nowrap;
+
+    mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+    }
+}
+
+.checkout-summary__card--provider p {
+    word-break: break-word;
+}
+
+.provider-switcher--cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.875rem;
+
+    @media (max-width: 720px) {
+        grid-template-columns: 1fr;
+    }
+
+    button {
+        flex: none;
+        min-height: 116px;
+        padding: 1.1rem;
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+
+        span {
+            font-size: 1rem;
+            font-weight: 600;
+            color: $text-primary;
+        }
+
+        small {
+            font-size: 0.8125rem;
+            line-height: 1.5;
+            color: $text-secondary;
+        }
+
+        &.disabled {
+            opacity: 0.45;
+        }
+    }
+}
+
+.checkout-provider {
+    border: 1px solid $border-color;
+    border-radius: 14px;
+    padding: 1.25rem;
+    background: linear-gradient(180deg, rgba($bg-card-hover, 0.92), rgba($bg-dark, 0.9));
+
+    &--hidden {
+        display: none;
+    }
+}
+
+.checkout-provider__intro {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+
+    strong {
+        display: block;
+        margin-bottom: 0.35rem;
+    }
+
+    p {
+        margin: 0;
+        color: $text-secondary;
+    }
+
+    @media (max-width: 720px) {
+        flex-direction: column;
+    }
+}
+
+.checkout-provider__chip {
+    align-self: flex-start;
+    padding: 0.5rem 0.75rem;
+    border-radius: 999px;
+    background: rgba($accent-orange, 0.12);
+    border: 1px solid rgba($accent-orange, 0.28);
+    color: $accent-orange-light;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.checkout-form__grid--billing {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 0;
+}
+
+.checkout-form__field--full {
+    width: 100%;
+}
+
+.checkout-form__name-row {
+    display: flex;
+    gap: 1rem;
+
+    .checkout-form__field {
+        flex: 1 1 0;
+        min-width: 0;
+    }
+
+    @media (max-width: 420px) {
+        flex-wrap: wrap;
+
+        .checkout-form__field {
+            flex: 1 1 100%;
+        }
+    }
+}
+
+.card-fields-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+
+    @media (max-width: 720px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.card-type-row {
+    margin-bottom: 0.5rem;
+}
+
+.card-type-switcher {
+    display: inline-flex;
+    gap: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid $border-color;
+    background: $bg-dark;
+}
+
+.card-type-switcher__option {
+    padding: 8px 18px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: $text-secondary;
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+
+    &:hover {
+        background: rgba($accent-orange, 0.08);
+    }
+
+    &.active {
+        background: rgba($accent-orange, 0.18);
+        color: lighten($accent-orange, 15%);
+    }
+}
+
+.checkout-form__input {
+    width: 100%;
+    padding: 0.95rem 1rem;
+    background: $bg-dark;
+    border: 1px solid $border-color;
+    border-radius: 8px;
+    color: $text-primary;
+    font-size: 1rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &::placeholder {
+        color: $text-secondary;
+    }
+
+    &:focus {
+        outline: none;
+        border-color: $accent-orange;
+        box-shadow: 0 0 0 1px rgba($accent-orange, 0.25);
+    }
+
+    &:-webkit-autofill,
+    &:-webkit-autofill:hover,
+    &:-webkit-autofill:focus {
+        -webkit-text-fill-color: $text-primary;
+        -webkit-box-shadow: 0 0 0 1000px $bg-dark inset;
+        box-shadow: 0 0 0 1000px $bg-dark inset;
+        border-color: $border-color;
+        caret-color: $text-primary;
+    }
+}
+
+.checkout-form__field--wide {
+    grid-column: 1 / -1;
+}
+
+.checkout-form__field--element {
+    .stripe-element-host {
+        min-height: 52px;
+        display: flex;
+        align-items: center;
+        padding: 0.95rem 1rem;
+        background: $bg-dark;
+        border: 1px solid $border-color;
+        border-radius: 8px;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+        &:focus-within {
+            border-color: $accent-orange;
+            box-shadow: 0 0 0 1px rgba($accent-orange, 0.25);
+        }
+    }
+}
+
+.checkout-inline-error {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 0.9rem;
+    border-radius: 8px;
+    background: rgba($error-color, 0.08);
+    border: 1px solid rgba($error-color, 0.24);
+    color: lighten($error-color, 12%);
+    font-size: 0.875rem;
+
+    mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+    }
+}
+
+.checkout-panel__actions--stacked {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.875rem;
+}

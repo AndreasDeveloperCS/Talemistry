@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>CV - {{FIRSTNAME}} {{LASTNAME}}</title>
+  <link rel="stylesheet" href="../styles/split-accent.css" />
+</head>
+<div class="sa-wrapper">
+  <div class="sa-accent-bar"></div>
+
+  <div class="sa-content">
+    <aside class="sa-sidebar">
+
+      {{#if PHOTO}}
+      <div class="sa-sidebar__photo">
+        <img src="{{PHOTO}}" alt="{{FULL_NAME}}" />
+        <div class="sa-sidebar__photo-gradient"></div>
+      </div>
+      {{/if}}
+
+      <div class="sa-sidebar__contacts">
+        {{#if EMAIL}}
+        <div class="sa-contact">
+          <div class="sa-contact__icon">✉</div>
+          <span class="sa-contact__text">{{EMAIL}}</span>
+        </div>
+        {{/if}}
+
+        {{#if PHONE}}
+        <div class="sa-contact">
+          <div class="sa-contact__icon">☎</div>
+          <span class="sa-contact__text">{{PHONE}}</span>
+        </div>
+        {{/if}}
+      </div>
+
+      {{#if HARD_SKILLS.length}}
+      <div class="sa-sidebar-section">
+        <h2 class="sa-sidebar-section__title">
+          <span class="sa-sidebar-section__dash"></span>
+          Core Skills
+        </h2>
+        <div class="sa-skill-tags">
+          {{#each HARD_SKILLS}}
+            {{#if name}}
+              <span class="sa-skill-tag">{{name}}</span>
+            {{/if}}
+          {{/each}}
+        </div>
+      </div>
+      {{/if}}
+
+      {{#if DOMAIN_SKILLS.length}}
+      <div class="sa-sidebar-section">
+        <h2 class="sa-sidebar-section__title">
+          <span class="sa-sidebar-section__dash"></span>
+          Domain Skills
+        </h2>
+        <div class="sa-skill-tags">
+          {{#each DOMAIN_SKILLS}}
+            {{#if name}}
+              <span class="sa-skill-tag">{{name}}</span>
+            {{/if}}
+          {{/each}}
+        </div>
+      </div>
+      {{/if}}
+
+      {{#if MANAGERIAL_SKILLS.length}}
+      <div class="sa-sidebar-section">
+        <h2 class="sa-sidebar-section__title">
+          <span class="sa-sidebar-section__dash"></span>
+          Managerial Skills
+        </h2>
+        <div class="sa-attributes">
+          {{#each MANAGERIAL_SKILLS}}
+          <div class="sa-attribute">
+            {{#if name}}
+              <span class="sa-attribute__bullet"></span>
+              {{name}}
+            {{/if}}
+          </div>
+          {{/each}}
+        </div>
+      </div>
+      {{/if}}
+
+      {{#if SOFT_SKILLS.length}}
+      <div class="sa-sidebar-section">
+        <h2 class="sa-sidebar-section__title">
+          <span class="sa-sidebar-section__dash"></span>
+          Soft Skills
+        </h2>
+        <div class="sa-attributes">
+          {{#each SOFT_SKILLS}}
+          <div class="sa-attribute">
+            {{#if name}}
+              <span class="sa-attribute__bullet"></span>
+              {{name}}
+            {{/if}}
+          </div>
+          {{/each}}
+        </div>
+      </div>
+      {{/if}}
+
+      {{#if LANGUAGES.length}}
+      <div class="sa-sidebar-section">
+        <h2 class="sa-sidebar-section__title">
+          <span class="sa-sidebar-section__dash"></span>
+          Languages
+        </h2>
+
+        <div class="sa-languages">
+          {{#each LANGUAGES}}
+          <div class="sa-language">
+            <div class="sa-language__header">
+              {{#if name}}
+                <span class="sa-language__name">{{name}}</span>
+              {{/if}}
+              {{#if level}}
+                <span class="sa-language__level">{{level}}</span>
+              {{/if}}
+            </div>
+
+            <div class="sa-language__bars">
+              {{#each bars}}
+                <div class="sa-language__bar {{#if active}}sa-language__bar--active{{/if}}"></div>
+              {{/each}}
+            </div>
+          </div>
+          {{/each}}
+        </div>
+      </div>
+      {{/if}}
+
+    </aside>
+
+
+    <main class="sa-main">
+      <div class="sa-sidebar__name-block">
+        <h1>
+          <span class="sa-sidebar__firstname">{{FIRST_NAME}}</span>
+          <span class="sa-sidebar__lastname">{{LAST_NAME}}</span>
+        </h1>
+        {{#if TITLE}}
+          <p class="sa-sidebar__position">{{TITLE}}</p>
+        {{/if}}
+      </div>
+
+      {{#if OBJECTIVE}}
+      <section class="sa-section">
+        <div class="sa-section-label">
+          <div class="sa-section-label__icon-box">
+            <!-- <mat-icon>description</mat-icon> -->
+             📝
+          </div>
+          <h2>Career Objective</h2>
+        </div>
+        <p class="sa-objective-text">{{OBJECTIVE}}</p>
+      </section>
+      {{/if}}
+
+      {{#if SUMMARY}}
+      <section class="sa-section">
+        <div class="sa-section-label">
+          <div class="sa-section-label__icon-box">
+            <!-- <mat-icon>description</mat-icon> -->
+             📝
+          </div>
+          <h2>Professional Summary</h2>
+        </div>
+        <p class="sa-summary-text">{{SUMMARY}}</p>
+        <div class="sa-summary-line"></div>
+      </section>
+      {{/if}}
+
+      {{#if EXPERIENCE.length}}
+      <section class="sa-section">
+        <div class="sa-main-section-header">
+          <h2>Professional Experience</h2>
+          <div class="sa-main-section-header__line"></div>
+        </div>
+
+        <div class="sa-exp-list">
+        {{#each EXPERIENCE}}
+        <div class="sa-exp">
+            <div class="sa-exp__accent {{#if isCurrent}}sa-exp__accent--current{{/if}}"></div>
+            <div class="sa-exp__content">
+              <div class="sa-exp__header">
+                <div>
+                  {{#if title}}
+                    <h3 class="sa-exp__title">{{title}}</h3>
+                  {{/if}}
+                  {{#if company}}
+                    <div class="sa-exp__company-row">
+                      <!-- <mat-icon>business</mat-icon> -->
+                      🏢
+                      <span>{{company}}</span>
+                    </div>
+                  {{/if}}
+                </div>
+                {{#if period}}
+                  <div class="sa-exp__date-badge">
+                    <!-- <mat-icon>calendar_today</mat-icon> -->
+                    📅
+                    <span>{{period}}</span>
+                  </div>
+                {{/if}}
+              </div>
+
+              {{#if responsibilities}}
+                <p class="responsibilities-header">Responsibilities</p>
+                <ul class="sa-exp__responsibilities">
+                  {{#each responsibilities}}
+                  <li>
+                    <!-- <mat-icon>arrow_forward</mat-icon> -->
+                    <span class="sa-exp__chevron">&gt;</span>
+                    <span class="sa-exp__desc">{{this}}</span>
+                  </li>
+                  {{/each}}
+                </ul>
+              {{/if}}
+
+              {{#if achievements}}
+                <p class="achievements-header">Achievements</p>
+                <ul class="sa-exp__achievements">
+                  {{#each achievements}}
+                  <li>
+                    <!-- <mat-icon>arrow_forward</mat-icon> -->
+                    <span class="sa-exp__chevron">&gt;</span>
+                    <span class="sa-exp__desc">{{this}}</span>
+                  </li>
+                  {{/each}}
+                </ul>
+              {{/if}}
+            </div>
+          </div>
+        {{/each}}
+        </div>
+      </section>
+      {{/if}}
+
+      {{#if EDUCATION.length}}
+      <section class="sa-section">
+        <div class="sa-main-section-header">
+          <h2>Education</h2>
+          <div class="sa-main-section-header__line"></div>
+        </div>
+
+        <div class="sa-edu-grid">
+        {{#each EDUCATION}}
+          <div class="sa-edu">
+            <h3>{{degree}}</h3>
+            {{#if specialisation}}
+              <p class="sa-edu__spec">{{specialisation}}</p>
+            {{/if}}
+            {{#if institution}}
+              <p class="sa-edu__institution">{{institution}}</p>
+            {{/if}}
+            {{#if year}}
+              <span class="sa-edu__date">{{year}}</span>
+            {{/if}}
+          </div>
+        {{/each}}
+        </div>
+      </section>
+      {{/if}}
+
+      {{#if CERTIFICATIONS.length}}
+      <section class="sa-section">
+        <div class="sa-main-section-header">
+          <h2>Certifications</h2>
+          <div class="sa-main-section-header__line"></div>
+        </div>
+
+        <div class="sa-cert-grid">
+          {{#each CERTIFICATIONS}}
+          <div class="sa-cert">
+            <div class="sa-cert__icon">
+              <!-- <mat-icon>verified</mat-icon> -->
+              ✔️
+            </div>
+            <div>
+              {{#if name}}
+              <h4>{{name}}</h4>
+              {{/if}}
+              <p>{{#if issuer}}{{issuer}} | {{/if}}{{#if  year}}{{year}}{{/if}}</p>
+            </div>
+          </div>
+          {{/each}}
+        </div>
+
+      </section>
+      {{/if}}
+
+    </main>
+  </div>
+
+  <!-- <div class="sa-corner-accent"></div> -->
+</div>
+<body>

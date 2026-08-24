@@ -1,0 +1,8 @@
+<div class="circle-spinner-container">
+    @for (dot of dots; track $index; let i = $index) {
+      <div 
+        class="circle-dot" 
+        [style.animation-delay]="i * 0.1 + 's'">
+      </div>
+    }      
+</div>

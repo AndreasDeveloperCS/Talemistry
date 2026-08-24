@@ -1,0 +1,68 @@
+@use 'variables' as *;
+
+.tooltip-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  padding: 20px;
+  background: $background-dark-main !important; //$elements-highlight-background;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 10px;
+  color: var(--text);
+  font-size: 18px;
+  font-family: Arial, sans-serif;
+  z-index: 1000;
+}
+
+.checkmark-container {
+  margin: 0 auto;
+  width: 105px;
+  height: 105px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  align-self: center;
+  justify-items: center;
+  justify-self: center;
+  justify-content: center;
+}
+
+.circle {
+  stroke-dasharray: 314;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  align-self: center;
+  justify-items: center;
+  justify-self: center;
+  justify-content: center;
+  margin: auto;
+  stroke-dashoffset: 314;
+  padding: 0px;
+  animation: draw-circle 1s ease-out forwards;
+}
+
+.checkmark {
+  stroke-dasharray: 50;
+  /* Total length of the checkmark */
+  stroke-dashoffset: 50;
+  animation: draw-checkmark 0.5s ease-out 0.8s forwards;
+}
+
+/* Circle animation */
+@keyframes draw-circle {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Checkmark animation */
+@keyframes draw-checkmark {
+  to {
+    stroke-dashoffset: 0;
+  }
+}

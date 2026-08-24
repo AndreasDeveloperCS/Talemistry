@@ -1,0 +1,32 @@
+{
+  "corsClientShortHostHttp": "talemistry.com",
+  "corsClientHostHttp": "http://talemistry.com",
+  "corsClientHostHttps": "https://talemistry.com",
+  "corsHostHttp": "http://talemistry.com/api",
+  "corsHostHttps": "https://talemistry.com/api",
+  "serviceConfig": {
+    "port": 3000,
+    "httpPort": 5000,
+    "name": "talemistry",
+    "appUIUrl": "https://talemistry.com"
+  },
+  "mongoConnection": "mongodb://127.0.0.1:27017/evryka?authSource=admin",
+  "mongoCloudConnection": "mongodb+srv://evrykadis:Wo0dfjvGNPabn68A@evryka.fmq327h.mongodb.net/evryka",
+  "cloudDBName": "evryka",
+  "httpMode": false,
+  "certConfig": {
+    "path": "/client_certs/",
+    "key": "evryka-key.pem",
+    "cert": "evryka-cert.pem",
+    "ca": [ ],
+    "requestCert": true,
+    "rejectUnauthorized": false
+  },
+  "secure": true,
+  "certFile": "client_certs\\evryka-cert.crt",
+  "caFile": "client_certs\\evryka-CA.crt",
+  "keyFile": "client_certs\\evryka-key.key",
+  "secret": "freedom",
+  "refreshSecret": "freedom",
+  "expiresIn": 7200
+}

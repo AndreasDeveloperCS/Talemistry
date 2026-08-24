@@ -1,0 +1,42 @@
+  <div class="dialog-form editor universal-input">
+    <div class="container__middle">
+        <h4>{{ content.txtChatGptGenerator }}</h4>
+    </div>
+    @if(loading) {
+      <app-loading-spinner></app-loading-spinner>
+    }
+    @if(!loading && generatedForm) {
+      <form [formGroup]="generatedForm">
+          <mat-form-field appearance="outline" class="small-input" density="-2">
+              <input
+              type="text"
+              matInput
+              [placeholder]="content.txtRequest"
+              formControlName="title"
+              required
+              class="input-correction" />
+              <mat-icon matSuffix (click)="generateDescription()">send</mat-icon>
+          </mat-form-field>
+      </form>
+      
+      <ngx-editor appInsertion
+          [editor]="editor"
+          class="editor__scroll-hidden"
+          [(ngModel)]="html"
+          [disabled]="false"
+          (ngModelChange)="editorChange($event)"
+          [placeholder]="content.blogPostContent">
+      </ngx-editor>
+      <div class="edit-buttons">
+        <button class="menu-button" (click)="closeChatGptFullScreenDialog()">
+          <mat-icon>fullscreen_exit</mat-icon>
+        </button>
+        <button class="menu-button" (click)="openChatGptFullScreenDialog()">
+          <mat-icon>fullscreen</mat-icon>
+        </button>
+        <button class="menu-button" (click)="closeChatGptDialog()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    }
+  </div>

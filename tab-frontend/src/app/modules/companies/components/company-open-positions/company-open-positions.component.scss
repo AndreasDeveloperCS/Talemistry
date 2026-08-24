@@ -1,0 +1,61 @@
+@use 'variables' as *; 
+@use 'global' as *;
+
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+  //padding: 0 $padding-l;
+
+  @media (max-width: $screen-size-netbook) {
+    //padding: 0 $padding-s;
+  }
+}
+
+.dashboard-container {
+  display: flex;
+  height: 100%;
+  background-color: transparent;
+  max-width: $screen-size-netbook;
+  margin: 0 auto;
+  color: var(--text);
+
+  .content {
+    width: 100%;
+    margin: 0 auto;
+
+    @media (max-width: $screen-size-mobile) {
+      padding: 0;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      gap: $gap-small;
+
+        @media (max-width: $screen-size-mobile) {
+            flex-direction: column-reverse;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: $margin-narrow;
+        }
+
+        h2 {
+            color: $pallete-0-color-14;
+            font-weight: 600;
+        }
+    }
+
+    .positions-wrapper {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: 1fr;
+
+      @media (max-width: $screen-size-netbook) {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+}

@@ -1,0 +1,196 @@
+@if(loading) {
+    <app-sun-spinner></app-sun-spinner>
+}
+@if(!loading && company) {
+<div class="company-preview">
+  <div class="company-preview__hero">
+    <div class="company-preview__hero-top">
+      <div *ngIf="company.isVerified" class="verified-badge">
+        <mat-icon>verified</mat-icon>
+        Verified Company
+      </div>
+    </div>
+    <div class="company-preview__identity">
+      <div class="company-logo">
+        <ng-container *ngIf="company.data.companyLogo?.imagePath; else logoFallback">
+          <img [src]="company.data.companyLogo?.imagePath" alt="Company Logo">
+        </ng-container>
+        <ng-template #logoFallback>
+          <mat-icon>business</mat-icon>
+        </ng-template>
+      </div>
+      <div>
+        <h1 class="company-preview__title">
+          {{ company.data.companyName }}
+        </h1>
+        <div class="company-preview__subtitle">
+          {{ company.data.shortDescription }}
+        </div>
+      </div>
+    </div>
+    <div class="company-preview__meta">
+      <div class="meta-pill">
+        <mat-icon>apartment</mat-icon>
+        {{ company.data.companyType }}
+      </div>
+      <div class="meta-pill">
+        <mat-icon>groups</mat-icon>
+        {{ company.data.companySizeRange }}
+      </div>
+      <div class="meta-pill">
+        <mat-icon>public</mat-icon>
+        {{ company.data.country?.name }}
+      </div>
+      <div class="meta-pill">
+        <mat-icon>location_city</mat-icon>
+        {{ company.data.city?.name }}
+      </div>
+    </div>
+    <div class="preview-actions">
+      <button class="preview-action-btn" (click)="openInNewTab()">
+        <mat-icon>open_in_new</mat-icon>
+        Open Tab
+      </button>
+      <button class="preview-action-btn" (click)="copyLink()">
+        <mat-icon>content_copy</mat-icon>
+        Copy Link
+      </button>
+    </div>
+  </div>
+  <div class="company-preview__section">
+    <div class="section-header">
+      <div class="section-header__left">
+        <mat-icon>description</mat-icon>
+        <h2>About Company</h2>
+      </div>
+    </div>
+    <div class="section-content">{{ company.data.shortDescription }}</div>
+  </div>
+  <div class="company-preview__section">
+    <div class="section-header">
+      <div class="section-header__left">
+        <mat-icon>domain</mat-icon>
+        <h2>Industries</h2>
+      </div>
+    </div>
+    <div class="chips-list">
+      <div *ngFor="let item of company.data.industryCategories"
+        class="custom-chip">
+        {{ item.industryName }}
+      </div>
+    </div>
+  </div>
+  <div class="company-preview__section">
+    <div class="section-header">
+      <div class="section-header__left">
+        <mat-icon>favorite</mat-icon>
+        <h2>Company Values</h2>
+      </div>
+    </div>
+    <div class="chips-list">
+      <div *ngFor="let item of company.data.companyValues"
+        class="custom-chip">
+        {{ item.value }}
+      </div>
+    </div>
+  </div>
+  <div class="company-preview__section">
+    <div class="section-header">
+      <div class="section-header__left">
+        <mat-icon>workspace_premium</mat-icon>
+        <h2>Benefits</h2>
+      </div>
+    </div>
+    <div class="chips-list">
+      <div *ngFor="let item of company.data.companyBenefits"
+        class="custom-chip">
+        {{ item.benefit }}
+      </div>
+    </div>
+  </div>
+  <div class="company-preview__section">
+    <div class="section-header">
+      <div class="section-header__left">
+        <mat-icon>contacts</mat-icon>
+        <h2>Contacts</h2>
+      </div>
+    </div>
+    <div class="company-facts">
+      <div class="fact-item">
+        <mat-icon>mail</mat-icon>
+        <div>
+          <div class="fact-label">Email</div>
+          <div class="fact-value">{{ company.data.companyEmail }}</div>
+        </div>
+      </div>
+      <div class="fact-item">
+        <mat-icon>call</mat-icon>
+        <div>
+          <div class="fact-label">Phone</div>
+          <div class="fact-value">{{ company.data.companyPhone }}</div>
+        </div>
+      </div>
+      <div class="fact-item">
+        <mat-icon>language</mat-icon>
+        <div>
+          <div class="fact-label">Website</div>
+          <div class="fact-value">{{ company.data.companySite }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="company-preview__section">
+    <div class="section-header">
+      <div class="section-header__left">
+        <mat-icon>analytics</mat-icon>
+        <h2>Company Facts</h2>
+      </div>
+    </div>
+    <div class="company-facts-grid">
+      <div class="fact-card">
+        <mat-icon>payments</mat-icon>
+        <div class="fact-card__title">Revenue</div>
+        <div class="fact-card__value">
+          {{ company.data.currency?.symbol }}{{ company.data.companyRevenue }}
+        </div>
+      </div>
+      <div class="fact-card">
+        <mat-icon>badge</mat-icon>
+        <div class="fact-card__title">Registration</div>
+        <div class="fact-card__value">
+          {{ company.data.registrationNumber }}
+        </div>
+      </div>
+      <div class="fact-card">
+        <mat-icon>account_balance</mat-icon>
+        <div class="fact-card__title">Tax Number</div>
+        <div class="fact-card__value">{{ company.data.taxNumber }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="company-preview__section">
+    <div class="section-header">
+      <div class="section-header__left">
+        <mat-icon>work</mat-icon>
+        <h2>Open Positions</h2>
+      </div>
+    </div>
+    <div *ngIf="positions?.length; else noPositions"
+      class="positions-list">
+      <div *ngFor="let position of positions"
+        class="position-card" (click)="openPosition(position._id)">
+        <div class="position-card__top">
+          <div>
+            <div class="position-card__title">{{ position.title }}</div>
+            <div class="position-card__subtitle">{{ position.positionDetails.general.workPlace }}</div>
+          </div>
+          <mat-icon>arrow_forward_ios</mat-icon>
+        </div>
+      </div>
+    </div>
+    <ng-template #noPositions>
+      <div class="empty-state">No open positions</div>
+    </ng-template>
+  </div>
+</div>
+}

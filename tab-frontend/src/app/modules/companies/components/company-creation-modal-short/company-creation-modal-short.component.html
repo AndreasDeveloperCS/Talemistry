@@ -1,0 +1,79 @@
+<button mat-icon-button class="form-button exit-button" (click)="onCancel()">
+    <mat-icon>
+        <svg width="1.5rem" height="1.5rem" viewBox="0 0 108 107" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M27 26.75L54 53.5L81 26.75" stroke="white" stroke-width="10" stroke-linecap="round" />
+            <path d="M27 80.25L54 53.5L81 80.25" stroke="white" stroke-width="10" stroke-linecap="round" />
+        </svg>
+    </mat-icon>
+</button>
+
+<form [formGroup]="companyForm" enctype="multipart/form-data"
+    class="universal-input details custom-toggle modal-window details-items company-block-style modal-dialog">
+    <h2 class="dialog-header">Short Company Form</h2>
+    <div class="container__full-width">
+        <label class="form-field new-label">{{ content.txtCompanyName }}</label>
+        <input matInput formControlName="companyName" class="transparent-input-full-width" required>
+        @if(companyForm.get('companyName')?.hasError('required')) {
+        <p class="error">Company name is <strong>required</strong></p>
+        }
+    </div>
+
+    <div>
+        <label class="new-label">{{ content.txtShortDescription }}</label>
+        <textarea class="transparent-input-full-width" matInput formControlName="shortDescription" rows="3"
+            placeholder="">
+            </textarea>
+    </div>
+
+    <div class="container__full-width">
+        <label class="new-label">Company Logo</label>
+        <div class="file-input-row">
+            <input matInput [readonly]="true" name="icon" formControlName="icon" [(ngModel)]="companyVersion.data.logo"
+                [value]="fileName == '' || fileName == undefined ? 'Select company logo': fileName"
+                class="transparent-input-full-width" />
+
+            <div class="import-profile-image">
+
+                <a class="import-profile-image-link" (click)="fileInput.click()" target="_blank">
+                </a>
+
+                <input hidden (change)="onFileSelected($event)" [accept]="extensions" #fileInput type="file" />
+
+                <button class="button__primary-color button--small " (click)="fileInput.click()">
+                    {{ content.btnSelect }}
+                </button>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="container__full-width container__flex">
+        <div class="container__full-width">
+            <app-countries (countryChange)="onCountrySelected($event)"
+                [selectedCountry]="companyForm.get('country')?.value">
+            </app-countries>
+        </div>
+        <div class="container__full-width">
+            <app-cities (cityChange)="onCitySelected($event)" [selectedCity]="companyForm.get('city')?.value"
+                [selectedCountry]="companyForm.get('country')?.value">
+            </app-cities>
+        </div>
+    </div>
+
+    <div class="container__full-width">
+        <app-main-industry-domain (industryDomainChange)="onIndustryDomainSelected($event)"
+            [selectedMainIndustryDomain]="companyForm.get('mainIndustryDomain')?.value"
+            [selectedIndustryCategories]="companyForm.get('industryCategories')?.value">
+        </app-main-industry-domain>
+    </div>
+
+    <div [align]="'end'" class="container__center buttons">
+        <button (click)="onSubmit()" [class.disabled]="!companyForm.valid"
+            class="button__primary-color button--medium container__center">
+            {{ controlButtonContent }}
+        </button>
+        <button (click)="onFullForm()" class="button__secondary-color button--medium container__center">
+            Full Form
+        </button>
+    </div>
+</form>

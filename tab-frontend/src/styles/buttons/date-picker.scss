@@ -1,0 +1,126 @@
+:host ::ng-deep .calendar.mat-mdc-form-field {
+    position: relative;
+    overflow: visible;
+}
+
+/* Keep the suffix sized, but overlap it into the input */
+:host ::ng-deep .calendar .mat-mdc-form-field-icon-suffix {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    //flex: 0 0 auto;
+    // margin-inline-start: -75px;
+    margin-inline-start: 105px;
+    top: 2.1rem;
+    //margin-top: 2px;
+    /* overlap by ~icon width instead of width:0 */
+    overflow: visible;
+    justify-self: flex-end;
+}
+
+/* Make sure the button has a proper hit area and isn't squeezed */
+:host ::ng-deep .calendar .date-picker-shifting .mat-mdc-icon-button {
+    width: 30px;
+    height: 30px;
+
+    margin-top: 2px;
+    line-height: 30px;
+    /* centers the glyph */
+    box-sizing: content-box;
+    z-index: 2;
+
+    display: inline-flex;
+    /* use flexbox */
+    align-items: center;
+    /* vertical center */
+    justify-content: center;
+    padding: 0.3rem;
+}
+
+/* The hidden extra touch target MDC adds — keep it full size */
+:host ::ng-deep .calendar .date-picker-shifting .mat-mdc-button-touch-target {
+    width: 30px;
+    height: 30px;
+}
+
+/* Leave room for the icon so text doesn't sit under it */
+:host ::ng-deep .calendar input.mat-mdc-input-element {
+    min-width: 12ch;
+    /* fits “12/12/2025” */
+    padding-inline-end: 48px;
+    /* icon + gap */
+}
+
+/* Make the SVG not use baseline metrics */
+:host ::ng-deep .calendar .date-picker-shifting .mat-datepicker-toggle-default-icon {
+    display: block;
+    /* no extra baseline gap */
+}
+
+/* If the button is absolutely positioned inside the input, keep it centered vertically */
+:host ::ng-deep .calendar .date-picker-shifting .mat-mdc-icon-button.is-absolute,
+:host ::ng-deep .calendar .date-picker-shifting .mat-mdc-icon-button.absolute {
+    position: absolute;
+    //inset-inline-end: 4px;
+    /* same as your placement */
+    top: 50%;
+    transform: translateY(-50%);
+    /* vertical centering */
+}
+
+//----------------------------------------------------------------------------------------------------------------
+
+
+// /* 2) Let the suffix overlap a bit, but don't squeeze it */
+// :host ::ng-deep .calendar .mat-mdc-form-field-icon-suffix {
+//     display: flex;
+//     align-items: center;
+//     flex: 0 0 auto;
+//     margin-inline-start: -30px;
+//     /* overlap ~icon width; tweak -36..-44px */
+//     overflow: visible;
+// }
+
+// /* 3) Center the toggle button vertically & horizontally */
+// :host ::ng-deep .calendar .date-picker-shifting .mat-mdc-icon-button {
+//     position: absolute;
+//     inset-inline-end: 8px;
+//     /* RTL-safe 'right: 8px' */
+//     top: 50%;
+//     transform: translateY(-50%);
+//     /* vertical centering */
+//     display: inline-flex;
+//     align-items: center;
+//     justify-content: center;
+//     width: 30px;
+//     /* hit area */
+//     height: 30px;
+//     padding: 0;
+//     line-height: 1;
+//     /* avoid baseline offsets */
+//     z-index: 2;
+// }
+
+// /* 4) Keep SVG from sitting on the text baseline */
+// :host ::ng-deep .calendar .date-picker-shifting .mat-datepicker-toggle-default-icon {
+//     display: block;
+// }
+
+// /* 5) Ensure the touch target isn't shrinking */
+// :host ::ng-deep .calendar .date-picker-shifting .mat-mdc-button-touch-target {
+//     width: 30px;
+//     height: 30px;
+// }
+
+// /* 6) Leave space so text doesn't run under the icon */
+// :host ::ng-deep .calendar input.mat-mdc-input-element {
+//     min-width: 12ch;
+//     /* fits “12/12/2025” */
+//     padding-inline-end: 48px;
+//     /* icon width + small gap */
+// }
+
+:host ::ng-deep .container__center .mat-mdc-form-field-subscript-wrapper,
+:host ::ng-deep .calendar .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+}

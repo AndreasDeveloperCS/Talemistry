@@ -1,0 +1,272 @@
+<div class="skill-form">
+  <div>
+    @switch (skill.skillType) {
+    <!--   HARD   -->
+    @case (SkillType.hard) {
+    <ng-template #hardTemplate>
+      <form class="skill-form " [formGroup]="skillForm">
+        <!-- <mat-label class="new-label">{{
+          content.txtSkillNamePlaceholder}}</mat-label> -->
+        <div class="container__flex container__center">
+          <mat-form-field class="skill-full-width">
+            <mat-label class="new-label">{{content.skillNameHard}}
+            </mat-label>
+            <input type="text" class="input skill-standart-width transparent-input-full-width" [placeholder]="content.txtSkillNamePlaceholder"
+              matInput [value]="skill.skillName" formControlName="skillName" [(ngModel)]="skill.skillName"
+              [readonly]="true">
+          </mat-form-field>
+          <mat-form-field class="skill-full-width company">
+            <mat-label class="new-label">{{content.skillNameSubGroup}}</mat-label>
+            <input class="input company-name skill-standart-width transparent-input-full-width" type="text"
+              [placeholder]="content.txtSubGroupPlaceholder" matInput [(ngModel)]="skill.subGroup"
+              [matAutocomplete]="auto" (input)="filterSubGroup($event)" formControlName="subGroup" />
+            <mat-autocomplete #auto="matAutocomplete">
+              @for (subGroup of filteredSubGroup; track subGroup) {
+              <mat-option [value]="subGroup">
+                {{ subGroup }}
+              </mat-option>
+              }
+            </mat-autocomplete>
+            <mat-icon class="dropdown-icon" [class]="{ open: isOpen }" (click)="toggleDropdown()">
+              arrow_drop_down
+            </mat-icon>
+          </mat-form-field>
+          
+          <mat-form-field class="skill-full-width">
+            <mat-label class="new-label">
+              {{content.txtExpirienceInYearsPlaceholder}} </mat-label>
+            <input type="number" class="input skill-standart-width transparent-input-full-width" [placeholder]="content.txtExpirienceInYearsPlaceholder" matInput
+              [min]="1" [max]="100" [(ngModel)]="skill.expirienceInYears" formControlName="expirienceInYears">
+          </mat-form-field>
+          <mat-form-field class="skill-full-width">
+            <mat-label class="new-label">{{content.txtExpirienceInMonthsPlaceholder}}
+            </mat-label>
+            <input type="number" class="input skill-standart-width transparent-input-full-width" [placeholder]="content.txtExpirienceInMonthsPlaceholder" matInput
+              [min]="1" [max]="1000" [(ngModel)]="skill.expirienceInMonths" formControlName="expirienceInMonths">
+          </mat-form-field>
+          <mat-form-field class="width-narrow  general-vertical-align calendar">
+            <mat-label class="new-label">{{content.txtStartMonthPlaceholder}}</mat-label>
+            <input class="input datetime-block-size transparent-input-full-width" matInput [matDatepicker]="startDatePicker" [(ngModel)]="skill.startMonth"
+              name="startMonth" [placeholder]="content.txtStartMonthPlaceholder"
+              formControlName="startMonth" [max]="currentDate" />
+            <mat-datepicker-toggle 
+              class="date-picker-shifting" 
+              [max]="currentDate" matSuffix 
+              [for]="startDatePicker">
+            </mat-datepicker-toggle>
+            <mat-datepicker [max]="currentDate" #startDatePicker startView="multi-year"
+              (yearSelected)="chosenYearHandlerStart($event, startDatePicker)"
+              (monthSelected)="chosenMonthHandlerStart($event, startDatePicker)"></mat-datepicker>
+          </mat-form-field>
+          <div class="general-vertical-align">
+            <mat-button inline="true" (click)="removeItem(skill)">
+              <!-- <app-delete-icon></app-delete-icon> -->
+               <mat-icon>delete_sweep</mat-icon>
+            </mat-button>
+          </div>
+        </div>
+        <div class="slider-filter skill-standart-width">
+            @if (false) {
+            <mat-label class="new-title">{{content.skillNameProficiencyEstimation}}</mat-label>
+            }
+            <div class="custom-slider">
+              <ngx-slider class="custom-slider" [(ngModel)]="skill.proficiencyEstimation" [options]="skillOptions"
+                formControlName="proficiencyEstimation">
+              </ngx-slider>
+            </div>
+          </div>
+      </form>
+    </ng-template>
+    <ng-container *ngTemplateOutlet="hardTemplate"></ng-container>
+    }
+    <!--   SOFT   -->
+    @case (SkillType.soft) {
+    <ng-template #softTemplate>
+      <form class="skill-form " [formGroup]="skillForm">
+        <!-- <mat-label class="new-label">{{
+          content.txtSkillNamePlaceholder}}</mat-label> -->
+        <div class="container__flex container__center">
+          <mat-form-field class="skill-full-width">
+            <mat-label class="new-label">{{content.skillNameSoft}}
+            </mat-label>
+            <input type="text" class="input skill-standart-width transparent-input-full-width"
+              [placeholder]="content.txtSkillNamePlaceholder" matInput [value]="skill.skillName"
+              formControlName="skillName" [(ngModel)]="skill.skillName" [readonly]="true">
+          </mat-form-field>
+          <div class="slider-filter skill-standart-width">
+            @if (false) {
+            <mat-label class="slider-title input-group__item">{{
+              content.skillNameProficiencyEstimation }}</mat-label>
+            }
+            <div class="custom-slider">
+              <ngx-slider class="custom-slider" [(ngModel)]="skill.intensityEstimation" [options]="skillOptions"
+                formControlName="intensityEstimation">
+              </ngx-slider>
+            </div>
+          </div>
+          <div class="general-vertical-align">
+            <mat-button inline="true" (click)="removeItem(skill)">
+              <!-- <app-delete-icon></app-delete-icon> -->
+               <mat-icon>delete_sweep</mat-icon>
+            </mat-button>
+          </div>
+        </div>
+      </form>
+    </ng-template>
+    <ng-container *ngTemplateOutlet="softTemplate"></ng-container>
+    }
+    <!--  DOMAIN   -->
+    @case (SkillType.domain) {
+    <ng-template #domainTemplate>
+      <form class="skill-form " [formGroup]="skillForm">
+        <!-- <mat-label class="new-label">{{
+          content.txtSkillNamePlaceholder}}</mat-label> -->
+        <div class="container__flex container__center">
+          <mat-form-field class="skill-full-width">
+            <mat-label class="new-label">{{content.skillNameDomain}}
+            </mat-label>
+            <input type="text" class="input skill-standart-width transparent-input-full-width" [placeholder]="content.txtSkillNamePlaceholder"
+              matInput [value]="skill.skillName" formControlName="skillName" [(ngModel)]="skill.skillName"
+              [readonly]="true">
+          </mat-form-field>
+          <mat-form-field class="skill-full-width company">
+            <mat-label class="new-label">{{content.skillNameSubGroup}}</mat-label>
+            <input class="input company-name skill-standart-width transparent-input-full-width" type="text"
+              [placeholder]="content.txtSubGroupPlaceholder" matInput [(ngModel)]="skill.subGroup"
+              [matAutocomplete]="auto" (input)="filterSubGroup($event)" formControlName="subGroup" />
+            <mat-autocomplete #auto="matAutocomplete">
+              @for (subGroup of domainsSubGroups; track subGroup) {
+              <mat-option [value]="subGroup">
+                {{ subGroup }}
+              </mat-option>
+              }
+            </mat-autocomplete>
+            <mat-icon class="dropdown-icon" [class]="{ open: isOpen }" (click)="toggleDropdown()">
+              arrow_drop_down
+            </mat-icon>
+          </mat-form-field>
+          
+          <mat-form-field class="skill-full-width">
+            <mat-label class="new-label">
+              {{content.txtExpirienceInYearsPlaceholder}} </mat-label>
+            <input type="number" class="input skill-standart-width transparent-input-full-width" [placeholder]="content.txtExpirienceInYearsPlaceholder" matInput
+              [min]="1" [max]="100" [(ngModel)]="skill.expirienceInYears" formControlName="expirienceInYears">
+          </mat-form-field>
+          <mat-form-field class="skill-full-width">
+            <mat-label class="new-label">{{content.txtExpirienceInMonthsPlaceholder}}
+            </mat-label>
+            <input type="number" class="input skill-standart-width transparent-input-full-width" [placeholder]="content.txtExpirienceInMonthsPlaceholder" matInput
+              [min]="1" [max]="1000" [(ngModel)]="skill.expirienceInMonths" formControlName="expirienceInMonths">
+          </mat-form-field>
+          <div class="general-vertical-align">
+            <mat-button inline="true" (click)="removeItem(skill)">
+              <!-- <app-delete-icon></app-delete-icon> -->
+               <mat-icon>delete_sweep</mat-icon>
+            </mat-button>
+          </div>
+        </div>
+        <div class="slider-filter skill-standart-width">
+          @if (false) {
+          <mat-label class="new-title">{{content.skillNameProficiencyEstimation}}</mat-label>
+          }
+          <div class="custom-slider">
+            <ngx-slider class="custom-slider" [(ngModel)]="skill.proficiencyEstimation" [options]="skillOptions"
+              formControlName="proficiencyEstimation">
+            </ngx-slider>
+          </div>
+        </div>
+      </form>
+    </ng-template>
+    <ng-container *ngTemplateOutlet="domainTemplate"></ng-container>
+    }
+    <!--   SOFT   -->
+    @case (SkillType.managirial) {
+    <ng-template #managirialTemplate>
+      <form class="skill-form " [formGroup]="skillForm">
+        <!-- <mat-label class="new-label">{{
+          content.txtSkillNamePlaceholder}}</mat-label> -->
+        <div class="container__flex container__center">
+          <mat-form-field class="skill-full-width">
+            <mat-label class="new-label">{{content.skillNameManagerial}}
+            </mat-label>
+            <input type="text" class="input skill-standart-width transparent-input-full-width"
+              [placeholder]="content.txtSkillNamePlaceholder" matInput [value]="skill.skillName"
+              formControlName="skillName" [(ngModel)]="skill.skillName" [readonly]="true">
+          </mat-form-field>
+          <div class="slider-filter skill-standart-width">
+            @if (false) {
+            <mat-label class="slider-title input-group__item">{{
+              content.skillNameProficiencyEstimation }}</mat-label>
+            }
+            <div class="custom-slider">
+              <ngx-slider class="custom-slider" [(ngModel)]="skill.intensityEstimation" [options]="skillOptions"
+                formControlName="intensityEstimation">
+              </ngx-slider>
+            </div>
+          </div>
+          <div class="general-vertical-align">
+            <mat-button inline="true" (click)="removeItem(skill)">
+              <!-- <app-delete-icon></app-delete-icon> -->
+               <mat-icon>delete_sweep</mat-icon>
+            </mat-button>
+          </div>
+        </div>
+      </form>
+    </ng-template>
+    <ng-container *ngTemplateOutlet="managirialTemplate"></ng-container>
+    }
+    <!--  LANGUAGE   -->
+    @case (SkillType.language) {
+    <ng-template #languageTemplate>
+      <form class="skill-form " [formGroup]="skillForm">
+        <!-- <mat-label class="new-label">{{
+          content.txtSkillNamePlaceholder}}</mat-label> -->
+        <div class="container__flex container__center">
+          <mat-form-field class="skill-full-width">
+            <mat-label class="new-label">{{content.skillNameLanguage}}
+            </mat-label>
+            <input type="text" class="input skill-standart-width transparent-input-full-width" [placeholder]="content.txtSkillNamePlaceholder"
+              matInput [value]="skill.skillName" formControlName="skillName" [(ngModel)]="skill.skillName"
+              [readonly]="true">
+          </mat-form-field>
+          <div class="slider-filter skill-standart-width">
+            @if (false) {
+            <mat-label class="new-label">
+              {{content.skillNameProficiencyEstimation}}
+            </mat-label>
+            }
+            <div class="custom-slider">
+              <ngx-slider class="custom-slider" [(ngModel)]="skill.proficiencyEstimation" [options]="languageOptions"
+                formControlName="proficiencyEstimation">
+              </ngx-slider>
+            </div>
+          </div>
+          <mat-form-field class="skill-full-width">
+            <mat-label class="new-label">
+              {{content.txtExpirienceInYearsPlaceholder}} </mat-label>
+            <input type="number" class="input skill-standart-width transparent-input-full-width" [placeholder]="content.txtExpirienceInYearsPlaceholder" matInput
+              [(ngModel)]="skill.expirienceInYears" formControlName="expirienceInYears">
+          </mat-form-field>
+          <mat-form-field class="skill-full-width">
+            <mat-label class="new-label">{{content.txtExpirienceInMonthsPlaceholder}}
+            </mat-label>
+            <input type="number" class="input skill-standart-width transparent-input-full-width" [placeholder]="content.txtExpirienceInMonthsPlaceholder" matInput
+              [min]="1" [max]="1000" [(ngModel)]="skill.expirienceInMonths" formControlName="expirienceInMonths">
+          </mat-form-field>
+          <mat-button inline="true" (click)="removeItem(skill)">
+            <!-- <app-delete-icon></app-delete-icon> -->
+             <mat-icon>delete_sweep</mat-icon>
+          </mat-button>
+        </div>
+      </form>
+    </ng-template>
+    <ng-container *ngTemplateOutlet="languageTemplate"></ng-container>
+    }
+    @default {
+    <ng-template #defaultTemplate>
+    </ng-template>
+    <ng-container *ngTemplateOutlet="defaultTemplate"></ng-container>
+    }
+    }
+  </div>
+</div>

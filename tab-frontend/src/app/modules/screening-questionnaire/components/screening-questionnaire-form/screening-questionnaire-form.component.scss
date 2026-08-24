@@ -1,0 +1,20 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.mat-chip-list {
+    display: flex;
+    flex-direction: row;
+    gap: $gap-small;
+    align-items: center;
+}
+
+.mat-chip-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: $gap-micro;
+    padding: $padding-narrow;
+    box-shadow: var(--box-shadow-light);
+    width: fit-content;
+    border-radius: $borderRadiusSemiMiddle;
+}

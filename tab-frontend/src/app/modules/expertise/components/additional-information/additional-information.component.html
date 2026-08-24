@@ -1,0 +1,10 @@
+<form [formGroup]="additionalInformationForm">
+  <mat-form-field class="form-field-input">
+    <textarea class="skill-text-area transparent-input-full-width" matInput type="text" cdkTextareaAutosize cdkAutosizeMinRows="4"
+      cdkAutosizeMaxRows="7" name="additionalInformation" formControlName="additionalInformation" 
+      [(ngModel)]="service.model.additionalInformation" (blur)="onInputBlur()"
+      [class]="additionalInformationForm.controls['additionalInformation'].invalid && additionalInformationForm.controls['additionalInformation'].touched ? 'invalid' : 'valid'"
+      [placeholder]="content.txtPlaceholderAdditionalInformation" required>
+    </textarea>
+  </mat-form-field>
+</form>

@@ -1,0 +1,56 @@
+<div class="recruitment-container">
+    <div class="content-wrapper">
+
+        <div class="cards-grid">
+            <div *ngFor="let feature of features; let i = index" class="feature-card">
+                <!-- Card Image -->
+                <div class="card-image">
+                    <img [src]="feature.image || '/placeholder.svg'" [alt]="feature.title" />
+                    <div class="image-overlay"></div>
+                    <span class="badge">
+                        {{ feature.badge }}
+                    </span>
+                </div>
+
+                <!-- Card Header -->
+                <div class="card-header">
+                    <div class="header-content">
+                        <h3 class="card-title"><mat-icon>{{ feature.icon }}</mat-icon>{{ feature.title }}</h3>
+                    </div>
+                </div>
+
+                <!-- Card Content -->
+                <div class="card-content">
+                    <p class="description">
+                        {{ feature.description }}
+                    </p>
+
+                    <button (click)="onLearnMore(feature)" class="learn-more-btn">
+                        Learn More
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Call to Action Section -->
+        <div class="cta-section">
+            <div class="cta-card">
+                <div class="cta-image">
+                    <img src="assets/images/recruitment-team-celebration.png" alt="Successful Recruitment" />
+                </div>
+                <h2 class="cta-title">Ready to Transform Your Recruitment?</h2>
+                <p class="cta-description">
+                    Join thousands of companies already using our AI-powered recruitment platform
+                </p>
+                <div class="cta-buttons">
+                    <button (click)="onStartTrial()" class="secondary-btn is-hidden">
+                        Start Free Trial
+                    </button>
+                    <button (click)="onScheduleDemo()" class="primary-btn">
+                        Schedule Demo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

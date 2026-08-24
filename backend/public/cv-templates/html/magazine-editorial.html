@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CV - {{FIRSTNAME}} {{LASTNAME}}</title>
+  <link rel="stylesheet" href="../styles/magazine-editorial.css" />
+</head>
+<body>
+  <div class="me-wrapper">
+
+    <header class="me-header">
+      <div class="me-header__inner">
+        <div class="me-header__topbar">
+          <span class="me-header__cv-label">
+            <span class="me-header__cv-dash"></span>
+            Curriculum Vitae
+          </span>
+          <span class="me-header__edition">{{CURRENTYEAR}} Edition</span>
+        </div>
+
+        <div class="me-header__headline">
+          <h1>{{FIRSTNAME}} {{LASTNAME}}</h1>
+          <div class="me-header__rule"></div>
+          {{#if TITLE}}
+            <p class="me-header__position">{{TITLE}}</p>
+          {{/if}}
+        </div>
+
+        <div class="me-header__contacts">
+          {{#if EMAIL}}
+          <span class="me-header__contact-item">
+            <span>✉ {{EMAIL}}</span>
+          </span>
+          {{/if}}
+          {{#if PHONE}}
+          <span class="me-header__contact-item">
+            <span>☎ {{PHONE}}</span>
+          </span>
+          {{/if}}
+        </div>
+      </div>
+    </header>
+
+    <div class="me-stats">
+      <div class="me-stats__inner">
+        {{#if HAS_EXPERIENCE}}
+        <div class="me-stats__item">
+          <div class="me-stats__value">{{YEARS_EXPERIENCE}}+</div>
+          <div class="me-stats__label">Years Experience</div>
+        </div>
+        {{/if}}
+        {{#if SKILLS_COUNT}}
+        <div class="me-stats__item">
+          <div class="me-stats__value">{{SKILLS_COUNT}}</div>
+          <div class="me-stats__label">Technical Skills</div>
+        </div>
+        {{/if}}
+        {{#if CERT_COUNT}}
+        <div class="me-stats__item">
+          <div class="me-stats__value">{{CERT_COUNT}}</div>
+          <div class="me-stats__label">Certifications</div>
+        </div>
+        {{/if}}
+        {{#if LANG_COUNT}}
+        <div class="me-stats__item">
+          <div class="me-stats__value">{{LANG_COUNT}}</div>
+          <div class="me-stats__label">Languages</div>
+        </div>
+        {{/if}}
+      </div>
+    </div>
+
+    <main class="me-main">
+      <div class="me-columns">
+
+        <div class="me-columns__main">
+          {{#if OBJECTIVE}}
+            <section class="me-objective">
+              <div class="me-section-icon-label">
+                <div class="me-section-icon-label__icon me-section-icon-label__icon--teal">
+                  <!-- <mat-icon>track_changes</mat-icon> -->
+                  🔄
+                </div>
+                <h2>Career Objective</h2>
+              </div>
+              <p class="me-objective__text">{{OBJECTIVE}}</p>
+            </section>
+          {{/if}}
+
+          {{#if SUMMARY}}
+            <section class="me-summary-section">
+              <div class="me-section-icon-label">
+                <div class="me-section-icon-label__icon me-section-icon-label__icon--teal">
+                  <!-- <mat-icon>description</mat-icon> -->
+                  📝
+                </div>
+                <h2>Professional Summary</h2>
+              </div>
+              <blockquote class="me-pullquote">
+                <p>"{{SUMMARY}}"</p>
+              </blockquote>
+            </section>
+          {{/if}}
+
+          {{#if EXPERIENCE}}
+            <div class="me-divider">
+              <div class="me-divider__line"></div>
+              <h2 class="me-divider__label">Professional Experience</h2>
+              <div class="me-divider__line"></div>
+            </div>
+
+            {{#if FEATURED_EXPERIENCE}}
+              {{#with FEATURED_EXPERIENCE}}
+              <div class="me-featured">
+                <div class="me-featured__badge">
+                  <span class="me-featured__pulse"></span>
+                  Featured Role
+                </div>
+
+                {{#if title}}
+                  <h3 class="me-featured__title">{{title}}</h3>
+                {{/if}}
+
+                <div class="me-featured__meta">
+                  {{#if company}}
+                    <span class="me-featured__company">{{company}}</span>
+                    <span class="me-featured__sep">|</span>
+                  {{/if}}
+                  {{#if period}}
+                    <span class="me-featured__dates">{{period}}</span>
+                  {{/if}}
+                </div>
+
+                {{#if responsibilities}}
+                  <p class="me-featured__subheader">Responsibilities</p>
+                  <ul class="me-featured__achievements">
+                    {{#each responsibilities}}
+                    <li class="me-featured__achievement">
+                      ➡️ <span class="me-featured__desc">{{this}}</span>
+                    </li>
+                    {{/each}}
+                  </ul>
+                {{/if}}
+
+                {{#if achievements}}
+                  <p class="me-featured__subheader">Achievements</p>
+                  <ul class="me-featured__achievements">
+                    {{#each achievements}}
+                    <li class="me-featured__achievement">
+                      ➡️ <span class="me-featured__desc">{{this}}</span>
+                    </li>
+                    {{/each}}
+                  </ul>
+                {{/if}}
+              </div>
+              {{/with}}
+            {{/if}}
+
+            {{#if OTHER_EXPERIENCE}}
+              {{#each OTHER_EXPERIENCE}}
+                <div class="me-experience">
+                    {{#if period}}
+                      <div class="me-experience__period">{{period}}</div>
+                    {{/if}}
+                    {{#if title}}
+                      <h3 class="me-experience__title">{{title}}</h3>
+                    {{/if}}
+                    {{#if company}}
+                      <div class="me-experience__company">{{company}}</div>
+                    {{/if}}
+
+                    {{#if responsibilities}}
+                      <p class="me-experience__subheader">Responsibilities</p>
+                      <ul class="me-experience__achievements">
+                        {{#each responsibilities}}
+                        <li>
+                          <span class="me-experience__plus">+</span>
+                          <span class="me-experience__desc">{{this}}</span>
+                        </li>
+                        {{/each}}
+                      </ul>
+                    {{/if}}
+
+                    {{#if achievements}}
+                      <p class="me-experience__subheader">Achievements</p>
+                      <ul class="me-experience__achievements">
+                        {{#each achievements}}
+                        <li>
+                          <span class="me-experience__plus">+</span>
+                          <span>{{this}}</span>
+                        </li>
+                        {{/each}}
+                      </ul>
+                    {{/if}}
+                </div>
+              {{/each}}
+            {{/if}}
+
+          {{/if}}
+
+          {{#if EDUCATION.length}}
+          <div class="me-divider">
+            <div class="me-divider__line"></div>
+            <h2 class="me-divider__label">Education</h2>
+            <div class="me-divider__line"></div>
+          </div>
+          <div class="me-education-grid">
+            {{#each EDUCATION}}
+            <div class="me-edu-card">
+              {{#if year}}
+                <div class="me-edu-card__dates">
+                  {{year}}
+                </div>
+              {{/if}}
+              {{#if degree}}
+                <h3 class="me-edu-card__degree">{{degree}}</h3>
+              {{/if}}
+              {{#if specialisation}}
+                <div class="me-edu-card__spec">{{specialisation}}</div>
+              {{/if}}
+              {{#if institution}}
+                <div class="me-edu-card__institution">{{institution}}</div>
+              {{/if}}
+              {{#if fieldOfStudy}}
+                <div class="me-edu-card__field">{{fieldOfStudy}}</div>
+              {{/if}}
+            </div>
+            {{/each}}
+          </div>
+          {{/if}}
+
+          {{#if CERTIFICATIONS.length}}
+          <div class="me-divider">
+            <div class="me-divider__line"></div>
+            <h2 class="me-divider__label">Certifications</h2>
+            <div class="me-divider__line"></div>
+          </div>
+          <div class="me-sidebar-section">
+            <div class="me-sidebar-certs">
+              {{#each CERTIFICATIONS}}
+              <div class="me-sidebar-cert">
+                {{#if name}}
+                  <div class="me-sidebar-cert__name">{{name}}</div>
+                {{/if}}
+                <div class="me-sidebar-cert__meta">
+                  {{#if issuer}}{{issuer}} —{{/if}}
+                  {{#if year}}
+                    <span class="me-sidebar-cert__date">{{year}}</span>
+                  {{/if}}
+                </div>
+              </div>
+              {{/each}}
+            </div>
+          </div>
+          {{/if}}
+        </div>
+
+        <aside class="me-columns__sidebar">
+          {{#if PHOTO}} 
+          <div class="me-photo">
+            <div class="me-photo__frame">
+              <img
+                src="{{PHOTO}}"
+                alt="{{FIRSTNAME}} {{LASTNAME}}"
+              />
+            </div>
+            <div class="me-photo__bar"></div>
+          </div>
+          {{/if}}
+          {{#if HARD_SKILLS.length}}
+          <div class="me-sidebar-section">
+            <h3 class="me-sidebar-section__title">Technical Expertise</h3>
+            <div class="me-sidebar-skills">
+            {{#each HARD_SKILLS}}
+            <div class="me-sidebar-skill">
+              {{#if name}}
+                <span class="me-sidebar-skill__name">{{name}}</span>
+              {{/if}}
+              {{#if level}}
+                <span class="me-sidebar-skill__badge">{{level}}</span>
+              {{/if}}
+            </div>
+            {{/each}}
+            </div>
+          </div>
+          {{/if}}
+
+          {{#if DOMAIN_SKILLS.length}}
+            <div class="me-domain-card">
+              <h3 class="me-domain-card__title">
+                <span class="me-domain-card__dash"></span>
+                Domain Expertise
+              </h3>
+              <div class="me-domain-list">
+                {{#each DOMAIN_SKILLS}}
+                <div class="me-domain-item">
+                  <div class="me-domain-item__header">
+                    {{#if name}}
+                      <span class="me-domain-item__name">{{name}}</span>
+                    {{/if}}
+                    {{#if level}}
+                      <span class="me-domain-item__years">{{level}}</span>
+                    {{/if}}
+                  </div>
+                  <div class="me-domain-item__track">
+                    <div
+                      class="me-domain-item__fill"
+                      style="width: {{barWidth}}%;"
+                    ></div>
+                  </div>
+                </div>
+                {{/each}}
+              </div>
+            </div>
+          {{/if}}
+
+          {{#if MANAGERIAL_SKILLS.length}}
+          <div class="me-sidebar-section">
+            <h3 class="me-sidebar-section__title">Managerial Competencies</h3>
+            <div class="me-sidebar-tags">
+            {{#each MANAGERIAL_SKILLS}}
+              {{#if name}}
+                <span class="me-sidebar-tag">{{name}}</span>
+              {{/if}}
+            {{/each}}
+            </div>
+          </div>
+          {{/if}}
+
+          {{#if SOFT_SKILLS.length}}
+          <div class="me-sidebar-section">
+            <h3 class="me-sidebar-section__title">Core Competencies</h3>
+            <div class="me-sidebar-tags">
+              {{#each SOFT_SKILLS}}
+                {{#if name}}
+                  <span class="me-sidebar-tag">{{name}}</span>
+                {{/if}}
+              {{/each}}
+            </div>
+          </div>
+          {{/if}}
+
+          {{#if LANGUAGES.length}}
+          <div class="me-sidebar-section">
+            <h3 class="me-sidebar-section__title">Languages</h3>
+            <div class="me-sidebar-langs">
+              {{#each LANGUAGES}}
+              <div class="me-sidebar-lang">
+                {{#if name}}
+                  <span class="me-sidebar-lang__name">{{name}}</span>
+                {{/if}}
+                {{#if level}}
+                  <span class="me-sidebar-lang__level">{{level}}</span>
+                {{/if}}
+              </div>
+              {{/each}}
+            </div>
+          </div>
+          {{/if}}
+        </aside>
+
+      </div>
+    </main>
+
+    <footer class="me-footer">
+      References Available Upon Request
+    </footer>
+  </div>
+</body>
+</html>

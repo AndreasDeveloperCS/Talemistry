@@ -1,0 +1,25 @@
+    <div class="stats-grid">
+      <div class="stat-box companies">
+        <div class="icon"><mat-icon>business_center</mat-icon></div>
+        <h3>{{ companiesCount }}</h3>
+        <p>Companies Managed<br><small>+2 this month</small></p>
+      </div>
+
+      <div class="stat-box positions">
+        <div class="icon"><mat-icon>group</mat-icon></div>
+        <h3>{{ positionsCount }}</h3>
+        <p>Active Positions<br><small>+8 this week</small></p>
+      </div>
+
+      <div class="stat-box candidates">
+        <div class="icon"><mat-icon>person</mat-icon></div>
+        <h3>{{ candidatesCount | number }}</h3>
+        <p>Candidates Reviewed<br><small>+156 this month</small></p>
+      </div>
+
+      <div class="stat-box success">
+        <div class="icon"><mat-icon>emoji_events</mat-icon></div>
+        <h3>{{ successCount }}</h3>
+        <p>Successful Hires<br><small>94% success rate</small></p>
+      </div>
+    </div>

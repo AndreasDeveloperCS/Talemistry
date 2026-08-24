@@ -1,0 +1,51 @@
+<div class="permissions-layout">
+    <div class="role-list">
+        <ul>
+            @for(role of roles; track role) {
+            <li (click)="selectRole(role)" [class.active]="role.code === selectedRole.code">
+                {{ role.description }}
+            </li>
+            }
+        </ul>
+    </div>
+
+    @if(selectedRole) {
+    <div class="permissions-table">
+        <div class="container__space-between table-name">
+            <h3>{{ selectedRole.description }}</h3>
+            <button class="button__primary-color button--small" (click)="onSave()">
+                {{content.saveText}}
+            </button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th class="new-table__header">Block ↓ / Access Type →</th>
+                    @for(access of accessTypes; track access) {
+                    <th class="new-table__header">{{ access.description }}</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @for(block of functionalBlocks; track block) {
+                <tr>
+                    <td  class="new-table__cell container__space-between">
+                        {{ block.description }}
+                        <app-toggle-button [isActive]="hasAllPermissions(selectedRole, block)"
+                            (toggle)="toggleAllPermissions(selectedRole, block)">
+                        </app-toggle-button>
+                    </td>
+                    @for(access of accessTypes; track access) {
+                    <td class="new-table__cell">
+                        <app-toggle-button [isActive]="hasPermission(selectedRole, block, access.numberValue)"
+                            (toggle)="togglePermission(selectedRole, block, access.numberValue)">
+                        </app-toggle-button>
+                    </td>
+                    }
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    }
+</div>

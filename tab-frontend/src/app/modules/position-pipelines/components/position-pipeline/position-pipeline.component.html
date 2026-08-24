@@ -1,0 +1,142 @@
+@if(pipelineStages.length > 0) {
+    <div class="pipeline-block">
+        <!-- <h2><mat-icon>miscellaneous_services</mat-icon>{{ content.txtPipelinesSettings }}</h2> -->
+        <div class="general-container">
+            <div class="pipeline-header">
+                <h3>{{ content.txtPositionPipeline }}</h3>
+                <button class="edit-button" [class.disabled]="isEditMode" [disabled]="isEditMode" (click)="openEditMode()">
+                    <mat-icon>edit</mat-icon>
+                </button>
+            </div>
+            @if(isEditMode) {
+            <div class="edit-header">
+                <h5>Edit recruitment pipeline</h5>
+                <button class="close-edit-button" (click)="closeEditMode()">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+            }
+            <div cdkDropList class="tile-container" [class.edit-mode]="isEditMode" (cdkDropListDropped)="drop($event)"
+                (cdkDragStarted)="onDragStart()" (cdkDragEnded)="onDragEnd()">
+                @for (stage of pipelineStages; track stage) {
+                <div class="tile" cdkDrag [class.edit-mode]="isEditMode" [cdkDragDisabled]="isFixed(stage)">
+                    <div class="tile-main-info" [class.edit-mode]="isEditMode">
+                        @if(!isFixed(stage) && isEditMode) {
+                        <mat-icon cdkDragHandle [class.edit-mode]="isEditMode" class="drag-handle">
+                            drag_indicator
+                        </mat-icon>
+                        }
+                        <mat-icon>{{ stage.icon }}</mat-icon>
+                        <span>{{ stage.name }}</span>
+                    </div>
+                    @if(!isFixed(stage) && isEditMode) {
+                    <div class="edit-delete-buttons" [class.edit-mode]="isEditMode">
+                        <button class="close-edit-button" 
+                            [class.disabled-mode]="isEditFormVisible"
+                            (click)="openEditStageForm(stage)">
+                            <mat-icon>edit</mat-icon>
+                            <span class="btn-lbl" style="display: none;">Edit</span>
+                        </button>
+                        <button class="close-edit-button" 
+                            [class.disabled-mode]="isEditFormVisible"
+                            (click)="deleteStage(stage._id)">
+                            <mat-icon>delete</mat-icon>
+                            <span class="btn-lbl" style="display: none;">Delete</span>
+                        </button>
+                    </div>
+                    }
+                </div>
+                    @if(isEditFormVisible && selectedStage !=undefined && selectedStage === stage && isEditMode) {
+                    <form [formGroup]="editStageForm" class=" edit-stage-form" [class.visible]="isEditFormVisible">
+                        <div class="container__flex container__space-between">
+                            <div class="editStageField">
+                                <label class="new-label">Stage Name</label>
+                                <input matInput formControlName="stageName" required class="transparent-input">
+                                @if(editStageForm.get('stageName')?.hasError('required')) {
+                                    <mat-error>Stage Name is <strong>required</strong></mat-error>
+                                }
+                            </div>
+                            <div class="editStageField">
+                                <label class="new-label">Stage Type</label>
+
+                                <select
+                                    formControlName="stageType"
+                                    required
+                                    class="transparent-select"
+                                >
+                                    <option value="" disabled selected hidden>
+                                    Select stage
+                                    </option>
+
+                                    @for (type of stageTypeOptions; track type) {
+                                    <option [value]="type">
+                                        {{ stageTypeLabels[type] }}
+                                    </option>
+                                    }
+                                </select>
+
+                                <!-- @if (editStageForm.get('stageType')?.hasError('required')) {
+                                    <span class="error-text">
+                                    Stage Type is <strong>required</strong>
+                                    </span>
+                                } -->
+                            </div>
+                            <div class="editStageField">
+                                <label class="new-label">Stage Description</label>
+                                <input matInput formControlName="stageDescription" required class="transparent-input">
+                                @if(editStageForm.get('stageDescription')?.hasError('required')) {
+                                    <mat-error>Stage Name is <strong>required</strong></mat-error>
+                                }
+                            </div>
+                            <div class="edit-form-buttons">
+                                <button 
+                                    class="primary-button" 
+                                    [disabled]="!editStageForm.valid"
+                                    (click)="saveEditStage()">Save
+                                </button>
+                                <button class="secondary-button" (click)="closeEditStageForm()">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                    }
+                }
+                @if(isEditMode && !isCreateFormVisible) {
+                    <div class="container__center">
+                        <button 
+                            (click)="openCreateStageForm()" 
+                            class="add-stage-btn">
+                            <mat-icon>add</mat-icon> Add Stage
+                        </button>
+                    </div>
+                }
+
+                @if(isCreateFormVisible && isEditMode) {
+                    <form [formGroup]="addStageForm"
+                        class="edit-stage-form visible">
+                        <div class="container__flex container__space-between">
+                            <div class="editStageField">
+                                <label class="new-label">Stage Name</label>
+                                <input matInput formControlName="stageName" required class="transparent-input">
+                            </div>
+                            <div class="editStageField">
+                                <label class="new-label">Stage Description</label>
+                                <input matInput formControlName="stageDescription" required class="transparent-input">
+                            </div>
+                            <div class="edit-form-buttons">
+                                <button class="primary-button" 
+                                    [disabled]="!addStageForm.valid" 
+                                    (click)="addStage()">Save
+                                </button>
+                                <button class="secondary-button" (click)="closeCreateStageForm()">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                }
+
+                @if (isDragging) {
+                <div class="extra-space"></div>
+                }
+            </div>
+        </div>
+    </div>
+}

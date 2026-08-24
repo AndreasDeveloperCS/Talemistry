@@ -1,0 +1,6 @@
+{
+    "service": "tap-frontend",
+    "version": "tap-frontend-local-dev",
+    "commit": "local",
+    "builtAt": "dev"
+}

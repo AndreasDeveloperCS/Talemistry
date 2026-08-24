@@ -1,0 +1,31 @@
+/* Shared print rules to avoid cutting small items across pages */
+@media print {
+  /* atomic elements that should not be split across pages */
+  img, svg,
+  .photo, .profile-photo, .hero-photo, .ei-header__photo, .me-photo, .ht-header__hex-photo,
+  .skill-badge, .skill-tag, .skill-item, .skill-name,
+  .experience-item, .experience-card, .experience-header, .experience-badge,
+  .certification-item, .education-item, .language-item, .certification-card, .timeline-item, .achievement-item,
+  .me-header__contacts, .ht-header__contacts, .ei-language, .ei-certificate, .ei-domain,
+  .ei-education, .me-sidebar-cert, .ht-section-header, .ht-lang, .ht-cert, .ht-edu,
+  .sa-edu, .sa-cert {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+    -webkit-page-break-inside: avoid;
+  }
+
+  /* allow lists and main sections to break between items */
+  .experience-list, .skills-list, .skills-grid, .languages-list, .education-list, .certifications-list,
+  .me-columns__main, .ht-columns__main, .ei-columns__left, .content-grid, .content, .main-content,
+  .cv-wrapper, .cv-container, .cv-wrapper > .card {
+    page-break-inside: auto;
+    break-inside: auto;
+  }
+
+  /* ensure images don't get split and will move whole to next page if needed */
+  img, svg { max-width: 100%; display: block; }
+
+  /* optional: avoid orphaned lines where supported */
+  h2, h3, p, li { orphans: 2; widows: 2; }
+}

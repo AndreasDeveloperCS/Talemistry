@@ -1,0 +1,297 @@
+/* Brand palette (Evryka) */
+$pallete-0-color-18: #081E2B;
+$pallete-0-color-19: #081E2B;
+$pallete-0-color-1: #003D54;
+$pallete-0-color-2: #023859;
+$pallete-0-color-3: #011826;
+$alternative-color-1: #004664;
+$alternative-color-0: #064066;
+$alternative-color-1: #004664;
+$alternative-color-2: #009288;
+
+$pallete-0-color-8: #112c3d;
+
+$pallete-0-color-12: #008C94;
+$pallete-0-color-13: #f97316;
+$pallete-0-color-14: #ff8d23; // #F66411;
+$pallete-0-color-15: #f27916;
+
+
+$alternative-color-0: #064066;
+$alternative-color-1: #004664;
+$alternative-color-2: #009288;
+$alternative-color-3: #FF6900;
+$pallete-0-color-9: #1D3A4B;
+$pallete-0-color-10: #2B4A5D;
+
+/* Derived tokens */
+$ev-bg-1: $pallete-0-color-18; // deep navy
+$ev-bg-2: $pallete-0-color-2; // blue-navy
+$ev-surface: $pallete-0-color-8; // card surface
+$ev-accent-cool: $alternative-color-2; // teal
+$ev-accent-cool-2: $pallete-0-color-12; // teal-2
+$ev-accent-warm: $pallete-0-color-13; // orange
+$ev-accent-warm-2: $pallete-0-color-14; // orange-2
+
+.ws-hero {
+    position: relative;
+    overflow: hidden;
+    border-radius: 28px;
+    padding: clamp(24px, 4vw, 56px);
+    background:
+        radial-gradient(80% 100% at 10% 10%, rgba($ev-accent-cool, 0.20), transparent 60%),
+        radial-gradient(80% 100% at 90% 20%, rgba($ev-accent-cool-2, 0.18), transparent 60%),
+        linear-gradient(135deg, $ev-bg-1, $ev-bg-2 60%, $pallete-0-color-3);
+    color: var(--text);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.ws-glass {
+    position: relative;
+    z-index: 2;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: clamp(12px, 1vw, 20px);
+    //background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+    //border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 20px;
+    //backdrop-filter: blur(10px) saturate(120%);
+}
+
+.ws-badge {
+    display: inline-block;
+    font-size: 12px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+
+.ws-title {
+    margin: 14px 0 8px;
+    line-height: 1.1;
+    font-weight: 800;
+}
+
+.ws-title .ws-gradient {
+    font-size: clamp(28px, 6vw, 48px);
+    background: linear-gradient(90deg, $ev-accent-cool-2, $ev-accent-cool, $ev-accent-warm);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.ws-sub {
+    font-size: clamp(16px, 2.4vw, 22px);
+    color: rgba(255, 255, 255, 0.92);
+    margin: 8px 0 6px;
+}
+
+.ws-date {
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 18px;
+}
+
+
+.ws-count {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 14px 0 24px;
+}
+
+.ws-count-label {
+    opacity: .7;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+}
+
+.ws-count-value {
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    font-size: 16px;
+    padding: 6px 10px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+
+.ws-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.btn {
+    padding: 10px 14px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform .15s ease, box-shadow .15s ease, background .15s ease, color .15s ease;
+    border: 1px solid transparent;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+
+.btn.primary {
+    background: linear-gradient(135deg, $ev-accent-warm, $ev-accent-warm-2);
+    color: #0b0b0b;
+    border-color: rgba($ev-accent-warm, 0.4);
+    box-shadow: 0 8px 24px rgba($ev-accent-warm, 0.35);
+}
+
+.btn.primary:focus-visible {
+    outline: 2px solid rgba($ev-accent-warm, .65);
+    outline-offset: 2px;
+}
+
+
+.btn.ghost {
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text);
+    border-color: rgba(255, 255, 255, 0.35);
+
+    &:hover {
+        border-color: rgba(255, 255, 255, 0.8);
+    }
+}
+
+.btn.ghost:focus-visible {
+    outline: 2px solid rgba($ev-accent-cool, .55);
+    outline-offset: 2px;
+}
+
+.btn.highlight {
+    background: transparent;
+    color: $pallete-0-color-14;
+    border-color: rgba($ev-accent-cool, 0.35);
+
+    &:hover {
+        border-color: rgba(255, 255, 255, 0.8);
+    }
+}
+
+.btn.link {
+    background: transparent;
+    color: $ev-accent-cool;
+    border-color: rgba($ev-accent-cool, 0.35);
+
+    &:hover {
+        border-color: rgba(255, 255, 255, 0.8);
+    }
+}
+
+.btn.link:focus-visible {
+    outline: 2px solid rgba($ev-accent-cool, .55);
+    outline-offset: 2px;
+}
+
+
+.ws-legal {
+    margin-top: 14px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.55);
+}
+
+
+/* Decorative bits */
+.blob {
+    position: absolute;
+    filter: blur(40px);
+    opacity: .25;
+    z-index: 1;
+}
+
+.b1 {
+    width: 280px;
+    height: 280px;
+    left: -60px;
+    bottom: -80px;
+    background: radial-gradient(closest-side, $ev-accent-cool, transparent);
+    animation: float1 14s ease-in-out infinite;
+}
+
+.b2 {
+    width: 340px;
+    height: 340px;
+    right: -80px;
+    top: -100px;
+    background: radial-gradient(closest-side, $ev-accent-warm, transparent);
+    animation: float2 18s ease-in-out infinite;
+}
+
+.grid {
+    position: absolute;
+    inset: -2px;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+    background-size: 28px 28px;
+    mask-image: radial-gradient(120% 120% at 50% 50%, #000 40%, transparent 70%);
+    opacity: .25;
+    z-index: 0;
+}
+
+
+@keyframes float1 {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-14px);
+    }
+}
+
+@keyframes float2 {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(18px);
+    }
+}
+
+.ws-logo-card {
+    width: 100%;
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 14px;
+    padding: 12px 14px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(205, 225, 255, 0.35);
+    text-decoration: none;
+    transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+
+.ws-logo-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.ws-logo {
+    height: 5rem;
+    width: auto;
+    display: block;
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3));
+}
+
+.ws-card-caption {
+    font-weight: 600;
+    color: $pallete-0-color-14;
+}

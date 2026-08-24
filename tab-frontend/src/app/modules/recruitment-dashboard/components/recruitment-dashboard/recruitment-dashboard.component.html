@@ -1,0 +1,293 @@
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <div>
+            <h2><mat-icon>insights</mat-icon>Recruitment Dashboard</h2>
+            <p class="sub-title">Track pipeline health, interviews, and outcomes by role.</p>
+        </div>
+        <div class="date-tag"><mat-icon>calendar_month</mat-icon>Apr 2026</div>
+    </div>
+
+    <section class="role-switcher">
+        <button [class.active]="role === 'recruiter'" (click)="setRole('recruiter')">
+            <mat-icon>badge</mat-icon>
+            Recruiter
+        </button>
+        <button [class.active]="role === 'interviewer'" (click)="setRole('interviewer')">
+            <mat-icon>support_agent</mat-icon>
+            Interviewer
+        </button>
+        <button [class.active]="role === 'candidate'" (click)="setRole('candidate')">
+            <mat-icon>person</mat-icon>
+            Candidate
+        </button>
+    </section>
+
+    <section class="dashboard-grid" *ngIf="role === 'recruiter'">
+        <div class="main-column">
+            <div class="card metrics-grid">
+                <div class="metric-card">
+                    <p class="metric-label">Active Positions</p>
+                    <h3>{{ selectedPosition.active }}</h3>
+                </div>
+                <div class="metric-card">
+                    <p class="metric-label">Closed Positions</p>
+                    <h3>{{ selectedPosition.closed }}</h3>
+                </div>
+                <div class="metric-card">
+                    <p class="metric-label">Active Meetings</p>
+                    <h3>{{ activeMeetingsCount }}</h3>
+                    <a routerLink="/recruitment/calendar/schedule">Open calendar</a>
+                </div>
+                <div class="metric-card">
+                    <p class="metric-label">Upcoming Meetings</p>
+                    <h3>{{ upcomingMeetingsCount }}</h3>
+                    <a [routerLink]="feedbackCollectionUrl">Open feedback collection</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-header">
+                    <h3>Recruitment Pipeline</h3>
+                    <span class="meta-pill">Pass rate: {{ passRate }}%</span>
+                </div>
+                <p class="muted">Candidates per stage for {{ selectedPosition.title }}.</p>
+                <div class="pipeline-bars">
+                    <div class="pipeline-row" *ngFor="let item of stageStats">
+                        <span>{{ item.stage }}</span>
+                        <div class="bar-track">
+                            <div class="bar-fill" [style.width]="stageWidth(item.value, stageStats[0].value)"></div>
+                        </div>
+                        <strong>{{ item.value }}</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-header">
+                    <h3>Pipeline Summary By Position</h3>
+                    <a [routerLink]="feedbackCollectionUrl">Feedbacks</a>
+                </div>
+                <div class="position-table">
+                    <button class="position-row" *ngFor="let position of recruiterPositions"
+                        [class.selected]="selectedPositionId === position.id" (click)="setPosition(position.id)">
+                        <div>
+                            <strong>{{ position.title }}</strong>
+                            <p>{{ position.team }}</p>
+                        </div>
+                        <div class="position-stats">
+                            <span>Applied {{ position.candidatesByStage['Applied'] }}</span>
+                            <span>Screening {{ position.candidatesByStage['Screening'] }}</span>
+                            <span>Interview {{ position.candidatesByStage['Interview'] }}</span>
+                            <span>Offer {{ position.candidatesByStage['Offer'] }}</span>
+                            <span>Hired {{ position.candidatesByStage['Hired'] }}</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="side-column">
+            <div class="card">
+                <div class="section-header">
+                    <h3>Interviews</h3>
+                    <a routerLink="/recruitment/calendar/schedule">View all</a>
+                </div>
+                <div class="link-list">
+                    <button class="link-item" *ngFor="let interview of recruiterInterviews"
+                        [class.selected]="selectedRecruiterInterviewId === interview.id"
+                        (click)="setRecruiterInterview(interview.id)">
+                        <div>
+                            <strong>{{ interview.candidate }}</strong>
+                            <p>{{ interview.position }} | {{ interview.stage }}</p>
+                        </div>
+                        <span>{{ interview.date }}</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="card detail-card" *ngIf="selectedRecruiterInterview as selected">
+                <h3>Interview Details</h3>
+                <p><strong>Candidate:</strong> {{ selected.candidate }}</p>
+                <p><strong>Position:</strong> {{ selected.position }}</p>
+                <p><strong>Interviewer:</strong> {{ selected.interviewer }}</p>
+                <p><strong>Schedule:</strong> {{ selected.date }} | {{ selected.time }}</p>
+                <p><strong>Location:</strong> {{ selected.location }}</p>
+                <p><strong>Notes:</strong> {{ selected.notes }}</p>
+                <div class="detail-links">
+                    <a [routerLink]="selected.calendarUrl">Open in calendar</a>
+                    <a [routerLink]="selected.candidateProfileUrl">Candidate public profile</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="dashboard-grid" *ngIf="role === 'interviewer'">
+        <div class="main-column">
+            <div class="card metrics-grid">
+                <div class="metric-card">
+                    <p class="metric-label">Upcoming Interviews</p>
+                    <h3>{{ interviewerUpcoming.length }}</h3>
+                </div>
+                <div class="metric-card">
+                    <p class="metric-label">Submitted Feedbacks</p>
+                    <h3>{{ interviewerFeedbacks.length }}</h3>
+                </div>
+                <div class="metric-card">
+                    <p class="metric-label">Total Conducted</p>
+                    <h3>{{ totalInterviewsConducted }}</h3>
+                </div>
+                <div class="metric-card">
+                    <p class="metric-label">Pending Feedback</p>
+                    <h3>{{ interviewerUpcoming.length - interviewerFeedbacks.length }}</h3>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Technical Expertise Deep Dive</h3>
+                <div class="skills-grid">
+                    <button class="skill-card" *ngFor="let skill of interviewsBySkill"
+                        [class.selected]="selectedSkill === skill.skill" (click)="setSkill(skill.skill)">
+                        <strong>{{ skill.skill }}</strong>
+                        <span>{{ skill.level }}</span>
+                        <h4>{{ skill.count }} interviews</h4>
+                    </button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-header">
+                    <h3>All Conducted Interviews - {{ selectedSkillSummary.skill }}</h3>
+                    <span class="meta-pill">{{ selectedSkillSummary.count }} total</span>
+                </div>
+                <div class="conducted-list">
+                    <div class="conducted-item" *ngFor="let conducted of selectedSkillSummary.conducted">
+                        <div>
+                            <strong>{{ conducted.candidate }}</strong>
+                            <p>{{ conducted.position }}</p>
+                        </div>
+                        <span>{{ conducted.date }}</span>
+                        <span class="verdict">{{ conducted.verdict }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="side-column">
+            <div class="card">
+                <h3>Upcoming Interviews</h3>
+                <div class="link-list">
+                    <button class="link-item" *ngFor="let interview of interviewerUpcoming"
+                        [class.selected]="selectedInterviewerInterviewId === interview.id"
+                        (click)="setInterviewerInterview(interview.id)">
+                        <div>
+                            <strong>{{ interview.candidate }}</strong>
+                            <p>{{ interview.position }}</p>
+                        </div>
+                        <span>{{ interview.date }}</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="card detail-card" *ngIf="selectedInterviewerInterview as selected">
+                <h3>Interview Details</h3>
+                <p><strong>Candidate:</strong> {{ selected.candidate }}</p>
+                <p><strong>Position:</strong> {{ selected.position }}</p>
+                <p><strong>Stage:</strong> {{ selected.stage }}</p>
+                <p><strong>Schedule:</strong> {{ selected.date }} | {{ selected.time }}</p>
+                <p><strong>Notes:</strong> {{ selected.notes }}</p>
+                <div class="detail-links">
+                    <a [routerLink]="selected.calendarUrl">Open meeting</a>
+                    <a [routerLink]="selected.candidateProfileUrl">Candidate public profile</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-header">
+                    <h3>Submitted Feedback</h3>
+                    <a [routerLink]="feedbackCollectionUrl">View all</a>
+                </div>
+                <div class="feedback-list">
+                    <div class="feedback-item" *ngFor="let feedback of interviewerFeedbacks">
+                        <div>
+                            <strong>{{ feedback.candidate }}</strong>
+                            <p>{{ feedback.position }}</p>
+                            <p>{{ feedback.summary }}</p>
+                        </div>
+                        <div class="feedback-meta">
+                            <span>{{ feedback.label }}</span>
+                            <span>{{ feedback.rating }}/5</span>
+                            <a [routerLink]="feedback.candidateProfileUrl">Public profile</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="dashboard-grid candidate-grid" *ngIf="role === 'candidate'">
+        <div class="main-column">
+            <div class="card metrics-grid">
+                <div class="metric-card">
+                    <p class="metric-label">Matching Positions</p>
+                    <h3>{{ matchedPositions }}</h3>
+                    <p class="objective">Based on objective</p>
+                </div>
+                <div class="metric-card">
+                    <p class="metric-label">Total Applications</p>
+                    <h3>{{ candidateAppliedTotal }}</h3>
+                </div>
+                <div class="metric-card">
+                    <p class="metric-label">Interview Stage</p>
+                    <h3>{{ candidateFunnel[2].value }}</h3>
+                </div>
+                <div class="metric-card">
+                    <p class="metric-label">Offers Received</p>
+                    <h3>{{ candidateFunnel[3].value }}</h3>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Application Funnel</h3>
+                <p class="muted">Aggregated status reflection of all applications.</p>
+                <div class="funnel-chart">
+                    <div class="funnel-row" *ngFor="let stage of candidateFunnel">
+                        <span>{{ stage.stage }}</span>
+                        <div class="bar-track">
+                            <div class="bar-fill candidate" [style.width]="stageWidth(stage.value, candidateFunnelMax)">
+                            </div>
+                        </div>
+                        <strong>{{ stage.value }} ({{ stagePercent(stage.value, candidateAppliedTotal) }}%)</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-header">
+                    <h3>My Applications</h3>
+                    <a routerLink="/positions">View all positions</a>
+                </div>
+                <div class="applications-list">
+                    <div class="application-item" *ngFor="let application of candidateApplications">
+                        <div>
+                            <strong>{{ application.position }}</strong>
+                            <p>{{ application.company }}</p>
+                            <p>Applied: {{ application.applied }} | Updated: {{ application.updated }}</p>
+                        </div>
+                        <div class="application-meta">
+                            <span class="status-pill">{{ application.status }}</span>
+                            <small>{{ application.nextStep }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="side-column">
+            <div class="card detail-card">
+                <h3>Your Objective</h3>
+                <p>{{ candidateObjective }}</p>
+                <a routerLink="/profile/objective">Update objective</a>
+            </div>
+        </div>
+    </section>
+</div>

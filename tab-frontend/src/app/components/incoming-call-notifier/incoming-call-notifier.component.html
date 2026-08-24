@@ -1,0 +1,22 @@
+<div class="incoming-call-popup-container" *ngIf="popups.length > 0">
+    <div *ngFor="let popup of popups" class="incoming-call-popup" [class.fade-out]="popup.closing">
+        <div class="incoming-call-avatar">
+            <span>{{ popup.initials }}</span>
+        </div>
+
+        <div class="incoming-call-copy">
+            <span class="incoming-call-kicker">Incoming {{ popup.callType === 'audio' ? 'audio' : 'video' }} call</span>
+            <strong>{{ popup.callerName }}</strong>
+            <span>{{ popup.roomName || 'Direct call' }}</span>
+        </div>
+
+        <div class="incoming-call-actions">
+            <button type="button" class="incoming-call-action accept" (click)="acceptIncomingCall(popup)">
+                Join
+            </button>
+            <button type="button" class="incoming-call-action decline" (click)="closePopup(popup.id)">
+                Dismiss
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,183 @@
+@use 'variables' as *;
+
+.paginator {
+  background-color: $secondary-dark-background;
+  color: var(--text);
+  border-radius: $borderRadius;
+  border-style: solid;
+  border-color: var(--text);
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  color: var(--text);
+  background-color: transparent;
+  border: 1px solid $active-text;
+  border-radius: 10px;
+  font-size: $font-size-header-small;
+  width: 100%;
+  box-sizing: border-box;
+
+  @media (max-width: $screen-size-mobile) {
+    font-size: $font-size-description-small;
+  }
+}
+
+.paginator__new {
+  border-radius: $borderRadiusSemiMiddle;
+  align-items: center;
+  background-color: transparent !important;
+  border: none !important;
+  color: var(--text);
+  font-size: $font-size-header-narrow;
+  padding: $padding-middle;
+  box-shadow: var(--box-shadow-light);
+  margin: $margin-narrow 0;
+}
+
+::ng-deep .mat-mdc-option {
+  background-color: transparent !important;
+}
+
+::ng-deep .mat-mdc-option-active {
+  background-color: $hover-background-color !important;
+
+}
+
+::ng-deep .mat-mdc-icon-button .mat-mdc-button-touch-target {
+  @media (max-width: $screen-size-mobile) {
+    width: 0px !important;
+    height: 20px !important;
+  }
+}
+
+::ng-deep .mat-mdc-option:hover {
+  background-color: $active-background-color !important;
+}
+
+::ng-deep .mat-mdc-icon-button {
+  margin: 10px;
+
+  @media (max-width: $screen-size-mobile) {
+    width: 36px !important;
+    height: 36px !important;
+    margin: 0px;
+    display: inline-flex !important;
+    justify-content: center !important;
+    align-items: center;
+  }
+}
+
+::ng-deep .mat-mdc-icon-button:disabled {
+  background-color: $disabled-button-bg;
+}
+
+::ng-deep .mat-mdc-icon-button[disabled] {
+  background-color: $disabled-button-bg;
+}
+
+::ng-deep .mat-mdc-icon-button:not(:disabled) {
+  background-color: transparent;
+  border: none;
+  border-radius: $borderRadiusMedium;
+  box-shadow: var(--box-shadow-light);
+}
+
+:host ::ng-deep .mat-mdc-icon-button svg {
+  @media (max-width: $screen-size-mobile) {
+    width: 1rem !important;
+    padding: 0;
+    margin: 0;
+  }
+}
+
+::ng-deep .mat-mdc-paginator-page-size-label {
+  margin: auto 0;
+  display: flex;
+  width: 100%;
+  white-space: nowrap;
+
+  @media (max-width: $screen-size-mobile) {
+    flex-wrap: wrap;
+    white-space: unset;
+    font-size: 8pt;
+    padding: $padding-narrow;
+  }
+
+  @media (max-width: $screen-size-small) {
+    display: none;
+  }
+}
+
+::ng-deep .mdc-notched-outline {
+  //border: 1px solid $active-text;
+  width: 100% !important;
+}
+
+::ng-deep mat-mdc-paginator .mat-mdc-form-field {
+  width: fit-content !important;
+}
+
+::ng-deep .mat-mdc-paginator .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
+  padding: $padding-narrow;
+
+  @media (max-width: $screen-size-mobile) {
+    gap: 5px;
+  }
+}
+
+::ng-deep .mat-mdc-paginator-page-size .mat-mdc-form-field {
+  width: 100% !important;
+}
+
+.paginator-middle-container {
+  display: flex;
+  flex-direction: column;
+  justify-self: center;
+  margin: auto;
+  max-width: $screen-size-tab !important;
+
+  @media (min-width: $screen-size-tab) {
+    max-width: $screen-size-tab !important;
+  }
+
+  @media (max-width: $screen-size-mobile) {
+    max-width: $screen-size-mobile !important;
+  }
+
+  @media (max-width: $screen-size-small) {
+    max-width: $screen-size-small !important;
+  }
+
+
+  ::ng-deep .mat-mdc-paginator-container .mat-mdc-form-field-infix {
+    margin: $margin-narrow !important;
+    width: 100% !important;
+    padding: 0;
+    box-sizing: border-box;
+
+    @media (min-width: $screen-size-tab) {
+      width: $screen-size-tab;
+    }
+
+    @media (min-width: $screen-size-middle) {
+      width: $screen-size-middle;
+    }
+
+
+    @media (min-width: $screen-size-small) {
+      width: $screen-size-small;
+    }
+
+  }
+}
+
+::ng-deep .mat-mdc-paginator .mat-mdc-form-field-infix {
+  min-height: 2rem !important;
+}
+
+
+::ng-deep .mat-mdc-paginator-icon {
+  fill: $active-text !important;
+  display: flex;
+  align-items: center !important;
+}

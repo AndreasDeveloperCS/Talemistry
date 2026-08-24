@@ -1,0 +1,49 @@
+<button button-name="close-dialog" mat-icon-button class="form-button exit-button" (click)="closeDialog()">
+  <mat-icon class="icon-close">
+    <svg width="24px" height="24px" viewBox="0 0 108 107" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M27 26.75L54 53.5L81 26.75" stroke="white" stroke-width="10" stroke-linecap="round" />
+      <path d="M27 80.25L54 53.5L81 80.25" stroke="white" stroke-width="10" stroke-linecap="round" />
+    </svg>
+  </mat-icon>
+</button>
+
+<div class="schedule-container">
+  <h2>Schedule a Meeting</h2>
+
+  @if(isLoading) {
+    <app-loading-spinner></app-loading-spinner>
+  }
+
+  @if(!isFormOpen && !isLoading) {
+  <div class="schedule-box">
+    <div class="left-panel">
+      <div class="panel-header">📅 Select Date</div>
+      <app-datepicker 
+        [userId]="userId"
+        (dateSelected)="setDate($event)">
+      </app-datepicker>
+    </div>
+    <app-meeting-time-slots 
+      [userId]="userId" 
+      [selectedTime]="selectedTime" 
+      [selectedDate]="selectedDate" 
+      [selectedSlotPeriod]="selectedSlotPeriod"
+      [isScheduleInfoDefault]="isScheduleInfoDefault"
+      (timeSelected)="setTime($event)"
+      (openDetails)="openDetails()">
+    </app-meeting-time-slots>
+  </div>
+  }
+  @else if(isFormOpen) {
+  <app-meeting-booking-request-form [selectedTimeSlot]="timeSlotSelected">
+  </app-meeting-booking-request-form>
+  <button mat-icon-button class="form-button previous-step-button" (click)="back()">
+    <mat-icon>undo</mat-icon> {{ content.btnBack }}
+  </button>
+  <button [disabled]="!isMeetingFormValid" class="button__primary-color button--medium collapsed-button fixed-button"
+    (click)="sendRequest()">
+    <mat-icon>forward_to_inbox</mat-icon>
+    <span>{{ content.txtRequest }} </span>
+  </button>
+  }
+</div>

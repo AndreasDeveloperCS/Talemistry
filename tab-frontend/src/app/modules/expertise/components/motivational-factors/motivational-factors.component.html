@@ -1,0 +1,49 @@
+<form #motivationalFactorsSearchInput style="margin: 1rem 0;">
+  <mat-form-field class="form-field-input">
+    <mat-label class="new-label"><mat-icon>emoji_events</mat-icon> {{ placeholderText }}</mat-label>
+
+    <div class="input-field ">
+      <input #searchInput [hidden]="suppressFocus" type="text" [placeholder]="placeholderText" matInput [(ngModel)]="rawInputlValue"
+        [formControl]="inputControl" (input)="filterCollectionItems()" (focus)="onAutocompleteOpened()"
+        (click)="onAutocompleteOpened()" [matAutocomplete]="matAutocomplete" class="transparent-input-full-width" />
+
+      <mat-autocomplete autoActiveFirstOption #matAutocomplete="matAutocomplete" (opened)="onAutocompleteOpened()">
+        <input class="input-dropdown-filter" [placeholder]='content.txtFilter' [formControl]="filterControl"
+          (keyup)="applyLocalFilter()" />
+
+        <div (scroll)="onScroll($event)" class="input-dropdown-options" (opened)="onAutocompleteOpened()">
+          @for (option of collection; track option) {
+          <mat-option [value]="getValue(option)">
+            <div class="input-option-text">
+              {{ option.factor }}
+            </div>
+          </mat-option>
+          }
+        </div>
+      </mat-autocomplete>
+
+      <div class="square-add-button" (click)="add(rawInputlValue)">
+        <mat-icon>add</mat-icon>
+      </div>
+    </div>
+
+    <!-- <mat-error>
+      <div class="input-errors">
+        @for (error of errors; track error) {
+          <p>{{ error }}</p>
+        }
+      </div>
+    </mat-error> -->
+  </mat-form-field>
+
+  <div class="input-items">
+    @for (item of populatedCollection; track item) {
+    <div class="tag-item">
+      <button (click)="remove(item)">
+        <mat-icon>delete_sweep</mat-icon>
+      </button>
+      <span>{{ getValue(item) }}</span>
+    </div>
+    }
+  </div>
+</form>

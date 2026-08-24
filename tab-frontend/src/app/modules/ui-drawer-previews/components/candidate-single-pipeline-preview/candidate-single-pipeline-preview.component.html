@@ -1,0 +1,85 @@
+@if(isLoading) {
+  <app-sun-spinner></app-sun-spinner>
+}
+@if(!isLoading && pipelineGroup) {
+<div class="candidate-pipeline">
+  <div class="pipeline-hero">
+    <div class="pipeline-hero__left">
+      <div class="pipeline-eyebrow">
+        Candidate Pipeline
+      </div>
+      <div class="pipeline-title">
+        {{ pipelineGroup?.records?.[0]?.talentName }}
+      </div>
+      <div class="pipeline-subtitle">
+        {{ pipelineGroup?.records?.[0]?.positionName }}
+      </div>
+    </div>
+    <div class="context-actions">
+      <button class="action-btn" (click)="openCandidate()">
+        <mat-icon>person</mat-icon>
+        Candidate
+      </button>
+      <button class="action-btn" (click)="openPosition(pipelineGroup?.records?.[0]?.positionId)">
+        <mat-icon>work</mat-icon>
+        Position
+      </button>
+      <button class="action-btn secondary" (click)="openFullPipelineHistory()">
+        <mat-icon>hub</mat-icon>
+        Full Pipeline History
+      </button>
+    </div>
+  </div>
+  <div class="stats-grid">
+    <div class="stats-card">
+      <mat-icon>analytics</mat-icon>
+      <div class="stats-card__value">{{ pipelineGroup?.records?.[0]?.assessmentScore || 0 }}/10</div>
+      <div class="stats-card__label">Assessment</div>
+    </div>
+    <div class="stats-card">
+      <mat-icon>flag</mat-icon>
+      <div class="stats-card__value">{{ pipelineGroup?.records?.length || 0 }}</div>
+      <div class="stats-card__label">Stages</div>
+    </div>
+    <div class="stats-card">
+      <mat-icon>task_alt</mat-icon>
+      <div class="stats-card__value">{{ pipelineGroup?.records?.[0]?.finalDecision || 'Pending' }}</div>
+      <div class="stats-card__label">Decision</div>
+    </div>
+  </div>
+  <div class="timeline">
+    <div *ngFor="let progress of pipelineGroup.records" class="timeline-item">
+      <div class="timeline-left">
+        <div class="timeline-dot"></div>
+        <div class="timeline-line"></div>
+      </div>
+      <div class="timeline-content">
+        <div class="timeline-content__top">
+          <div class="timeline-stage">{{ progress.stageName }}</div>
+          <div class="timeline-status" [ngClass]="getStatusClass(progress.status)">
+            {{ progress.status }}
+          </div>
+        </div>
+        <div class="timeline-meta">{{ progress.createdDate | date:'MMM d, y HH:mm' }}</div>
+        <div *ngIf="progress.interviewFeedback" class="timeline-feedback">
+          {{ progress.interviewFeedback }}
+        </div>
+        <div *ngIf="progress.finalNotes" class="timeline-notes">
+          {{ progress.finalNotes }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="skills-section" *ngIf="pipelineGroup.skills?.length">
+    <div class="section-title">
+      <mat-icon>psychology</mat-icon>
+      Top Skills
+    </div>
+    <div class="skills-list">
+      <div *ngFor="let skill of getTopSkills()" class="skill-chip">
+        {{ skill.skillName }}
+      </div>
+    </div>
+  </div>
+</div>
+}

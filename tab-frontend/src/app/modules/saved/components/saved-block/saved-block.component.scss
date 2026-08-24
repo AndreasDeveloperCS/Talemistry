@@ -1,0 +1,66 @@
+@use 'variables' as *; 
+@use 'global' as *;
+
+.saved-wrapper {
+  width: 100%;
+  width: $screen-size-netbook;
+}
+  
+  .saved-body {
+    width: 100%;
+    max-width: $screen-size-netbook;
+    margin-top: $margin-middle;
+
+    @media(max-width: $screen-size-netbook) {
+      width: 100%;
+    }
+  }
+
+  .tabs {
+    display: flex;
+    gap: $gap-narrow;
+    margin-bottom: $margin-wide;
+
+    .tab-btn {
+      display: flex;
+      align-items: center;
+      padding: $padding-narrow-three $padding-extra-wide;
+      font-size: $font-size-header-narrow;
+      background: transparent;
+      border-radius: $borderRadiusMiddle;
+      box-shadow: var(--box-shadow-light);
+      gap: $gap-small;
+      border: none;
+      cursor: pointer;
+      color: var(--text);
+      justify-content: center;
+      flex: 1;
+
+      .label {
+        @media(max-width: $screen-size-mobile) {
+          display: none;
+        }
+      }
+
+      mat-icon {
+        flex-shrink: 0;
+      }
+
+      &:hover {
+        transform: translateY(-5px);
+      }
+
+      &.active-tab {
+        background-color: $pallete-0-color-12;
+        box-shadow: var(--box-shadow-light);
+        font-weight: bold;
+      }
+
+      .tab-icon {
+        margin-right: $margin-narrow;
+        width: $width-middle;
+        height: $height-middle;
+        stroke: currentColor;
+      }
+    }
+  }

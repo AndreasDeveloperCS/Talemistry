@@ -1,0 +1,21 @@
+<form [formGroup]="form" class="container__margin-x-middle">
+  <mat-form-field>
+    <mat-label class="new-label"><mat-icon>library_books</mat-icon>{{content.txtLabelSummary}}</mat-label>
+    <textarea class="transparent-input-full-width" matInput (blur)="onInputBlur()" cdkTextareaAutosize cdkAutosizeMinRows="4" cdkAutosizeMaxRows="7"
+      name="summary" [(ngModel)]="service.model.summary" formControlName="summary"
+      [class]="form.controls['summary'].invalid && form.controls['summary'].touched ? 'invalid' : 'valid'"
+      [placeholder]="content.txtPlaceholderSummary" required>
+    </textarea>
+    @if (validator.fieldIsValid(form, 'summary')) {
+    <mat-error>
+      <div class="errors">
+        @if (validator.getErrors(form, 'summary')['required']) {
+        <p>
+          {{content.txtFieldRequired}}
+        </p>
+        }
+      </div>
+    </mat-error>
+    }
+  </mat-form-field>
+</form>

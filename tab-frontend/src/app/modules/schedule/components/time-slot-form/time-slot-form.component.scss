@@ -1,0 +1,220 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba($pallete-0-color-10, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+  padding: $padding-middle;
+}
+
+.dialog {
+  background-color: $pallete-0-color-3;
+  border-radius: $borderRadiusMiddle;
+  border-radius: $borderRadiusMiddle $borderRadius;
+  box-shadow: var(--box-shadow-light);
+  max-width: 480px;
+  width: 100%;
+  padding: $padding-extra-wide $padding-wide;
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $margin-middle;
+}
+
+.dialog-title {
+  font-size: $font-size-header-narrow;
+  font-weight: $font-button-weight;
+  color: var(--accent-text);
+  margin: 0;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: $teal-17-4914-TCX;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  transition: transform 0.25s ease;
+
+  &:active {
+    transform: scale(0.9);
+  }
+
+  &:hover,
+  &:focus {
+    color: $pallete-0-color-12;
+    outline: none;
+    scale: 1.1;
+  }
+}
+
+.close-icon {
+  width: $width-middle;
+  height: $height-middle;
+  stroke-width: 2.5;
+}
+
+.dialog-description {
+  color: var(--text);
+  font-size: $font-size-placeholder;
+  margin-bottom: $margin-extra-wide;
+  line-height: $line-height-narrow;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: $gap-wide;
+  border: none;
+  background-color: transparent;
+  padding: 0;
+}
+
+.time-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $gap-narrow;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-weight: $font-button-weight;
+  font-size: $font-size-placeholder;
+  color: var(--accent-text);
+  margin-bottom: $margin-narrow;
+}
+
+.input,
+.select {
+  padding: $padding-narrow $padding-narrow-three;
+  background-color: $gradient-color-4;
+  border: $border solid $pallete-0-color-11;
+  border-radius: $borderRadiusMiddle $borderRadius;
+  color: var(--text);
+  font-size: $font-size-header-small;
+  font-weight: $font-textarea-weight;
+  transition: border-color 0.3s ease;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+    box-shadow: var(--box-shadow-light);
+  }
+}
+select {
+  appearance: none;
+  -webkit-appearance: none; /* Safari & Chrome */
+  -moz-appearance: none; /* Firefox */
+}
+
+select option {
+  color: var(--text);
+  background-color: $gradient-color-4;
+}
+
+select option:checked {
+  color: $pallete-0-color-13;
+  font-weight: $font-button-weight;
+}
+
+.helper-text {
+  font-size: $font-size-description-small;
+  color: var(--text);
+  margin-top: $margin-mini-narrow;
+}
+
+.error-text {
+  font-size: $font-size-description-small;
+  color: $pallete-0-color-21;
+  margin-top: $margin-mini-narrow;
+}
+
+.custom-days-section {
+  margin-top: $margin-middle;
+}
+
+.custom-days-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $gap-semi-small $gap-narrow;
+}
+
+.custom-day-checkbox {
+  display: flex;
+  align-items: center;
+  gap: $gap-semi-small;
+}
+
+.checkbox {
+  width: $width-small;
+  height: $height-small;
+  border: $border solid $teal-19-4922-TPX;
+  border-radius: $borderRadius;
+  cursor: pointer;
+  transition: background-color 0.25s ease, border-color 0.25s ease;
+
+  &:checked {
+    background-color: var(--accent-text);
+    border-color: var(--accent-text);
+  }
+}
+
+.checkbox-label {
+  font-size: $font-size-placeholder;
+  color: var(--accent-text);
+  cursor: pointer;
+}
+
+// Action buttons container
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: $gap-narrow;
+  padding-top: $padding-extra-wide;
+}
+
+.btn-save {
+  color: var(--text);
+  align-items: center;
+  gap: $gap-semi-small;
+  background-color: $pallete-0-color-14;
+  border: none;
+  border-radius: $borderRadiusMiddle;
+  padding: $padding-middle;
+  font-weight: $font-button-weight;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-size: $font-size-header-narrow;
+  transition: transform 0.5s ease;
+
+  &:active {
+    transform: scale(0.9);
+  }
+
+  &:hover:not(:disabled) {
+    background-color: $pallete-0-color-15;
+    scale: 1.1;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}

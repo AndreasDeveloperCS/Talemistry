@@ -1,0 +1,230 @@
+<div class="sa-wrapper">
+  <div class="sa-accent-bar"></div>
+
+  <div class="sa-content">
+    <div class="sa-sidebar">
+      <div class="sa-sidebar__photo">
+        <img
+          [src]="data.user?.photo"
+          [alt]="data.user.firstname + ' ' + data.user.lastname"
+        />
+        <div class="sa-sidebar__photo-gradient"></div>
+      </div>
+
+      <div class="sa-sidebar__contacts">
+        <div class="sa-contact" *ngIf="data.user.email">
+          <div class="sa-contact__icon">
+            <mat-icon>email</mat-icon>
+          </div>
+          <span class="sa-contact__text">{{ data.user.email }}</span>
+        </div>
+        <div class="sa-contact" *ngIf="data.user.phone">
+          <div class="sa-contact__icon">
+            <mat-icon>phone</mat-icon>
+          </div>
+          <span class="sa-contact__text">{{ data.user.phone }}</span>
+        </div>
+      </div>
+
+      <div class="sa-sidebar-section" *ngIf="data.hardSkills?.length">
+        <h2 class="sa-sidebar-section__title">
+          <span class="sa-sidebar-section__dash"></span>
+          Core Skills
+        </h2>
+        <div class="sa-skill-tags">
+          <span class="sa-skill-tag" *ngFor="let skill of data.hardSkills.slice(0, 8)">
+            {{ skill.skillName }}
+          </span>
+        </div>
+      </div>
+
+      <div class="sa-sidebar-section" *ngIf="data.domainSkills?.length">
+        <h2 class="sa-sidebar-section__title">
+          <span class="sa-sidebar-section__dash"></span>
+          Domain Skills
+        </h2>
+        <div class="sa-skill-tags">
+          <span class="sa-skill-tag" *ngFor="let skill of data.domainSkills.slice(0, 8)">
+            {{ skill.skillName }}
+          </span>
+        </div>
+      </div>
+
+      <div class="sa-sidebar-section" *ngIf="data.managerialSkills?.length">
+        <h2 class="sa-sidebar-section__title">
+          <span class="sa-sidebar-section__dash"></span>
+          Managerial Skills
+        </h2>
+        <div class="sa-attributes">
+          <div class="sa-attribute" *ngFor="let skill of data.managerialSkills">
+            <span class="sa-attribute__bullet"></span>
+            {{ skill.skillName }}
+          </div>
+        </div>
+      </div>
+
+      <div class="sa-sidebar-section" *ngIf="data.softSkills?.length">
+        <h2 class="sa-sidebar-section__title">
+          <span class="sa-sidebar-section__dash"></span>
+          Soft Skills
+        </h2>
+        <div class="sa-attributes">
+          <div class="sa-attribute" *ngFor="let skill of data.softSkills">
+            <span class="sa-attribute__bullet"></span>
+            {{ skill.skillName }}
+          </div>
+        </div>
+      </div>
+
+      <div class="sa-sidebar-section" *ngIf="data.languagesSkills?.length">
+        <h2 class="sa-sidebar-section__title">
+          <span class="sa-sidebar-section__dash"></span>
+          Languages
+        </h2>
+        <div class="sa-languages">
+          <div class="sa-language" *ngFor="let lang of data.languagesSkills">
+            <div class="sa-language__header">
+              <span class="sa-language__name">{{ lang.skillName }}</span>
+              <span class="sa-language__level">{{ getLanguageProficiency(lang.proficiencyEstimation) }}</span>
+            </div>
+            <div class="sa-language__bars">
+              <div
+                *ngFor="let level of proficiencyLevels"
+                class="sa-language__bar"
+                [class.sa-language__bar--active]="level <= lang.proficiencyEstimation"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sa-main">
+      <div class="sa-sidebar__name-block">
+        <h1>
+          <span class="sa-sidebar__firstname">{{ data.user.firstname }} </span>
+          <span class="sa-sidebar__lastname">{{ data.user.lastname }}</span>
+        </h1>
+        <p class="sa-sidebar__position">{{ data.targetPosition }}</p>
+      </div>
+      <section class="sa-section" *ngIf="data.objective">
+        <div class="sa-section-label">
+          <div class="sa-section-label__icon-box">
+            <mat-icon>description</mat-icon>
+          </div>
+          <h2>Career Objective</h2>
+        </div>
+        <p class="sa-objective-text">{{ data.objective }}</p>
+      </section>
+
+      <section class="sa-section" *ngIf="data.summary">
+        <div class="sa-section-label">
+          <div class="sa-section-label__icon-box">
+            <mat-icon>description</mat-icon>
+          </div>
+          <h2>Professional Summary</h2>
+        </div>
+        <p class="sa-summary-text">{{ data.summary }}</p>
+        <div class="sa-summary-line"></div>
+      </section>
+
+      <section class="sa-section" *ngIf="data.operationalExperience?.length">
+        <div class="sa-main-section-header">
+          <h2>Professional Experience</h2>
+          <div class="sa-main-section-header__line"></div>
+        </div>
+        <div class="sa-exp-list">
+          <div class="sa-exp" *ngFor="let exp of data.operationalExperience">
+            <div
+              class="sa-exp__accent"
+              [class.sa-exp__accent--current]="isCurrent(exp)"
+            ></div>
+            <div class="sa-exp__content">
+              <div class="sa-exp__header">
+                <div>
+                  <h3 class="sa-exp__title">{{ exp.jobTitle }}</h3>
+                  <div class="sa-exp__company-row">
+                    <mat-icon>business</mat-icon>
+                    <span>{{ exp.companyName }}</span>
+                  </div>
+                </div>
+                <div class="sa-exp__date-badge">
+                  <mat-icon>calendar_today</mat-icon>
+                  <span>
+                    <!-- {{ formatDate(exp.startWorkDate) }} -
+                    <ng-container *ngIf="isCurrent(exp)">
+                      <span class="sa-exp__present">Present</span>
+                    </ng-container>
+                    <ng-container *ngIf="!isCurrent(exp)">
+                      {{ formatDate(exp.endWorkDate) }}
+                    </ng-container> -->
+                    {{ exp.startWorkDate | monthYearRange: exp.endWorkDate : exp.isCurrent }}
+                  </span>
+                </div>
+              </div>
+
+              <div *ngIf="exp.resposiblities">
+                <p class="responsibilities-header">Responsibilities</p>
+                <ul class="sa-exp__achievements">
+                  <li *ngFor="let responsibility of splitTextLines(exp.resposiblities)">
+                    <span class="sa-exp__chevron">&gt;</span>
+                    {{ responsibility }}
+                  </li>
+                </ul>
+              </div>
+
+              <div *ngIf="exp.achievements">
+                <p class="achievements-header">Achievements</p>
+                <ul class="sa-exp__achievements">
+                  <li *ngFor="let achievement of splitTextLines(exp.achievements)">
+                    <span class="sa-exp__chevron">&gt;</span>
+                    {{ achievement }}
+                  </li>
+                </ul>
+              </div>
+
+              <div class="sa-exp__skills" *ngIf="exp.skills?.length">
+                <span class="sa-exp__skill-tag" *ngFor="let tech of exp.skills">{{ tech }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="sa-section" *ngIf="data.academicEducation?.length">
+        <div class="sa-main-section-header">
+          <h2>Education</h2>
+          <div class="sa-main-section-header__line"></div>
+        </div>
+        <div class="sa-edu-grid">
+          <div class="sa-edu" *ngFor="let edu of data.academicEducation">
+            <h3>{{ getEducationDegree(edu.academicEducationLevelType) }}</h3>
+            <p class="sa-edu__spec">{{ edu.specialication }}</p>
+            <p class="sa-edu__institution">{{ edu.institutionName }}</p>
+            <span class="sa-edu__date">{{ formatDate(edu.graduationDate) }}</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="sa-section" *ngIf="data.certification?.length">
+        <div class="sa-main-section-header">
+          <h2>Certifications</h2>
+          <div class="sa-main-section-header__line"></div>
+        </div>
+        <div class="sa-cert-grid">
+          <div class="sa-cert" *ngFor="let cert of data.certification">
+            <div class="sa-cert__icon">
+              <mat-icon>verified</mat-icon>
+            </div>
+            <div>
+              <h4>{{ cert.skillName }}</h4>
+              <p>{{ cert.certificationCenter }} | {{ formatDate(cert.certificationDate) }}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="sa-corner-accent"></div>
+</div>

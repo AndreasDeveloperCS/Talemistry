@@ -1,0 +1,55 @@
+<div class="day-view-container" *ngIf="dayData">
+
+  <div class="day-header">
+    <h2 class="day-title">{{ formatDate(dayData.date) }}</h2>
+    <div class="meeting-count">
+      <mat-icon class="material-icons">event</mat-icon>
+      {{ dayData.meetings.length }} meeting{{ dayData.meetings.length !== 1 ? 's' : '' }}
+    </div>
+  </div>
+
+  <div class="day-grid-wrapper" #dayGrid>
+    <div class="day-grid" >
+      <div class="time-column">
+        <div class="time-slot" *ngFor="let slot of timeSlots">
+          {{ formatTime(slot) }}
+        </div>
+      </div>
+
+      <div class="slots-column">
+        <div
+          *ngFor="let slot of timeSlots"
+          class="slot"
+          [class.free]="slotMeetingsMap.get(slot.getTime())?.status === 'free'"
+          [class.booked]="slotMeetingsMap.get(slot.getTime())?.status === 'booked'"
+          [class.unavailable]="slotMeetingsMap.get(slot.getTime())?.status === 'unavailable'"
+        >
+          <ng-container *ngFor="let meeting of slotMeetingsMap.get(slot.getTime())?.meetings">
+            <div
+              class="meeting-block"
+              [style.height.px]="getMeetingHeight(meeting)"
+              [style.top.px]="getMeetingTopOffset(meeting, slot)"
+              (click)="onMeetingClick.emit(meeting)"
+            >
+              <div class="meeting-title">{{ meeting.topic }}</div>
+
+              <button
+                class="join-button"
+                (click)="openMeetingLink(meeting, $event)"
+              >
+                <mat-icon>videocam</mat-icon>
+              </button>
+            </div>
+          </ng-container>
+        </div>
+
+        <div
+          class="current-time-line"
+          *ngIf="currentTimeTop >= 0"
+          [style.top.px]="currentTimeTop"
+        ></div>
+      </div>
+
+    </div>
+  </div>
+</div>

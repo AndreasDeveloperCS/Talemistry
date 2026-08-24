@@ -1,0 +1,54 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+/* src/app/interview-comm/components/call/call.component.scss */
+.call {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 8px;
+}
+
+.videos {
+    position: relative;
+    flex: 1;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+video {
+    width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    background: #000;
+}
+
+video.local {
+    position: absolute;
+    width: 50vw;
+    height: 50vh;
+    right: 12px;
+    bottom: 12px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.controls {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    padding: 8px;
+    border-top: 1px solid #2223;
+}
+
+.controls button {
+    box-shadow: var(--box-shadow-light);
+    padding: $padding-narrow;
+    border-radius: $borderRadius;
+
+    &:hover {
+        transform: translateY(-3px);
+    }
+}

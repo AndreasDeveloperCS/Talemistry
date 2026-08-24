@@ -1,0 +1,32 @@
+@if(isAllowed){
+<div class="communication-wrapper" #tabMenu>
+    <div class="container communication-body">
+        <header class="communication-topbar">
+            <div class="header-compact-row">
+                <div class="brand-mark compact">
+                    <div class="brand-icon">E</div>
+                    <div class="brand-text">
+                        <p class="brand-kicker">EVRYKA</p>
+                        <h1>Communication hub</h1>
+                    </div>
+                </div>
+
+                <div class="tabs compact-tabs" aria-label="Communication sections">
+                    @for(item of routes; track item) {
+                    <button [routerLink]="item.route" routerLinkActive="active"
+                        [routerLinkActiveOptions]="{ exact: false }" [class.active-tab]="isActive(item)"
+                        class="tab-btn compact">
+                        <mat-icon>{{ item.icon }}</mat-icon>
+                        <span class="label">{{ item.label }}</span>
+                    </button>
+                    }
+                </div>
+            </div>
+        </header>
+
+        <div class="communication-content">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>
+}

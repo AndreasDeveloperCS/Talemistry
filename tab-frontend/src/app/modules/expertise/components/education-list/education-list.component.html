@@ -1,0 +1,20 @@
+<div class="selected-filtered">
+  @for (education of educationItems; track education) {
+    <div class="selected-filtered-items">
+      <div class="selected-filtered-item">
+        <span>{{ education.educationName }}</span>
+        <span>{{ education.educationNumber }}</span>
+        <span>{{ education.startStudyDate | date: 'MM/yyyy' }}</span>
+        <span>{{ education.graduationDate | date: 'MM/yyyy' }}</span>
+        <span>{{ education.academicEducationLevelType }}</span>
+        <span>{{ education.institution }}</span>
+        <span>{{ education.fieldOfStudy }}</span>
+        <span>{{ education.specialication }}</span>
+      </div>
+      <button mat-icon-button >
+        <!-- (click)="addEducationItems.splice(educationItems.indexOf(education), 1)" -->
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  }
+</div>

@@ -1,0 +1,66 @@
+<div class="opened-position-form modal hover-container" data-toggle="modal" data-backdrop="static" data-keyboard="false"
+  style="max-width: 1400px !important; width: 100%;">
+  @if (canEditItem) {
+  <div class="controls">
+    <app-toggle-button [isActive]="position.isVerified" (toggle)="valueChanged($event)">
+    </app-toggle-button>
+  </div>
+  }
+
+  <!-- <mat-slide-toggle [aria-label]="position.isVerified ? 'Is Verified' : 'Not Verified'"  *ngIf="isAuthorised"
+    (change)="valueChanged($event)"
+    class="position-switcher"
+    [checked]="position.isVerified">
+  </mat-slide-toggle> -->
+  <!-- <button  class="download-pdf-button" (click)="downloadAsPdf()"  >
+  Download PDF
+</button> -->
+
+
+  <div id="cvDiscription ">
+    <div class="position-title" (click)="navigateToPosition(position._id)">
+
+      <span>
+        {{position.title}}
+      </span>
+      <span>
+        {{' ('}}{{position && position.titleCode ? position.titleCode :
+        position._id ?
+        'HRP-'+ position._id.slice(-6).toUpperCase()
+        : '120256'
+        }}{{') '}}
+      </span>
+    </div>
+
+    <table cellspacing="0" cellpadding="8" class="custom-table">
+      <thead>
+        <tr>
+          <!-- <th>Position</th> -->
+          @for (requirement of getFirstElement(); track requirement) {
+          <th>
+            {{ requirement?.sectionName }}</th>
+          }
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <!-- <td><span>
+        <strong>{{position.title}}</strong>
+      </span>
+      <span>
+        {{' ('}}{{position && position.titleCode ? position.titleCode :
+        position._id ?
+        'HRP-'+ position._id.slice(-6).toUpperCase()
+        : '120256'
+        }}{{') '}}
+      </span></td> -->
+          @for (requirement of getFirstElement(); track requirement) {
+          <td [innerHTML]="truncateContent(requirement.sectionContent)"></td>
+          }
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>

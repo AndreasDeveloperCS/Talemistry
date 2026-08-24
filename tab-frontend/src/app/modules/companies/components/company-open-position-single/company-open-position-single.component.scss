@@ -1,0 +1,124 @@
+@use 'variables' as *; 
+@use 'global' as *;
+
+.position-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: transparent;
+  border-radius: 10px;
+  padding: 1rem;
+  width: 100%;
+  min-width: 350px;
+  height: 100%;
+  box-shadow: var(--box-shadow-light);
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: $height-large;
+
+    @media (max-width: $screen-size-tab) {
+      gap: $gap-small;
+      flex-direction: column-reverse;
+      align-items: flex-start;
+      height: fit-content;
+    }
+
+    h3 {
+      margin: 0 $margin-narrow 0 0;
+      color: $pallete-0-color-14;
+      font-weight: 600;
+
+      &:hover {
+        text-decoration: underline;
+        text-decoration-color: $pallete-0-color-14;
+        cursor: pointer;
+        transform: translateY(-3px);
+      }
+    }
+
+    p {
+        margin: 0.5rem 0;
+        display: flex;
+        align-items: center;
+        font-size: 1.1rem;
+
+        mat-icon {
+            width: fit-content;
+            height: 100%;
+            font-size: 1.5rem;
+            margin-right: 0.25rem;
+            color: $pallete-0-color-14;
+        }
+    }
+}
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $gap-small;
+    margin-top: $margin-middle;
+  }
+
+  .tag, .status-tag {
+    background-color: transparent;
+    padding: 0.25rem;
+    font-size: 1rem;
+    color: var(--text);
+    box-shadow: var(--box-shadow-light);
+    border: none;
+    border-radius: $borderRadius;
+    height: fit-content;
+    display: flex;
+    flex-direction: row;
+    gap: $gap-micro;
+    align-items: center;
+  }
+
+  .custom-icon {
+    color: $pallete-0-color-14;
+    flex-shrink: 0;
+  }
+
+  .status-tag {
+    background-color: $pallete-0-color-13;
+  }
+
+  .tag-list {
+    gap: $gap-semi-small;
+    display: inline-flex;
+    align-items: center;
+    white-space: normal;
+    word-break: break-word;
+    width: 100%;
+
+    mat-icon {
+      color: $pallete-0-color-14;
+      flex-shrink: 0;
+    }
+  }
+
+  .tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $gap-small;
+    margin: $margin-narrow 0;
+  }
+
+  .single-tag {
+    padding: $padding-narrow;
+    background-color: transparent;
+    border: none;
+    border-radius: $borderRadius;
+    box-shadow: var(--box-shadow-light);
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+  }
+}
+
+mat-icon {
+    flex-shrink: 0;
+}

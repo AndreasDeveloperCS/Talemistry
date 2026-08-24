@@ -1,0 +1,367 @@
+<div class="application-tracker">
+  <!-- Header -->
+  <header class="tracker-header">
+    <div class="header-container">
+      <div class="header-content">
+        <div class="header-text">
+          <h1>My Applications</h1>
+          <p>Track your job application progress</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="tracker-container">
+    <div class="tracker-grid">
+      
+      <!-- Left: Positions List -->
+      <aside class="positions-sidebar">
+        <div class="sidebar-header">
+          <h2>Applied Positions</h2>
+          <p class="subtitle">{{ positions.length }} active applications</p>
+        </div>
+        
+        <div class="positions-scroll">
+          <div class="positions-list">
+            <button 
+              *ngFor="let position of positions"
+              class="position-card"
+              [class.selected]="selectedPosition?.id === position.id"
+              (click)="selectPosition(position)">
+              
+              <div class="position-header">
+                <h3>{{ position.positionName }}</h3>
+                <span class="badge proficiency-badge" [ngClass]="getProficiencyBorderClass(position.proficiencyLevel)">
+                  {{ position.proficiencyLevel }}
+                </span>
+              </div>
+
+              <div class="company-info">
+                <mat-icon class="material-icons">business</mat-icon>
+                <span>{{ position.companyName }}</span>
+              </div>
+
+              <div class="position-meta">
+                <span class="badge work-type-badge" [ngClass]="getWorkTypeBadgeClass(position.workType)">
+                  {{ position.workType }}
+                </span>
+                <span class="date">{{ position.appliedDate | date:'shortDate' }}</span>
+              </div>
+
+              <div class="position-footer">
+                <span class="current-stage">{{ position.currentStage }}</span>
+                <div class="skill-match">
+                  <mat-icon class="material-icons">trending_up</mat-icon>
+                  <span class="match-percentage">{{ position.skillMatch }}%</span>
+                </div>
+              </div>
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Right: Details View -->
+      <main class="details-panel" *ngIf="selectedPosition">
+        
+        <!-- Skill Match Analysis -->
+        <section class="card skill-match-card" *ngIf="skillComparison">
+          <div class="card-header">
+            <div class="card-title-row">
+              <h2>Skill Match Analysis</h2>
+              <span class="badge match-badge">{{ skillComparison.matchPercentage }}%</span>
+            </div>
+            <p class="card-description">Detailed proficiency comparison between your skills and requirements</p>
+          </div>
+
+          <div class="card-content">
+            <!-- Overall Progress -->
+            <div class="overall-match">
+              <div class="progress-header">
+                <span class="progress-label">Overall Match</span>
+                <span class="progress-text">
+                  {{ skillComparison.confirmed.length }} of {{ skillComparison.required.length }} skills confirmed
+                </span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" [style.width.%]="skillComparison.matchPercentage"></div>
+              </div>
+            </div>
+
+            <!-- Detailed Skills Breakdown -->
+            <div class="skills-breakdown">
+              <h4 class="section-title">Skill Breakdown</h4>
+              
+              <div class="skill-item" *ngFor="let skill of skillComparison.detailedSkills">
+                <div class="skill-header">
+                  <div class="skill-name-group">
+                    <mat-icon class="material-icons" [ngClass]="getSkillStatusIconColor(skill.status)">
+                      {{ getSkillStatusIcon(skill.status) }}
+                    </mat-icon>
+                    <span class="skill-name">{{ skill.name }}</span>
+                  </div>
+                  <span class="badge skill-match-badge">{{ skill.matchPercentage }}% match</span>
+                </div>
+
+                <div class="skill-progress">
+                  <div class="skill-progress-bar">
+                    <div class="skill-progress-fill" 
+                         [ngClass]="getSkillStatusColor(skill.status)"
+                         [style.width.%]="skill.matchPercentage"></div>
+                  </div>
+                  <span class="skill-levels">{{ skill.talentLevel || 0 }}/{{ skill.requiredLevel || 10 }}</span>
+                </div>
+
+                <p class="skill-notes" *ngIf="skill.notes">{{ skill.notes }}</p>
+              </div>
+            </div>
+
+            <div class="separator"></div>
+
+            <!-- Skills Summary Grid -->
+            <div class="skills-summary-grid">
+              <div class="summary-column">
+                <h5 class="summary-title required">Required Skills</h5>
+                <div class="badge-group">
+                  <span class="badge outline-badge" *ngFor="let skill of skillComparison.required">
+                    {{ skill }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="summary-column">
+                <h5 class="summary-title confirmed">Confirmed Skills</h5>
+                <div class="badge-group">
+                  <span class="badge confirmed-badge" *ngFor="let skill of skillComparison.confirmed">
+                    {{ skill }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="summary-column">
+                <h5 class="summary-title missing">Missing Skills</h5>
+                <div class="badge-group">
+                  <span class="badge missing-badge" *ngFor="let skill of skillComparison.missing">
+                    {{ skill }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Pipeline Stages -->
+        <section class="card pipeline-card">
+          <div class="card-header">
+            <h2>Application Pipeline</h2>
+            <p class="card-description">
+              {{ completedStagesCount }} of {{ selectedPosition.stages.length }} stages completed
+            </p>
+          </div>
+
+          <div class="card-content">
+            <div class="stages-list">
+              <ng-container *ngFor="let stage of selectedPosition.stages; let isLast = last">
+                <button 
+                  class="stage-item"
+                  (click)="selectStage(stage)">
+                  <!-- [disabled]="!hasInterviewOrAssessment(stage)" -->
+                  
+                  <mat-icon class="material-icons stage-icon" [ngClass]="getStageIconColor(stage.status)">
+                    {{ getStageIconClass(stage.status) }}
+                  </mat-icon>
+
+                  <div class="stage-content">
+                    <div class="stage-header-row">
+                      <span class="stage-name">{{ stage.name }}</span>
+                      <span class="stage-date" *ngIf="stage.completedDate">
+                        {{ stage.completedDate | date:'shortDate' }}
+                      </span>
+                    </div>
+                    <span class="badge stage-badge" [ngClass]="getStageIconColor(stage.status)">
+                      {{ stage.status.replace('_', ' ') }}
+                    </span>
+                  </div>
+
+                  <mat-icon class="material-icons chevron" *ngIf="hasInterviewOrAssessment(stage)">
+                    chevron_right
+                  </mat-icon>
+                </button>
+
+                <div class="stage-connector" *ngIf="!isLast"></div>
+              </ng-container>
+            </div>
+          </div>
+        </section>
+
+        <!-- Assessment Details -->
+        <section class="card assessment-card" *ngIf="selectedStage?.name === 'ASSESSMENT' && assessment">
+          <div class="card-header">
+            <div class="card-title-row">
+              <h2>Assessment Details</h2>
+              <span class="badge assessment-badge">
+                {{ assessment.totalScore }}/{{ assessment.maxScore }} ({{ assessment.percentage }}%)
+              </span>
+            </div>
+            <p class="card-description">
+              {{ assessment.assessmentName }} • Completed {{ assessment.completedDate | date:'shortDate' }}
+              <span *ngIf="assessment.duration"> • {{ assessment.duration }} minutes</span>
+            </p>
+          </div>
+
+          <div class="card-content">
+            <!-- Score Overview -->
+            <div class="stats-grid">
+              <div class="stat-box">
+                <p class="stat-value">{{ assessment.percentage }}%</p>
+                <p class="stat-label">Score</p>
+              </div>
+              <div class="stat-box">
+                <p class="stat-value">{{ assessment.questions.length }}</p>
+                <p class="stat-label">Questions</p>
+              </div>
+              <div class="stat-box">
+                <p class="stat-value">{{ assessment.duration }}m</p>
+                <p class="stat-label">Duration</p>
+              </div>
+            </div>
+
+            <!-- Evaluator Feedback -->
+            <div class="feedback-box" *ngIf="assessment.feedback">
+              <h4 class="feedback-title">Evaluator Feedback</h4>
+              <p class="feedback-text">{{ assessment.feedback }}</p>
+              <p class="evaluator-name" *ngIf="assessment.evaluator">— {{ assessment.evaluator }}</p>
+            </div>
+
+            <div class="separator"></div>
+
+            <!-- Assessment Questions & Answers -->
+            <div class="assessment-questions">
+              <h4 class="section-title">Assessment Form Responses</h4>
+              
+              <div class="question-card" *ngFor="let q of assessment.questions; let i = index">
+                <div class="question-header">
+                  <div class="question-info">
+                    <div class="question-badges">
+                      <span class="badge outline-badge">Q{{ i + 1 }}</span>
+                      <span class="badge secondary-badge">{{ q.type.replace('_', ' ') }}</span>
+                    </div>
+                    <p class="question-text">{{ q.question }}</p>
+                  </div>
+                  <span class="badge" [ngClass]="getQuestionScoreClass(q.score, q.maxScore)">
+                    {{ q.score }}/{{ q.maxScore }}
+                  </span>
+                </div>
+
+                <div class="answer-section">
+                  <p class="answer-text">{{ q.answer }}</p>
+                </div>
+
+                <div class="question-feedback" *ngIf="q.feedback">
+                  <p class="feedback-label">Feedback</p>
+                  <p class="feedback-content">{{ q.feedback }}</p>
+                </div>
+
+                <div class="question-progress">
+                  <div class="question-progress-fill" [style.width.%]="(q.score / q.maxScore) * 100"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Interview Details -->
+        <section class="card interview-card" *ngIf="selectedStage?.interviewDetails as interview">
+          <div class="card-header">
+            <div class="card-title-row">
+              <h2>{{ selectedStage?.name }} Details</h2>
+              <span class="badge interview-score-badge">Score: {{ interview.score }}/10</span>
+            </div>
+            <p class="card-description">
+              Interview conducted on {{ interview.interviewDate | date:'shortDate' }} by {{ interview.interviewer }}
+            </p>
+          </div>
+
+          <div class="card-content">
+            <!-- Summary -->
+            <div class="interview-section">
+              <h4 class="section-title">Summary</h4>
+              <p class="section-text">{{ interview.summary }}</p>
+            </div>
+
+            <!-- Key Notes -->
+            <div class="interview-section">
+              <h4 class="section-title">Key Notes</h4>
+              <ul class="notes-list">
+                <li *ngFor="let note of interview.notes">
+                  <span class="bullet">•</span>
+                  <span>{{ note }}</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="separator"></div>
+
+            <!-- Questions & Answers -->
+            <div class="interview-section">
+              <h4 class="section-title">Questions & Answers</h4>
+              
+              <div class="qa-item" *ngFor="let qa of interview.questions; let i = index">
+                <div class="qa-header">
+                  <span class="qa-number">Q{{ i + 1 }}</span>
+                  <h5 class="qa-question">{{ qa.question }}</h5>
+                </div>
+
+                <div class="qa-answer">
+                  <p class="answer-label">Answer:</p>
+                  <p class="answer-content">{{ qa.answer }}</p>
+                </div>
+
+                <div class="qa-interpretation">
+                  <p class="interpretation-label">Interpretation:</p>
+                  <p class="interpretation-content">{{ qa.interpretation }}</p>
+                </div>
+
+                <div class="qa-score">
+                  <mat-icon class="material-icons">star</mat-icon>
+                  <span>{{ qa.score }}/10</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="separator"></div>
+
+            <!-- Feedback & Strengths -->
+            <div class="interview-section">
+              <h4 class="section-title">Overall Feedback</h4>
+              <p class="section-text">{{ interview.feedback }}</p>
+            </div>
+
+            <div class="strengths-weaknesses">
+              <div class="strength-column">
+                <h5 class="column-title">Strengths</h5>
+                <ul class="items-list">
+                  <li *ngFor="let strength of interview.strengths">
+                    <mat-icon class="material-icons check-icon">check_circle</mat-icon>
+                    <span>{{ strength }}</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="weakness-column">
+                <h5 class="column-title">Areas for Improvement</h5>
+                <ul class="items-list">
+                  <li *ngFor="let area of interview.areasForImprovement">
+                    <mat-icon class="material-icons info-icon">info</mat-icon>
+                    <span>{{ area }}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+</div>

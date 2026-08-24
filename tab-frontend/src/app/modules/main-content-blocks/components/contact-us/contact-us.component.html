@@ -1,0 +1,168 @@
+<div class="contact-us background-form-image">
+  <div class="container__limited-width__netbook container container__column">
+
+    <div class="row mb-3">
+      <div class="col-11 title-block">
+        <h2 class="title">
+          <!-- <img class="rotating-element" src="assets/main-page/titles/goals_title.svg" /> -->
+          {{ content.lblContactUs }}
+        </h2>
+      </div>
+    </div>
+
+    <div class="small__bg"></div>
+
+    <form [formGroup]="form" class="form new-form" section="contactUsForm">
+
+      <div class="form__flex universal-input universal-text">
+        <div>
+
+          <mat-form-field>
+            <mat-label class="new-label">{{ content.txtName }} {{ content.txtSurname }}</mat-label>
+            <input class="transparent-input" matInput [placeholder]="content.txtFullName"
+              [class]="form.controls.contactName?.invalid && form.controls.contactName?.touched ? 'invalid' : 'valid'"
+              formControlName="contactName" [(ngModel)]="data.contactName" required />
+            @if (form.controls.contactName?.invalid) {
+            <mat-error>
+              <div class="errors">
+                @if (form.controls.contactName?.errors) {
+                <p>{{content.txtFieldRequired}}</p>
+                }
+              </div>
+            </mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label class="new-label">{{ content.txtCompanyName }}</mat-label>
+            <input class="transparent-input" title="company" autocomplete="on" matInput [placeholder]="content.txtCompanyName"
+              [class]="form.controls.company?.invalid && form.controls.company?.touched ? 'invalid' : 'valid'"
+              formControlName="company" [(ngModel)]="data.company" required />
+            @if (form.controls.company?.invalid) {
+            <mat-error>
+              <div class="errors">
+                @if (form.controls.company?.errors) {
+                <p>{{content.txtFieldRequired}}</p>
+                }
+              </div>
+            </mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label class="new-label">{{ content.txtPhoneNumber }}</mat-label>
+            <input class="transparent-input" autocomplete="off" matInput [placeholder]="content.txtPhone"
+              [class]="form.controls.phone?.invalid && form.controls.phone?.touched ? 'invalid' : 'valid'"
+              formControlName="phone" [(ngModel)]="data.phone" required />
+            @if (form.controls.phone?.invalid) {
+            <mat-error>
+              <div class="errors">
+                <p>{{content.txtFieldRequired}} {{content.txtValidationPhoneNumber}}</p>
+              </div>
+            </mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label class="new-label">{{ content.txtEmail }}</mat-label>
+            <input class="transparent-input" type="email" autocomplete="off" matInput [placeholder]="content.txtEmail"
+              [class]="form.controls.email?.invalid && form.controls.email?.touched ? 'invalid' : 'valid'"
+              formControlName="email" [(ngModel)]="data.email" [value]="data.email" required />
+            @if (form.controls.email?.invalid) {
+            <mat-error class="errors">
+              @if (form.controls.email?.errors) {
+              <p>
+                {{content.txtFieldRequired}}
+              </p>
+              }
+              @if (form.controls.email?.errors) {
+              <p>{{content.txtValidationEmailError}}</p>
+              }
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <div class="wrapper-textarea">
+          <mat-form-field #parent>
+            <mat-label class="new-label">{{ content.txtShareYourVision }}</mat-label>
+            <textarea class="transparent-input" [disabled]="isMessageSent" matInput [attr.rows]="rows" formControlName="message"
+              [placeholder]="content.txtWriteYourRequest" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+              cdkAutosizeMinRows="10" cdkAutosizeMaxRows="10" [value]="data.message" required
+              [class]="form.controls.message?.invalid && form.controls.message?.touched ? 'invalid' : 'valid'"
+              [(ngModel)]="data.message"></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="container__flex container__left">
+        <button class="button__primary-color button--medium collapsed-button small-button"
+          (click)="attachmentsInput.click()">
+          <mat-icon>attach_file</mat-icon>
+          <span>{{ content.btnCaptionSelectAttachment }}</span>
+        </button>
+
+        <input class="transparent-input" hidden multiple (change)="onAttachmentsSelected($event)" #attachmentsInput type="file">
+      </div>
+
+      <mat-accordion class=" mb-sm expansion-panel" [class.hidden]="!(attachments.length > 0)">
+        <mat-expansion-panel [class.hidden]="!(attachments.length > 0)" [expanded]="false">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <div class="custom-border-pseudo">
+                <mat-icon>attachment</mat-icon>
+                {{ content.btnCaptionSelectAttachment }}
+                ({{ attachments.length }})
+              </div>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+
+          @for (attachment of attachments; track attachment) {
+          <div class="attachments-block">
+            <div class="attachment">
+              <!-- <app-clip class="ml-xs mr-xs"></app-clip> -->
+              <div class="container__flex container__middle">
+                <mat-icon>attach_file</mat-icon> {{attachment.fileInfo.name}}
+              </div>
+              <button mat-button (click)="removeAttachment(attachment)" inline="true">
+                <!-- <app-delete-icon></app-delete-icon> -->
+                 <mat-icon>delete_sweep</mat-icon>
+              </button>
+              <!-- <app-close-button class="ml-xs mr-xs" (click)="removeAttachment(attachment)"></app-close-button> -->
+            </div>
+          </div>
+          }
+
+          <input class="transparent-input" matInput [placeholder]="'Email Attachment'" required hidden />
+
+        </mat-expansion-panel>
+      </mat-accordion>
+
+      <div class="container container__flex container__center" style="position: relative;">
+        
+        <!-- <div class="container__flex container__center">
+          <button type="button" (click)="bookMeeting()" class="container__middle button__secondary-color button--medium"
+            type="submit">
+            <mat-icon>event</mat-icon>
+            <span>{{ content.btnBookMeeting }}</span>
+          </button>
+        </div> -->
+
+        <button type="button" (click)="onSubmitContactData()" [attr.disabled]="isMessageSent"
+          class="container__middle button__primary-color button--medium collapsed-button send-button"
+          [disabled]="!form.valid" type="submit">
+          <mat-icon>send</mat-icon>
+          <span>{{ content.btnSend }}</span>
+        </button>
+
+        @if (isMessageSent) {
+          <div class="notification-message p-xs container__middle">
+            <div>{{"Message has been sent"}}</div>
+          </div>
+        }
+
+      </div>
+
+    </form>
+  </div>

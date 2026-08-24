@@ -1,0 +1,140 @@
+<div class="universal-input">
+  <button class="form-button exit-button" (click)="closeDialog()">
+    <mat-icon class="icon-close">
+      <svg class="icon-close" width="1.5rem" height="1.5rem" viewBox="0 0 108 107"
+        fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M27 26.75L54 53.5L81 26.75" stroke="white" stroke-width="10"
+          stroke-linecap="round" />
+        <path d="M27 80.25L54 53.5L81 80.25" stroke="white" stroke-width="10"
+          stroke-linecap="round" />
+      </svg>
+    </mat-icon>
+  </button>
+
+  <h3 class="container__center">{{content.txtSocialMedia}}</h3>
+  
+  <form [formGroup]="userSocialMediaForm"
+    class="universal-input dialog-form">
+
+
+        <div class="link-form__space container__flex">
+          <div class="container__full-width">
+            <mat-label>{{content.txtSocialMediaType}}</mat-label>
+            <mat-select (scroll)="onScroll($event)"
+              [compareWith]="compareSocialMedia"
+              name="type"
+              class="transparent-input-full-width"
+              formControlName="type"
+              [(value)]="userSocialMedia.type"
+              [(ngModel)]="userSocialMedia.type"
+              (click)="populateCollection()"
+              (selectionChange)="selectMedia($event.value)"
+              [matAutocomplete]="auto">
+
+              <input class="dropdown-filter transparent-input-full-width"
+                [placeholder]='content.txtFilter'
+                [formControl]="filterControl"
+                (keyup)="applyLocalFilter($event, 'name')"
+                (selectionChange)="applyLocalFilter($event, 'name')" />
+
+              <mat-select-trigger>
+
+                <div class="container__flex" style="align-items: center;">
+                  @if (userSocialMedia.type) {
+                    <img
+                      class="img-small"
+                      [src]="userSocialMedia.type.imagePath"
+                      [alt]="userSocialMedia.type.name" />
+                  }
+                  @if (userSocialMedia.type) {
+                    <span>{{ userSocialMedia.type.name}}</span>
+                  }
+                </div>
+              </mat-select-trigger>
+
+              <div class="drop-down-list-scroll" (scroll)="onScroll($event)">
+                @for (option of socialMediaList; track option) {
+                  <mat-option
+                    [value]="option">
+                    <div class="container__flex">
+                      <img class="img-small"
+                        [alt]="option.icon"
+                        [matTooltip]="option.icon"
+                        [src]="option.imagePath" />
+                      {{option.name}}
+                    </div>
+                  </mat-option>
+                }
+              </div>
+            </mat-select>
+
+            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+              @for (option of socialMediaList; track option) {
+                <mat-option [value]="option" style="align-items: center;">
+                  <div class="container__middle">
+                    <img class="img-small"
+                      [alt]="option.icon"
+                      [matTooltip]="option.icon"
+                      [src]="option.imagePath" />
+                    {{option.name}}
+                  </div>
+                </mat-option>
+              }
+            </mat-autocomplete>
+          </div>
+     
+          <app-primary-digit-input-element 
+            [labelText]="'Priority'"
+            [defaultValue]="userSocialMedia.priority"
+            (valueChanged)="update($event)">
+          </app-primary-digit-input-element>
+        </div>
+      
+
+        <mat-form-field >
+          <mat-label>{{content.txtProfileLink}}</mat-label>
+          <input
+            class="transparent-input-full-width"
+            matInput
+            name="profileLink"
+            formControlName="profileLink"
+            placeholder="URL: "
+            [(ngModel)]="userSocialMedia.profileLink">
+          @if (userSocialMediaForm.controls.profileLink?.invalid) {
+            <mat-error>
+              <div class="errors">
+                @if (userSocialMediaForm.controls.profileLink?.errors) {
+                  <p>
+                    {{ content.txtFieldRequired }}
+                  </p>
+                }
+              </div>
+            </mat-error>
+          }
+        </mat-form-field>
+   
+  </form>
+
+  <div mat-dialog-actions>
+    <div class="container__full-width">
+      <div class="pt-lg pb-lg container__flex container__center">
+        <button [mat-dialog-close]="data"
+          type="submit"
+          (click)="onApply()"
+          class="margin-vertical-middle button__primary-color button--small">
+          {{ controlButtonContent }}
+        </button>
+        <button (click)="closeDialog()"
+          mat-dialog-close
+          class="margin-vertical-middle button__primary-color button--small">
+          {{ content.closeText }}
+        </button>
+      </div>
+    </div>
+  </div>
+  @for (notification of notificationMessages; track notification) {
+    <div class="notification">
+      {{notification}}
+    </div>
+  }
+</div>

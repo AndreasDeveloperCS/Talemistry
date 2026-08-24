@@ -1,0 +1,20 @@
+<div class="privacy-policy">
+  <div class="gdpr-title">
+    <mat-icon>{{gdprContent.gdprIcon}}</mat-icon>{{gdprContent.gdprTitle}}
+  </div>
+
+
+  <div class="gdpr-agreement">
+    @for (item of gdprContent.statements; track item) {
+      <div class="gdpr-statement">
+        <div class="gdpr-statement-title"><mat-icon>{{ item.icon }}</mat-icon>{{ item.statementTitle }}</div>
+        @for (statementItem of item.statementContent; track statementItem) {
+          <div class="gdpr-statement-content">
+            <p [innerHtml]="statementItem"></p>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+</div>

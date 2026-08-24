@@ -1,0 +1,42 @@
+<form>
+  <mat-form-field class="form-field-input">
+    <mat-label class="new-label">{{ content.txtMainIndustryDomains }}</mat-label>
+
+    <div class="input-field ">
+      <input type="text" matInput [(ngModel)]="rawInputlValue"
+        [formControl]="inputControl" (input)="filterCollectionItems()" (click)="onAutocompleteOpened()"
+        (focus)="onAutocompleteOpened()" [matAutocomplete]="matAutocomplete" class="transparent-input-full-width" />
+
+      <mat-autocomplete autoActiveFirstOption #matAutocomplete="matAutocomplete" (opened)="onAutocompleteOpened()">
+        <input class="input-dropdown-filter" [placeholder]='content.txtFilter' [formControl]="filterControl"
+          (keyup)="applyLocalFilter()" />
+
+        <div (scroll)="onScroll($event)" class="input-dropdown-options" (opened)="onAutocompleteOpened()">
+          @for (option of collection; track option) {
+          <mat-option [value]="getValue(option)">
+            <div class="input-option-text">
+              {{ getValue(option) }} - {{ getSubgroup(option) }}
+            </div>
+          </mat-option>
+          }
+        </div>
+      </mat-autocomplete>
+
+      <div class="round-add-button" (click)="add(rawInputlValue)">
+        <mat-icon>add</mat-icon>
+      </div>
+    </div>
+
+  </mat-form-field>
+
+  <div class="tag-items">
+    @for (item of populatedCollection; track item) {
+    <div class="tag-item">
+      <span>{{ getValue(item) }}</span>
+      <button (click)="remove(item)">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    }
+  </div>
+</form>

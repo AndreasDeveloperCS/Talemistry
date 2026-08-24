@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>{{basics.name}} – CV</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="{{cssPath}}" />
+</head>
+
+<body>
+    <header>
+        <h1>{{basics.name}}</h1>
+        <p>{{basics.label}}</p>
+    </header>
+
+    {{#if work.length}}
+    <section>
+        <h2>Experience</h2>
+        {{#each work}}
+        <article>
+            <h3>{{position}} — {{company}}</h3>
+            <div class="dates">{{range startDate endDate}}</div>
+            <p>{{summary}}</p>
+        </article>
+        {{/each}}
+    </section>
+    {{/if}}
+
+    {{!-- etc… --}}
+</body>
+
+</html>

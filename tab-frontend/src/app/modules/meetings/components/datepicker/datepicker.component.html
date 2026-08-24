@@ -1,0 +1,55 @@
+<div class="calendar">
+  <div class="calendar-header">
+    <button [disabled]="isPrevMonthDisabled()" 
+      (click)="navigateMonth('prev')" 
+      [class.disabled]="isPrevMonthDisabled()">‹</button>
+    <span>{{ monthName }} {{ year }}</span>
+    <button (click)="navigateMonth('next')">›</button>
+  </div>
+
+  <div class="day-names">
+    @for(day of weekDays; track day) {
+      <span>{{ day }}</span>
+    }
+  </div>
+
+  @if(isDefaultCalendarView) {
+  <div class="dates-grid">
+    @for(first of [].constructor(firstDayOfWeek); track first) {
+      <span class="empty"></span>
+    }
+
+    @for(day of daysInMonth; track day) {
+      <button
+        [class.selected]="isSelectedDateNumber(day)"
+        [class.disabled]="isPastDateNumber(day)"
+        (click)="selectDateNumber(day)"
+        [disabled]="isPastDateNumber(day)"
+      >
+        {{ day }}
+      </button>
+    }
+  </div>
+  }
+
+  @if(!isDefaultCalendarView) {
+  <div class="dates-grid">
+
+    @for(day of calendarDays; track day) {
+      <div
+          [class.selected]="isSameDate(day.date, selectedDate)"
+          [ngClass]="{
+            'past-day': isPastDate(day.date),
+            'day-cell': true,
+            'not-current-month': !day.isCurrentMonth,
+            'not-work': day.date > perspectiveEnd,
+            'today': day.isToday,
+            'selected': day.date === selectedDate,
+            'current-month': day.isCurrentMonth && !day.isToday,
+          }" (click)="selectDate(day)">
+          <span class="day-number">{{ day.date | date:'d' }}</span>
+        </div>
+    }
+  </div>
+  }
+</div>

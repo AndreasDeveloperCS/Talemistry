@@ -1,0 +1,69 @@
+@if(isLoading) {
+    <app-sun-spinner></app-sun-spinner>
+}
+@if(!isLoading) {
+<div class="applicants-preview">
+  <div class="applicants-preview__hero">
+    <div>
+      <div class="applicants-preview__eyebrow">Talent Pipeline</div>
+      <h1 class="applicants-preview__title">{{ position?.title }}</h1>
+      <div class="applicants-preview__subtitle">
+        {{ groupedTalentProgress.length }} Applicants
+      </div>
+    </div>
+  </div>
+  <div class="stats-grid">
+    <div class="stats-card">
+      <mat-icon>group</mat-icon>
+      <div class="stats-card__value">{{ groupedTalentProgress.length }}</div>
+      <div class="stats-card__label">Applicants</div>
+    </div>
+    <div class="stats-card">
+      <mat-icon>pending_actions</mat-icon>
+      <div class="stats-card__value">{{ pipelineStages.length }}</div>
+      <div class="stats-card__label">Stages</div>
+    </div>
+  </div>
+  <div class="candidates-list">
+    <div *ngFor="let candidate of groupedTalentProgress"
+      class="candidate-card" (click)="openSinglePipeline(candidate)">
+      <div class="candidate-card__top">
+        <div class="candidate-card__profile">
+          <img *ngIf="candidate.photoUrl"
+            [src]="candidate.photoUrl"
+            class="candidate-avatar"
+            (click)="openCandidate(candidate, $event)">
+          <div>
+            <div class="candidate-name clickable" (click)="openCandidate(candidate, $event)">
+              {{ candidate.records?.[0]?.talentName }}
+            </div>
+            <div
+              class="candidate-stage"
+              [ngClass]="getStatusClass(getLastRecord(candidate)?.status)">
+              {{ getLastRecord(candidate)?.stageName }}
+            </div>
+          </div>
+        </div>
+        <div class="candidate-score">
+          <mat-icon>analytics</mat-icon>
+          {{ getLastRecord(candidate)?.assessmentScore || 0 }}/10
+        </div>
+      </div>
+      <div class="pipeline-mini">
+        <div *ngFor="let record of candidate.records" class="pipeline-mini__stage">
+          {{ record.stageName }}
+        </div>
+      </div>
+      <div class="candidate-skills">
+        <div *ngFor="let skill of getTopSkills(candidate)" class="skill-chip">
+          {{ skill.skillName }}
+        </div>
+      </div>
+      <div *ngIf="candidate?.talentNote?.text" class="candidate-note">
+        <mat-icon>notes</mat-icon>
+        {{ candidate?.talentNote?.text }}
+      </div>
+    </div>
+  </div>
+</div>
+}

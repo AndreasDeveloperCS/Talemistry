@@ -1,0 +1,217 @@
+<div class="dashboard">
+  <header class="page-header">
+    <div>
+      <h1 class="page-header__title">Recruiter Dashboard</h1>
+      <p class="page-header__subtitle">Overview of your recruitment activities and pipeline</p>
+    </div>
+  </header>
+
+  <section class="kpi-row">
+    <tm-card class="kpi-tile clickable" (click)="openPipelineHealthPreview()">
+      <div class="kpi-tile__top">
+        <span class="kpi-tile__label">Pipeline Health</span>
+        <lucide-icon name="git-compare-arrows" [size]="16" class="kpi-tile__icon"></lucide-icon>
+      </div>
+      <p class="kpi-tile__value">{{ animatedStats.pipelineInterviews }}<span class="kpi-tile__unit">interviews</span></p>
+      <tm-stat-delta [value]="dashboardStats.trends.interviewsDeltaWeek"></tm-stat-delta>
+      <span class="kpi-tile__meta">{{ dashboardStats.pipeline.offers }} offers · {{ dashboardStats.pipeline.hires }} hires</span>
+    </tm-card>
+
+    <tm-card class="kpi-tile clickable" (click)="openPositionsListPreview($event)">
+      <div class="kpi-tile__top">
+        <span class="kpi-tile__label">Positions</span>
+        <lucide-icon name="briefcase" [size]="16" class="kpi-tile__icon"></lucide-icon>
+      </div>
+      <p class="kpi-tile__value">{{ animatedStats.activePositions }}<span class="kpi-tile__unit">active</span></p>
+      <tm-stat-delta [value]="dashboardStats.trends.positionsDeltaWeek"></tm-stat-delta>
+      <span class="kpi-tile__meta">{{ positionStats.closed }} closed · {{ positionStats.draft }} drafts</span>
+    </tm-card>
+
+    <tm-card class="kpi-tile clickable" (click)="openMeetingsList($event)">
+      <div class="kpi-tile__top">
+        <span class="kpi-tile__label">Active Meetings</span>
+        <lucide-icon name="calendar-clock" [size]="16" class="kpi-tile__icon"></lucide-icon>
+      </div>
+      <p class="kpi-tile__value">{{ animatedStats.meetingsToday }}<span class="kpi-tile__unit">today</span></p>
+      <span class="kpi-tile__meta">{{ meetingStats.week }} this week · {{ meetingStats.month }} this month</span>
+    </tm-card>
+
+    <tm-card class="kpi-tile clickable" (click)="openApplicantsByStage($event)">
+      <div class="kpi-tile__top">
+        <span class="kpi-tile__label">Total Candidates</span>
+        <lucide-icon name="users" [size]="16" class="kpi-tile__icon"></lucide-icon>
+      </div>
+      <p class="kpi-tile__value">{{ animatedStats.totalCandidates }}<span class="kpi-tile__unit">in pipeline</span></p>
+      <tm-stat-delta [value]="dashboardStats.trends.candidatesDeltaWeek"></tm-stat-delta>
+    </tm-card>
+  </section>
+
+  <tm-card class="section-card funnel-section">
+    <div class="section-card__header funnel-header">
+      <div>
+        <h2 class="section-card__title">
+          <lucide-icon name="filter" [size]="16"></lucide-icon>
+          {{ currentFunnelTitle }}
+        </h2>
+        <div class="funnel-substats">
+          <span class="funnel-substat">
+            <lucide-icon name="users" [size]="13"></lucide-icon>
+            {{ getFunnelTotal() }} candidate{{ getFunnelTotal() !== 1 ? 's' : '' }}
+          </span>
+          <span class="funnel-substat">
+            <lucide-icon name="trending-up" [size]="13"></lucide-icon>
+            {{ getOverallConversionRate() }}% conversion
+          </span>
+          <span class="funnel-substat funnel-substat--warning" *ngIf="getBiggestDropoff() as dropoff">
+            <lucide-icon name="triangle-alert" [size]="13"></lucide-icon>
+            Biggest drop: {{ dropoff.from }} → {{ dropoff.to }} ({{ dropoff.drop }}%)
+          </span>
+        </div>
+      </div>
+      <tm-badge tone="green">{{ getHealthyPositionsCount() }}/{{ funnels.length }} healthy</tm-badge>
+    </div>
+
+    <div class="funnel-filters">
+      <button class="status-filter" [class.status-filter--active]="selectedPositionStatus === 'all'" (click)="changeStatusFilter('all')">All</button>
+      <button class="status-filter" [class.status-filter--active]="selectedPositionStatus === PositionStatus.ACTIVE" (click)="changeStatusFilter(PositionStatus.ACTIVE)">Active</button>
+      <button class="status-filter" [class.status-filter--active]="selectedPositionStatus === PositionStatus.PAUSED" (click)="changeStatusFilter(PositionStatus.PAUSED)">Paused</button>
+      <button class="status-filter" [class.status-filter--active]="selectedPositionStatus === PositionStatus.CLOSED" (click)="changeStatusFilter(PositionStatus.CLOSED)">Closed</button>
+    </div>
+
+    <div class="position-tabs">
+      <div class="position-tab" [class.position-tab--active]="selectedPositionId === null" (click)="selectPosition(null)">
+        <div class="position-tab__content"><span>All positions</span></div>
+        <button class="position-tab__preview-btn" (click)="openPositionsListPreview($event)">
+          <lucide-icon name="external-link" [size]="14"></lucide-icon>
+        </button>
+      </div>
+      <div *ngFor="let pos of funnels" class="position-tab" (click)="selectPosition(pos.positionId)" [class.position-tab--active]="selectedPositionId === pos.positionId">
+        <div class="position-tab__content">
+          <span>{{ pos.positionTitle }}</span>
+          <span class="position-tab__count">{{ pos.applicantsCount }}</span>
+          <span class="position-health-dot" [class.position-health-dot--danger]="isPositionUnhealthy(pos)"></span>
+        </div>
+        <button class="position-tab__preview-btn" (click)="openPosition(pos.positionId, $event)">
+          <lucide-icon name="external-link" [size]="14"></lucide-icon>
+        </button>
+      </div>
+    </div>
+
+    <div class="funnel-chart-wrap">
+      <svg class="funnel-svg" [attr.width]="svgWidth" [attr.height]="svgHeight" [attr.viewBox]="'0 0 ' + svgWidth + ' ' + svgHeight">
+        <g *ngFor="let seg of getFunnelSegments()" (click)="openApplicantsByPositionStageType(seg, $event)" class="clickable">
+          <path class="funnel-segment" [class.funnel-segment--danger]="seg.isDropoff" [attr.d]="seg.path" [attr.fill]="seg.color" [attr.opacity]="seg.isEmpty ? 0 : 1"></path>
+          <text [attr.x]="seg.labelX" [attr.y]="seg.labelY" text-anchor="middle" class="funnel-label--value">{{ seg.value }}</text>
+        </g>
+      </svg>
+      <div class="funnel-labels">
+        <div *ngFor="let seg of getFunnelSegments()" class="funnel-label-item clickable" (click)="openApplicantsByPositionStageType(seg, $event)" [style.height.px]="getSegmentHeight()" [class.funnel-label-item--danger]="seg.isDropoff">
+          <div class="funnel-label-left">
+            <span class="funnel-dot" [style.background]="seg.color"></span>
+            <div>
+              <div class="funnel-label-name">{{ seg.name }}</div>
+              <div class="funnel-label-conversion">{{ seg.conversionRate }}% conversion</div>
+            </div>
+          </div>
+          <div class="funnel-label-right">
+            <div class="funnel-label-val">{{ seg.value }}</div>
+            <div class="funnel-label-days">{{ seg.avgDays }}d avg</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="selectedPositionDetail" class="position-detail">
+      <div class="position-detail__info">
+        <h3>{{ selectedPositionDetail.positionTitle }}</h3>
+        <div class="position-detail__meta">{{ selectedPositionDetail.positionStatus }}</div>
+      </div>
+      <button class="link-accent" (click)="openPosition(selectedPositionDetail.positionId, $event)">
+        View position details
+        <lucide-icon name="chevron-right" [size]="14"></lucide-icon>
+      </button>
+    </div>
+  </tm-card>
+
+  <div class="bottom-grid">
+    <tm-card class="section-card pipeline-summary">
+      <div class="section-card__header">
+        <h2 class="section-card__title">Pipeline Summary</h2>
+        <span (click)="openPositionsListPreview($event)" class="link-accent clickable">
+          View all
+          <lucide-icon name="chevron-right" [size]="14"></lucide-icon>
+        </span>
+      </div>
+      <div class="positions-list">
+        <div *ngFor="let position of funnels" class="position-row" (click)="openPosition(position.positionId, $event)">
+          <div class="position-row__head">
+            <div>
+              <h3 class="position-row__title clickable" (click)="openPosition(position.positionId, $event)">{{ position.positionTitle }}</h3>
+              <span class="position-row__dept">{{ position.positionStatus }}</span>
+            </div>
+            <div class="position-row__total" (click)="openApplicants(position, $event)">
+              <span>{{ position.applicantsCount }}</span>
+              <p>candidates</p>
+            </div>
+          </div>
+          <div class="pipeline-bar">
+            <div *ngFor="let stage of position.pipelineStagesInfo; let idx = index" class="pipeline-bar__segment" [style.width.%]="getStageWidth(position, stage)" [style.background]="getStageColor(idx)"></div>
+          </div>
+          <div class="stage-counts">
+            <div *ngFor="let stage of position.pipelineStagesInfo" class="stage-count">
+              <span class="stage-count__label">{{ stage.stageName }}</span>
+              <span class="stage-count__val">{{ stage.candidatesCount }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </tm-card>
+
+    <tm-card class="section-card">
+      <div class="section-card__header">
+        <h2 class="section-card__title">
+          <lucide-icon name="video" [size]="16"></lucide-icon>
+          Upcoming Meetings
+        </h2>
+        <span class="link-accent clickable" (click)="openMeetingsList($event)">View all</span>
+      </div>
+      <div class="meetings-list">
+        @if(upcomingMeetings && upcomingMeetings?.length) {
+          <div *ngFor="let meeting of upcomingMeetings" class="meeting-item" (click)="openMeetingPreview(meeting, $event)">
+            <div class="meeting-item__left">
+              <div class="meeting-platform" [ngClass]="getPlatformClass(meeting.platform)">
+                <lucide-icon [name]="getPlatformIcon(meeting.platform)" [size]="16"></lucide-icon>
+              </div>
+              <div class="meeting-item__info">
+                <div class="meeting-item__top">
+                  <div class="meeting-item__topic">{{ meeting.topic || 'Untitled meeting' }}</div>
+                  <tm-badge [tone]="getStatusClass(meeting.status) === 'confirmed' ? 'green' : getStatusClass(meeting.status) === 'cancelled' ? 'red' : 'neutral'">
+                    {{ getStatusLabel(meeting.status) }}
+                  </tm-badge>
+                </div>
+                <div class="meeting-item__participants">{{ getParticipantNames(meeting.participants) }}</div>
+                <div class="meeting-item__meta">
+                  <span class="meeting-meta-block"><lucide-icon name="calendar" [size]="12"></lucide-icon>{{ meeting.date | date:'MMM d, y' }}</span>
+                  <span class="meeting-meta-block"><lucide-icon name="clock" [size]="12"></lucide-icon>{{ meeting.startTime | date:'HH:mm' }}</span>
+                  <span class="meeting-meta-block"><lucide-icon name="timer" [size]="12"></lucide-icon>{{ formatDuration(meeting) }}</span>
+                </div>
+                <div class="meeting-actions" (click)="$event.stopPropagation()">
+                  <a *ngIf="meeting?.meetingLinkEvryka" [href]="meeting?.meetingLinkEvryka" target="_blank" class="meeting-action-btn">Talemistry</a>
+                  <a *ngIf="meeting?.meetingLinkGoogleMeets?.hangoutLink" [href]="meeting?.meetingLinkGoogleMeets?.hangoutLink" target="_blank" class="meeting-action-btn">Google Meet</a>
+                  <a *ngIf="meeting?.meetingLinkZoom?.join_url" [href]="meeting?.meetingLinkZoom?.join_url" target="_blank" class="meeting-action-btn">Zoom</a>
+                  <a *ngIf="meeting?.meetingLinkTeams?.joinUrl" [href]="meeting?.meetingLinkTeams?.joinUrl" target="_blank" class="meeting-action-btn">Teams</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        } @else {
+          <div class="meetings-empty">
+            <lucide-icon name="calendar-x" [size]="24"></lucide-icon>
+            <div class="meetings-empty__title">No upcoming meetings</div>
+            <div class="meetings-empty__text">Your scheduled interviews and calls will appear here.</div>
+          </div>
+        }
+      </div>
+    </tm-card>
+  </div>
+</div>

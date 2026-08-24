@@ -1,0 +1,26 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+
+.width-definition {
+    min-width: 15rem;
+    width: fit-content;
+}
+
+.button--micro {
+    border-radius: 50%;
+    padding: 0 !important;
+    width: 3rem;
+}
+
+.container__align {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    gap: $gap-micro;
+    margin-bottom: $margin-extra-wide;
+}
+
+.orange-back {
+    background: linear-gradient(45deg, #C78A00, #D77400, #E76A00, #F66411);
+}

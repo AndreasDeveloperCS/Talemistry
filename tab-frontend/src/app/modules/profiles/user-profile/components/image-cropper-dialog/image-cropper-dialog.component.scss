@@ -1,0 +1,68 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.download-button {
+    position: relative;
+    top: 2rem;
+    left: 2rem;
+    width: 150px;
+    height: 40px;
+    display: flex;
+    align-self: baseline;
+    vertical-align: bottom;
+    justify-self: baseline;
+}
+
+.disabled {
+    color: var(--dark-grey);
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.cropper-modal {
+    height: 98vh;
+    padding: 1rem;
+    max-width: $screen-size-netbook;
+    width: $screen-size-netbook;
+    max-height: 60vh;
+
+    @media screen and (max-width: $screen-size-netbook) {
+        width: 100%;
+    }
+}
+
+.croper {
+    margin-top: 3rem;
+    max-height: 50vh;
+    width: 100%;
+    max-width: $screen-size-netbook;
+
+    @media screen and (max-width: $screen-size-netbook) {
+        width: 100%;
+    }
+}
+
+.cropper-dialog-exit {
+    color: var(--evryka);
+    z-index: 3;
+}
+
+
+
+label {
+    display: inline-block;
+    cursor: pointer;
+    border: 2px dashed;
+    border-radius: 5px;
+    width: 150px;
+    height: 30px;
+    color: #3d3b3b;
+
+    span {
+        margin: 5px;
+    }
+}
+
+input[type="file"] {
+    display: none;
+}

@@ -1,0 +1,46 @@
+<div class="notification-card">
+  <div class="card-header">
+    <h2 class="card-title">Message Notification Preferences</h2>
+    <p class="card-subtitle">Choose how you want to be notified about new messages from recruiters</p>
+  </div>
+
+  <div class="subheader-info">
+      <mat-icon class="material-icons info-icon">info</mat-icon>
+      <span class="info-text">{{ getEnabledCount() }} notification method(s) enabled</span>
+    </div>
+
+  <div class="channels-list">
+    <div 
+      *ngFor="let channel of channels" 
+      class="channel-card"
+      [class.channel-enabled]="channel.enabled">
+      <div class="channel-icon">
+        <img [src]="channel.image" class="material-icons"/>
+        <!-- <mat-icon class="material-icons">{{ channel.icon }}</mat-icon> -->
+      </div>
+      <div class="channel-info">
+        <h3 class="channel-name">{{ channel.name }}</h3>
+        <p class="channel-description">{{ channel.description }}</p>
+      </div>
+      <label class="toggle-switch">
+        <input 
+          type="checkbox" 
+          [(ngModel)]="channel.enabled"
+          (change)="onToggleChange()"
+        />
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+  </div>
+<!-- [disabled]="!hasChanges || isSaving" -->
+  <div class="card-footer">
+    <button 
+      class="save-button"
+      [class.has-changes]="hasChanges"
+      (click)="savePreferences()">
+      <mat-icon class="material-icons button-icon" *ngIf="!isSaving">save</mat-icon>
+      <span class="spinner" *ngIf="isSaving"></span>
+      {{ isSaving ? 'Saving...' : 'Save Preferences' }}
+    </button>
+  </div>
+</div>

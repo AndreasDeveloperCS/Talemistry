@@ -1,0 +1,67 @@
+<button title="role" mat-icon-button class="close-button" (click)="cancel()">
+    <mat-icon>
+        <svg width="1.5rem" height="1.5rem" viewBox="0 0 108 107" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M27 26.75L54 53.5L81 26.75" stroke="white" stroke-width="10" stroke-linecap="round" />
+            <path d="M27 80.25L54 53.5L81 80.25" stroke="white" stroke-width="10" stroke-linecap="round" />
+        </svg>
+    </mat-icon>
+</button>
+
+<h2>{{ content.roleFormTitle }}</h2>
+<div class="container__left">
+    <app-toggle-button 
+        [isActive]="isRoleActive()" 
+        (toggle)="toggleRoleActive()">
+    </app-toggle-button>
+</div>  
+<div class="universal-input">
+    <form [formGroup]="roleForm">
+        <mat-form-field class="input-group universal-input">
+            <mat-label class="form-field">{{ content.txtCode }}</mat-label>
+            <input matInput formControlName="code" required [placeholder]="content.txtCode" />
+            <mat-error *ngIf="roleForm.get('code')?.hasError('required')">{{ content.txtCodeIsRequired }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="container__full-width">
+            <mat-label class="form-field">{{ content.txtDescription }}</mat-label>
+            <input matInput formControlName="description" [placeholder]="content.txtDescription" />
+            <mat-error *ngIf="roleForm.get('description')?.hasError('required')">{{ content.txtDescriptionIsRequired
+                }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="container__full-width">
+            <mat-label class="form-field">{{ content.txtProfileRoute }}</mat-label>
+            <input matInput formControlName="route" [placeholder]="content.txtFieldRequired" />
+            <mat-error *ngIf="roleForm.get('route')?.hasError('required')">{{ content.txtFieldRequired }}</mat-error>
+        </mat-form-field>
+
+        <div class="register-value-container">
+            <button mat-icon-button color="primary" (click)="decrementRegisterValue()">
+                <mat-icon>remove</mat-icon>
+            </button>
+            <mat-form-field>
+                <mat-label class="form-field">{{ content.txtRegisterValue }}</mat-label>
+                <input matInput formControlName="registerValue" readonly [placeholder]="content.txtRegisterValue" />
+            </mat-form-field>
+            <button mat-icon-button (click)="incrementRegisterValue()">
+                <mat-icon>add</mat-icon>
+            </button>
+        </div>
+
+        <mat-form-field>
+            <mat-label class="form-field">{{ content.txtBitValue }}</mat-label>
+            <input matInput formControlName="bitValue" readonly class="valid" />
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label class="form-field">{{ content.txtNumberValue }}</mat-label>
+            <input matInput formControlName="numberValue" readonly class="valid" />
+        </mat-form-field>        
+
+    </form>
+    <div mat-dialog-actions [align]="'end'" class="container__center">
+        <button (click)="save()" class="button__primary-color button--medium container__center">
+            {{ controlButtonContent }}
+        </button>
+    </div>
+</div>

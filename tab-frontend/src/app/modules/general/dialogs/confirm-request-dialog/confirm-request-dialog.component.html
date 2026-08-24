@@ -1,0 +1,11 @@
+
+<div class="dialog-padding container__flex container__column_gap">
+    <div class="custom-dialog-title container__center dialog-header">{{content.txtConfirmation}}</div>
+    <div mat-dialog-content class="custom-dialog-content container__center">
+        {{data.message}}
+    </div>
+    <div mat-dialog-actions class="container__center container__flex">
+        <button class="button-confirm button--small" (click)="confirm()">{{content.txtYes}}</button>
+        <button class="button-reject button--small" (click)="reject()">{{content.txtNo}}</button>
+    </div>
+</div>

@@ -1,0 +1,11 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+:host {
+    display: block;
+    max-width: 100%;
+}
+
+mat-form-field {
+    padding: 0 !important;
+}

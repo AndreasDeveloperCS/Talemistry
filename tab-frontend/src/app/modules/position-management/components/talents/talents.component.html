@@ -1,0 +1,75 @@
+@if(!isLoading) {
+  @if(candidatesView.length > 0) {
+  <div class="candidate-container">
+    <div class="header">
+      <h2><mat-icon>connect_without_contact</mat-icon>Talent Pipeline</h2>
+      <div class="sort-buttons">
+        <button
+          [class.active]="sortMode === 'score'"
+          (click)="setSortMode('score')">
+          <mat-icon>grade</mat-icon>
+          By Score
+        </button>
+        <button
+          [class.active]="sortMode === 'date'"
+          (click)="setSortMode('date')">
+          <mat-icon>calendar_today</mat-icon>
+          By Date
+        </button>
+      </div>
+    </div>
+
+    @for(c of candidatesView; track c) {
+      <div class="candidate-box">
+        <div class="candidate-info">
+            <div class="avatar">
+                <img *ngIf="c.photoUrl; else noPhoto" [src]="c.photoUrl" alt="Photo of {{ c.talentName }}" />
+                <ng-template #noPhoto>
+                  <mat-icon>person</mat-icon>
+                </ng-template>
+            </div>
+          <div class="details">
+            <h3>{{ c.talentName }} (...{{ c.shortTalentId }})</h3>
+            <div class="pipeline">
+              <div style="display: flex; align-items: center;" *ngFor="let stage of c.stages; let last = last">
+                <div
+                  class="stage"
+                  [ngClass]="stage.status"
+                  (click)="viewStageInfo(stage)"
+                  [ngStyle]="stage.name === pipelineInterview ? { cursor: 'pointer' } : {}">
+                  <mat-icon>{{ stage.icon }}</mat-icon>
+                  {{ stage.name }}
+                </div>
+                <div *ngIf="!last" class="connector"></div>
+              </div>
+            </div>
+            <div class="progress-bar">
+                <div
+                    class="progress-bar-fill"
+                    [ngStyle]="{ width: c.overallScore + '%' }">
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="meta-info">
+          <span class="score-tag">
+            <mat-icon>grade</mat-icon>
+            <span class="score-tag-lbl">Score: </span>{{ c.overallScore }}%
+          </span>
+          <button class="details-btn">Details</button>
+          <div class="applied">
+            <mat-icon>calendar_today</mat-icon>
+            <strong>{{ c.createdDate | date:'dd.MM.yyyy' }}</strong>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+  }
+  @if(candidatesView.length === 0) {
+    <div class="no-candidates">
+      <p>No candidates found for this position.</p>
+    </div>
+  }
+}

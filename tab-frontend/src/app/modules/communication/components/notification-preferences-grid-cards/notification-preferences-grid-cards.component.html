@@ -1,0 +1,60 @@
+<div class="grid-container">
+  <div class="grid-header">
+    <div class="header-top">
+      <h2 class="grid-title">Notification Channels</h2>
+      <div class="status-pill">
+        <span class="status-dot"></span>
+        <span class="status-text">{{ getEnabledCount() }} Active</span>
+      </div>
+    </div>
+    <p class="grid-description">
+      Tap cards to enable or disable notification methods for new recruiter messages
+    </p>
+  </div>
+
+  <div class="cards-grid">
+    <div 
+      *ngFor="let channel of channels" 
+      class="channel-card"
+      [class.card-active]="channel.enabled"
+      (click)="toggleChannel(channel)">
+      <div class="card-inner">
+        <div class="card-icon-container">
+          <img [src]="channel.image" class="material-icons"/>
+          <!-- <mat-icon class="material-icons card-icon">{{ channel.icon }}</mat-icon> -->
+        </div>
+        <h3 class="card-name">{{ channel.name }}</h3>
+        <span class="card-description">{{ channel.description }}</span>
+        <div class="card-status">
+          <mat-icon class="material-icons status-icon">
+            {{ channel.enabled ? 'check_circle' : 'radio_button_unchecked' }}
+          </mat-icon>
+          <span class="status-label">
+            {{ channel.enabled ? 'Enabled' : 'Disabled' }}
+          </span>
+        </div>
+      </div>
+      <div class="card-overlay" *ngIf="channel.enabled">
+        <mat-icon class="material-icons overlay-check">check</mat-icon>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-footer">
+    <div class="footer-hint">
+      <mat-icon class="material-icons hint-icon">touch_app</mat-icon>
+      <span class="hint-text">Click on any card to toggle</span>
+    </div>
+    <button 
+      class="action-button"
+      [class.button-highlighted]="hasChanges"
+      (click)="savePreferences()">
+      <span class="button-spinner" *ngIf="isSaving"></span>
+      <mat-icon class="material-icons button-icon">save</mat-icon>
+      <span class="button-text">
+        <!-- {{ isSaving ? 'Applying...' : hasChanges ? 'Apply Changes' : 'Saved' }} -->
+        {{ isSaving ? 'Applying...' : 'Save' }}
+      </span>
+    </button>
+  </div>
+</div>

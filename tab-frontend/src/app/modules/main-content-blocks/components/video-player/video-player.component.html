@@ -1,0 +1,22 @@
+<div class="video-wrapper">
+    <video #videoEl class="video" [autoplay]="true" [loop]="true" [muted]="true" z-index="1" [src]="src" playsinline
+        muted preload="metadata">
+    </video>
+
+
+    <!-- Initial loading overlay -->
+    @if(isLoading()) {
+    <div class="overlay">
+        <div class="spinner"></div>
+        <div>Loading video…</div>
+    </div>
+    }
+
+    @if(!isLoading() && isBuffering()) {
+    <div class="overlay">
+        <div class="spinner"></div>
+        <div>Buffering…</div>
+    </div>
+    }
+
+</div>

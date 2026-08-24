@@ -1,0 +1,133 @@
+@use "variables" as *;
+@use "global" as *;
+
+.container-import {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+}
+
+.textarea-button {
+  bottom: 10px;
+  left: calc((100% - 20rem) / 2);
+  opacity: 0.3 !important;
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 100;
+  margin: auto;
+  white-space: nowrap;
+  &:hover {
+    opacity: 100 !important;
+  }
+
+  &:active {
+    opacity: 100 !important;
+  }
+}
+
+.add-cv-button {
+  background-color: $primaryThree !important;
+}
+
+.import-file-title {
+  color: var(--text);
+  font-size: small;
+  background-color: red !important;
+}
+
+.import-btn-input {
+  align-items: center;
+  align-content: center;
+  text-align: center;
+}
+
+.select-cv-button-layout {
+  display: flex;
+  width: 28.125rem;
+  padding: 0.625rem 1.875rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.625rem;
+  background-color: black !important;
+}
+
+.button-container {
+  position: absolute;
+  bottom: -24rem;
+  right: calc((100% - 20rem) / 2);
+  display: flex;
+  gap: 10px;
+
+  @media (max-width: $screen-size-mobile) {
+    flex-wrap: wrap;
+  }
+}
+
+.button-container__cover-letter {
+  right: calc((100% - 20rem) / 2);
+  display: flex;
+  gap: 10px;
+  margin: -5rem auto 2rem;
+
+  @media (max-width: $screen-size-mobile) {
+    flex-wrap: wrap;
+  }
+}
+.universal-input .mat-mdc-text-field-wrapper.mdc-text-field,
+.import-cv-container .container,
+.mat-mdc-text-field-wrapper.mdc-text-field.mdc-text-field--filled.mdc-text-field--no-label {
+  @media (max-width: $screen-size-mobile) {
+    padding-inline: 0;
+  }
+}
+.container-wrapper-horizontal {
+  @media (max-width: $screen-size-mobile) {
+    align-items: flex-start !important;
+    margin-bottom: 0 !important;
+  }
+}
+button.button__primary-color.button--medium.btn-text-icon {
+  @media (max-width: $screen-size-mobile) {
+    max-width: 100%;
+  }
+}
+
+.mat-mdc-input-element.cdk-textarea-autosize.transparent-input.ng-pristine.ng-valid.mat-mdc-form-field-textarea-control.mat-mdc-form-field-input-control.mdc-text-field__input {
+  @media (max-width: $screen-size-mobile) {
+    min-width: 200px;
+  }
+}
+:host ::ng-deep textarea.transparent-input {
+  resize: none;
+}
+@media (max-width: $screen-size-mobile) {
+  :host ::ng-deep textarea.transparent-input {
+    min-height: 80px;
+    min-height: 200px !important;
+    height: 200px !important;
+  }
+  :host ::ng-deep input#mat-mdc-dialog-title-0 {
+    margin-inline: 0 !important;
+    width: 100% !important;
+  }
+  :host
+    ::ng-deep
+    .mat-mdc-text-field-wrapper.mdc-text-field.mdc-text-field--filled.mdc-text-field--no-label {
+    padding-inline: 0;
+  }
+  .button-container__cover-letter {
+    justify-content: space-between;
+    width: 100%;
+  }
+  :host ::ng-deep textarea.transparent-input[cdkTextareaAutosize] {
+    --cdk-textarea-autosize-min-rows: 4 !important;
+    --cdk-textarea-autosize-max-rows: 6 !important;
+  }
+  .import-cv-container {
+    padding-top: 1rem;
+  }
+}

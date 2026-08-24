@@ -1,0 +1,76 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+.max-input-width-middle {
+  max-width: $max-input-width-middle;
+
+  @media (max-width: $screen-size-tab) {
+    max-width: 100%;
+  }
+}
+
+mat-label.skill-label {
+  color: var(--text);
+  margin-left: $margin-middle;
+  font-size: $font-size-header-narrow;
+}
+
+.mat-form-field .company-name {
+  position: relative;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.mat-error {
+  height: 100%;
+}
+
+.form-container-items {
+  display: flex;
+  flex-direction: column;
+  gap: $gap-middle;
+}
+
+.skill-text-area,
+input {
+  width: 100%;
+
+}
+
+
+.horizontal-width-middle {
+  align-items: flex-end !important;
+
+}
+
+.baseline {
+  align-items: baseline;
+}
+
+:host ::ng-deep .mat-mdc-form-field-infix {
+  //padding-top: 16px;
+  padding-bottom: 16px;
+  display: flex;
+  align-items: flex-end;
+}
+
+.job-title {
+  align-items: flex-end;
+  flex-direction: column;
+  width: fit-content !important;
+  justify-content: right;
+  display: flex;
+}
+
+.job-input {
+  width: $job-width;
+}
+
+.container-space-between {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

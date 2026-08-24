@@ -1,0 +1,115 @@
+@if(loading) {
+  <app-sun-spinner></app-sun-spinner>
+}
+@if(!loading && position) {
+<div class="position-preview">
+  <div class="position-preview__hero">
+    <div class="position-preview__hero-top">
+      <div class="position-preview__status">{{ position.status }}</div>
+      <div *ngIf="position.isVerified" class="verified-badge">
+        <mat-icon>verified</mat-icon>
+        Verified
+      </div>
+    </div>
+    <h1 class="position-preview__title">{{ position.title }}</h1>
+    <button class="company-link" (click)="openCompany()">
+      <mat-icon>business</mat-icon>
+      {{ position.positionDetails.company.data.companyName }}
+    </button>
+    <div class="position-preview__meta">
+      <div class="meta-pill">
+        <mat-icon>work</mat-icon>
+        {{ position.positionDetails.conditions.jobType }}
+      </div>
+      <div class="meta-pill">
+        <mat-icon>handshake</mat-icon>
+        {{ position.positionDetails.conditions.cooperationType }}
+      </div>
+      <div class="meta-pill">
+        <mat-icon>language</mat-icon>
+        {{ position.positionDetails.general.workPlace }}
+      </div>
+      <div class="meta-pill">
+        <mat-icon>payments</mat-icon>
+        €{{ position.positionDetails.conditions.budget.maxBudgetAmount }}
+      </div>
+    </div>
+    <div class="preview-actions">
+      <button class="preview-action-btn" (click)="openInNewTab()">
+        <mat-icon>open_in_new</mat-icon>
+        Open Tab
+      </button>
+      <button class="preview-action-btn" (click)="copyLink()">
+        <mat-icon>content_copy</mat-icon>
+        Copy Position Link
+      </button>
+      <button class="preview-action-btn" (click)="openCompany()">
+        <mat-icon>visibility</mat-icon>
+        View Company
+      </button>
+    </div>
+  </div>
+  @if(isVisible) {
+    <div class="position-preview">
+      <div class="quick-action-card" (click)="openApplicants()">
+        <div class="quick-action-card__icon">
+          <mat-icon>group</mat-icon>
+        </div>
+        <div>
+          <div class="quick-action-card__title">Applicants</div>
+          <div class="quick-action-card__subtitle">View candidates pipeline</div>
+        </div>
+      </div>
+    </div>
+  }
+  <div *ngIf="skills?.length" class="position-preview__section">
+    <div class="section-header">
+      <div class="section-header__left">
+        <mat-icon>psychology</mat-icon>
+        <h2>Skills</h2>
+      </div>
+    </div>
+    <div class="skills-list">
+      <div *ngFor="let skill of skills" class="skill-chip">
+        {{ skill.skillName }}
+      </div>
+    </div>
+  </div>
+  <div class="position-preview__section">
+    <div class="section-header">
+      <div class="section-header__left">
+        <mat-icon>rule</mat-icon>
+        <h2>Requirements</h2>
+      </div>
+    </div>
+    <div class="section-content" [innerHTML]="formatSectionContent(position.requirements?.sectionContent)"></div>
+  </div>
+  <div class="position-preview__section">
+    <div class="section-header">
+      <div class="section-header__left">
+        <mat-icon>description</mat-icon>
+        <h2>Project Description</h2>
+      </div>
+    </div>
+    <div class="section-content" [innerHTML]="formatSectionContent(position.projectDescription?.sectionContent)"></div>
+  </div>
+  <div class="position-preview__section">
+    <div class="section-header">
+      <div class="section-header__left">
+        <mat-icon>task_alt</mat-icon>
+        <h2>Responsibilities</h2>
+      </div>
+    </div>
+    <div class="section-content" [innerHTML]="formatSectionContent(position.jobResponsibilities?.sectionContent)"></div>
+  </div>
+  <div class="position-preview__section">
+    <div class="section-header">
+      <div class="section-header__left">
+        <mat-icon>workspace_premium</mat-icon>
+        <h2>Benefits</h2>
+      </div>
+    </div>
+    <div class="section-content" [innerHTML]="formatSectionContent(position.benefits?.sectionContent)"></div>
+  </div>
+</div>
+}

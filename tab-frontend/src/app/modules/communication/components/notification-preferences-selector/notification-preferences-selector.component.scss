@@ -1,0 +1,141 @@
+@use 'variables' as *;
+@use 'global' as *;
+
+mat-icon {
+    flex-shrink: 0;
+    height: fit-content;
+    width: fit-content;
+}
+
+.app-container {
+  //min-height: 100vh;
+  background: transparent;
+  padding: 40px 20px;
+  //box-shadow: var(--box-shadow-light);
+  border-radius: 10px;
+}
+
+.app-header {
+  max-width: 900px;
+  margin: 0 auto 32px;
+  text-align: center;
+}
+
+.header-content {
+  padding: 32px;
+  background: linear-gradient(135deg, #037F8C 0%, #008C94 50%, #3bd3d4 100%);
+  border-radius: 20px;
+  color: #ffffff;
+  box-shadow: var(--box-shadow-light);
+}
+
+.header-title {
+  margin: 0 0 8px;
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.variant-selector {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin: 0 auto 40px;
+  flex-wrap: wrap;
+}
+
+.variant-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 20px 24px;
+  background: transparent;
+  box-shadow: var(--box-shadow-light);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 140px;
+
+  .material-icons {
+    font-size: 32px;
+    color: var(--text);
+    transition: all 0.3s ease;
+  }
+
+  &:hover {
+    border-color: $pallete-0-color-14;
+    box-shadow: 0 0 5px $pallete-0-color-14;
+    transform: translateY(-2px);
+
+    .material-icons {
+      color: $pallete-0-color-12;
+    }
+  }
+
+  &.active {
+    border-color: #f97316;
+    box-shadow: 0 0 5px $pallete-0-color-14;
+    background-color: $pallete-0-color-14;
+
+    .material-icons {
+      color: var(--text);
+    }
+
+    .variant-label {
+      color: var(--text);
+    }
+  }
+}
+
+.variant-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  transition: all 0.3s ease;
+}
+
+.variant-desc {
+  font-size: 13px;
+  color: var(--text);
+  opacity: 0.8;
+}
+
+.content-area {
+  margin: 0 auto;
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .app-container {
+    padding: 24px 16px;
+  }
+
+  .header-content {
+    padding: 24px 20px;
+  }
+
+  .header-title {
+    font-size: 28px;
+  }
+
+  .variant-selector {
+    gap: 12px;
+  }
+
+  .variant-button {
+    padding: 16px 20px;
+    min-width: 120px;
+  }
+}

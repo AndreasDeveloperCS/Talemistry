@@ -1,0 +1,18 @@
+<div class="gdpr-confirmation-elements toggle-switch">
+
+  <div class="confirm-element">
+    <!-- <mat-slide-toggle (change)="valueChanged($event)" [checked]="amAgree">
+    </mat-slide-toggle> -->
+    <app-toggle-button [isActive]="amAgree" (toggle)="valueChanged($event)">
+    </app-toggle-button>
+    <span class="text-confirmation">{{confirmationText}}</span>
+  </div>
+    
+    <div class="confirm-element">
+      <app-toggle-button [isActive]="!amAgree" (toggle)="valueChanged($event)">
+      </app-toggle-button>
+      <!-- <mat-slide-toggle (change)="valueChanged($event)" [checked]="!amAgree">
+      </mat-slide-toggle> -->
+      <span class="text-confirmation">{{refusionText}}</span>
+    </div>
+</div>
