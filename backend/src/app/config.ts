@@ -30,6 +30,15 @@ export const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
 if (!process.env.MONGO_URI && config.mongoCloudConnection) {
   process.env.MONGO_URI = config.mongoCloudConnection;
 }
+if (!process.env.JWT_SECRET && config.secret) {
+  process.env.JWT_SECRET = config.secret;
+}
+if (!process.env.SECRET && config.secret) {
+  process.env.SECRET = config.secret;
+}
+if (!process.env.REFRESH_JWT_SECRET && config.refreshSecret) {
+  process.env.REFRESH_JWT_SECRET = config.refreshSecret;
+}
 
 export const serviceConfig = config.serviceConfig;
 export const corsClientHostHttp = config.corsClientHostHttp;
