@@ -27,6 +27,10 @@ if (!fs.existsSync(configPath)) {
 }
 export const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
 
+if (!process.env.MONGO_URI && config.mongoCloudConnection) {
+  process.env.MONGO_URI = config.mongoCloudConnection;
+}
+
 export const serviceConfig = config.serviceConfig;
 export const corsClientHostHttp = config.corsClientHostHttp;
 export const corsClientHostHttps = config.corsClientHostHttps;
