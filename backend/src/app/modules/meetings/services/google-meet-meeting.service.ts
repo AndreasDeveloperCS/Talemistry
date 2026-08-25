@@ -2,30 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { google } from 'googleapis';
 const { authenticate } = require('@google-cloud/local-auth');
 
-import * as fs from 'fs';
-import * as path from 'path';
-import { cwd } from 'process';
-import { getBaseDir } from '../../../common/utils/path.helper';
-
 @Injectable()
 export class GoogleMeetMeetingService {
-  private readonly fileName = "google.api.calendar-461909-v3-70dee0837e58.json";
   private readonly scopes = ['https://www.googleapis.com/auth/calendar'];
   private readonly profileEmail = process.env.GOOGLE_PROFILE_EMAIL;
 
   private async getJWTClient(): Promise<any> {
-    const baseDir = getBaseDir();
-    const keyPath = path.join(
-      baseDir,
-      'google.api.calendar-461909-v3-70dee0837e58.json'
-    );
-    // const keyPath = path.join(getBaseDir('getJWTClient'), this.fileName);
-    const credentials = JSON.parse(fs.readFileSync(keyPath, 'utf8'));
-    console.log(keyPath);
-
     const jwtClient = new google.auth.JWT({
-      email: credentials.client_email,
-      key: credentials.private_key,
+      email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+      key: process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY,
       scopes: this.scopes,
       subject: this.profileEmail,
     });

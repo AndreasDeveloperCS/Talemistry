@@ -29,9 +29,14 @@ github-actions-deploy.pub
 SERVER_KNOWN_HOSTS
 
 # backend runtime config and secrets (see *.example.json for the template)
-
+#backend/config.json
+#backend/config.prod.json
 
 # TLS certs/keys and service account credentials - never commit real ones
+#backend/ssl/
+#backend/client_certs/
+#backend/cloudfront/
+#backend/google.api.calendar-*.json
 
 **/node_modules/
 dist/

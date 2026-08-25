@@ -13,7 +13,7 @@ export class GeminiService extends BaseService<any> {
 
   private readonly apiUrl = 'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash-002:generateContent';
   private readonly imageApiUrl = 'https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash-001:generateContent';
-  private readonly apiKey = 'AIzaSyDWd9sRIa7l5rQECarG25ZVY6JQM4hgN1I';
+  private readonly apiKey = process.env.GEMINI_API_KEY!;
   private readonly projectNumber = '491769735377';
 
 
