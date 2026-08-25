@@ -44,6 +44,7 @@ module.exports = {
             watch: false,
             env: {
                 ...envConfig,
+                OPENAI_API_KEY: process.env.OPENAI_API_KEY,
                 NODE_ENV: "PROD",
                 // Backend should not share the same port as the Next.js frontend.
                 // Keep API on 4000 so web can reliably bind to 3000.
