@@ -59,7 +59,6 @@ jobs:
             --exclude=".env.local" \
             --exclude=".env.production" \
             --exclude="backend/config.json" \
-            --exclude="backend/config.prod.json" \
             --exclude="backend/google.api.calendar-*.json" \
             --exclude="backend/client_certs" \
             --exclude="backend/ssl" \
