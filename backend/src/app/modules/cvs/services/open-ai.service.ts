@@ -65,12 +65,12 @@ function splitCVIntoSections(cvText: string) {
 export class OpenAIHelperService {
     private MAX_TOKENS = 120000;
     private MODEL = "gpt-5";
-    private openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    private openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY2 });
     private readonly logger = new Logger(OpenAIHelperService.name);
 
     constructor() {
         this.openai = new OpenAI({
-            apiKey: process.env.OPENAI_API_KEY,
+            apiKey: process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY2,
         });
     }
 

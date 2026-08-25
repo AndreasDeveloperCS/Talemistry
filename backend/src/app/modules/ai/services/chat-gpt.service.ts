@@ -10,7 +10,7 @@ import { EmptyModel } from '../../base/models/empty-model';
 @Injectable()
 export class ChatGptService extends BaseService<any> {
 
-  private readonly OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+  private readonly OPENAI_API_KEY = process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY2;
   private readonly API_URL_COMPLETIONS = 'https://api.openai.com/v1/chat/completions';
   private readonly API_URL_IMAGES = 'https://api.openai.com/v1/images/generations';
 
