@@ -100,7 +100,14 @@ jobs:
 
       - name: Start or reload backend
         working-directory: ${{ vars.APP_PATH }}/backend
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPEN_API_KEY }}
         run: |
+          if [ -z "$OPENAI_API_KEY" ]; then
+            echo "The OPEN_API_KEY GitHub secret is missing or empty"
+            exit 1
+          fi
+
           # Clean up legacy process names from older manual deployments.
           pm2 delete EVRYKA || true
 
