@@ -65,13 +65,18 @@ function splitCVIntoSections(cvText: string) {
 export class OpenAIHelperService {
     private MAX_TOKENS = 120000;
     private MODEL = "gpt-5";
-    private openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY2 });
+    private openai?: OpenAI;
     private readonly logger = new Logger(OpenAIHelperService.name);
 
-    constructor() {
-        this.openai = new OpenAI({
-            apiKey: process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY2,
-        });
+    private getOpenAI(): OpenAI {
+        if (!this.openai) {
+            const apiKey = process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY2;
+            if (!apiKey) {
+                throw new Error('OpenAI is not configured. Set OPENAI_API_KEY before using AI features.');
+            }
+            this.openai = new OpenAI({ apiKey });
+        }
+        return this.openai;
     }
 
     async generateStructuredTalentProfileBySections(
@@ -377,7 +382,7 @@ export class OpenAIHelperService {
         Return ONLY JSON.
         `;
 
-        const response = await this.openai.chat.completions.create({
+        const response = await this.getOpenAI().chat.completions.create({
             model: this.MODEL,
             //temperature: 0,
             reasoning_effort: "medium",
@@ -701,7 +706,7 @@ export class OpenAIHelperService {
         `;
 
         try {
-            const response = await this.openai.chat.completions.create({
+            const response = await this.getOpenAI().chat.completions.create({
                 model: this.MODEL,
                 temperature: 0,
                 reasoning_effort: "medium",
