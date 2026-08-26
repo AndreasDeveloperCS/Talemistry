@@ -23,6 +23,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Use supported Node.js version
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
       - name: Show environment
         run: |
           echo "Runner: $(hostname)"
@@ -76,13 +81,19 @@ jobs:
       - name: Start or restart application
         working-directory: ${{ vars.APP_PATH }}
         run: |
-          pm2 delete talemistry-web || true
-          PORT=3000 HOSTNAME=0.0.0.0 pm2 start npm \
+          if command -v sudo >/dev/null 2>&1 && sudo -n true >/dev/null 2>&1; then
+            pm2_cmd() { sudo -n -E env "PATH=$PATH" PM2_HOME=/root/.pm2 pm2 "$@"; }
+          else
+            pm2_cmd() { pm2 "$@"; }
+          fi
+
+          pm2_cmd delete talemistry-web || true
+          PORT=3000 HOSTNAME=0.0.0.0 pm2_cmd start npm \
             --name talemistry-web \
             -- start -- -p 3000 -H 0.0.0.0
 
-          pm2 save
-          pm2 status talemistry-web
+          pm2_cmd save
+          pm2_cmd status talemistry-web
 
       - name: Install backend dependencies
         working-directory: ${{ vars.APP_PATH }}/backend
@@ -136,27 +147,39 @@ jobs:
             echo "OpenAI API key supplied from GitHub Actions secret"
           fi
 
-          # Clean up legacy process names from older manual deployments.
-          pm2 delete EVRYKA || true
+          if command -v sudo >/dev/null 2>&1 && sudo -n true >/dev/null 2>&1; then
+            pm2_cmd() { sudo -n -E env "PATH=$PATH" PM2_HOME=/root/.pm2 pm2 "$@"; }
+          else
+            pm2_cmd() { pm2 "$@"; }
+          fi
 
-          pm2 startOrReload ecosystem.config.js --update-env
-          pm2 save
-          pm2 status TALEMISTRY
+          # Clean up legacy process names from older manual deployments.
+          pm2_cmd delete EVRYKA || true
+
+          pm2_cmd startOrReload ecosystem.config.js --update-env
+          pm2_cmd save
+          pm2_cmd status TALEMISTRY
 
       - name: Verify PM2 processes are online
         run: |
+          if command -v sudo >/dev/null 2>&1 && sudo -n true >/dev/null 2>&1; then
+            pm2_cmd() { sudo -n -E env "PATH=$PATH" PM2_HOME=/root/.pm2 pm2 "$@"; }
+          else
+            pm2_cmd() { pm2 "$@"; }
+          fi
+
           for app in talemistry-web TALEMISTRY; do
             echo "Waiting for PM2 app: ${app}"
             for i in {1..15}; do
-              if pm2 describe "$app" | grep -q "status.*online"; then
+              if pm2_cmd describe "$app" | grep -q "status.*online"; then
                 echo "${app} is online"
                 break
               fi
 
               if [ "$i" -eq 15 ]; then
                 echo "${app} failed to reach online state"
-                pm2 describe "$app" || true
-                pm2 logs "$app" --lines 80 --nostream || true
+                pm2_cmd describe "$app" || true
+                pm2_cmd logs "$app" --lines 80 --nostream || true
                 exit 1
               fi
 
@@ -164,7 +187,7 @@ jobs:
             done
           done
 
-          pm2 list
+          pm2_cmd list
 
       - name: Inject frontend secrets
         working-directory: ${{ vars.APP_PATH }}/tab-frontend
@@ -203,6 +226,12 @@ jobs:
           done
 
           echo "Backend failed to listen on port 4000"
-          pm2 describe TALEMISTRY || true
-          pm2 logs TALEMISTRY --lines 80 --nostream || true
+          if command -v sudo >/dev/null 2>&1 && sudo -n true >/dev/null 2>&1; then
+            pm2_cmd() { sudo -n -E env "PATH=$PATH" PM2_HOME=/root/.pm2 pm2 "$@"; }
+          else
+            pm2_cmd() { pm2 "$@"; }
+          fi
+
+          pm2_cmd describe TALEMISTRY || true
+          pm2_cmd logs TALEMISTRY --lines 80 --nostream || true
           exit 1
