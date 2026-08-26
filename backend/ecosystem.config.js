@@ -28,6 +28,10 @@ if (fs.existsSync(envPath)) {
     console.warn(`⚠️ .env file not found at: ${envPath}`);
 }
 
+const processEnvConfig = Object.fromEntries(
+    Object.entries(process.env).filter(([, value]) => typeof value === 'string' && value.length > 0),
+);
+
 module.exports = {
     apps: [
         {
@@ -43,8 +47,8 @@ module.exports = {
             watch: false,
             env: {
                 ...envConfig,
-                ...process.env,
-                OPENAI_API_KEY: process.env.OPENAI_API_KEY || process.env.OPEN_API_KEY || envConfig.OPENAI_API_KEY || envConfig.OPEN_API_KEY || envConfig.OPENAI_API_KEY2,
+                ...processEnvConfig,
+                OPENAI_API_KEY: process.env.OPENAI_API_KEY ||  envConfig.OPEN_API_KEY || envConfig.OPENAI_API_KEY2,
                 NODE_ENV: "PROD",
                 // Backend should not share the same port as the Next.js frontend.
                 // Keep API on 4000 so web can reliably bind to 3000.

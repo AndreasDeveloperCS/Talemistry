@@ -112,14 +112,23 @@ jobs:
         run: |
           set -euo pipefail
 
+          stripe_value_available() {
+            local variable="$1"
+            if [ -n "${!variable:-}" ]; then
+              return 0
+            fi
+
+            grep -Eq "^[[:space:]]*${variable}[[:space:]]*=[[:space:]]*['\"]?[^[:space:]'\"]+" .env 2>/dev/null
+          }
+
           for variable in STRIPE_SECRET_KEY STRIPE_PUBLISHABLE_KEY STRIPE_WEBHOOK_SECRET; do
-            if [ -z "${!variable:-}" ]; then
-              echo "Required GitHub Actions secret is missing: ${variable}"
+            if ! stripe_value_available "$variable"; then
+              echo "Required Stripe value is missing from GitHub Actions secrets and backend/.env: ${variable}"
               exit 1
             fi
           done
 
-          echo "Stripe deployment variables are configured"
+          echo "Stripe deployment variables are configured from GitHub Actions secrets or backend/.env"
 
           if [ -z "${OPENAI_API_KEY:-}" ]; then
             echo "GitHub Actions OpenAI secret is missing; PM2 will use the server-side environment value if configured"
