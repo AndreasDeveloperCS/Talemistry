@@ -106,8 +106,8 @@ if [ ! -f "dist/main.js" ]; then
     exit 1
 fi
 
-if [ ! -f "dist/.env" ]; then
-    echo "❌ Error: dist/.env not found. Did you run 'npm run build'?"
+if [ ! -f ".env" ] && [ -z "${STRIPE_SECRET_KEY:-}" ]; then
+    echo "❌ Error: backend/.env or STRIPE_SECRET_KEY is required"
     exit 1
 fi
 

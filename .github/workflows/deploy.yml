@@ -102,9 +102,27 @@ jobs:
         working-directory: ${{ vars.APP_PATH }}/backend
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || secrets.OPEN_API_KEY }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          STRIPE_PUBLISHABLE_KEY: ${{ secrets.STRIPE_PUBLISHABLE_KEY }}
+          STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+          STRIPE_PRICE_STARTER_MONTHLY: ${{ secrets.STRIPE_PRICE_STARTER_MONTHLY }}
+          STRIPE_PRICE_STARTER_YEARLY: ${{ secrets.STRIPE_PRICE_STARTER_YEARLY }}
+          STRIPE_PRICE_PROFESSIONAL_MONTHLY: ${{ secrets.STRIPE_PRICE_PROFESSIONAL_MONTHLY }}
+          STRIPE_PRICE_PROFESSIONAL_YEARLY: ${{ secrets.STRIPE_PRICE_PROFESSIONAL_YEARLY }}
         run: |
-          if [ -z "$OPENAI_API_KEY" ]; then
-            echo "GitHub Actions OpenAI secret is missing; PM2 will use the server-side backend/.env value if configured"
+          set -euo pipefail
+
+          for variable in STRIPE_SECRET_KEY STRIPE_PUBLISHABLE_KEY STRIPE_WEBHOOK_SECRET; do
+            if [ -z "${!variable:-}" ]; then
+              echo "Required GitHub Actions secret is missing: ${variable}"
+              exit 1
+            fi
+          done
+
+          echo "Stripe deployment variables are configured"
+
+          if [ -z "${OPENAI_API_KEY:-}" ]; then
+            echo "GitHub Actions OpenAI secret is missing; PM2 will use the server-side environment value if configured"
           else
             echo "OpenAI API key supplied from GitHub Actions secret"
           fi

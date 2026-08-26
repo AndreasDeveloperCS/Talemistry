@@ -119,7 +119,9 @@ chmod 600 .env
 nano .env
 ```
 
-At minimum, set `STRIPE_SECRET_KEY`, `STRIPE_PUBLISHABLE_KEY`, and `STRIPE_WEBHOOK_SECRET` in this server-only file. The secret key must exist only in the backend environment; never add it to the Angular or Next.js frontend environment.
+For manual deployments, set `STRIPE_SECRET_KEY`, `STRIPE_PUBLISHABLE_KEY`, and `STRIPE_WEBHOOK_SECRET` in this server-only file. For GitHub Actions deployments, configure those same names as GitHub repository or environment secrets; the workflow passes them directly to PM2. The secret key must exist only in the backend environment; never add it to the Angular or Next.js frontend environment.
+
+The deployment workflow is intentionally fail-fast: it will stop before restarting PM2 when any required Stripe secret is missing. This prevents a successful-looking deployment with a broken payment service.
 
 ## Files to Upload to Server
 - ✅ `dist/` folder (entire directory after build)

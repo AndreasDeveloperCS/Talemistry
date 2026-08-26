@@ -61,7 +61,7 @@ pm2 save
 pm2 list
 ```
 
-**IMPORTANT**: The ecosystem.config.js now properly loads environment variables from `dist/.env` in production.
+**IMPORTANT**: Production secrets belong in the backend root `.env` or in the process environment. They are not copied into `dist/`. The GitHub Actions deployment supplies the Stripe variables directly to PM2 from GitHub secrets.
 
 ### Step 4: Verify
 Check PM2 logs:
