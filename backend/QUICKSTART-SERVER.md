@@ -50,7 +50,7 @@ pm2 logs EVRYKA --lines 20
 
 ### On PM2 Start:
 ```
-📄 Loading .env from: /var/www/evryka_org_usr/data/www/Evridis/backend/dist/.env
+📄 Loading .env from: /var/www/evryka_org_usr/data/www/Evridis/backend/.env
 ✅ Loaded XX environment variables
 ```
 
@@ -108,6 +108,19 @@ pm2 logs EVRYKA --lines 100
 pm2 logs EVRYKA --err  # errors only
 ```
 
+## Production secrets
+
+Create the file below directly on the server. Do not commit it and do not put it in `dist/`:
+
+```bash
+cd /var/www/evryka_org_usr/data/www/Evridis/backend
+cp .env.example .env
+chmod 600 .env
+nano .env
+```
+
+At minimum, set `STRIPE_SECRET_KEY`, `STRIPE_PUBLISHABLE_KEY`, and `STRIPE_WEBHOOK_SECRET` in this server-only file. The secret key must exist only in the backend environment; never add it to the Angular or Next.js frontend environment.
+
 ## Files to Upload to Server
 - ✅ `dist/` folder (entire directory after build)
 - ✅ `ecosystem.config.js` (backend root)
@@ -117,4 +130,4 @@ pm2 logs EVRYKA --err  # errors only
 - ⚠️ Always use `pm2 start ecosystem.config.js` (not `pm2 start dist/main.js`)
 - ⚠️ Set `NODE_ENV=PROD` before starting PM2
 - ⚠️ Chrome dependencies are required on the server (one-time install)
-- ⚠️ The `.env` file must be in `dist/.env` after build (automatically copied)
+- ⚠️ The production `.env` file must be in the backend root (`backend/.env`) or supplied by the process manager/environment. It is not copied into `dist/`.

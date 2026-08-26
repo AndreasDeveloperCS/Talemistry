@@ -117,7 +117,6 @@ function copyArtifacts() {
         { src: 'public', dest: path.join(DIST_DIR, 'public'), type: 'dir' },
         { src: 'static-content', dest: path.join(DIST_DIR, 'static-content'), type: 'dir' },
         { src: 'client_certs', dest: path.join(DIST_DIR, 'client_certs'), type: 'dir' },
-        { src: '.env', dest: path.join(DIST_DIR, '.env'), type: 'file' },
         { src: 'config.json', dest: path.join(DIST_DIR, 'config.json'), type: 'file' },
         { src: 'config.prod.json', dest: path.join(DIST_DIR, 'config.prod.json'), type: 'file' }
     ];

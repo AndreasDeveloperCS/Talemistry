@@ -5,10 +5,9 @@ const fs = require('fs');
 const backendRoot = __dirname;
 const puppeteerCacheDir = path.join(backendRoot, '.cache', 'puppeteer');
 
-// Auto-detect .env location: prefer dist/.env (production) over root .env (development)
-const distEnvPath = path.join(backendRoot, 'dist', '.env');
 const rootEnvPath = path.join(backendRoot, '.env');
-const envPath = fs.existsSync(distEnvPath) ? distEnvPath : rootEnvPath;
+const distEnvPath = path.join(backendRoot, 'dist', '.env');
+const envPath = fs.existsSync(rootEnvPath) ? rootEnvPath : distEnvPath;
 
 const envConfig = {};
 
@@ -44,6 +43,7 @@ module.exports = {
             watch: false,
             env: {
                 ...envConfig,
+                ...process.env,
                 OPENAI_API_KEY: process.env.OPENAI_API_KEY || process.env.OPEN_API_KEY || envConfig.OPENAI_API_KEY || envConfig.OPEN_API_KEY || envConfig.OPENAI_API_KEY2,
                 NODE_ENV: "PROD",
                 // Backend should not share the same port as the Next.js frontend.
