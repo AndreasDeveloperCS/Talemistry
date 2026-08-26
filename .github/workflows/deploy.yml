@@ -81,19 +81,39 @@ jobs:
       - name: Start or restart application
         working-directory: ${{ vars.APP_PATH }}
         run: |
+          set -euo pipefail
+
           if command -v sudo >/dev/null 2>&1 && sudo -n true >/dev/null 2>&1; then
             pm2_cmd() { sudo -n -E env "PATH=$PATH" PM2_HOME=/root/.pm2 pm2 "$@"; }
           else
             pm2_cmd() { pm2 "$@"; }
           fi
 
+          NPM_BIN="$(command -v npm)"
+          export PORT=3000
+          export HOSTNAME=0.0.0.0
+
           pm2_cmd delete talemistry-web || true
-          PORT=3000 HOSTNAME=0.0.0.0 pm2_cmd start npm \
+          pm2_cmd start "$NPM_BIN" \
             --name talemistry-web \
+            --cwd "${{ vars.APP_PATH }}" \
             -- start -- -p 3000 -H 0.0.0.0
 
           pm2_cmd save
           pm2_cmd status talemistry-web
+
+          for i in {1..15}; do
+            if curl --fail --silent --show-error http://127.0.0.1:3000 >/dev/null; then
+              echo "Talemistry frontend is responding on port 3000"
+              exit 0
+            fi
+            sleep 2
+          done
+
+          echo "Talemistry frontend failed to start on port 3000"
+          pm2_cmd describe talemistry-web || true
+          pm2_cmd logs talemistry-web --lines 80 --nostream || true
+          exit 1
 
       - name: Install backend dependencies
         working-directory: ${{ vars.APP_PATH }}/backend
