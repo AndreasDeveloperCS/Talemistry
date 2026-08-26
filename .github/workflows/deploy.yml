@@ -83,10 +83,14 @@ jobs:
         run: |
           set -euo pipefail
 
-          if command -v sudo >/dev/null 2>&1 && sudo -n true >/dev/null 2>&1; then
-            pm2_cmd() { sudo -n -E env "PATH=$PATH" PM2_HOME=/root/.pm2 pm2 "$@"; }
+          PM2_BIN="$(command -v pm2)"
+          if [ "$(id -u)" -eq 0 ]; then
+            pm2_cmd() { PM2_HOME=/root/.pm2 "$PM2_BIN" "$@"; }
+          elif sudo -n true >/dev/null 2>&1; then
+            pm2_cmd() { sudo -n -E env "PATH=$PATH" PM2_HOME=/root/.pm2 "$PM2_BIN" "$@"; }
           else
-            pm2_cmd() { pm2 "$@"; }
+            echo "Passwordless sudo is required to manage the root PM2 daemon"
+            exit 1
           fi
 
           NPM_BIN="$(command -v npm)"
@@ -167,10 +171,14 @@ jobs:
             echo "OpenAI API key supplied from GitHub Actions secret"
           fi
 
-          if command -v sudo >/dev/null 2>&1 && sudo -n true >/dev/null 2>&1; then
-            pm2_cmd() { sudo -n -E env "PATH=$PATH" PM2_HOME=/root/.pm2 pm2 "$@"; }
+          PM2_BIN="$(command -v pm2)"
+          if [ "$(id -u)" -eq 0 ]; then
+            pm2_cmd() { PM2_HOME=/root/.pm2 "$PM2_BIN" "$@"; }
+          elif sudo -n true >/dev/null 2>&1; then
+            pm2_cmd() { sudo -n -E env "PATH=$PATH" PM2_HOME=/root/.pm2 "$PM2_BIN" "$@"; }
           else
-            pm2_cmd() { pm2 "$@"; }
+            echo "Passwordless sudo is required to manage the root PM2 daemon"
+            exit 1
           fi
 
           # Clean up legacy process names from older manual deployments.
@@ -182,10 +190,14 @@ jobs:
 
       - name: Verify PM2 processes are online
         run: |
-          if command -v sudo >/dev/null 2>&1 && sudo -n true >/dev/null 2>&1; then
-            pm2_cmd() { sudo -n -E env "PATH=$PATH" PM2_HOME=/root/.pm2 pm2 "$@"; }
+          PM2_BIN="$(command -v pm2)"
+          if [ "$(id -u)" -eq 0 ]; then
+            pm2_cmd() { PM2_HOME=/root/.pm2 "$PM2_BIN" "$@"; }
+          elif sudo -n true >/dev/null 2>&1; then
+            pm2_cmd() { sudo -n -E env "PATH=$PATH" PM2_HOME=/root/.pm2 "$PM2_BIN" "$@"; }
           else
-            pm2_cmd() { pm2 "$@"; }
+            echo "Passwordless sudo is required to manage the root PM2 daemon"
+            exit 1
           fi
 
           for app in talemistry-web TALEMISTRY; do
@@ -246,10 +258,14 @@ jobs:
           done
 
           echo "Backend failed to listen on port 4000"
-          if command -v sudo >/dev/null 2>&1 && sudo -n true >/dev/null 2>&1; then
-            pm2_cmd() { sudo -n -E env "PATH=$PATH" PM2_HOME=/root/.pm2 pm2 "$@"; }
+          PM2_BIN="$(command -v pm2)"
+          if [ "$(id -u)" -eq 0 ]; then
+            pm2_cmd() { PM2_HOME=/root/.pm2 "$PM2_BIN" "$@"; }
+          elif sudo -n true >/dev/null 2>&1; then
+            pm2_cmd() { sudo -n -E env "PATH=$PATH" PM2_HOME=/root/.pm2 "$PM2_BIN" "$@"; }
           else
-            pm2_cmd() { pm2 "$@"; }
+            echo "Passwordless sudo is required to manage the root PM2 daemon"
+            exit 1
           fi
 
           pm2_cmd describe TALEMISTRY || true
