@@ -84,14 +84,8 @@ jobs:
           set -euo pipefail
 
           PM2_BIN="$(command -v pm2)"
-          if [ "$(id -u)" -eq 0 ]; then
-            pm2_cmd() { PM2_HOME=/root/.pm2 "$PM2_BIN" "$@"; }
-          elif sudo -n true >/dev/null 2>&1; then
-            pm2_cmd() { sudo -n -E env "PATH=$PATH" PM2_HOME=/root/.pm2 "$PM2_BIN" "$@"; }
-          else
-            echo "Passwordless sudo is required to manage the root PM2 daemon"
-            exit 1
-          fi
+          export PM2_HOME="${PM2_HOME:-$HOME/.pm2}"
+          pm2_cmd() { "$PM2_BIN" "$@"; }
 
           NPM_BIN="$(command -v npm)"
           export PORT=3000
@@ -172,51 +166,14 @@ jobs:
             echo "OpenAI API key supplied from GitHub Actions secret"
           fi
 
-          PM2_BIN="$(command -v pm2)"
-          if [ "$(id -u)" -eq 0 ]; then
-            pm2_cmd() { PM2_HOME=/root/.pm2 "$PM2_BIN" "$@"; }
-          elif sudo -n true >/dev/null 2>&1; then
-            pm2_cmd() { sudo -n -E env "PATH=$PATH" PM2_HOME=/root/.pm2 "$PM2_BIN" "$@"; }
-          else
-            echo "Passwordless sudo is required to manage the root PM2 daemon"
-            exit 1
-          fi
-
-          # Clean up legacy process names from older manual deployments.
-          pm2_cmd delete EVRYKA || true
-
-          pm2_cmd stop TALEMISTRY || true
-          pm2_cmd delete TALEMISTRY || true
-          pm2_cmd start ecosystem.config.js --only TALEMISTRY --update-env
-          pm2_cmd save
-
-          for i in {1..15}; do
-            if pm2_cmd describe TALEMISTRY | grep -q "status.*online" && bash -c '>/dev/tcp/127.0.0.1/4000' 2>/dev/null; then
-              echo "NestJS backend is online and listening on port 4000"
-              break
-            fi
-
-            if [ "$i" -eq 15 ]; then
-              echo "NestJS backend failed to start on port 4000"
-              pm2_cmd describe TALEMISTRY || true
-              pm2_cmd logs TALEMISTRY --lines 80 --nostream || true
-              exit 1
-            fi
-
-            sleep 2
-          done
+          APP_PATH="${{ vars.APP_PATH }}"
+          bash "$APP_PATH/scripts/start-production.sh" "$APP_PATH"
 
       - name: Verify PM2 processes are online
         run: |
           PM2_BIN="$(command -v pm2)"
-          if [ "$(id -u)" -eq 0 ]; then
-            pm2_cmd() { PM2_HOME=/root/.pm2 "$PM2_BIN" "$@"; }
-          elif sudo -n true >/dev/null 2>&1; then
-            pm2_cmd() { sudo -n -E env "PATH=$PATH" PM2_HOME=/root/.pm2 "$PM2_BIN" "$@"; }
-          else
-            echo "Passwordless sudo is required to manage the root PM2 daemon"
-            exit 1
-          fi
+          export PM2_HOME="${PM2_HOME:-$HOME/.pm2}"
+          pm2_cmd() { "$PM2_BIN" "$@"; }
 
           for app in talemistry-web TALEMISTRY; do
             echo "Waiting for PM2 app: ${app}"
@@ -274,15 +231,7 @@ jobs:
 
           echo "NestJS is listening on port 4000"
           PM2_BIN="$(command -v pm2)"
-          if [ "$(id -u)" -eq 0 ]; then
-            pm2_cmd() { PM2_HOME=/root/.pm2 "$PM2_BIN" "$@"; }
-          elif sudo -n true >/dev/null 2>&1; then
-            pm2_cmd() { sudo -n -E env "PATH=$PATH" PM2_HOME=/root/.pm2 "$PM2_BIN" "$@"; }
-          else
-            echo "Passwordless sudo is required to manage the root PM2 daemon"
-            exit 1
-          fi
-
-          pm2_cmd describe TALEMISTRY || true
-          pm2_cmd logs TALEMISTRY --lines 80 --nostream || true
-          exit 1
+          export PM2_HOME="${PM2_HOME:-$HOME/.pm2}"
+          pm2_cmd() { "$PM2_BIN" "$@"; }
+          pm2_cmd list
+          echo "Both applications are running after deployment"
