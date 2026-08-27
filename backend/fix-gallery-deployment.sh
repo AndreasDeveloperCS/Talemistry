@@ -9,8 +9,8 @@ echo "=========================================="
 echo "Gallery Photo Upload - Production Fix"
 echo "=========================================="
 
-# Navigate to backend directory
-cd /var/www/evryka_org_usr/data/www/Evridis/backend || exit 1
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR" || exit 1
 
 echo "📦 Installing/updating backend dependencies..."
 npm install
@@ -34,7 +34,7 @@ else
 fi
 
 echo "🔄 Restarting PM2 process..."
-pm2 delete EVRYKA || true
+pm2 delete TALEMISTRY || true
 pm2 start ecosystem.config.js
 pm2 save
 
@@ -48,4 +48,4 @@ echo "You can test with:"
 echo "curl -X GET https://evryka.org/api/companies-verified/68c977520527632943404ae7/photo-gallery"
 echo ""
 echo "📊 Check PM2 logs:"
-echo "pm2 logs EVRYKA --lines 100"
+echo "pm2 logs TALEMISTRY --lines 100"

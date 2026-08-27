@@ -6,7 +6,8 @@ set -e
 
 echo "🚀 Starting CV PDF Fix Deployment..."
 
-PUPPETEER_CACHE_DIR="/var/www/evryka_org_usr/data/www/Evridis/backend/.cache/puppeteer"
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+PUPPETEER_CACHE_DIR="$SCRIPT_DIR/.cache/puppeteer"
 CHROME_DEPS_PACKAGES="ca-certificates fonts-liberation libasound2 libatk-bridge2.0-0 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgbm1 libgcc1 libglib2.0-0 libgtk-3-0 libnspr4 libnss3 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 lsb-release wget xdg-utils"
 
 ensure_chrome_dependencies() {
@@ -96,8 +97,8 @@ const candidatePaths = [
 EOF
 }
 
-# Navigate to backend directory
-cd /var/www/evryka_org_usr/data/www/Evridis/backend
+# Navigate to the directory containing this script.
+cd "$SCRIPT_DIR"
 
 echo ""
 echo "📋 Step 1: Verify files are present"
@@ -137,11 +138,11 @@ verify_puppeteer_launch
 
 echo ""
 echo "📋 Step 6: Stop current PM2 process"
-pm2 stop EVRYKA || true
+pm2 stop TALEMISTRY || true
 
 echo ""
 echo "📋 Step 7: Delete old PM2 process"
-pm2 delete EVRYKA || true
+pm2 delete TALEMISTRY || true
 
 echo ""
 echo "📋 Step 8: Start with ecosystem.config.js (loads .env properly)"
@@ -158,7 +159,7 @@ pm2 list
 echo ""
 echo "📋 Step 11: Check logs for errors"
 echo "Showing last 30 lines of logs..."
-pm2 logs EVRYKA --lines 30 --nostream
+pm2 logs TALEMISTRY --lines 30 --nostream
 
 echo ""
 echo "✅ Deployment complete!"
@@ -169,5 +170,5 @@ echo "        -H \"Origin: https://evryka.org\" \\"
 echo "        -H \"Authorization: Bearer YOUR_TOKEN\" \\"
 echo "        --output test-cv.pdf"
 echo ""
-echo "📊 Monitor logs with: pm2 logs EVRYKA"
-echo "🔄 Restart if needed: pm2 restart EVRYKA"
+echo "📊 Monitor logs with: pm2 logs TALEMISTRY"
+echo "🔄 Restart if needed: pm2 restart TALEMISTRY"

@@ -4,11 +4,12 @@
   "description": "Backend - Talemistry",
   "main": "main.js",
   "scripts": {
+    "start:prod": "node dist/main.js",
     "startProd": "pm2 startOrReload ecosystem.config.js --update-env",
     "start": "cross-env NODE_OPTIONS='--openssl-legacy-provider' NODE_TLS_REJECT_UNAUTHORIZED='0' nest start",
     "start:dev": "cross-env NODE_OPTIONS='--openssl-legacy-provider' NODE_TLS_REJECT_UNAUTHORIZED='0' nest start --watch --dest dist --no-clean",
     "build": "node --trace-deprecation --max-old-space-size=4096 build-with-logs.js",
-    "prod": "npm run build && npm run startProd",
+    "prod": "npm run build && npm run start:prod",
     "lint": "npm run lint",
     "tswatch": "tsc -w",
     "test": "echo \"Error: no test specified\" && exit 1",
