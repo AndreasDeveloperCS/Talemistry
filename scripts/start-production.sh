@@ -22,10 +22,7 @@ pm2_cmd() {
 
 pm2_cmd stop talemistry-web || true
 pm2_cmd delete talemistry-web || true
-pm2_cmd start npm \
-  --name talemistry-web \
-  --cwd "$APP_PATH" \
-  -- run start:prod
+pm2_cmd start "$APP_PATH/ecosystem.config.js" --only talemistry-web --update-env
 
 pm2_cmd stop TALEMISTRY || true
 pm2_cmd delete TALEMISTRY || true

@@ -87,16 +87,11 @@ jobs:
           export PM2_HOME="${PM2_HOME:-$HOME/.pm2}"
           pm2_cmd() { "$PM2_BIN" "$@"; }
 
-          NPM_BIN="$(command -v npm)"
-          export PORT=3000
-          export HOSTNAME=0.0.0.0
-
           pm2_cmd stop talemistry-web || true
           pm2_cmd delete talemistry-web || true
-          pm2_cmd start "$NPM_BIN" \
-            --name talemistry-web \
-            --cwd "${{ vars.APP_PATH }}" \
-            -- run start:prod
+          pm2_cmd start "${{ vars.APP_PATH }}/ecosystem.config.js" \
+            --only talemistry-web \
+            --update-env
 
           pm2_cmd save
           pm2_cmd status talemistry-web
@@ -195,6 +190,20 @@ jobs:
           done
 
           pm2_cmd list
+
+      - name: Install and reload Nginx
+        working-directory: ${{ vars.APP_PATH }}
+        run: |
+          set -euo pipefail
+
+          if [ "$(id -u)" -eq 0 ]; then
+            bash scripts/install-nginx-config.sh "${{ vars.APP_PATH }}"
+          elif sudo -n true >/dev/null 2>&1; then
+            sudo -n bash scripts/install-nginx-config.sh "${{ vars.APP_PATH }}"
+          else
+            echo "Passwordless sudo is required to install and reload the Talemistry Nginx config"
+            exit 1
+          fi
 
       - name: Inject frontend secrets
         working-directory: ${{ vars.APP_PATH }}/tab-frontend
