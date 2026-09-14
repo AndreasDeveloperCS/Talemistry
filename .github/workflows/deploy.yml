@@ -247,6 +247,8 @@ jobs:
           SOURCE_CONFIG="$APP_PATH/nginx/talemistry.com.conf"
           NGINX_CONFIG="/etc/nginx/sites-available/talemistry.com.conf"
           NGINX_ENABLED="/etc/nginx/sites-enabled/talemistry.com.conf"
+          BEFORE_SHA="${{ github.event.before }}"
+          CURRENT_SHA="${{ github.sha }}"
 
           # Passwordless sudo may be granted for everything, or only for the
           # install script (see scripts/setup-runner-sudo.sh).
@@ -258,8 +260,22 @@ jobs:
             cmp -s "$SOURCE_CONFIG" "$NGINX_CONFIG" 2>/dev/null && [ -e "$NGINX_ENABLED" ]
           }
 
+          ensure_compare_base() {
+            if [ -z "$BEFORE_SHA" ] || [ "$BEFORE_SHA" = "0000000000000000000000000000000000000000" ]; then
+              return 1
+            fi
+
+            git cat-file -e "$BEFORE_SHA^{commit}" 2>/dev/null \
+              || git fetch --no-tags --depth=1 origin "$BEFORE_SHA" >/dev/null 2>&1
+          }
+
           nginx_config_changed_in_push() {
-            python -c 'import json, sys; event = json.load(open(sys.argv[1], encoding="utf-8")); raise SystemExit(0 if any(path == "nginx/talemistry.com.conf" for commit in event.get("commits", []) for status in ("added", "modified", "removed") for path in commit.get(status, [])) else 1)' "$GITHUB_EVENT_PATH"
+            if ! ensure_compare_base; then
+              echo "::warning::Could not load $BEFORE_SHA to compare changed files; treating nginx/talemistry.com.conf as changed to avoid masking a partial deploy."
+              return 0
+            fi
+
+            git diff --name-only "$BEFORE_SHA" "$CURRENT_SHA" | grep -Fxq "nginx/talemistry.com.conf"
           }
 
           if [ "$(id -u)" -eq 0 ]; then
