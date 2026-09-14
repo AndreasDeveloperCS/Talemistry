@@ -30,6 +30,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Use supported Node.js version
         uses: actions/setup-node@v4
@@ -260,18 +262,14 @@ jobs:
             cmp -s "$SOURCE_CONFIG" "$NGINX_CONFIG" 2>/dev/null && [ -e "$NGINX_ENABLED" ]
           }
 
-          ensure_compare_base() {
+          nginx_config_changed_in_push() {
             if [ -z "$BEFORE_SHA" ] || [ "$BEFORE_SHA" = "0000000000000000000000000000000000000000" ]; then
-              return 1
+              echo "::warning::Could not determine the push base commit; treating nginx/talemistry.com.conf as changed to avoid masking a partial deploy."
+              return 0
             fi
 
-            git cat-file -e "$BEFORE_SHA^{commit}" 2>/dev/null \
-              || git fetch --no-tags --depth=1 origin "$BEFORE_SHA" >/dev/null 2>&1
-          }
-
-          nginx_config_changed_in_push() {
-            if ! ensure_compare_base; then
-              echo "::warning::Could not load $BEFORE_SHA to compare changed files; treating nginx/talemistry.com.conf as changed to avoid masking a partial deploy."
+            if ! git cat-file -e "$BEFORE_SHA^{commit}" 2>/dev/null; then
+              echo "::warning::Push base commit $BEFORE_SHA is not available in the checkout; treating nginx/talemistry.com.conf as changed to avoid masking a partial deploy."
               return 0
             fi
 
