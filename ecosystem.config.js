@@ -21,7 +21,12 @@ function loadEnvFile(filePath) {
 }
 
 const fileEnv = loadEnvFile(path.join(__dirname, '.env'));
-const runtimeEnv = { ...fileEnv, ...process.env };
+// Ignore empty process.env values (e.g. an unset GitHub Actions secret) so they
+// never override a value that is configured in the server-side .env file.
+const processEnv = Object.fromEntries(
+  Object.entries(process.env).filter(([, value]) => typeof value === 'string' && value.length > 0),
+);
+const runtimeEnv = { ...fileEnv, ...processEnv };
 
 module.exports = {
   apps: [

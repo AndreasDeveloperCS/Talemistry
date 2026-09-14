@@ -11,6 +11,14 @@ concurrency:
   group: talemistry-production
   cancel-in-progress: true
 
+env:
+  # Frontend (Next.js) production values. Set these as GitHub Actions secrets
+  # (Settings -> Secrets and variables -> Actions) or provide them in the root
+  # .env file on the server at $APP_PATH. Job-level env makes them visible to
+  # the validation step and to every PM2 start/restart in this job.
+  AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+  MONGODB_CONNECTION_STRING: ${{ secrets.MONGODB_CONNECTION_STRING || secrets.TALEMISTRY_MONGODB_URI }}
+
 jobs:
   deploy:
     runs-on:
@@ -107,12 +115,14 @@ jobs:
               continue
             fi
             if ! env_value_available "$variable"; then
-              echo "Required frontend production value is missing from the runner environment or root .env: ${variable}"
+              echo "Required frontend production value is missing: ${variable}"
+              echo "Provide it as a GitHub Actions secret (AUTH_SECRET, MONGODB_CONNECTION_STRING or TALEMISTRY_MONGODB_URI)"
+              echo "or add it to the root .env file on the server at: $(pwd)/.env"
               exit 1
             fi
           done
 
-            echo "Frontend authentication and database environment is configured"
+          echo "Frontend authentication and database environment is configured"
 
       - name: Start or restart application
         working-directory: ${{ vars.APP_PATH }}
