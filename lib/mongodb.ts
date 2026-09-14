@@ -53,7 +53,6 @@ global._talemistryConns = cache
 
 /** Primary Talemistry connection (read/write). */
 export async function getConnection(): Promise<mongoose.Connection> {
-    console.log(PRIMARY_URI);
   if (!PRIMARY_URI) {
     throw new Error("MONGODB_CONNECTION_STRING is not set")
   }
