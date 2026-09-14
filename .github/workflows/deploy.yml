@@ -72,7 +72,14 @@ jobs:
 
       - name: Install dependencies
         working-directory: ${{ vars.APP_PATH }}
-        run: npm ci
+        run: |
+          set -euo pipefail
+          if [ -f package-lock.json ] || [ -f npm-shrinkwrap.json ]; then
+            npm ci
+          else
+            echo "No root lockfile found; installing from package.json"
+            npm install --no-audit --no-fund
+          fi
 
       - name: Build Next.js
         working-directory: ${{ vars.APP_PATH }}
