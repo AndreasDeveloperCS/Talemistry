@@ -11,8 +11,9 @@ type Mode = "signin" | "signup"
 const ROLE_OPTIONS = [
   { value: "recruiter", label: "Recruiter" },
   { value: "hiring_manager", label: "Hiring Manager" },
-  { value: "hr_director", label: "HR Director" },
-  { value: "admin", label: "Administrator" },
+  // { value: "hr_director", label: "HR Director" },
+  { value: "talent", label: "Talent" }
+  // { value: "admin", label: "Administrator" },
 ]
 
 export function AuthForm({ mode }: { mode: Mode }) {

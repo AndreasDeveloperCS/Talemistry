@@ -115,7 +115,7 @@ export default async function JobsPage() {
                         style={{ backgroundColor: `${stage.color}1a`, color: stage.color }}
                       >
                         <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: stage.color }} />
-                        {stage.label} stage
+                        {stage.name} stage
                       </span>
                     )}
                   </div>

@@ -42,3 +42,5 @@ SERVER_KNOWN_HOSTS
 dist/
 build/
 .next/
+**/package-lock.json
+package-lock.json
