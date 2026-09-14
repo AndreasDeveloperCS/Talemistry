@@ -259,7 +259,7 @@ jobs:
           }
 
           nginx_config_changed_in_push() {
-            python -c 'import json, sys; event = json.load(open(sys.argv[1], encoding="utf-8")); raise SystemExit(0 if any("nginx/talemistry.com.conf" in commit.get(status, []) for commit in event.get("commits", []) for status in ("added", "modified", "removed")) else 1)' "$GITHUB_EVENT_PATH"
+            python -c 'import json, sys; event = json.load(open(sys.argv[1], encoding="utf-8")); raise SystemExit(0 if any(path == "nginx/talemistry.com.conf" for commit in event.get("commits", []) for status in ("added", "modified", "removed") for path in commit.get(status, [])) else 1)' "$GITHUB_EVENT_PATH"
           }
 
           if [ "$(id -u)" -eq 0 ]; then
