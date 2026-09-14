@@ -258,6 +258,10 @@ jobs:
             cmp -s "$SOURCE_CONFIG" "$NGINX_CONFIG" 2>/dev/null && [ -e "$NGINX_ENABLED" ]
           }
 
+          nginx_config_changed_in_push() {
+            python -c 'import json, sys; event = json.load(open(sys.argv[1], encoding="utf-8")); raise SystemExit(0 if any("nginx/talemistry.com.conf" in commit.get(status, []) for commit in event.get("commits", []) for status in ("added", "modified", "removed")) else 1)' "$GITHUB_EVENT_PATH"
+          }
+
           if [ "$(id -u)" -eq 0 ]; then
             bash "$INSTALL_SCRIPT" "$APP_PATH"
           elif can_sudo; then
@@ -265,7 +269,16 @@ jobs:
           elif nginx_config_current; then
             echo "::notice::Installed Nginx config already matches nginx/talemistry.com.conf; skipping install and reload (runner user has no passwordless sudo)"
           else
-            echo "::warning::The Nginx config changed but the runner user '$(whoami)' cannot run the install script as root; continuing with the currently installed Nginx config."
+            if nginx_config_changed_in_push; then
+              echo "::error::This push changed nginx/talemistry.com.conf, but the runner user '$(whoami)' cannot run the install script as root."
+              echo "Run this once on the server as root to grant the required permission:"
+              echo "  sudo bash $APP_PATH/scripts/setup-runner-sudo.sh $(whoami) $APP_PATH"
+              echo "Or install the config manually:"
+              echo "  sudo bash $INSTALL_SCRIPT $APP_PATH"
+              exit 1
+            fi
+
+            echo "::warning::Installed Nginx config differs from nginx/talemistry.com.conf, but this push did not modify that file and the runner user '$(whoami)' cannot run the install script as root; continuing with the currently installed Nginx config."
             echo "Run this once on the server as root to grant the required permission:"
             echo "  sudo bash $APP_PATH/scripts/setup-runner-sudo.sh $(whoami) $APP_PATH"
             echo "Or install the config manually:"
