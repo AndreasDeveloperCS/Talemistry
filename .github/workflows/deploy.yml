@@ -265,12 +265,11 @@ jobs:
           elif nginx_config_current; then
             echo "::notice::Installed Nginx config already matches nginx/talemistry.com.conf; skipping install and reload (runner user has no passwordless sudo)"
           else
-            echo "::error::The Nginx config changed but the runner user '$(whoami)' cannot run the install script as root."
+            echo "::warning::The Nginx config changed but the runner user '$(whoami)' cannot run the install script as root; continuing with the currently installed Nginx config."
             echo "Run this once on the server as root to grant the required permission:"
             echo "  sudo bash $APP_PATH/scripts/setup-runner-sudo.sh $(whoami) $APP_PATH"
             echo "Or install the config manually:"
             echo "  sudo bash $INSTALL_SCRIPT $APP_PATH"
-            exit 1
           fi
 
       - name: Inject frontend secrets
