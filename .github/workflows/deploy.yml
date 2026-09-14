@@ -78,6 +78,35 @@ jobs:
         working-directory: ${{ vars.APP_PATH }}
         run: npm run build
 
+      - name: Validate frontend production environment
+        working-directory: ${{ vars.APP_PATH }}
+        run: |
+          set -euo pipefail
+
+          env_value_available() {
+            local variable="$1"
+            if [ -n "${!variable:-}" ]; then
+              return 0
+            fi
+
+            grep -Eq "^[[:space:]]*${variable}[[:space:]]*=[[:space:]]*['\"]?[^[:space:]'\"]+" .env 2>/dev/null
+          }
+
+          for variable in AUTH_SECRET MONGODB_CONNECTION_STRING TALEMISTRY_MONGODB_URI; do
+            if [ "$variable" = "TALEMISTRY_MONGODB_URI" ] && env_value_available MONGODB_CONNECTION_STRING; then
+              continue
+            fi
+            if [ "$variable" = "MONGODB_CONNECTION_STRING" ] && env_value_available TALEMISTRY_MONGODB_URI; then
+              continue
+            fi
+            if ! env_value_available "$variable"; then
+              echo "Required frontend production value is missing from the runner environment or root .env: ${variable}"
+              exit 1
+            fi
+          done
+
+            echo "Frontend authentication and database environment is configured"
+
       - name: Start or restart application
         working-directory: ${{ vars.APP_PATH }}
         run: |

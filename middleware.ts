@@ -4,8 +4,11 @@ import { jwtVerify } from "jose"
 const SESSION_COOKIE = "tal_session"
 
 function getSecret() {
-  const secret = process.env.AUTH_SECRET || "talemistry-dev-secret-change-me"
-  return new TextEncoder().encode(secret)
+  const secret = process.env.AUTH_SECRET
+  if (!secret && process.env.NODE_ENV === "production") {
+    throw new Error("AUTH_SECRET is not configured")
+  }
+  return new TextEncoder().encode(secret || "talemistry-dev-secret-change-me")
 }
 
 export async function middleware(req: NextRequest) {
