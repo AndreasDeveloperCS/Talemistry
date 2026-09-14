@@ -242,12 +242,34 @@ jobs:
         run: |
           set -euo pipefail
 
+          APP_PATH="${{ vars.APP_PATH }}"
+          INSTALL_SCRIPT="$APP_PATH/scripts/install-nginx-config.sh"
+          SOURCE_CONFIG="$APP_PATH/nginx/talemistry.com.conf"
+          NGINX_CONFIG="/etc/nginx/sites-available/talemistry.com.conf"
+          NGINX_ENABLED="/etc/nginx/sites-enabled/talemistry.com.conf"
+
+          # Passwordless sudo may be granted for everything, or only for the
+          # install script (see scripts/setup-runner-sudo.sh).
+          can_sudo() {
+            sudo -n true >/dev/null 2>&1               || sudo -n -l /bin/bash "$INSTALL_SCRIPT" "$APP_PATH" >/dev/null 2>&1
+          }
+
+          nginx_config_current() {
+            cmp -s "$SOURCE_CONFIG" "$NGINX_CONFIG" 2>/dev/null && [ -e "$NGINX_ENABLED" ]
+          }
+
           if [ "$(id -u)" -eq 0 ]; then
-            bash scripts/install-nginx-config.sh "${{ vars.APP_PATH }}"
-          elif sudo -n true >/dev/null 2>&1; then
-            sudo -n bash scripts/install-nginx-config.sh "${{ vars.APP_PATH }}"
+            bash "$INSTALL_SCRIPT" "$APP_PATH"
+          elif can_sudo; then
+            sudo -n /bin/bash "$INSTALL_SCRIPT" "$APP_PATH"
+          elif nginx_config_current; then
+            echo "::notice::Installed Nginx config already matches nginx/talemistry.com.conf; skipping install and reload (runner user has no passwordless sudo)"
           else
-            echo "Passwordless sudo is required to install and reload the Talemistry Nginx config"
+            echo "::error::The Nginx config changed but the runner user '$(whoami)' cannot run the install script as root."
+            echo "Run this once on the server as root to grant the required permission:"
+            echo "  sudo bash $APP_PATH/scripts/setup-runner-sudo.sh $(whoami) $APP_PATH"
+            echo "Or install the config manually:"
+            echo "  sudo bash $INSTALL_SCRIPT $APP_PATH"
             exit 1
           fi
 
