@@ -26,8 +26,8 @@
   "certFile": "client_certs\\evryka-cert.crt",
   "caFile": "client_certs\\evryka-CA.crt",
   "keyFile": "client_certs\\evryka-key.key",
-  "secret": "freedom",
-  "refreshSecret": "freedom",
+  "secret": "Vm6bOG24fE3cFVYtOsy3xVY4DPMu0j7FiC969AjoZgw=",
+  "refreshSecret": "Vm6bOG24fE3cFVYtOsy3xVY4DPMu0j7FiC969AjoZgw=",
   "expiresIn": 7200,
   "loggerConfig": {
     "DATA_INPUT": {
