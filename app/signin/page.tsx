@@ -6,6 +6,7 @@ import { AuthForm } from "@/components/auth/auth-form"
 export const metadata: Metadata = {
   title: "Sign in · Talemistry",
   description: "Sign in to your Talemistry recruitment workspace.",
+  robots: { index: false, follow: false },
 }
 
 export default function SignInPage() {

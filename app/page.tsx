@@ -18,9 +18,74 @@ import { SiteFooter } from "@/components/marketing/site-footer"
 import { JourneyBand } from "@/components/marketing/journey-band"
 import { Button, Card, Badge } from "@/components/ui/primitives"
 
+const FAQS = [
+  {
+    question: "What is Talemistry?",
+    answer:
+      "Talemistry is a full-cycle AI recruitment ecosystem that connects job publication, candidate discovery, assessment, interviews, decisions and offers in one human-supervised platform.",
+  },
+  {
+    question: "How does Talemistry use AI in recruitment?",
+    answer:
+      "Talemistry uses AI to coordinate recruiting work, analyze candidate information and identify patterns. People remain responsible for reviewing evidence, challenging recommendations and making hiring decisions.",
+  },
+  {
+    question: "Who is Talemistry for?",
+    answer:
+      "Talemistry is for recruiting and hiring teams that want one connected workspace for sourcing, candidate intelligence, structured evaluation, interviews, decisions and offers.",
+  },
+  {
+    question: "What makes Talemistry different from an applicant tracking system?",
+    answer:
+      "Talemistry connects the entire recruitment journey and adds explainable candidate intelligence, team chemistry context and an evidence trail instead of treating applications as isolated records.",
+  },
+]
+
+const STRUCTURED_DATA = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://talemistry.com/#organization",
+      name: "Talemistry",
+      url: "https://talemistry.com",
+      logo: "https://talemistry.com/icon.svg",
+      parentOrganization: { "@type": "Organization", name: "Nomado Innovations" },
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://talemistry.com/#website",
+      url: "https://talemistry.com",
+      name: "Talemistry",
+      publisher: { "@id": "https://talemistry.com/#organization" },
+      description:
+        "Full-cycle AI recruitment software for connected, explainable and human-supervised hiring.",
+    },
+    {
+      "@type": "SoftwareApplication",
+      name: "Talemistry",
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web",
+      url: "https://talemistry.com",
+      description:
+        "A full-cycle AI recruitment ecosystem for candidate discovery, assessment, interviews, decisions and offers.",
+      provider: { "@id": "https://talemistry.com/#organization" },
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: FAQS.map(({ question, answer }) => ({
+        "@type": "Question",
+        name: question,
+        acceptedAnswer: { "@type": "Answer", text: answer },
+      })),
+    },
+  ],
+}
+
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(STRUCTURED_DATA) }} />
       <SiteHeader />
       <main>
         {/* ---------------- Hero ---------------- */}
@@ -269,6 +334,27 @@ export default function HomePage() {
                   </div>
                 ))}
               </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="faq" className="border-t border-border bg-muted/40">
+          <div className="mx-auto max-w-4xl px-4 py-20 sm:px-6 lg:px-8">
+            <div className="max-w-2xl">
+              <p className="text-sm font-semibold uppercase tracking-wider text-primary">About Talemistry</p>
+              <h2 className="mt-3 text-balance text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+                Clear answers for better hiring decisions.
+              </h2>
+            </div>
+            <div className="mt-10 divide-y divide-border border-y border-border">
+              {FAQS.map((item) => (
+                <details key={item.question} className="group py-5">
+                  <summary className="cursor-pointer list-none pr-8 text-base font-semibold text-foreground marker:hidden">
+                    {item.question}
+                  </summary>
+                  <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">{item.answer}</p>
+                </details>
+              ))}
             </div>
           </div>
         </section>

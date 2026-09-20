@@ -12,11 +12,11 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL("https://talemistry.com"),
   title: {
-    default: "Talemistry — Reveal the chemistry of human potential",
+    default: "Talemistry | AI Recruitment Platform for Human-Supervised Hiring",
     template: "%s · Talemistry",
   },
   description:
-    "Talemistry is a full-cycle AI recruitment ecosystem by Nomado Innovations that connects job publication, candidate discovery, assessment, interviews, decisions and offers in one human-supervised platform.",
+    "Talemistry is an AI recruitment platform that connects candidate discovery, assessment, interviews, decisions and offers in one human-supervised hiring workspace.",
   keywords: [
     "AI recruitment",
     "talent acquisition",
@@ -29,19 +29,31 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Nomado Innovations" }],
   creator: "Nomado Innovations",
+  alternates: { canonical: "/" },
+  category: "Recruitment software",
+  applicationName: "Talemistry",
   openGraph: {
     type: "website",
     siteName: "Talemistry",
-    title: "Talemistry — Reveal the chemistry of human potential",
+    title: "Talemistry | AI Recruitment Platform for Human-Supervised Hiring",
     description:
-      "A full-cycle AI recruitment ecosystem that unifies the journey from job publication to signed offer, with candidate intelligence and human evaluation.",
+      "AI recruitment software for connected, explainable hiring from candidate discovery through signed offer.",
     url: "https://talemistry.com",
+    images: [
+      {
+        url: "/hero-collaboration.png",
+        width: 720,
+        height: 560,
+        alt: "Talemistry recruitment team collaboration",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Talemistry — Reveal the chemistry of human potential",
+    title: "Talemistry | AI Recruitment Platform",
     description:
-      "Full-cycle AI recruitment ecosystem. Deeper human understanding.",
+      "Connected, explainable recruitment with human-supervised AI.",
+    images: ["/hero-collaboration.png"],
   },
   robots: { index: true, follow: true },
 }
