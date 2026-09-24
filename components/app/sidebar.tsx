@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { createContext, useContext, useEffect, useState } from "react"
 import {
   LayoutDashboard,
   Users,
@@ -15,6 +16,7 @@ import {
   Plug,
   ShieldCheck,
   Sparkles,
+  X,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { TalemistryMark } from "@/components/brand/logo"
@@ -56,11 +58,25 @@ const NAV_GROUPS: {
   },
 ]
 
-export function Sidebar() {
+const SidebarContext = createContext<{ open: boolean; setOpen: (v: boolean) => void }>({
+  open: false,
+  setOpen: () => {},
+})
+
+export function SidebarProvider({ children }: { children: React.ReactNode }) {
+  const [open, setOpen] = useState(false)
+  return <SidebarContext.Provider value={{ open, setOpen }}>{children}</SidebarContext.Provider>
+}
+
+export function useSidebar() {
+  return useContext(SidebarContext)
+}
+
+function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname()
   return (
-    <aside className="hidden w-64 shrink-0 flex-col bg-[#0b1b2a] lg:flex">
-      <div className="flex h-16 items-center gap-2.5 px-5">
+    <>
+      <div className="flex h-16 shrink-0 items-center gap-2.5 px-5">
         <TalemistryMark />
         <div className="flex flex-col leading-none">
           <span className="text-[13px] font-bold tracking-[0.18em] text-white">TALEMISTRY</span>
@@ -84,6 +100,7 @@ export function Sidebar() {
                   <li key={item.href}>
                     <Link
                       href={item.href}
+                      onClick={onNavigate}
                       className={cn(
                         "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                         active
@@ -102,7 +119,7 @@ export function Sidebar() {
         ))}
       </nav>
 
-      <div className="m-3 rounded-xl border border-white/10 bg-white/[0.04] p-4">
+      <div className="m-3 shrink-0 rounded-xl border border-white/10 bg-white/[0.04] p-4">
         <div className="flex items-center gap-2 text-[#4fd1a8]">
           <Sparkles className="h-4 w-4" />
           <span className="text-xs font-semibold text-white">Pipeline Copilot</span>
@@ -112,11 +129,63 @@ export function Sidebar() {
         </p>
         <Link
           href="/dashboard/pipeline"
+          onClick={onNavigate}
           className="mt-3 inline-block text-xs font-semibold text-[#4fd1a8] hover:underline"
         >
           Review pipeline →
         </Link>
       </div>
-    </aside>
+    </>
+  )
+}
+
+export function Sidebar() {
+  const { open, setOpen } = useSidebar()
+
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : ""
+    return () => {
+      document.body.style.overflow = ""
+    }
+  }, [open])
+
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false)
+    }
+    window.addEventListener("keydown", onKey)
+    return () => window.removeEventListener("keydown", onKey)
+  }, [open, setOpen])
+
+  return (
+    <>
+      {/* Desktop sidebar */}
+      <aside className="hidden w-64 shrink-0 flex-col bg-[#0b1b2a] lg:flex">
+        <SidebarContent />
+      </aside>
+
+      {/* Mobile drawer */}
+      {open && (
+        <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Navigation">
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setOpen(false)}
+            aria-hidden="true"
+          />
+          <aside className="absolute inset-y-0 left-0 flex w-72 max-w-[85vw] flex-col bg-[#0b1b2a] shadow-2xl">
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              aria-label="Close menu"
+              className="absolute right-3 top-3.5 inline-flex h-9 w-9 items-center justify-center rounded-lg text-[#8ea0b5] hover:bg-white/5 hover:text-white"
+            >
+              <X className="h-5 w-5" />
+            </button>
+            <SidebarContent onNavigate={() => setOpen(false)} />
+          </aside>
+        </div>
+      )}
+    </>
   )
 }

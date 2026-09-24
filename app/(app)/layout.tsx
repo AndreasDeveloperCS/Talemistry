@@ -1,7 +1,7 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { redirect } from "next/navigation"
-import { Sidebar } from "@/components/app/sidebar"
+import { Sidebar, SidebarProvider } from "@/components/app/sidebar"
 import { getSession } from "@/lib/auth"
 
 export const metadata: Metadata = {
@@ -13,9 +13,11 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   if (!user) redirect("/signin")
 
   return (
-    <div className="flex min-h-screen bg-muted/40">
-      <Sidebar />
-      <div className="flex min-w-0 flex-1 flex-col">{children}</div>
-    </div>
+    <SidebarProvider>
+      <div className="flex min-h-screen bg-muted/40">
+        <Sidebar />
+        <div className="flex min-w-0 flex-1 flex-col">{children}</div>
+      </div>
+    </SidebarProvider>
   )
 }

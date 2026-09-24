@@ -1,15 +1,27 @@
 "use client"
 
-import { Search, Bell, Plus, HelpCircle } from "lucide-react"
+import { Search, Bell, Plus, HelpCircle, Menu } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { UserMenu } from "@/components/app/user-menu"
+import { useSidebar } from "@/components/app/sidebar"
 
 export function Topbar({ title, subtitle }: { title: string; subtitle?: string }) {
+  const { setOpen } = useSidebar()
   return (
-    <header className="sticky top-0 z-30 flex flex-col gap-3 border-b border-border bg-background/85 px-5 py-3.5 backdrop-blur-md md:flex-row md:items-center md:justify-between md:px-7">
-      <div className="min-w-0">
-        <h1 className="truncate font-serif text-lg font-semibold text-foreground md:text-xl">{title}</h1>
-        {subtitle ? <p className="truncate text-sm text-muted-foreground">{subtitle}</p> : null}
+    <header className="sticky top-0 z-30 flex flex-col gap-3 border-b border-border bg-background/85 px-4 py-3.5 backdrop-blur-md sm:px-5 md:flex-row md:items-center md:justify-between md:px-7">
+      <div className="flex min-w-0 items-center gap-3">
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          aria-label="Open navigation menu"
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition hover:text-foreground lg:hidden"
+        >
+          <Menu className="h-4.5 w-4.5" aria-hidden />
+        </button>
+        <div className="min-w-0">
+          <h1 className="truncate font-serif text-lg font-semibold text-foreground md:text-xl">{title}</h1>
+          {subtitle ? <p className="truncate text-sm text-muted-foreground">{subtitle}</p> : null}
+        </div>
       </div>
 
       <div className="flex items-center gap-2">

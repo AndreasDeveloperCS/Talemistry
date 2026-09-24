@@ -102,9 +102,9 @@ export function InterviewRoom({ interview }: { interview: Interview }) {
   }
 
   return (
-    <div className="grid h-[calc(100vh-64px)] grid-cols-1 lg:grid-cols-[1fr_400px]">
+    <div className="grid grid-cols-1 lg:h-[calc(100vh-64px)] lg:grid-cols-[1fr_400px]">
       {/* Stage */}
-      <div className="flex flex-col bg-[#08131e]">
+      <div className="flex min-h-[55vh] flex-col bg-[#08131e] lg:min-h-0">
         <div className="flex items-center justify-between px-5 py-3 text-white">
           <div className="flex items-center gap-3">
             <span className="text-sm font-semibold">{interview.type} · {interview.candidateName}</span>
@@ -126,7 +126,7 @@ export function InterviewRoom({ interview }: { interview: Interview }) {
           </div>
 
           {/* Local self-view */}
-          <div className="absolute bottom-6 right-6 h-32 w-48 overflow-hidden rounded-xl border border-white/10 bg-black shadow-xl">
+          <div className="absolute bottom-4 right-4 h-24 w-36 overflow-hidden rounded-xl border border-white/10 bg-black shadow-xl sm:bottom-6 sm:right-6 sm:h-32 sm:w-48">
             {camOn ? (
               <video ref={videoRef} autoPlay muted playsInline className="h-full w-full object-cover" />
             ) : (
