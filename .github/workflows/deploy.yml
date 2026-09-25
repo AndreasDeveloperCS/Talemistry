@@ -180,6 +180,9 @@ jobs:
           STRIPE_PRICE_STARTER_YEARLY: ${{ secrets.STRIPE_PRICE_STARTER_YEARLY }}
           STRIPE_PRICE_PROFESSIONAL_MONTHLY: ${{ secrets.STRIPE_PRICE_PROFESSIONAL_MONTHLY }}
           STRIPE_PRICE_PROFESSIONAL_YEARLY: ${{ secrets.STRIPE_PRICE_PROFESSIONAL_YEARLY }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
         run: |
           set -euo pipefail
 

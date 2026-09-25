@@ -17,12 +17,20 @@ export class StripePaymentsService {
     private readonly apiBaseUrl = 'https://api.stripe.com/v1';
     private readonly defaultPublishableKey = 'pk_test_51T8yWGDMcSySjYCyqIuQtEPJlHmfdQbWVzXwcQPvaoHNDtYYEOHYsqvyM7K2L0koXSkmqWEEszUZ3tPAU3W5WjAB003eUvIKLu';
 
-    private readonly stripe = new Stripe(
-        this.getSecretKey(),
-        {
-            apiVersion: '2026-07-29.dahlia',
-        },
-    );
+    // Lazy so a missing STRIPE_SECRET_KEY fails the payment call, not app bootstrap.
+    private stripeClient?: Stripe;
+
+    private get stripe(): Stripe {
+        if (!this.stripeClient) {
+            this.stripeClient = new Stripe(
+                this.getSecretKey(),
+                {
+                    apiVersion: '2026-07-29.dahlia',
+                },
+            );
+        }
+        return this.stripeClient;
+    }
 
     constructor(private paymentsStateService: PaymentsStateService) { }
 

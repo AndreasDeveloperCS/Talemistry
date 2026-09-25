@@ -26,10 +26,12 @@ pm2_cmd start "$APP_PATH/ecosystem.config.js" --only talemistry-web --update-env
 
 pm2_cmd stop TALEMISTRY || true
 pm2_cmd delete TALEMISTRY || true
+# Flush old logs so failure diagnostics below show only the current boot.
+pm2_cmd flush || true
 pm2_cmd start "$BACKEND_PATH/ecosystem.config.js" --only TALEMISTRY --update-env
 pm2_cmd save
 
-for attempt in {1..15}; do
+for attempt in {1..40}; do
   frontend_ready=false
   backend_ready=false
 
@@ -50,7 +52,7 @@ for attempt in {1..15}; do
     exit 0
   fi
 
-  sleep 2
+  sleep 3
 done
 
 echo "Production applications failed readiness checks"
