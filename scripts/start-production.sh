@@ -38,8 +38,9 @@ port_busy() {
 }
 
 port_pids() {
-  { $SUDO ss -ltnpH "sport = :$1" 2>/dev/null || true; } \
-    | grep -oE 'pid=[0-9]+' | cut -d= -f2 | sort -u
+  # || true guards keep set -e/pipefail from killing the script when no match.
+  { $SUDO ss -ltnp "sport = :$1" 2>/dev/null || ss -ltnp "sport = :$1" 2>/dev/null || true; } \
+    | { grep -oE 'pid=[0-9]+' || true; } | cut -d= -f2 | sort -u
 }
 
 # After PM2 cleanup, anything still on the port is a rogue/stale process that

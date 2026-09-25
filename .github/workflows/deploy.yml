@@ -139,11 +139,10 @@ jobs:
           # A leftover non-PM2 listener on 3000 would crash the new app with EADDRINUSE.
           if bash -c ">/dev/tcp/127.0.0.1/3000" 2>/dev/null; then
             echo "Port 3000 is still occupied after PM2 cleanup; terminating the listener"
-            if command -v sudo >/dev/null 2>&1 && sudo -n true >/dev/null 2>&1; then
-              sudo -n fuser -k 3000/tcp || true
-            else
-              fuser -k 3000/tcp 2>/dev/null || true
-            fi
+            pids="$(ss -ltnp 'sport = :3000' 2>/dev/null | { grep -oE 'pid=[0-9]+' || true; } | cut -d= -f2 | sort -u)"
+            for pid in $pids; do
+              kill "$pid" 2>/dev/null || true
+            done
             sleep 2
           fi
 

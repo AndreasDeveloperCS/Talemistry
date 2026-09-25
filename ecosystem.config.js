@@ -33,12 +33,14 @@ module.exports = {
     {
       name: 'talemistry-web',
       version: packageJson.version,
-      script: 'npm',
-      args: 'run start:prod',
+      // Run the Next.js binary directly: wrapping npm leaves an orphaned
+      // next-server child holding port 3000 whenever PM2 stops/deletes the app.
+      script: 'node_modules/next/dist/bin/next',
+      args: 'start -p 3000 -H 0.0.0.0',
       cwd: __dirname,
-      interpreter: 'none',
       autorestart: true,
       watch: false,
+      kill_timeout: 5000,
       env: {
         ...runtimeEnv,
         NODE_ENV: 'production',
