@@ -20,12 +20,35 @@ pm2_cmd() {
   "$PM2_BIN" "$@"
 }
 
+# After PM2 cleanup, anything still on the port is a rogue/stale process that
+# would crash the new app with EADDRINUSE. Terminate it.
+free_port() {
+  local port="$1"
+  if ! bash -c ">/dev/tcp/127.0.0.1/${port}" 2>/dev/null; then
+    return 0
+  fi
+  echo "Port ${port} is still occupied after PM2 cleanup; terminating the listener"
+  if command -v sudo >/dev/null 2>&1 && sudo -n true >/dev/null 2>&1; then
+    sudo -n fuser -k "${port}/tcp" || true
+  else
+    fuser -k "${port}/tcp" 2>/dev/null || true
+  fi
+  sleep 2
+  if bash -c ">/dev/tcp/127.0.0.1/${port}" 2>/dev/null; then
+    echo "Unable to free port ${port}; the process may belong to another user"
+    ss -ltnp "sport = :${port}" 2>/dev/null || true
+    exit 1
+  fi
+}
+
 pm2_cmd stop talemistry-web || true
 pm2_cmd delete talemistry-web || true
+free_port 3000
 pm2_cmd start "$APP_PATH/ecosystem.config.js" --only talemistry-web --update-env
 
 pm2_cmd stop TALEMISTRY || true
 pm2_cmd delete TALEMISTRY || true
+free_port 4000
 # Flush old logs so failure diagnostics below show only the current boot.
 pm2_cmd flush || true
 pm2_cmd start "$BACKEND_PATH/ecosystem.config.js" --only TALEMISTRY --update-env

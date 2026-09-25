@@ -135,6 +135,18 @@ jobs:
 
           pm2_cmd stop talemistry-web || true
           pm2_cmd delete talemistry-web || true
+
+          # A leftover non-PM2 listener on 3000 would crash the new app with EADDRINUSE.
+          if bash -c ">/dev/tcp/127.0.0.1/3000" 2>/dev/null; then
+            echo "Port 3000 is still occupied after PM2 cleanup; terminating the listener"
+            if command -v sudo >/dev/null 2>&1 && sudo -n true >/dev/null 2>&1; then
+              sudo -n fuser -k 3000/tcp || true
+            else
+              fuser -k 3000/tcp 2>/dev/null || true
+            fi
+            sleep 2
+          fi
+
           pm2_cmd start "${{ vars.APP_PATH }}/ecosystem.config.js" \
             --only talemistry-web \
             --update-env
@@ -172,19 +184,52 @@ jobs:
       - name: Start or reload backend
         working-directory: ${{ vars.APP_PATH }}/backend
         env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || secrets.OPEN_API_KEY }}
-          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
-          STRIPE_PUBLISHABLE_KEY: ${{ secrets.STRIPE_PUBLISHABLE_KEY }}
-          STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
-          STRIPE_PRICE_STARTER_MONTHLY: ${{ secrets.STRIPE_PRICE_STARTER_MONTHLY }}
-          STRIPE_PRICE_STARTER_YEARLY: ${{ secrets.STRIPE_PRICE_STARTER_YEARLY }}
-          STRIPE_PRICE_PROFESSIONAL_MONTHLY: ${{ secrets.STRIPE_PRICE_PROFESSIONAL_MONTHLY }}
-          STRIPE_PRICE_PROFESSIONAL_YEARLY: ${{ secrets.STRIPE_PRICE_PROFESSIONAL_YEARLY }}
-          SMTP_HOST: ${{ secrets.SMTP_HOST }}
-          SMTP_USER: ${{ secrets.SMTP_USER }}
-          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || secrets.OPEN_API_KEY || vars.OPENAI_API_KEY }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY || vars.STRIPE_SECRET_KEY }}
+          STRIPE_PUBLISHABLE_KEY: ${{ secrets.STRIPE_PUBLISHABLE_KEY || vars.STRIPE_PUBLISHABLE_KEY }}
+          STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET || vars.STRIPE_WEBHOOK_SECRET }}
+          STRIPE_PRICE_STARTER_MONTHLY: ${{ secrets.STRIPE_PRICE_STARTER_MONTHLY || vars.STRIPE_PRICE_STARTER_MONTHLY }}
+          STRIPE_PRICE_STARTER_YEARLY: ${{ secrets.STRIPE_PRICE_STARTER_YEARLY || vars.STRIPE_PRICE_STARTER_YEARLY }}
+          STRIPE_PRICE_PROFESSIONAL_MONTHLY: ${{ secrets.STRIPE_PRICE_PROFESSIONAL_MONTHLY || vars.STRIPE_PRICE_PROFESSIONAL_MONTHLY }}
+          STRIPE_PRICE_PROFESSIONAL_YEARLY: ${{ secrets.STRIPE_PRICE_PROFESSIONAL_YEARLY || vars.STRIPE_PRICE_PROFESSIONAL_YEARLY }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST || vars.SMTP_HOST }}
+          SMTP_USER: ${{ secrets.SMTP_USER || vars.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS || vars.SMTP_PASS }}
         run: |
           set -euo pipefail
+
+          APP_PATH="${{ vars.APP_PATH }}"
+
+          # Persist CI/CD values into the server .env files so PM2 keeps them
+          # across restarts that happen outside this workflow.
+          upsert_env() {
+            local file="$1" key="$2" value="${3:-}"
+            if [ -z "$value" ]; then
+              return 0
+            fi
+            touch "$file"
+            if grep -Eq "^[[:space:]]*${key}[[:space:]]*=" "$file"; then
+              awk -v k="$key" -v v="$value" '
+                !done && $0 ~ "^[[:space:]]*"k"[[:space:]]*=" { print k"="v; done=1; next }
+                { print }
+              ' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+            else
+              printf '%s=%s\n' "$key" "$value" >> "$file"
+            fi
+            echo "Applied ${key} to ${file}"
+          }
+
+          BACKEND_ENV="$APP_PATH/backend/.env"
+          for variable in STRIPE_SECRET_KEY STRIPE_PUBLISHABLE_KEY STRIPE_WEBHOOK_SECRET \
+            STRIPE_PRICE_STARTER_MONTHLY STRIPE_PRICE_STARTER_YEARLY \
+            STRIPE_PRICE_PROFESSIONAL_MONTHLY STRIPE_PRICE_PROFESSIONAL_YEARLY \
+            SMTP_HOST SMTP_USER SMTP_PASS OPENAI_API_KEY; do
+            upsert_env "$BACKEND_ENV" "$variable" "${!variable:-}"
+          done
+
+          ROOT_ENV="$APP_PATH/.env"
+          upsert_env "$ROOT_ENV" AUTH_SECRET "${AUTH_SECRET:-}"
+          upsert_env "$ROOT_ENV" MONGODB_CONNECTION_STRING "${MONGODB_CONNECTION_STRING:-}"
 
           stripe_value_available() {
             local variable="$1"
@@ -197,12 +242,12 @@ jobs:
 
           for variable in STRIPE_SECRET_KEY STRIPE_PUBLISHABLE_KEY STRIPE_WEBHOOK_SECRET; do
             if ! stripe_value_available "$variable"; then
-              echo "Required Stripe value is missing from GitHub Actions secrets and backend/.env: ${variable}"
+              echo "Required Stripe value is missing from GitHub Actions secrets/variables and backend/.env: ${variable}"
               exit 1
             fi
           done
 
-          echo "Stripe deployment variables are configured from GitHub Actions secrets or backend/.env"
+          echo "Stripe deployment variables are configured from GitHub Actions or backend/.env"
 
           if [ -z "${OPENAI_API_KEY:-}" ]; then
             echo "GitHub Actions OpenAI secret is missing; PM2 will use the server-side environment value if configured"
@@ -210,7 +255,6 @@ jobs:
             echo "OpenAI API key supplied from GitHub Actions secret"
           fi
 
-          APP_PATH="${{ vars.APP_PATH }}"
           bash "$APP_PATH/scripts/start-production.sh" "$APP_PATH"
 
       - name: Verify PM2 processes are online
