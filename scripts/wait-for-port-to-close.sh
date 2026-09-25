@@ -4,6 +4,16 @@ set -euo pipefail
 PORT="${1:?Port is required}"
 TIMEOUT_SECONDS="${2:-30}"
 
+if [[ ! "$PORT" =~ ^[0-9]+$ ]] || (( PORT < 1 || PORT > 65535 )); then
+  echo "Port must be an integer between 1 and 65535" >&2
+  exit 1
+fi
+
+if [[ ! "$TIMEOUT_SECONDS" =~ ^[0-9]+$ ]] || (( TIMEOUT_SECONDS < 1 )); then
+  echo "Timeout must be a positive integer number of seconds" >&2
+  exit 1
+fi
+
 port_is_open() {
   node -e "
     const net = require('net');
