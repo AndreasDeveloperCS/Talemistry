@@ -20,23 +20,56 @@ pm2_cmd() {
   "$PM2_BIN" "$@"
 }
 
+SUDO=""
+if command -v sudo >/dev/null 2>&1 && sudo -n true >/dev/null 2>&1; then
+  SUDO="sudo -n"
+fi
+
+# A stale PM2 daemon under another user (e.g. root) can keep old apps bound to
+# our ports; remove them there before starting under the runner's PM2_HOME.
+if [ -n "$SUDO" ] && [ -d /root/.pm2 ]; then
+  for stale_app in talemistry-web TALEMISTRY EVRYKA; do
+    $SUDO env PM2_HOME=/root/.pm2 "$PM2_BIN" delete "$stale_app" >/dev/null 2>&1 || true
+  done
+fi
+
+port_busy() {
+  bash -c ">/dev/tcp/127.0.0.1/$1" 2>/dev/null
+}
+
+port_pids() {
+  { $SUDO ss -ltnpH "sport = :$1" 2>/dev/null || true; } \
+    | grep -oE 'pid=[0-9]+' | cut -d= -f2 | sort -u
+}
+
 # After PM2 cleanup, anything still on the port is a rogue/stale process that
 # would crash the new app with EADDRINUSE. Terminate it.
 free_port() {
   local port="$1"
-  if ! bash -c ">/dev/tcp/127.0.0.1/${port}" 2>/dev/null; then
+  if ! port_busy "$port"; then
     return 0
   fi
   echo "Port ${port} is still occupied after PM2 cleanup; terminating the listener"
-  if command -v sudo >/dev/null 2>&1 && sudo -n true >/dev/null 2>&1; then
-    sudo -n fuser -k "${port}/tcp" || true
+  local pids
+  pids="$(port_pids "$port")"
+  if [ -z "$pids" ]; then
+    $SUDO fuser -k "${port}/tcp" 2>/dev/null || fuser -k "${port}/tcp" 2>/dev/null || true
   else
-    fuser -k "${port}/tcp" 2>/dev/null || true
+    for pid in $pids; do
+      $SUDO kill "$pid" 2>/dev/null || kill "$pid" 2>/dev/null || true
+    done
   fi
   sleep 2
-  if bash -c ">/dev/tcp/127.0.0.1/${port}" 2>/dev/null; then
-    echo "Unable to free port ${port}; the process may belong to another user"
-    ss -ltnp "sport = :${port}" 2>/dev/null || true
+  if port_busy "$port"; then
+    pids="$(port_pids "$port")"
+    for pid in $pids; do
+      $SUDO kill -9 "$pid" 2>/dev/null || kill -9 "$pid" 2>/dev/null || true
+    done
+    sleep 1
+  fi
+  if port_busy "$port"; then
+    echo "Unable to free port ${port}; current listener:"
+    $SUDO ss -ltnp "sport = :${port}" 2>/dev/null || ss -ltnp "sport = :${port}" 2>/dev/null || true
     exit 1
   fi
 }
