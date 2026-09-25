@@ -20,12 +20,29 @@ pm2_cmd() {
   "$PM2_BIN" "$@"
 }
 
+wait_for_port_to_close() {
+  local port="$1"
+
+  for _ in {1..30}; do
+    if ! bash -c ">/dev/tcp/127.0.0.1/${port}" 2>/dev/null; then
+      return 0
+    fi
+
+    sleep 1
+  done
+
+  echo "Port ${port} is still accepting connections after PM2 stop/delete"
+  return 1
+}
+
 pm2_cmd stop talemistry-web || true
 pm2_cmd delete talemistry-web || true
+wait_for_port_to_close 3000
 pm2_cmd start "$APP_PATH/ecosystem.config.js" --only talemistry-web --update-env
 
 pm2_cmd stop TALEMISTRY || true
 pm2_cmd delete TALEMISTRY || true
+wait_for_port_to_close 4000
 pm2_cmd start "$BACKEND_PATH/ecosystem.config.js" --only TALEMISTRY --update-env
 pm2_cmd save
 
