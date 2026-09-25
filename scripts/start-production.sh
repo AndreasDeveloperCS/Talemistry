@@ -17,8 +17,8 @@ if [[ ! -f "$BACKEND_PATH/dist/main.js" ]]; then
   exit 1
 fi
 
-if [[ ! -f "$WAIT_FOR_PORT_TO_CLOSE_SCRIPT" ]]; then
-  echo "Port wait helper not found at $WAIT_FOR_PORT_TO_CLOSE_SCRIPT"
+if [[ ! -f "$WAIT_FOR_PORT_TO_CLOSE_SCRIPT" || ! -r "$WAIT_FOR_PORT_TO_CLOSE_SCRIPT" ]]; then
+  echo "Port wait helper is missing or unreadable at $WAIT_FOR_PORT_TO_CLOSE_SCRIPT"
   exit 1
 fi
 
