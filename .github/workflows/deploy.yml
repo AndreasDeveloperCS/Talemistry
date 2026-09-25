@@ -273,7 +273,7 @@ jobs:
             echo "OpenAI API key supplied from GitHub Actions secret"
           fi
 
-          bash "$APP_PATH/scripts/start-production.sh" "$APP_PATH"
+          bash "$APP_PATH/scripts/start-production.sh" "$APP_PATH" --skip-frontend
 
       - name: Verify PM2 processes are online
         run: |

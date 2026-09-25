@@ -5,6 +5,7 @@ APP_PATH="${1:-$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)}"
 BACKEND_PATH="$APP_PATH/backend"
 PM2_BIN="${PM2_BIN:-$(command -v pm2)}"
 export PM2_HOME="${PM2_HOME:-$HOME/.pm2}"
+SKIP_FRONTEND_RESTART="${2:-}"
 
 if [[ ! -f "$APP_PATH/.next/BUILD_ID" ]]; then
   echo "Next.js build not found at $APP_PATH/.next/BUILD_ID"
@@ -41,10 +42,12 @@ free_port() {
   fi
 }
 
-pm2_cmd stop talemistry-web || true
-pm2_cmd delete talemistry-web || true
-free_port 3000
-pm2_cmd start "$APP_PATH/ecosystem.config.js" --only talemistry-web --update-env
+if [[ "$SKIP_FRONTEND_RESTART" != "--skip-frontend" ]]; then
+  pm2_cmd stop talemistry-web || true
+  pm2_cmd delete talemistry-web || true
+  free_port 3000
+  pm2_cmd start "$APP_PATH/ecosystem.config.js" --only talemistry-web --update-env
+fi
 
 pm2_cmd stop TALEMISTRY || true
 pm2_cmd delete TALEMISTRY || true
@@ -58,7 +61,8 @@ for attempt in {1..40}; do
   frontend_ready=false
   backend_ready=false
 
-  if curl --fail --silent --show-error http://127.0.0.1:3000 >/dev/null 2>&1; then
+  if [[ "$SKIP_FRONTEND_RESTART" == "--skip-frontend" ]] \
+    || curl --fail --silent --show-error http://127.0.0.1:3000 >/dev/null 2>&1; then
     frontend_ready=true
   fi
 
@@ -67,7 +71,8 @@ for attempt in {1..40}; do
   fi
 
   if [[ "$frontend_ready" == true && "$backend_ready" == true ]] \
-    && pm2_cmd describe talemistry-web | grep -q "status.*online" \
+    && ([[ "$SKIP_FRONTEND_RESTART" == "--skip-frontend" ]] \
+      || pm2_cmd describe talemistry-web | grep -q "status.*online") \
     && pm2_cmd describe TALEMISTRY | grep -q "status.*online"; then
     echo "Next.js is running on localhost:3000"
     echo "NestJS is running on localhost:4000"
