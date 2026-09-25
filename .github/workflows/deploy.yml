@@ -124,6 +124,23 @@ jobs:
 
           echo "Frontend authentication and database environment is configured"
 
+      # The nginx install script is the one command the runner may run as root
+      # (see scripts/setup-runner-sudo.sh); it also clears stale root-owned
+      # listeners on ports 3000/4000 that would break the PM2 starts below.
+      - name: Clear stale app listeners (scoped sudo)
+        working-directory: ${{ vars.APP_PATH }}
+        run: |
+          set -euo pipefail
+          APP_PATH="${{ vars.APP_PATH }}"
+          INSTALL_SCRIPT="$APP_PATH/scripts/install-nginx-config.sh"
+          if [ "$(id -u)" -eq 0 ]; then
+            bash "$INSTALL_SCRIPT" "$APP_PATH"
+          elif sudo -n true >/dev/null 2>&1 || sudo -n -l /bin/bash "$INSTALL_SCRIPT" "$APP_PATH" >/dev/null 2>&1; then
+            sudo -n /bin/bash "$INSTALL_SCRIPT" "$APP_PATH"
+          else
+            echo "::warning::Runner has no scoped sudo for $INSTALL_SCRIPT; stale root-owned listeners cannot be cleared from CI. Run: sudo bash $APP_PATH/scripts/setup-runner-sudo.sh $(whoami) $APP_PATH"
+          fi
+
       - name: Start or restart application
         working-directory: ${{ vars.APP_PATH }}
         run: |
