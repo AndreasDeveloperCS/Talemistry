@@ -131,11 +131,17 @@ jobs:
 
           PM2_BIN="$(command -v pm2)"
           export PM2_HOME="${PM2_HOME:-$HOME/.pm2}"
+          WAIT_FOR_PORT_TO_CLOSE_SCRIPT="$GITHUB_WORKSPACE/scripts/wait-for-port-to-close.sh"
           pm2_cmd() { "$PM2_BIN" "$@"; }
+
+          if [ ! -f "$WAIT_FOR_PORT_TO_CLOSE_SCRIPT" ]; then
+            echo "Port wait helper not found at $WAIT_FOR_PORT_TO_CLOSE_SCRIPT"
+            exit 1
+          fi
 
           pm2_cmd stop talemistry-web || true
           pm2_cmd delete talemistry-web || true
-          bash "${{ vars.APP_PATH }}/scripts/wait-for-port-to-close.sh" 3000
+          bash "$WAIT_FOR_PORT_TO_CLOSE_SCRIPT" 3000
           pm2_cmd start "${{ vars.APP_PATH }}/ecosystem.config.js" \
             --only talemistry-web \
             --update-env

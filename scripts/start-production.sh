@@ -17,6 +17,11 @@ if [[ ! -f "$BACKEND_PATH/dist/main.js" ]]; then
   exit 1
 fi
 
+if [[ ! -f "$WAIT_FOR_PORT_TO_CLOSE_SCRIPT" ]]; then
+  echo "Port wait helper not found at $WAIT_FOR_PORT_TO_CLOSE_SCRIPT"
+  exit 1
+fi
+
 pm2_cmd() {
   "$PM2_BIN" "$@"
 }
