@@ -13,6 +13,7 @@ RUNNER_USER="${1:-}"
 APP_PATH="${2:-/var/www/talemistry}"
 SUDOERS_FILE="/etc/sudoers.d/talemistry-deploy"
 INSTALL_SCRIPT="$APP_PATH/scripts/install-nginx-config.sh"
+FREE_PORTS_SCRIPT="$APP_PATH/scripts/free-app-ports.sh"
 
 if [[ "$(id -u)" -ne 0 ]]; then
   echo "Run this script as root (sudo)."
@@ -30,7 +31,7 @@ if ! id "$RUNNER_USER" >/dev/null 2>&1; then
   exit 1
 fi
 
-RULE="$RUNNER_USER ALL=(root) NOPASSWD: /bin/bash $INSTALL_SCRIPT $APP_PATH"
+RULE="$RUNNER_USER ALL=(root) NOPASSWD: /bin/bash $INSTALL_SCRIPT $APP_PATH, /bin/bash $FREE_PORTS_SCRIPT"
 
 TMP_FILE="$(mktemp)"
 trap 'rm -f "$TMP_FILE"' EXIT
@@ -45,3 +46,4 @@ cat "$SUDOERS_FILE"
 echo
 echo "Verify as the runner user with:"
 echo "  sudo -u $RUNNER_USER sudo -n -l /bin/bash $INSTALL_SCRIPT $APP_PATH"
+echo "  sudo -u $RUNNER_USER sudo -n -l /bin/bash $FREE_PORTS_SCRIPT"

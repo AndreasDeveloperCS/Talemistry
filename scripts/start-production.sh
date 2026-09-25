@@ -25,6 +25,15 @@ if command -v sudo >/dev/null 2>&1 && sudo -n true >/dev/null 2>&1; then
   SUDO="sudo -n"
 fi
 
+FREE_PORTS_SCRIPT="$APP_PATH/scripts/free-app-ports.sh"
+
+# Scoped sudoers rule (see scripts/setup-runner-sudo.sh) lets the runner free
+# ports held by another user even without general sudo rights.
+can_sudo_free_ports() {
+  command -v sudo >/dev/null 2>&1 \
+    && sudo -n -l /bin/bash "$FREE_PORTS_SCRIPT" >/dev/null 2>&1
+}
+
 # A stale PM2 daemon under another user (e.g. root) can keep old apps bound to
 # our ports; remove them there before starting under the runner's PM2_HOME.
 if [ -n "$SUDO" ] && [ -d /root/.pm2 ]; then
@@ -53,13 +62,12 @@ free_port() {
   echo "Port ${port} is still occupied after PM2 cleanup; terminating the listener"
   local pids
   pids="$(port_pids "$port")"
-  if [ -z "$pids" ]; then
-    $SUDO fuser -k "${port}/tcp" 2>/dev/null || fuser -k "${port}/tcp" 2>/dev/null || true
-  else
-    for pid in $pids; do
-      $SUDO kill "$pid" 2>/dev/null || kill "$pid" 2>/dev/null || true
-    done
+  if [ -z "$pids" ] && can_sudo_free_ports; then
+    sudo -n /bin/bash "$FREE_PORTS_SCRIPT" || true
   fi
+  for pid in $pids; do
+    $SUDO kill "$pid" 2>/dev/null || kill "$pid" 2>/dev/null || true
+  done
   sleep 2
   if port_busy "$port"; then
     pids="$(port_pids "$port")"
@@ -71,6 +79,11 @@ free_port() {
   if port_busy "$port"; then
     echo "Unable to free port ${port}; current listener:"
     $SUDO ss -ltnp "sport = :${port}" 2>/dev/null || ss -ltnp "sport = :${port}" 2>/dev/null || true
+    echo
+    echo "The listener belongs to another user and the runner lacks permission to stop it."
+    echo "Run ONCE on the server as root to fix this permanently:"
+    echo "  sudo fuser -k ${port}/tcp"
+    echo "  sudo bash $APP_PATH/scripts/setup-runner-sudo.sh $(whoami) $APP_PATH"
     exit 1
   fi
 }
