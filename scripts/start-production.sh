@@ -4,6 +4,7 @@ set -euo pipefail
 APP_PATH="${1:-$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)}"
 BACKEND_PATH="$APP_PATH/backend"
 PM2_BIN="${PM2_BIN:-$(command -v pm2)}"
+WAIT_FOR_PORT_TO_CLOSE_SCRIPT="$APP_PATH/scripts/wait-for-port-to-close.sh"
 export PM2_HOME="${PM2_HOME:-$HOME/.pm2}"
 
 if [[ ! -f "$APP_PATH/.next/BUILD_ID" ]]; then
@@ -20,29 +21,14 @@ pm2_cmd() {
   "$PM2_BIN" "$@"
 }
 
-wait_for_port_to_close() {
-  local port="$1"
-
-  for _ in {1..30}; do
-    if ! bash -c ">/dev/tcp/127.0.0.1/${port}" 2>/dev/null; then
-      return 0
-    fi
-
-    sleep 1
-  done
-
-  echo "Port ${port} is still accepting connections after PM2 stop/delete"
-  return 1
-}
-
 pm2_cmd stop talemistry-web || true
 pm2_cmd delete talemistry-web || true
-wait_for_port_to_close 3000
+bash "$WAIT_FOR_PORT_TO_CLOSE_SCRIPT" 3000
 pm2_cmd start "$APP_PATH/ecosystem.config.js" --only talemistry-web --update-env
 
 pm2_cmd stop TALEMISTRY || true
 pm2_cmd delete TALEMISTRY || true
-wait_for_port_to_close 4000
+bash "$WAIT_FOR_PORT_TO_CLOSE_SCRIPT" 4000
 pm2_cmd start "$BACKEND_PATH/ecosystem.config.js" --only TALEMISTRY --update-env
 pm2_cmd save
 
