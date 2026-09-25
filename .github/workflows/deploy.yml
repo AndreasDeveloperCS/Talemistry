@@ -202,12 +202,30 @@ jobs:
 
           # Persist CI/CD values into the server .env files so PM2 keeps them
           # across restarts that happen outside this workflow.
+          ensure_writable() {
+            local file="$1"
+            if [ -w "$file" ]; then
+              return 0
+            fi
+            if [ ! -e "$file" ] && touch "$file" 2>/dev/null; then
+              return 0
+            fi
+            if command -v sudo >/dev/null 2>&1 && sudo -n true >/dev/null 2>&1; then
+              sudo -n touch "$file" 2>/dev/null || true
+              sudo -n chown "$(id -u):$(id -g)" "$file" 2>/dev/null || true
+            fi
+            [ -w "$file" ]
+          }
+
           upsert_env() {
             local file="$1" key="$2" value="${3:-}"
             if [ -z "$value" ]; then
               return 0
             fi
-            touch "$file"
+            if ! ensure_writable "$file"; then
+              echo "::warning::Cannot write ${key} to ${file} (permission denied); PM2 will only receive it from the workflow environment"
+              return 0
+            fi
             if grep -Eq "^[[:space:]]*${key}[[:space:]]*=" "$file"; then
               awk -v k="$key" -v v="$value" '
                 !done && $0 ~ "^[[:space:]]*"k"[[:space:]]*=" { print k"="v; done=1; next }
