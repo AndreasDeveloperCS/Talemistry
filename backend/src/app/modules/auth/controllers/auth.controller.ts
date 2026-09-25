@@ -64,8 +64,14 @@ export class AuthController extends BaseController<UserSession> {
           await this.userService.registerUser(user);
         }
 
-      } catch (ex) {
-        console.error(ex);
+      } catch (ex: any) {
+        // E11000 = another process already seeded the superadmin; not an error.
+        const code = ex?.code ?? ex?.errorResponse?.code;
+        if (code === 11000 || String(ex?.message).includes('E11000')) {
+          console.log('Superadmin user already exists — seed skipped.');
+        } else {
+          console.error(ex);
+        }
       }
 
     })();
