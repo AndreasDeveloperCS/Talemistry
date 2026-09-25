@@ -30,6 +30,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Use supported Node.js version
         uses: actions/setup-node@v4
@@ -312,6 +314,8 @@ jobs:
           SOURCE_CONFIG="$APP_PATH/nginx/talemistry.com.conf"
           NGINX_CONFIG="/etc/nginx/sites-available/talemistry.com.conf"
           NGINX_ENABLED="/etc/nginx/sites-enabled/talemistry.com.conf"
+          BEFORE_SHA="${{ github.event.before }}"
+          CURRENT_SHA="${{ github.sha }}"
 
           # Passwordless sudo may be granted for everything, or only for the
           # install script (see scripts/setup-runner-sudo.sh).
@@ -323,6 +327,20 @@ jobs:
             cmp -s "$SOURCE_CONFIG" "$NGINX_CONFIG" 2>/dev/null && [ -e "$NGINX_ENABLED" ]
           }
 
+          nginx_config_changed_in_push() {
+            if [ -z "$BEFORE_SHA" ] || [ "$BEFORE_SHA" = "0000000000000000000000000000000000000000" ]; then
+              echo "::warning::Could not determine the push base commit; treating nginx/talemistry.com.conf as changed to avoid masking a partial deploy."
+              return 0
+            fi
+
+            if ! git cat-file -e "$BEFORE_SHA^{commit}" 2>/dev/null; then
+              echo "::warning::Push base commit $BEFORE_SHA is not available in the checkout; treating nginx/talemistry.com.conf as changed to avoid masking a partial deploy."
+              return 0
+            fi
+
+            git diff --name-only "$BEFORE_SHA" "$CURRENT_SHA" | grep -Fxq "nginx/talemistry.com.conf"
+          }
+
           if [ "$(id -u)" -eq 0 ]; then
             bash "$INSTALL_SCRIPT" "$APP_PATH"
           elif can_sudo; then
@@ -330,12 +348,20 @@ jobs:
           elif nginx_config_current; then
             echo "::notice::Installed Nginx config already matches nginx/talemistry.com.conf; skipping install and reload (runner user has no passwordless sudo)"
           else
-            echo "::error::The Nginx config changed but the runner user '$(whoami)' cannot run the install script as root."
+            if nginx_config_changed_in_push; then
+              echo "::error::This push changed nginx/talemistry.com.conf, but the runner user '$(whoami)' cannot run the install script as root."
+              echo "Run this once on the server as root to grant the required permission:"
+              echo "  sudo bash $APP_PATH/scripts/setup-runner-sudo.sh $(whoami) $APP_PATH"
+              echo "Or install the config manually:"
+              echo "  sudo bash $INSTALL_SCRIPT $APP_PATH"
+              exit 1
+            fi
+
+            echo "::warning::Installed Nginx config differs from nginx/talemistry.com.conf, but this push did not modify that file and the runner user '$(whoami)' cannot run the install script as root; continuing with the currently installed Nginx config."
             echo "Run this once on the server as root to grant the required permission:"
             echo "  sudo bash $APP_PATH/scripts/setup-runner-sudo.sh $(whoami) $APP_PATH"
             echo "Or install the config manually:"
             echo "  sudo bash $INSTALL_SCRIPT $APP_PATH"
-            exit 1
           fi
 
       - name: Inject frontend secrets
