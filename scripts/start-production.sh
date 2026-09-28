@@ -60,15 +60,20 @@ free_port() {
     return 0
   fi
   echo "Port ${port} is still occupied after PM2 cleanup; terminating the listener"
-  local pids
-  pids="$(port_pids "$port")"
-  if [ -z "$pids" ] && can_sudo_free_ports; then
+  # The listener may belong to another user (e.g. a root PM2 daemon that the
+  # runner cannot signal). Try the scoped-sudo cleaner first: it deletes the
+  # app from every PM2 daemon on the box and force-frees the app ports.
+  if can_sudo_free_ports; then
     sudo -n /bin/bash "$FREE_PORTS_SCRIPT" || true
   fi
-  for pid in $pids; do
-    $SUDO kill "$pid" 2>/dev/null || kill "$pid" 2>/dev/null || true
-  done
-  sleep 2
+  local pids
+  if port_busy "$port"; then
+    pids="$(port_pids "$port")"
+    for pid in $pids; do
+      $SUDO kill "$pid" 2>/dev/null || kill "$pid" 2>/dev/null || true
+    done
+    sleep 2
+  fi
   if port_busy "$port"; then
     pids="$(port_pids "$port")"
     for pid in $pids; do

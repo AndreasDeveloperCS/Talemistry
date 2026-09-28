@@ -153,13 +153,22 @@ jobs:
           pm2_cmd stop talemistry-web || true
           pm2_cmd delete talemistry-web || true
 
-          # A leftover non-PM2 listener on 3000 would crash the new app with EADDRINUSE.
+          # A leftover listener on 3000 may belong to another user (e.g. a
+          # root-owned PM2 app or orphan next-server). The scoped-sudo cleaner
+          # removes it from any PM2 daemon and frees the port; the unprivileged
+          # kill below only works for the runner's own processes.
           if bash -c ">/dev/tcp/127.0.0.1/3000" 2>/dev/null; then
-            echo "Port 3000 is still occupied after PM2 cleanup; terminating the listener"
-            pids="$(ss -ltnp 'sport = :3000' 2>/dev/null | { grep -oE 'pid=[0-9]+' || true; } | cut -d= -f2 | sort -u)"
-            for pid in $pids; do
-              kill "$pid" 2>/dev/null || true
-            done
+            echo "Port 3000 is still occupied after PM2 cleanup; clearing the listener"
+            FREE_PORTS_SCRIPT="${{ vars.APP_PATH }}/scripts/free-app-ports.sh"
+            if sudo -n true >/dev/null 2>&1 || sudo -n -l /bin/bash "$FREE_PORTS_SCRIPT" >/dev/null 2>&1; then
+              sudo -n /bin/bash "$FREE_PORTS_SCRIPT" || true
+            fi
+            if bash -c ">/dev/tcp/127.0.0.1/3000" 2>/dev/null; then
+              pids="$(ss -ltnp 'sport = :3000' 2>/dev/null | { grep -oE 'pid=[0-9]+' || true; } | cut -d= -f2 | sort -u)"
+              for pid in $pids; do
+                kill "$pid" 2>/dev/null || true
+              done
+            fi
             sleep 2
           fi
 
