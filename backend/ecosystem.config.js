@@ -18,8 +18,11 @@ if (fs.existsSync(envPath)) {
         const trimmed = line.trim();
         if (trimmed && !trimmed.startsWith('#')) {
             const [key, ...values] = trimmed.split('=');
-            if (key && values.length > 0) {
-                envConfig[key.trim()] = values.join('=').trim().replace(/^['"]|['"]$/g, '');
+            const value = values.join('=').trim().replace(/^['"]|['"]$/g, '');
+            // Skip empty values: an empty string in the PM2 env would mask the
+            // real value from dotenv/.env at boot (dotenv never overrides).
+            if (key && value.length > 0) {
+                envConfig[key.trim()] = value;
             }
         }
     });

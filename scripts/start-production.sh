@@ -118,6 +118,21 @@ for attempt in {1..40}; do
     && pm2_cmd describe TALEMISTRY | grep -q "status.*online"; then
     echo "Next.js is running on localhost:3000"
     echo "NestJS is running on localhost:4000"
+
+    # Surface Stripe env drift: values can exist in backend/.env yet be
+    # invisible to the running process (stale PM2 env or empty overrides).
+    catalog="$(curl --fail --silent http://127.0.0.1:4000/api/payments/catalog 2>/dev/null || true)"
+    if echo "$catalog" | grep -q '"stripe":{"configured":true'; then
+      echo "Stripe is configured in the running backend process"
+    elif echo "$catalog" | grep -q '"stripe":{"configured":false'; then
+      echo "WARNING: backend is online but STRIPE_SECRET_KEY is NOT visible to the running process."
+      echo "  - Check $BACKEND_PATH/.env for a missing or empty STRIPE_SECRET_KEY= line"
+      echo "  - PM2 caches env from the first start; recover with:"
+      echo "      pm2 delete TALEMISTRY && bash $APP_PATH/scripts/start-production.sh $APP_PATH"
+    else
+      echo "Could not read /api/payments/catalog to verify Stripe configuration"
+    fi
+
     pm2_cmd list
     exit 0
   fi
