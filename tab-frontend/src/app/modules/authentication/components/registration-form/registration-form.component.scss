@@ -71,6 +71,35 @@ $white: #ffffff;
       }
     }
 
+    .google-auth {
+      margin-bottom: 1.5rem;
+
+      .google-button-container {
+        display: flex;
+        justify-content: center;
+      }
+
+      .divider {
+        display: flex;
+        align-items: center;
+        margin-top: 1.25rem;
+        color: $text;
+        font-size: 0.85rem;
+
+        &::before,
+        &::after {
+          content: '';
+          flex: 1;
+          height: 1px;
+          background: $pallete-0-color-11;
+        }
+
+        span {
+          padding: 0 0.75rem;
+        }
+      }
+    }
+
     form {
       display: flex;
       flex-direction: column;

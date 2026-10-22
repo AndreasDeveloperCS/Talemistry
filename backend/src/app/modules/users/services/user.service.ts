@@ -299,6 +299,11 @@ export class UsersService extends BaseService<User> {
     }
   }
 
+  /** Stamp a social-login-verified email/avatar onto a user (e.g. after Google sign-in/sign-up). */
+  async markSocialProfile(email: string, data: { isVerifiedEmail?: boolean; photo?: string }): Promise<void> {
+    await this.model.updateOne({ email: email.toLowerCase() }, { $set: data }).exec();
+  }
+
   async createUser(
     firstname: string,
     lastname: string,

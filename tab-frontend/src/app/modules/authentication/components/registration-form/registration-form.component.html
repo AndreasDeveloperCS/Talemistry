@@ -8,6 +8,11 @@
       <button [class.active]="activeTab === roles.RC" (click)="onChangeRole(roles.RC)">🏢 I'm a Recruiter</button>
     </div>
 
+    <div class="google-auth">
+      <div #googleButton class="google-button-container"></div>
+      <div class="divider"><span>or</span></div>
+    </div>
+
     <form [formGroup]="signUpForm">
       <div class="form-group">
         <div class="form-item">

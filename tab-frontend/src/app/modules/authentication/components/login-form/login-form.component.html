@@ -3,6 +3,11 @@
     <h1 class="brand">AI Talent Acquisition</h1>
     <p class="subtitle">Log in to your account</p>
 
+    <div class="google-auth">
+      <div #googleButton class="google-button-container"></div>
+      <div class="divider"><span>or</span></div>
+    </div>
+
     <form [formGroup]="form">
       <div class="form-item">
         <label for="email">{{content.txtEmail}}</label>

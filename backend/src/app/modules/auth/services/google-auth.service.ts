@@ -1,102 +1,121 @@
-import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { Request } from 'express';
 import { OAuth2Client } from 'google-auth-library';
-import * as jwt from 'jsonwebtoken';
+
+/** Normalized Google profile, derived from a signature-verified ID token. */
+export interface GoogleProfile {
+  googleId: string;
+  email: string;
+  emailVerified: boolean;
+  name?: string;
+  givenName?: string;
+  familyName?: string;
+  picture?: string;
+}
+
+/** The `state` payload we round-trip through Google during the redirect flow. */
+export interface GoogleOAuthState {
+  returnUrl?: string;
+}
+
+const STATE_PURPOSE = 'google_oauth_state';
+const STATE_TTL = '10m';
 
 @Injectable()
 export class GoogleAuthService {
   private readonly GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
   private readonly GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
-  private readonly redirectUrl = 'http://localhost:4200';
-  private readonly accessTokenUrl = 'https://oauth2.googleapis.com/token';
-  private readonly phoneNumberApiUrl = 'https://people.googleapis.com/v1/people/me?personFields=phoneNumbers';
-  private readonly googleUserInfoApiUrl = 'https://www.googleapis.com/oauth2/v3/userinfo';
-  private client = new OAuth2Client(this.GOOGLE_CLIENT_ID);
 
-  constructor(private readonly httpService: HttpService) { }
+  private readonly client = new OAuth2Client({
+    clientId: this.GOOGLE_CLIENT_ID,
+    clientSecret: this.GOOGLE_CLIENT_SECRET,
+  });
 
-  // async validateGoogleToken(token: string) {
-  //   console.log('Token', token);
-  //   try {
-  //     const ticket = await this.client.verifyIdToken({
-  //       idToken: token,
-  //       audience: this.GOOGLE_CLIENT_ID,
-  //     });
+  constructor(private readonly jwtService: JwtService) { }
 
-  //     const userInfo = ticket.getPayload();
-  //     if (!userInfo) {
-  //       throw new Error('Invalid Google token');
-  //     }
+  /**
+   * Redirect URI used for the server-side authorization-code flow. Must
+   * exactly match an "Authorized redirect URI" configured in the Google Cloud
+   * Console OAuth client (see GOOGLE_REDIRECT_URI in .env).
+   */
+  resolveRedirectUri(request: Request): string {
+    if (process.env.GOOGLE_REDIRECT_URI) {
+      return process.env.GOOGLE_REDIRECT_URI;
+    }
+    return `${request.protocol}://${request.get('host')}/auth/google/callback`;
+  }
 
-  //     console.log(userInfo);
+  /** Build the URL that starts the Google OAuth consent flow. */
+  getAuthorizationUrl(state: string, redirectUri: string): string {
+    return this.client.generateAuthUrl({
+      redirect_uri: redirectUri,
+      scope: ['openid', 'email', 'profile'],
+      state,
+      prompt: 'select_account',
+    });
+  }
 
-  //     return userInfo;
-  //   } catch (error) {
-  //     throw new Error('Error validating Google token: ' + error.message);
-  //   }
-  // }
+  /** Exchange an authorization `code` (redirect flow) for Google tokens. */
+  async exchangeCode(code: string, redirectUri: string) {
+    const { tokens } = await this.client.getToken({ code, redirect_uri: redirectUri });
+    if (!tokens?.id_token) {
+      throw new UnauthorizedException('Google did not return an ID token');
+    }
+    return tokens;
+  }
 
-    async decodeIdToken(idToken: string): Promise<any> {
-      try {
-        const decodedToken = jwt.decode(idToken);
-        return decodedToken;
-      } catch (error) {
-        console.error('Invalid ID Token');
-      }
+  /**
+   * Verify a Google-issued ID token (signature, audience and issuer) and
+   * return a normalized profile. Used by both the redirect flow (after
+   * exchanging the code) and the client-side "Sign in with Google" button
+   * flow (which posts the credential ID token directly).
+   */
+  async verifyIdToken(idToken: string): Promise<GoogleProfile> {
+    if (!idToken) {
+      throw new UnauthorizedException('Missing Google ID token');
     }
 
-  // async getAccessToken(code: string): Promise<any> {
-  //   try {
-  //     const accessTokenResponse = await firstValueFrom(
-  //       this.httpService.post(`${this.accessTokenUrl}`, {
-  //         code: code,
-  //         client_id: this.GOOGLE_CLIENT_ID,
-  //         client_secret: this.GOOGLE_CLIENT_SECRET,
-  //         grant_type: 'authorization_code',
-  //         redirect_uri: `${this.redirectUrl}`,
-  //         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-  //       },
-  //       )
-  //     );
-  //     const accessTokenInfo = accessTokenResponse.data;
-  //     return accessTokenInfo;
-  //   } catch (error) {
-  //     console.error('Error getting access token', error);
-  //     throw new Error('Error fetching access token');
-  //   }
-  // }
+    let payload;
+    try {
+      const ticket = await this.client.verifyIdToken({
+        idToken,
+        audience: this.GOOGLE_CLIENT_ID,
+      });
+      payload = ticket.getPayload();
+    } catch (error) {
+      throw new UnauthorizedException('Invalid Google token: ' + (error as Error).message);
+    }
 
-  // async fetchUserPhoneNumber(accessToken: string): Promise<string | null> {
-  //   try {
-  //     const response = await firstValueFrom(
-  //       this.httpService.get(`${this.phoneNumberApiUrl}`, {
-  //         headers: {
-  //           Authorization: `Bearer ${accessToken}`,
-  //           'Accept': 'application/json'
-  //         },
-  //       })
-  //     );
-  //     const phoneNumbers = response.data?.phoneNumbers;
-  //     return phoneNumbers && phoneNumbers.length > 0 ? phoneNumbers[0].value : null;
-  //   } catch (error) {
-  //     console.error('Error fetching user data', error);
-  //     throw new Error('Failed to fetch user phone number');
-  //   }
-  // }
+    if (!payload?.sub || !payload?.email) {
+      throw new UnauthorizedException('Invalid Google token payload');
+    }
 
-  // async fetchUserData(accessToken: string) {
-  //   try {
-  //     const response = await firstValueFrom(
-  //       this.httpService.get(`${this.googleUserInfoApiUrl}`, {
-  //         headers: {
-  //           Authorization: `Bearer ${accessToken}`,
-  //           'Accept': 'application/json',
-  //         },
-  //       })
-  //     );
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error('fetchUserData', error);
-  //   }
-  // }
+    return {
+      googleId: payload.sub,
+      email: payload.email.toLowerCase(),
+      emailVerified: !!payload.email_verified,
+      name: payload.name,
+      givenName: payload.given_name,
+      familyName: payload.family_name,
+      picture: payload.picture,
+    };
+  }
+
+  /** Sign a short-lived, tamper-proof `state` value (CSRF protection; no server-side storage needed). */
+  createState(payload: GoogleOAuthState): string {
+    return this.jwtService.sign({ ...payload, purpose: STATE_PURPOSE }, { expiresIn: STATE_TTL });
+  }
+
+  /** Verify and decode a `state` value produced by {@link createState}. */
+  verifyState(state: string | undefined): GoogleOAuthState {
+    if (!state) return {};
+    try {
+      const payload: any = this.jwtService.verify(state);
+      if (payload?.purpose !== STATE_PURPOSE) return {};
+      return { returnUrl: payload.returnUrl };
+    } catch {
+      return {};
+    }
+  }
 }

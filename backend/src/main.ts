@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { INestApplication, NestApplicationOptions } from '@nestjs/common';
+import { INestApplication, NestApplicationOptions, RequestMethod } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import * as bodyParser from 'body-parser';
@@ -59,7 +59,17 @@ async function bootstrap() {
 
   // Nest expects a prefix without a leading slash.
   // Using a leading slash can result in subtle route mismatches in some setups.
-  api.setGlobalPrefix('api');
+  // Only the GET redirect-flow routes are excluded, so they are reachable at
+  // the exact path registered in the Google Cloud Console OAuth client
+  // (https://api.talemistry.com/auth/google/callback, no /api prefix).
+  // POST auth/google (the Sign-In-With-Google button flow) stays under /api,
+  // matching the existing frontend `environment.apiUrl` + `auth/google` calls.
+  api.setGlobalPrefix('api', {
+    exclude: [
+      { path: 'auth/google', method: RequestMethod.GET },
+      { path: 'auth/google/callback', method: RequestMethod.GET },
+    ],
+  });
   api.useStaticAssets(join(getBaseDir(), 'public'), {
     prefix: '/public/',
   });

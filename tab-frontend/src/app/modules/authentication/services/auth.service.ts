@@ -154,6 +154,22 @@ export class AuthService implements OnDestroy {
     return this.loginRequest;
   }
 
+  /**
+   * Google "Sign in with Google" button flow: posts the signature-verified
+   * credential ID token Google handed to the browser. The backend logs in an
+   * existing account or auto-registers ("signs up") a new one on first use.
+   * `role` is only honored by the backend when it creates a brand-new user
+   * (e.g. from the registration form's Talent/Recruiter toggle).
+   */
+  loginWithGoogle(idToken: string, role?: string): Observable<any> {
+    const targetUrl = `${environment.apiUrl}${environment.serverPaths.authGoogle}`;
+    const body: { token: string; role?: string } = { token: idToken };
+    if (role) {
+      body.role = role;
+    }
+    return this.http.post(targetUrl, body, { withCredentials: false });
+  }
+
   decodeJWTToken(token: any): any {
     if (!token) {
       //console.log('Token split', token);

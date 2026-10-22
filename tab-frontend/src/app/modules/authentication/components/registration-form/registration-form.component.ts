@@ -1,8 +1,11 @@
-import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { RecaptchaComponent } from 'ng-recaptcha-2';
+import { take } from 'rxjs';
+import { AuthRedirectService } from 'src/app/modules/general/services/auth-redirect.service';
+import { GoogleIdentityService } from 'src/app/modules/general/services/google-identity.service';
 import { environment } from '../../../../../environments/environment';
 import { ContentService } from '../../../general/services/content.service';
 import { ROLES, ROLES_ICONS, SignUpRoleGroup } from '../../models/roles';
@@ -18,9 +21,12 @@ import { parsePhoneNumberFromString } from 'libphonenumber-js';
   standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RegistrationFormComponent implements AfterViewChecked, OnDestroy {
+export class RegistrationFormComponent implements AfterViewChecked, AfterViewInit, OnDestroy {
   @ViewChild('captchaRef')
   public recaptcha?: RecaptchaComponent;
+
+  @ViewChild('googleButton')
+  public googleButtonRef?: ElementRef<HTMLDivElement>;
 
   private emailRegx = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,5}$/;
   private phoneRegx = /^[+]?[\d]{0,3}[\s]?[(]?[\d]{1,3}[)]?[\s]?[\d\s]{7,12}$/;
@@ -40,6 +46,8 @@ export class RegistrationFormComponent implements AfterViewChecked, OnDestroy {
     private route: ActivatedRoute,
     public content: ContentService,
     private changeDetectorRef: ChangeDetectorRef,
+    private authRedirect: AuthRedirectService,
+    private googleIdentity: GoogleIdentityService,
     public authService: AuthService
   ) {
     this.signUpForm = formBuilder.group<SignUpInfo>({
@@ -62,6 +70,37 @@ export class RegistrationFormComponent implements AfterViewChecked, OnDestroy {
 
   ngAfterViewChecked(): void {
     this.changeDetectorRef.detectChanges();
+  }
+
+  ngAfterViewInit(): void {
+    if (this.googleButtonRef) {
+      this.googleIdentity
+        .renderButton(this.googleButtonRef.nativeElement, (idToken) => this.onGoogleCredential(idToken), { text: 'signup_with' })
+        .catch((error) => console.error('Google button render failed', error));
+    }
+  }
+
+  /** Called with the credential ID token once the user completes the Google button flow.
+   *  The currently selected Talent/Recruiter tab is passed along as the role to use
+   *  if this turns out to be a brand-new account. */
+  onGoogleCredential(idToken: string) {
+    this.authService.loginWithGoogle(idToken, this.activeTab)
+      .pipe(take(1))
+      .subscribe({
+        next: (result: any) => {
+          this.authService.handleLogin(result?.userData);
+          if (this.returnUrl) {
+            this.router.navigateByUrl(this.returnUrl);
+          } else {
+            this.authRedirect.redirectIfSaved();
+          }
+          this.changeDetectorRef.markForCheck();
+        },
+        error: (error) => {
+          console.error('onGoogleCredential', error);
+          this.changeDetectorRef.markForCheck();
+        }
+      });
   }
 
   ngOnDestroy() {
