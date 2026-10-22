@@ -1,11 +1,11 @@
 import type { NextRequest } from "next/server"
+import { selfServiceRole } from "@/lib/auth"
 import {
   buildAuthorizationUrl,
   createGoogleFlow,
   getGoogleConfig,
   redirectTo,
   safeNextPath,
-  selfServiceRole,
   setGoogleFlowCookie,
 } from "@/lib/google-oauth"
 

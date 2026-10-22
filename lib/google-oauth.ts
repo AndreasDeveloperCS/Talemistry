@@ -24,9 +24,6 @@ export const GOOGLE_FLOW_COOKIE = "tal_google_oauth"
 const FLOW_COOKIE_PATH = "/api/auth/google"
 const FLOW_MAX_AGE = 60 * 10 // 10 minutes to complete the consent screen
 
-/** Roles a user may pick for themselves when signing up with Google. */
-const SELF_SERVICE_ROLES: AccountRole[] = ["hr_director", "hiring_manager", "recruiter"]
-
 export type GoogleFlowMode = "signin" | "signup"
 
 /** Per-attempt values round-tripped through a signed, short-lived cookie. */
@@ -61,10 +58,6 @@ export function safeNextPath(value: string | null | undefined) {
     return "/dashboard"
   }
   return value
-}
-
-export function selfServiceRole(value: string | null | undefined): AccountRole {
-  return SELF_SERVICE_ROLES.includes(value as AccountRole) ? (value as AccountRole) : "recruiter"
 }
 
 /** Redirect with a relative Location so it stays on whatever host served the request. */

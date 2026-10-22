@@ -262,6 +262,11 @@ jobs:
             echo "Applied ${key} to ${file}"
           }
 
+          # The .env files hold secrets: upsert_env rewrites them via a temp file
+          # + mv, so create those files owner-only (0600) instead of the
+          # runner's default world-readable 0644.
+          umask 077
+
           BACKEND_ENV="$APP_PATH/backend/.env"
           for variable in STRIPE_SECRET_KEY STRIPE_PUBLISHABLE_KEY STRIPE_WEBHOOK_SECRET \
             STRIPE_PRICE_STARTER_MONTHLY STRIPE_PRICE_STARTER_YEARLY \
@@ -273,6 +278,8 @@ jobs:
           ROOT_ENV="$APP_PATH/.env"
           upsert_env "$ROOT_ENV" AUTH_SECRET "${AUTH_SECRET:-}"
           upsert_env "$ROOT_ENV" MONGODB_CONNECTION_STRING "${MONGODB_CONNECTION_STRING:-}"
+
+          umask 022
 
           stripe_value_available() {
             local variable="$1"

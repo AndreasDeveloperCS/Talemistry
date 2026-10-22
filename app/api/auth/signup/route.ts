@@ -1,9 +1,7 @@
 import { NextResponse } from "next/server"
-import { createAccount, setSessionCookie, type AccountRole } from "@/lib/auth"
+import { createAccount, selfServiceRole, setSessionCookie } from "@/lib/auth"
 
 export const runtime = "nodejs"
-
-const ROLES: AccountRole[] = ["admin", "hr_director", "hiring_manager", "recruiter"]
 
 export async function POST(req: Request) {
   try {
@@ -11,7 +9,7 @@ export async function POST(req: Request) {
     const name = String(body.name ?? "").trim()
     const email = String(body.email ?? "").trim()
     const password = String(body.password ?? "")
-    const role = ROLES.includes(body.role) ? (body.role as AccountRole) : "recruiter"
+    const role = selfServiceRole(body.role)
 
     if (!name || !email || !password) {
       return NextResponse.json({ ok: false, error: "Name, email and password are required." }, { status: 400 })

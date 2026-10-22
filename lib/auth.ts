@@ -8,6 +8,13 @@ const MAX_AGE = 60 * 60 * 24 * 7 // 7 days
 
 export type AccountRole = "admin" | "hr_director" | "hiring_manager" | "recruiter"
 
+/** Roles a user may pick for themselves at sign-up; "admin" is never self-assignable. */
+const SELF_SERVICE_ROLES: AccountRole[] = ["hr_director", "hiring_manager", "recruiter"]
+
+export function selfServiceRole(value: unknown): AccountRole {
+  return SELF_SERVICE_ROLES.includes(value as AccountRole) ? (value as AccountRole) : "recruiter"
+}
+
 export interface Account {
   id: string
   email: string
