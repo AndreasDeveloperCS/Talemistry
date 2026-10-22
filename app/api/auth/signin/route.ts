@@ -6,7 +6,6 @@ export const runtime = "nodejs"
 export async function POST(req: Request) {
   try {
     const body = await req.json()
-    console.log(body);
     const email = String(body.email ?? "").trim()
     const password = String(body.password ?? "")
 
@@ -15,7 +14,8 @@ export async function POST(req: Request) {
     }
 
     const account = await findAccountByEmail(email)
-    if (!account || !(await verifyPassword(password, account.passwordHash))) {
+    // Accounts created through Google sign-in have no password.
+    if (!account || !account.passwordHash || !(await verifyPassword(password, account.passwordHash))) {
       return NextResponse.json({ ok: false, error: "Invalid email or password." }, { status: 401 })
     }
 

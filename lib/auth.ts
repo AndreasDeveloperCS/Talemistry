@@ -13,7 +13,9 @@ export interface Account {
   email: string
   name: string
   role: AccountRole
+  /** Empty for accounts created through Google sign-in (no password login). */
   passwordHash: string
+  googleId?: string
   createdAt: string
 }
 
@@ -24,7 +26,7 @@ export interface SessionUser {
   role: AccountRole
 }
 
-function getSecret() {
+export function getSecret() {
   const secret = process.env.AUTH_SECRET
   if (!secret && process.env.NODE_ENV === "production") {
     throw new Error("AUTH_SECRET is not configured")
@@ -109,7 +111,7 @@ export async function createAccount(input: {
 
   const passwordHash = await hashPassword(input.password)
   const doc = {
-    id: `acc-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`,
+    id: newAccountId(),
     email,
     name: input.name.trim(),
     role: input.role ?? "recruiter",
@@ -120,6 +122,47 @@ export async function createAccount(input: {
   return doc
 }
 
+/**
+ * Resolve the account for a verified Google identity: match on the Google
+ * subject first, then link an existing account with the same email, otherwise
+ * create a password-less account ("sign up with Google").
+ */
+export async function findOrCreateGoogleAccount(input: {
+  googleId: string
+  email: string
+  name: string
+  picture?: string
+  role?: AccountRole
+}): Promise<Account> {
+  const col = await collection("accounts")
+  const email = input.email.toLowerCase()
+
+  const existing = (await col.findOne({ googleId: input.googleId })) ?? (await col.findOne({ email }))
+  if (existing) {
+    if (existing.googleId !== input.googleId) {
+      await col.updateOne({ _id: existing._id }, { $set: { googleId: input.googleId } })
+    }
+    return normalizeAccount(existing)
+  }
+
+  const doc = {
+    id: newAccountId(),
+    email,
+    name: input.name.trim() || email.split("@")[0],
+    role: input.role ?? "recruiter",
+    passwordHash: "",
+    googleId: input.googleId,
+    avatarUrl: input.picture,
+    createdAt: new Date().toISOString(),
+  }
+  await col.insertOne(doc as Record<string, unknown>)
+  return normalizeAccount(doc)
+}
+
+function newAccountId() {
+  return `acc-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`
+}
+
 function normalizeAccount(doc: Record<string, unknown>): Account {
   return {
     id: String(doc.id ?? doc._id),
@@ -127,6 +170,7 @@ function normalizeAccount(doc: Record<string, unknown>): Account {
     name: String(doc.name ?? ""),
     role: (doc.role as AccountRole) ?? "recruiter",
     passwordHash: String(doc.passwordHash ?? ""),
+    googleId: doc.googleId ? String(doc.googleId) : undefined,
     createdAt: String(doc.createdAt ?? ""),
   }
 }
