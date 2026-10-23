@@ -42,7 +42,7 @@ export function SiteFooter() {
                   {col.links.map((link) => (
                     <li key={link}>
                       <Link
-                        href="/dashboard"
+                        href={link === "Privacy policy" ? "/privacy" : "/dashboard"}
                         className="text-sm text-muted-foreground transition-colors hover:text-primary"
                       >
                         {link}
